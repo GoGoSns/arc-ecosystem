@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(robocopy \"C:\\\\Users\\\\User\\\\Documents\\\\projects\\\\arc-pay\" \"C:\\\\Users\\\\User\\\\Documents\\\\projects\\\\arc-ecosystem\\\\apps\\\\arc-pay\" /E /XD node_modules .next /COPYALL /NP 2>&1)",
+      "PowerShell(robocopy \"C:\\\\Users\\\\User\\\\Documents\\\\projects\\\\arc-pay\" \"C:\\\\Users\\\\User\\\\Documents\\\\projects\\\\arc-ecosystem\\\\apps\\\\arc-pay\" /E /XD node_modules .next /COPY:DAT /NP 2>&1)",
+      "Bash(pnpm install *)",
+      "Bash(pnpm store *)",
+      "Bash(pnpm approve-builds *)",
+      "Bash(timeout 30 pnpm dev)",
+      "PowerShell(robocopy \"C:\\\\Users\\\\User\\\\Documents\\\\projects\\\\arc-ecosystem\\\\apps\\\\arc-pay\" \"C:\\\\Users\\\\User\\\\Documents\\\\projects\\\\arc-ecosystem\\\\apps\\\\arc-creator\" /E /XD node_modules .next /COPY:DAT /NP 2>&1)",
+      "Bash(npx tsc *)",
+      "Bash(timeout 25 pnpm --filter @arc-ecosystem/arc-creator dev)",
+      "Bash(robocopy \"C:\\\\Users\\\\User\\\\Documents\\\\projects\\\\arc-ecosystem\\\\apps\\\\arc-pay\" \"C:\\\\Users\\\\User\\\\Documents\\\\projects\\\\arc-ecosystem\\\\apps\\\\arc-play\" /E /XD node_modules .next /NFL /NDL /NJH /NJS)",
+      "Bash(echo \"Exit: $?\")",
+      "PowerShell(robocopy \"C:\\\\Users\\\\User\\\\Documents\\\\projects\\\\arc-ecosystem\\\\apps\\\\arc-pay\" \"C:\\\\Users\\\\User\\\\Documents\\\\projects\\\\arc-ecosystem\\\\apps\\\\arc-play\" /E /XD node_modules .next /NFL /NDL /NJH /NJS; $exit = $LASTEXITCODE; if \\($exit -le 7\\) { \"Robocopy succeeded \\(exit $exit\\)\" } else { \"Robocopy FAILED \\(exit $exit\\)\" })",
+      "Bash(git config *)",
+      "Bash(git add *)",
+      "Bash(git check-ignore *)",
+      "Bash(echo \"exit: $?\")",
+      "PowerShell($bytes = [System.IO.File]::ReadAllBytes\\(\"c:\\\\Users\\\\User\\\\Documents\\\\projects\\\\arc-ecosystem\\\\.gitignore\"\\); $bytes[0..20] | ForEach-Object { $_.ToString\\(\"X2\"\\) } | Join-String -Separator \" \")",
+      "Bash(Remove-Item .git/index -Force)"
+    ]
+  }
+}

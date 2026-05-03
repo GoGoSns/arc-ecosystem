@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --bg: #fafafa;
+  --fg: #171717;
+  --accent: #c9a84c;
+  --accent-muted: #a8893a;
+  --border: #e5e5e5;
+  --card: #ffffff;
+  --bg-nav: rgba(250, 250, 250, 0.85);
+}
+
+.dark {
+  --bg: #0a0a0a;
+  --fg: #ededed;
+  --accent: #c9a84c;
+  --accent-muted: #a8893a;
+  --border: #1f1f1f;
+  --card: #111111;
+  --bg-nav: rgba(10, 10, 10, 0.85);
+}
+
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@keyframes sweep {
+  from {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+  to {
+    transform: translateX(400%) skewX(-15deg);
+  }
+}
+
+.sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.sweep::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: 0;
+  width: 25%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(201, 168, 76, 0.38) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%) skewX(-15deg);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+
+.sweep:hover::after {
+  opacity: 1;
+  animation: sweep 1.8s ease-in-out infinite;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+}
