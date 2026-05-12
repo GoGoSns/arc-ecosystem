@@ -137,7 +137,7 @@ export default function DropsArchivePage() {
           <p>&copy; 2026 Arc Ecosystem &middot; Giveaway Transparency</p>
           <div className="flex gap-5">
             <Link href="/drops" className="nav-link">// Active Drops</Link>
-            <a href="https://x.com/arcnetwork_" target="_blank" className="nav-link">// X</a>
+            <a href="https://x.com/arcnetwork_" target="_blank" rel="noopener noreferrer" className="nav-link">// X</a>
           </div>
         </div>
       </footer>

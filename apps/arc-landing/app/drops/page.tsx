@@ -298,7 +298,7 @@ export default function DropsPage() {
           <div className="flex gap-5">
             <Link href="/drops" className="nav-link">// Active</Link>
             <Link href="/drops/archive" className="nav-link">// Archive</Link>
-            <a href="https://x.com/arcnetwork_" target="_blank" className="nav-link">// X</a>
+            <a href="https://x.com/arcnetwork_" target="_blank" rel="noopener noreferrer" className="nav-link">// X</a>
           </div>
         </div>
       </footer>

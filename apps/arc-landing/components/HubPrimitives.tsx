@@ -6,7 +6,7 @@ import type { LucideIcon } from 'lucide-react';
 type CardTag = 'div' | 'article' | 'section' | 'aside';
 
 const surfaceClass =
-  'bracket-card relative overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[linear-gradient(135deg,rgba(201,168,76,0.055),transparent_32%),rgba(255,255,255,0.02)] transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:border-[#c9a84c]/30 hover:shadow-[0_20px_60px_rgba(0,0,0,0.35)]';
+  'bracket-card relative overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[linear-gradient(135deg,rgba(201,168,76,0.055),transparent_32%),rgba(255,255,255,0.02)] transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:border-[#c9a84c]/30 hover:shadow-[0_20px_60px_rgba(0,0,0,0.35)] focus-within:border-[#c9a84c]/30 focus-within:shadow-[0_20px_60px_rgba(0,0,0,0.35)]';
 
 export const hubInputClass =
   'rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm text-white outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/70 focus:ring-2 focus:ring-[#c9a84c]/20';

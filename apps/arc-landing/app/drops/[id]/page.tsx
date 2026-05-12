@@ -245,12 +245,22 @@ export default function DropDetailPage({ params }: { params: Promise<{ id: strin
                                 {req === 'forum-post' && 'Post in #drops forum channel'}
                               </p>
                               {req.includes('twitter') && (
-                                <a href={drop.twitterUrl || '#'} target="_blank" className="text-[10px] text-[#c9a84c] hover:underline flex items-center gap-1 mt-1">
+                                <a
+                                  href={drop.twitterUrl || '#'}
+                                  target={drop.twitterUrl ? '_blank' : undefined}
+                                  rel={drop.twitterUrl ? 'noopener noreferrer' : undefined}
+                                  className="mt-1 flex items-center gap-1 text-[10px] text-[#c9a84c] hover:underline"
+                                >
                                   Go to Twitter <ExternalLink size={8} />
                                 </a>
                               )}
                               {req.includes('discord') && (
-                                <a href={drop.discordUrl || '#'} target="_blank" className="text-[10px] text-[#c9a84c] hover:underline flex items-center gap-1 mt-1">
+                                <a
+                                  href={drop.discordUrl || '#'}
+                                  target={drop.discordUrl ? '_blank' : undefined}
+                                  rel={drop.discordUrl ? 'noopener noreferrer' : undefined}
+                                  className="mt-1 flex items-center gap-1 text-[10px] text-[#c9a84c] hover:underline"
+                                >
                                   Go to Discord <ExternalLink size={8} />
                                 </a>
                               )}

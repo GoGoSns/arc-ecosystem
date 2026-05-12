@@ -21,7 +21,7 @@ export default function AppSwitcher() {
 
   return (
     <div
-      className="flex items-center gap-1 rounded-2xl border p-1"
+      className="flex max-w-full items-center gap-1 overflow-x-auto rounded-2xl border p-1"
       aria-label="Switch between Arc apps"
       role="navigation"
       aria-roledescription="app switcher"
@@ -35,7 +35,7 @@ export default function AppSwitcher() {
             href={app.url}
             aria-current={isActive ? 'page' : undefined}
             aria-label={`Open Arc ${app.name}`}
-            className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold transition-all hover:scale-105 focus-visible:bg-white/5"
+            className="shrink-0 flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold transition-all hover:scale-105 focus-visible:bg-white/5"
             style={{
               background: isActive ? 'rgba(201,168,76,0.15)' : 'transparent',
               color: isActive ? 'var(--accent)' : 'var(--fg)',
