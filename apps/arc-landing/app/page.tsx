@@ -180,6 +180,28 @@ export default function Page() {
     { title: t.apps.creatorTitle, description: t.apps.creatorDescription },
     { title: t.apps.playTitle, description: t.apps.playDescription },
   ];
+  const navLinks = [
+    { href: '#apps', label: t.nav.apps },
+    { href: '#architecture', label: t.nav.architecture },
+    { href: '#sdk', label: t.nav.sdk },
+    { href: '#resources', label: t.nav.docs },
+    { href: '/stats', label: t.nav.stats },
+    { href: '/value', label: t.nav.value },
+    { href: '/quests', label: t.nav.quests },
+    { href: '/jobs', label: t.nav.jobs },
+    { href: '/roulette', label: t.nav.roulette },
+    { href: '/drops', label: t.nav.drops },
+    { href: '/roadmap', label: t.nav.roadmap },
+    { href: '/showcase', label: t.nav.showcase },
+    { href: '/vault', label: t.nav.vault },
+    { href: '/signals', label: t.nav.signals },
+    { href: '/learn', label: t.nav.learn },
+    { href: '/race', label: t.nav.race },
+    { href: '#faq', label: t.nav.faq },
+    { href: '/feedback', label: t.nav.feedback },
+    { href: '/forum', label: t.nav.forum },
+    { href: '/node', label: t.nav.node },
+  ];
 
   return (
     <main className="min-h-screen overflow-hidden bg-[#0a0a0a] text-white">
@@ -191,22 +213,12 @@ export default function Page() {
             </span>
             Arc Ecosystem
           </a>
-          <div className="hidden items-center gap-8 font-mono text-xs uppercase text-[#777] md:flex">
-            <a href="#apps" className="nav-link">{t.nav.apps}</a>
-            <a href="#architecture" className="nav-link">{t.nav.architecture}</a>
-            <a href="#sdk" className="nav-link">{t.nav.sdk}</a>
-            <a href="#resources" className="nav-link">{t.nav.docs}</a>
-            <a href="/stats" className="nav-link">{t.nav.stats}</a>
-            <a href="/value" className="nav-link">{t.nav.value}</a>
-            <a href="/quests" className="nav-link">{t.nav.quests}</a>
-            <a href="/jobs" className="nav-link">{t.nav.jobs}</a>
-            <a href="/roulette" className="nav-link">{t.nav.roulette}</a>
-            <a href="/drops" className="nav-link">{t.nav.drops}</a>
-            <a href="/roadmap" className="nav-link">{t.nav.roadmap}</a>
-            <a href="#faq" className="nav-link">{t.nav.faq}</a>
-            <a href="/feedback" className="nav-link">{t.nav.feedback}</a>
-            <a href="/forum" className="nav-link">{t.nav.forum}</a>
-            <a href="/node" className="nav-link">{t.nav.node}</a>
+          <div className="hidden items-center gap-6 font-mono text-xs uppercase text-[#777] md:flex">
+            {navLinks.map((item) => (
+              <a key={item.href} href={item.href} className="nav-link">
+                {item.label}
+              </a>
+            ))}
           </div>
           <div className="hidden md:flex items-center gap-3">
             <LanguageToggle currentLang={lang} onChange={handleLangChange} />
@@ -223,24 +235,7 @@ export default function Page() {
         </div>
         {menuOpen ? (
           <div className="border-t border-[#2a2a2a] bg-[#0a0a0a] px-4 py-4 font-mono text-sm uppercase text-[#aaa] md:hidden">
-            {[
-              { href: '#apps', label: t.nav.apps },
-              { href: '#architecture', label: t.nav.architecture },
-              { href: '#sdk', label: t.nav.sdk },
-              { href: '#resources', label: t.nav.docs },
-              { href: '/stats', label: t.nav.stats },
-              { href: '/value', label: t.nav.value },
-              { href: '/quests', label: t.nav.quests },
-              { href: '/jobs', label: t.nav.jobs },
-              { href: '/roulette', label: t.nav.roulette },
-              { href: '/drops', label: t.nav.drops },
-              { href: '/race', label: t.nav.race },
-              { href: '/roadmap', label: t.nav.roadmap },
-              { href: '#faq', label: t.nav.faq },
-              { href: '/feedback', label: t.nav.feedback },
-              { href: '/forum', label: t.nav.forum },
-              { href: '/node', label: t.nav.node },
-            ].map((item) => (
+            {navLinks.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
