@@ -68,7 +68,7 @@ export default function ServicePricerPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen overflow-x-clip bg-black text-white">
       <div className="max-w-4xl mx-auto px-6 pt-32 pb-20">
         <Link href="/value" className="inline-flex items-center gap-2 text-[#555] hover:text-[#c9a84c] mb-12 group">
           <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
@@ -80,7 +80,7 @@ export default function ServicePricerPage() {
           <p className="text-[#888] text-lg">What's your freelance work worth in USDC?</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
           {/* Form Side */}
           <div className="space-y-8">
             <div className="space-y-4">
@@ -97,14 +97,14 @@ export default function ServicePricerPage() {
 
             <div className="space-y-4">
               <label className="text-xs font-mono text-[#555] uppercase tracking-widest">2. Experience Level</label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {EXPERIENCE_LEVELS.map(exp => (
                   <button
                     type="button"
                     key={exp.id}
                     onClick={() => setExperience(exp.id)}
                     aria-pressed={experience === exp.id}
-                    className={`p-4 rounded-2xl border text-sm font-bold transition-all ${experience === exp.id ? 'bg-[#c9a84c] border-[#c9a84c] text-black' : 'bg-white/5 border-white/5 text-[#555] hover:border-white/20'}`}
+                    className={`min-h-12 rounded-2xl border p-4 text-sm font-bold transition-all ${experience === exp.id ? 'bg-[#c9a84c] border-[#c9a84c] text-black' : 'bg-white/5 border-white/5 text-[#555] hover:border-white/20'}`}
                   >
                     {exp.label}
                   </button>
@@ -175,7 +175,7 @@ export default function ServicePricerPage() {
           {/* Result Side */}
           <div className="relative">
             {result ? (
-              <div className="sticky top-32 space-y-8 animate-in fade-in slide-in-from-right-4 duration-700">
+              <div className="sticky top-32 max-h-[calc(100vh-8rem)] space-y-8 overflow-y-auto pr-1 animate-in fade-in slide-in-from-right-4 duration-700">
                 <div className="rounded-3xl p-10 bg-white/[0.02] border border-[#c9a84c]/30 text-center relative overflow-hidden">
                   <div className="text-xs font-mono text-[#555] mb-6 uppercase tracking-[0.3em]">Suggested Price</div>
                   <div className="text-7xl font-black mb-4 text-[#c9a84c]">
@@ -186,7 +186,7 @@ export default function ServicePricerPage() {
                     PROFESSIONAL RATE
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-4 border-t border-white/5 pt-8">
+                  <div className="grid grid-cols-1 gap-4 border-t border-white/5 pt-8 sm:grid-cols-2">
                     <div>
                       <div className="text-[10px] text-[#555] uppercase mb-1">Hourly Rate</div>
                       <div className="font-bold text-lg">${result.hourly}/hr</div>
@@ -218,7 +218,7 @@ export default function ServicePricerPage() {
                       href={marketplaceUrl}
                       target={isExternalUrl(marketplaceUrl) ? "_blank" : undefined}
                       rel={isExternalUrl(marketplaceUrl) ? "noopener noreferrer" : undefined}
-                      className="flex items-center justify-center gap-3 p-5 rounded-2xl bg-white text-black font-black hover:bg-[#c9a84c] transition-all"
+                      className="flex min-h-14 items-center justify-center gap-3 rounded-2xl bg-white p-5 font-black text-black transition-all hover:bg-[#c9a84c]"
                     >
                       <Rocket size={20} />
                       CREATE SERVICE ON MARKETPLACE
@@ -227,7 +227,7 @@ export default function ServicePricerPage() {
                     <button
                       type="button"
                       disabled
-                      className="flex items-center justify-center gap-3 p-5 rounded-2xl bg-white text-black font-black transition-all opacity-50 cursor-not-allowed"
+                      className="flex min-h-14 items-center justify-center gap-3 rounded-2xl bg-white p-5 font-black text-black transition-all opacity-50 cursor-not-allowed"
                     >
                       <Rocket size={20} />
                       CREATE SERVICE ON MARKETPLACE

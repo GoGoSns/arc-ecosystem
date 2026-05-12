@@ -94,6 +94,7 @@ export default function DropsPage() {
   }, []);
 
   const t = translations[lang];
+  const copy = t.drops;
 
   const activeDrops = useMemo(() => drops.filter(d => d.status === 'active'), [drops]);
   const upcomingDrops = useMemo(() => drops.filter(d => d.status === 'upcoming'), [drops]);
@@ -122,8 +123,8 @@ export default function DropsPage() {
             Arc Ecosystem
           </Link>
           <div className="hidden items-center gap-8 font-mono text-xs uppercase text-[#777] md:flex">
-            <Link href="/drops" className="text-white">DROPS</Link>
-            <Link href="/drops/archive" className="nav-link">ARCHIVE</Link>
+            <Link href="/drops" className="text-white">{t.nav.drops}</Link>
+            <Link href="/drops/archive" className="nav-link">{copy.hero.archiveCta}</Link>
             <Link href="/quests" className="nav-link">{t.nav.quests}</Link>
             <Link href="/roulette" className="nav-link">{t.nav.roulette}</Link>
           </div>
@@ -145,16 +146,16 @@ export default function DropsPage() {
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col lg:flex-row justify-between items-end gap-8 mb-16">
             <div className="reveal">
-              <p className="font-mono text-xs uppercase tracking-[0.35em] text-[#c9a84c]">// giveaways</p>
+              <p className="font-mono text-xs uppercase tracking-[0.35em] text-[#c9a84c]">{copy.hero.tagline}</p>
               <h1 className="mt-6 text-5xl font-black uppercase sm:text-7xl lg:text-8xl">
-                ARC <span className="text-[#c9a84c]">DROPS</span>
+                {copy.hero.titlePrefix} <span className="text-[#c9a84c]">{copy.hero.titleAccent}</span>
               </h1>
               <p className="mt-6 max-w-2xl text-xl text-[#9a9a9a]">
-                Win USDC and exclusive NFTs. Complete simple social tasks to enter the most exciting on-chain giveaways.
+                {copy.hero.description}
               </p>
             </div>
             <Link href="/drops/archive" className="bracket-button flex items-center gap-2">
-              <Archive size={16} /> VIEW ARCHIVE
+              <Archive size={16} /> {copy.hero.archiveCta}
             </Link>
           </div>
 
@@ -162,7 +163,7 @@ export default function DropsPage() {
             <div className="bracket-card p-6 bg-white/[0.02]">
               <Brackets />
               <div className="flex items-center justify-between mb-4">
-                <p className="font-mono text-[10px] uppercase text-[#777]">Active Drops</p>
+                <p className="font-mono text-[10px] uppercase text-[#777]">{copy.stats.active}</p>
                 <Zap size={16} className="text-[#c9a84c]/50" />
               </div>
               <p className="text-3xl font-black">{stats.activeCount}</p>
@@ -170,7 +171,7 @@ export default function DropsPage() {
             <div className="bracket-card p-6 bg-white/[0.02]">
               <Brackets />
               <div className="flex items-center justify-between mb-4">
-                <p className="font-mono text-[10px] uppercase text-[#777]">Total Prize Pool</p>
+                <p className="font-mono text-[10px] uppercase text-[#777]">{copy.stats.pool}</p>
                 <Coins size={16} className="text-[#c9a84c]/50" />
               </div>
               <p className="text-3xl font-black">${stats.totalPrizePool.toLocaleString()}</p>
@@ -178,7 +179,7 @@ export default function DropsPage() {
             <div className="bracket-card p-6 bg-white/[0.02]">
               <Brackets />
               <div className="flex items-center justify-between mb-4">
-                <p className="font-mono text-[10px] uppercase text-[#777]">Total Entries</p>
+                <p className="font-mono text-[10px] uppercase text-[#777]">{copy.stats.entries}</p>
                 <Users size={16} className="text-[#c9a84c]/50" />
               </div>
               <p className="text-3xl font-black">{stats.totalEntries}</p>
@@ -186,7 +187,7 @@ export default function DropsPage() {
             <div className="bracket-card p-6 bg-[#c9a84c]/5 border-[#c9a84c]/20">
               <Brackets />
               <div className="flex items-center justify-between mb-4">
-                <p className="font-mono text-[10px] uppercase text-[#c9a84c]">Your Entries</p>
+                <p className="font-mono text-[10px] uppercase text-[#c9a84c]">{copy.stats.yours}</p>
                 <CheckCircle2 size={16} className="text-[#c9a84c]" />
               </div>
               <p className="text-3xl font-black">{stats.userEntries}</p>
@@ -197,7 +198,7 @@ export default function DropsPage() {
           <div className="mb-20">
             <div className="flex items-center gap-3 mb-10">
               <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-              <h2 className="text-2xl font-black uppercase tracking-wider">Active Drops</h2>
+              <h2 className="text-2xl font-black uppercase tracking-wider">{copy.sections.active}</h2>
             </div>
             
             <div className="grid gap-8 md:grid-cols-2">
@@ -219,7 +220,7 @@ export default function DropsPage() {
                       <div className="flex justify-between items-start mb-4">
                         <h3 className="text-3xl font-black uppercase group-hover:text-[#c9a84c] transition-colors">{drop.title}</h3>
                         <div className="text-right">
-                          <p className="text-[10px] font-mono text-[#777] uppercase">Prize</p>
+                          <p className="text-[10px] font-mono text-[#777] uppercase">{copy.cards.prize}</p>
                           <p className="text-xl font-black text-[#c9a84c]">
                             {drop.prizeType === 'usdc' ? `$${drop.prizeAmount}` : `${drop.prizeAmount} NFTs`}
                           </p>
@@ -233,10 +234,10 @@ export default function DropsPage() {
                       <div className="mt-auto pt-8 border-t border-white/5 flex items-center justify-between">
                         <div className="flex gap-4">
                           <div className="flex items-center gap-1.5 text-[10px] font-mono text-[#555] uppercase">
-                            <Users size={12} /> {drop.entries.length} entries
+                            <Users size={12} /> {drop.entries.length} {copy.cards.entries}
                           </div>
                           <div className="flex items-center gap-1.5 text-[10px] font-mono text-[#555] uppercase">
-                            <LayoutGrid size={12} /> {drop.winnerCount} winners
+                            <LayoutGrid size={12} /> {drop.winnerCount} {copy.cards.winners}
                           </div>
                         </div>
                         <div className="flex gap-2">
@@ -260,7 +261,7 @@ export default function DropsPage() {
           <div>
             <div className="flex items-center gap-3 mb-10">
               <div className="h-2 w-2 rounded-full bg-blue-500" />
-              <h2 className="text-2xl font-black uppercase tracking-wider text-[#777]">Upcoming Drops</h2>
+              <h2 className="text-2xl font-black uppercase tracking-wider text-[#777]">{copy.sections.upcoming}</h2>
             </div>
             
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -270,7 +271,9 @@ export default function DropsPage() {
                   <div className="flex justify-between items-start mb-6">
                     <div>
                       <h3 className="text-xl font-black uppercase mb-1">{drop.title}</h3>
-                      <p className="text-[10px] font-mono text-[#c9a84c] uppercase">Starts in {Math.floor((drop.startDate - Date.now()) / 86400000)} days</p>
+                      <p className="text-[10px] font-mono text-[#c9a84c] uppercase">
+                        {copy.cards.startsIn} {Math.floor((drop.startDate - Date.now()) / 86400000)} {copy.cards.days}
+                      </p>
                     </div>
                     <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                       <Timer size={20} className="text-[#555]" />
@@ -282,7 +285,7 @@ export default function DropsPage() {
                       {drop.prizeType === 'usdc' ? `$${drop.prizeAmount}` : `${drop.prizeAmount} NFTs`}
                     </span>
                     <Link href={`/drops/${drop.id}`} className="text-[10px] font-mono text-[#555] hover:text-white transition-colors">
-                      DETAILS <ArrowRight size={10} className="inline ml-1" />
+                      {copy.cards.details} <ArrowRight size={10} className="inline ml-1" />
                     </Link>
                   </div>
                 </div>

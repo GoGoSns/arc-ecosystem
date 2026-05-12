@@ -95,7 +95,7 @@ export default function FeedbackBrowse() {
   }, [feedbacks, category, status, sort, search]);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white">
       {/* Nav */}
       <nav className="sticky top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/90 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
@@ -120,11 +120,7 @@ export default function FeedbackBrowse() {
               Help shape Arc Ecosystem. Report bugs, suggest features, share ideas.
             </p>
           </div>
-          <Link
-            href="/feedback/new"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all hover:scale-105 shrink-0"
-            style={{ background: '#c9a84c', color: '#0a0a0a' }}
-          >
+          <Link href="/feedback/new" className="primary-button shrink-0">
             <Plus size={16} />
             New Feedback
           </Link>
@@ -157,7 +153,7 @@ export default function FeedbackBrowse() {
               type="button"
               onClick={() => setCategory('all')}
               aria-pressed={category === 'all'}
-              className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all"
+              className="min-h-11 px-3 py-2 rounded-lg text-xs font-bold transition-all"
               style={{
                 background: category === 'all' ? 'rgba(201,168,76,0.15)' : 'rgba(255,255,255,0.03)',
                 border: `1px solid ${category === 'all' ? 'rgba(201,168,76,0.4)' : 'rgba(255,255,255,0.08)'}`,
@@ -175,7 +171,7 @@ export default function FeedbackBrowse() {
                   key={cat}
                   onClick={() => setCategory(cat)}
                   aria-pressed={category === cat}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all"
+                  className="flex min-h-11 items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all"
                   style={{
                     background: active ? `${cfg.color}15` : 'rgba(255,255,255,0.03)',
                     border: `1px solid ${active ? `${cfg.color}60` : 'rgba(255,255,255,0.08)'}`,
@@ -199,7 +195,7 @@ export default function FeedbackBrowse() {
                 aria-label="Search feedback"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full rounded-lg pl-9 pr-3 py-2 text-sm text-white placeholder-[#555] outline-none transition-colors"
+                className="w-full min-h-11 rounded-lg pl-9 pr-3 py-2 text-sm text-white placeholder-[#555] outline-none transition-colors"
                 style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
               />
             </div>
@@ -207,7 +203,7 @@ export default function FeedbackBrowse() {
               aria-label="Filter feedback by status"
               value={status}
               onChange={(e) => setStatus(e.target.value as FeedbackStatus | 'all')}
-              className="rounded-lg px-3 py-2 text-sm text-[#aaa] outline-none"
+              className="min-h-11 rounded-lg px-3 py-2 text-sm text-[#aaa] outline-none"
               style={{ background: '#111', border: '1px solid rgba(255,255,255,0.08)' }}
             >
               <option value="all">All Statuses</option>
@@ -219,7 +215,7 @@ export default function FeedbackBrowse() {
               aria-label="Sort feedback"
               value={sort}
               onChange={(e) => setSort(e.target.value as 'votes' | 'newest' | 'oldest')}
-              className="rounded-lg px-3 py-2 text-sm text-[#aaa] outline-none"
+              className="min-h-11 rounded-lg px-3 py-2 text-sm text-[#aaa] outline-none"
               style={{ background: '#111', border: '1px solid rgba(255,255,255,0.08)' }}
             >
               <option value="votes">Most Votes</option>
@@ -237,11 +233,7 @@ export default function FeedbackBrowse() {
                 ? 'No feedback matches your filters.'
                 : 'No feedback yet. Be the first!'}
             </p>
-            <Link
-              href="/feedback/new"
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold"
-              style={{ background: '#c9a84c', color: '#0a0a0a' }}
-            >
+            <Link href="/feedback/new" className="primary-button">
               <Plus size={16} />
               Submit Feedback
             </Link>
@@ -255,7 +247,7 @@ export default function FeedbackBrowse() {
               return (
                 <div
                   key={fb.id}
-                  className="flex gap-4 rounded-xl p-4 transition-all"
+                  className="flex gap-4 rounded-3xl p-5 sm:p-6 transition-all"
                   style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
                 >
                   {/* Vote */}
@@ -270,7 +262,7 @@ export default function FeedbackBrowse() {
                           : `Upvote ${fb.title}`
                         : 'Connect wallet to vote'
                     }
-                    className="flex flex-col items-center justify-start gap-1 pt-1 min-w-[40px] transition-all hover:scale-110"
+                    className="flex min-w-[44px] flex-col items-center justify-start gap-1 pt-1 transition-all hover:scale-110"
                     title={address ? (hasVoted ? 'Remove vote' : 'Upvote') : 'Connect wallet to vote'}
                   >
                     <ChevronUp size={18} style={{ color: hasVoted ? '#c9a84c' : '#555' }} />

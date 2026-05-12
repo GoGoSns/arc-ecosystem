@@ -75,7 +75,7 @@ export default function QuestsPage() {
   }, [activeCategory, activeDifficulty, activeStatus, progress]);
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
+    <main className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white">
       {/* Navigation */}
       <nav className="fixed left-0 right-0 top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/85 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -175,7 +175,7 @@ export default function QuestsPage() {
                   </div>
                 </div>
 
-                <Link href="/quests/profile" className="bracket-button w-full mt-6 justify-center">
+                <Link href="/quests/profile" className="primary-button w-full mt-6 justify-center">
                   VIEW PROFILE <User size={14} />
                 </Link>
               </div>
@@ -186,7 +186,7 @@ export default function QuestsPage() {
 
       {/* Filters */}
       <section className="sticky top-16 z-40 border-y border-[#2a2a2a] bg-[#0a0a0a]/90 backdrop-blur-md">
-        <div className="mx-auto max-w-7xl px-4 py-4 flex flex-wrap items-center gap-6">
+        <div className="mx-auto grid max-w-7xl gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_auto]">
           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2">
             {CATEGORIES.map((cat) => (
               <button
@@ -194,7 +194,7 @@ export default function QuestsPage() {
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
                 aria-pressed={activeCategory === cat.id}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all whitespace-nowrap text-sm ${
+                className={`flex min-h-11 items-center gap-2 rounded-full border px-4 py-2 transition-all whitespace-nowrap text-sm ${
                   activeCategory === cat.id 
                     ? 'bg-[#c9a84c] border-[#c9a84c] text-black font-bold' 
                     : 'border-[#2a2a2a] text-[#777] hover:border-[#c9a84c]/50'
@@ -206,12 +206,12 @@ export default function QuestsPage() {
             ))}
           </div>
 
-          <div className="flex items-center gap-4 ml-auto">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center lg:ml-auto">
              <select 
               aria-label="Filter quests by difficulty"
               value={activeDifficulty} 
               onChange={(e) => setActiveDifficulty(e.target.value as any)}
-              className="bg-transparent border border-[#2a2a2a] text-[#777] text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#c9a84c]"
+              className="min-h-11 bg-transparent border border-[#2a2a2a] text-[#777] text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#c9a84c]"
             >
               <option value="all">All Difficulties</option>
               {DIFFICULTIES.map(d => (
@@ -226,7 +226,7 @@ export default function QuestsPage() {
                   key={s}
                   onClick={() => setActiveStatus(s)}
                   aria-pressed={activeStatus === s}
-                  className={`px-4 py-1.5 rounded-md text-xs font-mono uppercase transition-all ${
+                  className={`min-h-11 px-4 py-2 rounded-md text-xs font-mono uppercase transition-all ${
                     activeStatus === s ? 'bg-[#222] text-white shadow-lg' : 'text-[#555] hover:text-[#777]'
                   }`}
                 >
@@ -262,7 +262,7 @@ export default function QuestsPage() {
               <p className="mt-2 text-[#777]">Try adjusting your filters or category.</p>
               <button 
                 onClick={() => {setActiveCategory('all'); setActiveDifficulty('all'); setActiveStatus('all');}}
-                className="mt-6 text-[#c9a84c] hover:underline"
+                className="secondary-button mt-6"
               >
                 Clear all filters
               </button>
@@ -288,7 +288,7 @@ function QuestCard({
   const cat = CATEGORIES.find(c => c.id === quest.category);
   
   return (
-    <article className={`bracket-card flex flex-col p-6 transition-all group ${isCompleted ? 'opacity-70 grayscale-[0.5]' : 'hover:border-[#c9a84c]/40'}`}>
+    <article className={`bracket-card flex flex-col rounded-3xl p-6 transition-all group sm:p-7 ${isCompleted ? 'opacity-70 grayscale-[0.5]' : 'hover:border-[#c9a84c]/40'}`}>
       <Brackets />
       
       <div className="flex items-start justify-between mb-4">
@@ -325,27 +325,27 @@ function QuestCard({
               href={quest.externalUrl} 
               target="_blank" 
               rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-2 bg-[#1a1a1a] hover:bg-[#222] border border-[#2a2a2a] text-white font-mono text-xs py-3 rounded transition-all"
-            >
-              OPEN <ExternalLink size={12} />
-            </a>
+            className="secondary-button flex-1 justify-center"
+          >
+            OPEN <ExternalLink size={12} />
+          </a>
           )}
           
           {isConnected && !isCompleted ? (
             <button 
               onClick={onComplete}
-              className="flex-1 flex items-center justify-center gap-2 bg-[#c9a84c] hover:bg-[#d4b96a] text-black font-black text-xs py-3 rounded transition-all"
+              className="primary-button flex-1 justify-center"
             >
               COMPLETE <CheckCircle2 size={12} />
             </button>
           ) : isCompleted ? (
-            <div className="w-full flex items-center justify-center gap-2 bg-green-500/10 border border-green-500/20 text-green-500 font-black text-xs py-3 rounded cursor-default">
+            <div className="secondary-button w-full cursor-default justify-center border border-green-500/20 text-green-500">
               COMPLETED <CheckCircle2 size={12} />
             </div>
           ) : (
             <button 
               disabled
-              className="flex-1 flex items-center justify-center gap-2 bg-[#111] text-[#333] border border-[#222] font-mono text-xs py-3 rounded cursor-not-allowed"
+              className="secondary-button flex-1 cursor-not-allowed justify-center opacity-50"
             >
               CONNECT TO START
             </button>

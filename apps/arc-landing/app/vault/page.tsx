@@ -142,7 +142,7 @@ export default function VaultPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
+    <main className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white">
       <nav className="sticky top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/90 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link href="/" className="flex items-center gap-3 font-mono text-sm uppercase tracking-[0.18em] text-white">
@@ -198,7 +198,7 @@ export default function VaultPage() {
             <div className="space-y-5">
               <div className="bracket-card rounded-3xl p-5 sm:p-6">
                 <HubBrackets />
-                <div className="grid gap-5 lg:grid-cols-[1fr_auto_auto] lg:items-end">
+                <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-[1fr_auto_auto] xl:items-end">
                   <div className="relative">
                     <label className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Search</label>
                     <div className="relative mt-2">

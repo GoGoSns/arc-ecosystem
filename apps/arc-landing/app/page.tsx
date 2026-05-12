@@ -186,6 +186,16 @@ export default function Page() {
     { title: t.apps.creatorTitle, description: t.apps.creatorDescription },
     { title: t.apps.playTitle, description: t.apps.playDescription },
   ];
+  const appCardLabels = [
+    t.home.cards.payLabel,
+    t.home.cards.creatorLabel,
+    t.home.cards.playLabel,
+  ];
+  const appCardCtas = [
+    t.home.cards.payCta,
+    t.home.cards.creatorCta,
+    t.home.cards.playCta,
+  ];
   const primaryNavLinks = [
     { href: '#top', label: t.nav.home },
     { href: '/value', label: t.nav.value },
@@ -257,7 +267,7 @@ export default function Page() {
         </div>
         {menuOpen ? (
           <div id="mobile-nav" className="border-t border-[#2a2a2a] bg-[#0a0a0a] px-4 py-4 font-mono text-sm uppercase text-[#aaa] md:hidden">
-            <p className="pb-2 text-[10px] tracking-[0.3em] text-[#777]">CORE</p>
+            <p className="pb-2 text-[10px] tracking-[0.3em] text-[#777]">{t.home.diagram.core}</p>
             {primaryNavLinks.map((item) => (
               <a
                 key={item.href}
@@ -268,7 +278,7 @@ export default function Page() {
                 {item.label}
               </a>
             ))}
-            <p className="pb-2 pt-4 text-[10px] tracking-[0.3em] text-[#777]">UTILITY</p>
+            <p className="pb-2 pt-4 text-[10px] tracking-[0.3em] text-[#777]">{t.home.diagram.utility}</p>
             {utilityNavLinks.map((item) => (
               <a
                 key={item.href}
@@ -344,7 +354,7 @@ export default function Page() {
             {appCards.map((card, idx) => (
               <article key={card.title} className="bracket-card flex min-h-[560px] flex-col p-6 sm:p-8">
                 <Brackets />
-                <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">{card.label}</p>
+                <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">{appCardLabels[idx]}</p>
                 <h3 className="mt-5 text-4xl font-black tracking-wide">{cardDesc[idx].title.toUpperCase()}</h3>
                 <p className="mt-4 min-h-14 text-[#8b8b8b]">{cardDesc[idx].description}</p>
                 <div className="mt-8 space-y-3">
@@ -359,7 +369,7 @@ export default function Page() {
                       >
                         <span>{feature.name}</span>
                         <span className="ml-auto flex items-center gap-2">
-                          <span className="soon-badge">soon</span>
+                          <span className="soon-badge">{t.home.soon}</span>
                           <ChevronRight className="feature-arrow" size={16} />
                         </span>
                       </a>
@@ -371,7 +381,7 @@ export default function Page() {
                       >
                         <span>{feature.name}</span>
                         <span className="ml-auto flex items-center gap-2">
-                          <span className="soon-badge">soon</span>
+                          <span className="soon-badge">{t.home.soon}</span>
                           <ChevronRight className="feature-arrow" size={16} />
                         </span>
                       </span>
@@ -385,11 +395,11 @@ export default function Page() {
                     rel={isExternalUrl(card.url) ? "noopener noreferrer" : undefined}
                     className="bracket-button mt-auto w-full justify-center"
                   >
-                    {card.cta} <ArrowRight size={15} />
+                    {appCardCtas[idx]} <ArrowRight size={15} />
                   </a>
                 ) : (
                   <span aria-disabled="true" className="bracket-button mt-auto w-full justify-center cursor-not-allowed opacity-50">
-                    {card.cta} <ArrowRight size={15} />
+                    {appCardCtas[idx]} <ArrowRight size={15} />
                   </span>
                 )}
               </article>
@@ -402,11 +412,11 @@ export default function Page() {
         <div className="reveal mx-auto max-w-7xl">
           <SectionTitle label={`// ${t.sections.architectureTitle.toLowerCase()}`} title={t.sections.architectureSubtitle} />
           <div className="architecture mt-14 grid gap-8 lg:grid-cols-[1fr_1.1fr_1fr]">
-            <DiagramColumn title="INPUT" items={wallets} activeIndex={0} />
+            <DiagramColumn title={t.home.diagram.input} items={wallets} activeIndex={0} />
             <div className="bracket-card core-box p-8 text-center">
               <Brackets />
-              <p className="font-mono text-xs uppercase tracking-[0.28em] text-[#c9a84c]">CORE</p>
-              <h3 className="mt-4 text-4xl font-black">ARC NETWORK</h3>
+              <p className="font-mono text-xs uppercase tracking-[0.28em] text-[#c9a84c]">{t.home.diagram.core}</p>
+              <h3 className="mt-4 text-4xl font-black">{t.home.diagram.arcNetwork}</h3>
               <div className="mt-8 space-y-3 font-mono text-sm text-[#aaa]">
                 <p>chainId 5042002</p>
                 <p>USDC native (decimals 18)</p>
@@ -414,7 +424,7 @@ export default function Page() {
                 <p className="text-white">Status: <span className="green-dot" /> LIVE</p>
               </div>
             </div>
-            <DiagramColumn title="OUTPUT" items={["arc-pay", "arc-creator", "arc-play", "+ shared-ui", "+ arc-kit"]} activeIndex={2} plannedStart={3} />
+            <DiagramColumn title={t.home.diagram.output} items={["arc-pay", "arc-creator", "arc-play", "+ shared-ui", "+ arc-kit"]} activeIndex={2} plannedStart={3} />
           </div>
           <p className="mt-10 text-center font-mono text-xs uppercase tracking-[0.24em] text-[#777]">
             Apps &middot; 3 <span className="mx-3 text-[#333]">|</span> Features &middot; 13 <span className="mx-3 text-[#333]">|</span>{" "}
@@ -452,11 +462,32 @@ export default function Page() {
 
       <section id="resources" className="section border-y border-[#141414] bg-white/[0.01]">
         <div className="reveal mx-auto max-w-7xl">
-          <SectionTitle label={t.sections.resourcesTitle.toLowerCase()} title="Read the latest. Join the community." />
+          <SectionTitle label={t.sections.resourcesTitle.toLowerCase()} title={t.sections.resourcesSubtitle} />
           <div className="mt-14 grid gap-6 lg:grid-cols-3">
-            <ResourceCard icon={<FileText size={42} />} label="[ RESOURCES ]" title="DOCUMENTATION" text="Architecture overview, integration guides, and API reference for Arc Ecosystem." footer="READ DOCS" href={docsHref} />
-            <ResourceCard icon={<Github size={42} />} label="[ OPEN SOURCE ]" title="GITHUB" text="All apps, packages, and SDKs are open source. Contribute, fork, or audit." footer="VIEW REPO" href={githubHref} />
-            <ResourceCard icon={<XLogo />} label="[ COMMUNITY ]" title={"X · UPDATES"} text="Follow @gogo for protocol updates, demos, and ecosystem developments." footer="COMING SOON" href={null} />
+            <ResourceCard
+              icon={<FileText size={42} />}
+              label={t.home.resources.docsLabel}
+              title={t.home.resources.docsTitle}
+              text={t.home.resources.docsText}
+              footer={t.home.resources.docsFooter}
+              href={docsHref}
+            />
+            <ResourceCard
+              icon={<Github size={42} />}
+              label={t.home.resources.githubLabel}
+              title={t.home.resources.githubTitle}
+              text={t.home.resources.githubText}
+              footer={t.home.resources.githubFooter}
+              href={githubHref}
+            />
+            <ResourceCard
+              icon={<XLogo />}
+              label={t.home.resources.communityLabel}
+              title={t.home.resources.communityTitle}
+              text={t.home.resources.communityText}
+              footer={t.home.resources.communityFooter}
+              href={null}
+            />
           </div>
         </div>
       </section>
@@ -478,11 +509,11 @@ export default function Page() {
               rel={isExternalUrl(arcPayUrl) ? "noopener noreferrer" : undefined}
               className="primary-button mt-10"
             >
-              GET STARTED
+              {t.home.cta.start}
             </a>
           ) : (
             <span aria-disabled="true" className="primary-button mt-10 cursor-not-allowed opacity-50">
-              GET STARTED
+              {t.home.cta.start}
             </span>
           )}
           <p className="mt-14 font-mono text-xs uppercase tracking-[0.35em] text-white/15">// arc &middot; stablecoin &middot; onchain</p>
@@ -491,7 +522,7 @@ export default function Page() {
 
       <section id="faq" className="section pt-0">
         <div className="reveal mx-auto max-w-4xl">
-          <SectionTitle label={`[ ${t.sections.faqTitle} ]`} title="Frequently Asked Questions" />
+          <SectionTitle label={`[ ${t.sections.faqTitle} ]`} title={t.sections.faqSubtitle} />
           <div className="mt-12 border-t border-[#2a2a2a]">
             {faqs.map(([question, answer], index) => {
               const isOpen = openFaq === index;

@@ -187,7 +187,7 @@ export default function RoadmapPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white pb-20">
+    <div className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white pb-20">
       {/* Nav */}
       <nav className="sticky top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/90 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
@@ -224,8 +224,8 @@ export default function RoadmapPage() {
         </div>
 
         {/* Filters */}
-        <div className="flex flex-col lg:flex-row gap-6 mb-12 items-start lg:items-center justify-between bg-white/[0.01] border border-white/[0.05] p-6 rounded-2xl">
-          <div className="flex flex-wrap gap-4">
+        <div className="grid gap-4 mb-12 items-start bg-white/[0.01] border border-white/[0.05] p-5 sm:p-6 rounded-2xl xl:grid-cols-[minmax(0,1fr)_auto]">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {/* Quarter Filter */}
             <div className="flex flex-col gap-1.5">
               <label className="text-[9px] uppercase tracking-widest text-[#555] font-bold flex items-center gap-1">
@@ -235,7 +235,7 @@ export default function RoadmapPage() {
                 aria-label="Filter roadmap by quarter"
                 value={quarterFilter}
                 onChange={(e) => setQuarterFilter(e.target.value as any)}
-                className="bg-[#111] border border-[#2a2a2a] rounded-lg px-3 py-1.5 text-xs text-[#aaa] focus:outline-none focus:border-[#c9a84c]/50 appearance-none min-w-[120px]"
+                className="min-h-12 w-full bg-[#111] border border-[#2a2a2a] rounded-lg px-3 py-3 text-xs text-[#aaa] focus:outline-none focus:border-[#c9a84c]/50 appearance-none"
               >
                 <option value="All">All Quarters</option>
                 {QUARTERS.map(q => <option key={q} value={q}>{q}</option>)}
@@ -251,7 +251,7 @@ export default function RoadmapPage() {
                 aria-label="Filter roadmap by status"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value as any)}
-                className="bg-[#111] border border-[#2a2a2a] rounded-lg px-3 py-1.5 text-xs text-[#aaa] focus:outline-none focus:border-[#c9a84c]/50 appearance-none min-w-[120px]"
+                className="min-h-12 w-full bg-[#111] border border-[#2a2a2a] rounded-lg px-3 py-3 text-xs text-[#aaa] focus:outline-none focus:border-[#c9a84c]/50 appearance-none"
               >
                 <option value="All">All Statuses</option>
                 {STATUSES.map(s => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
@@ -267,7 +267,7 @@ export default function RoadmapPage() {
                 aria-label="Filter roadmap by category"
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value as any)}
-                className="bg-[#111] border border-[#2a2a2a] rounded-lg px-3 py-1.5 text-xs text-[#aaa] focus:outline-none focus:border-[#c9a84c]/50 appearance-none min-w-[120px]"
+                className="min-h-12 w-full bg-[#111] border border-[#2a2a2a] rounded-lg px-3 py-3 text-xs text-[#aaa] focus:outline-none focus:border-[#c9a84c]/50 appearance-none"
               >
                 <option value="All">All Categories</option>
                 {CATEGORIES.map(c => <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
@@ -275,18 +275,18 @@ export default function RoadmapPage() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-1.5 xl:items-end">
             <label className="text-[9px] uppercase tracking-widest text-[#555] font-bold flex items-center gap-1">
               <SortAsc size={10} /> Sort By
             </label>
-            <div className="flex border border-[#2a2a2a] rounded-lg overflow-hidden">
+            <div className="flex w-full max-w-full border border-[#2a2a2a] rounded-lg overflow-hidden">
               {(['quarter', 'votes', 'newest'] as const).map((sort) => (
                 <button
                   type="button"
                   key={sort}
                   onClick={() => setSortBy(sort)}
                   aria-pressed={sortBy === sort}
-                  className={`px-4 py-1.5 text-[10px] uppercase font-bold tracking-wider transition-colors ${sortBy === sort ? 'bg-[#c9a84c] text-black' : 'bg-[#111] text-[#777] hover:text-white'}`}
+                  className={`min-h-11 px-3 sm:px-4 py-2 text-[10px] uppercase font-bold tracking-wider transition-colors ${sortBy === sort ? 'bg-[#c9a84c] text-black' : 'bg-[#111] text-[#777] hover:text-white'}`}
                 >
                   {sort}
                 </button>
@@ -304,7 +304,7 @@ export default function RoadmapPage() {
               aria-haspopup="dialog"
               aria-expanded={showAddModal}
               aria-controls="roadmap-add-modal"
-              className="flex items-center gap-2 bg-[#c9a84c] text-black font-black px-6 py-3 rounded-xl hover:scale-105 transition-transform"
+              className="flex min-h-12 items-center gap-2 bg-[#c9a84c] px-6 py-3 font-black text-black rounded-xl hover:scale-105 transition-transform"
             >
               <Plus size={18} /> ADD NEW ITEM
             </button>
@@ -429,13 +429,13 @@ export default function RoadmapPage() {
 
       {/* Add Modal (Admin Only) */}
       {showAddModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto p-4 bg-black/80 backdrop-blur-sm sm:items-center">
           <div
             id="roadmap-add-modal"
             role="dialog"
             aria-modal="true"
             aria-labelledby="roadmap-add-modal-title"
-            className="bg-[#111] border border-[#2a2a2a] rounded-3xl p-8 max-w-lg w-full"
+            className="max-h-[calc(100vh-2rem)] w-full max-w-lg overflow-y-auto rounded-3xl border border-[#2a2a2a] bg-[#111] p-8"
           >
             <h3 id="roadmap-add-modal-title" className="text-2xl font-black mb-6">ADD ROADMAP ITEM</h3>
             <form onSubmit={handleAddItem} className="space-y-4">
@@ -457,7 +457,7 @@ export default function RoadmapPage() {
                   placeholder="Detailed description..."
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="text-[10px] uppercase font-bold text-[#555] mb-1 block">Quarter</label>
                   <select 
@@ -480,8 +480,8 @@ export default function RoadmapPage() {
                 </div>
               </div>
               <div className="flex gap-3 pt-4">
-                <button type="submit" className="flex-1 bg-[#c9a84c] text-black font-black py-3 rounded-xl">ADD ITEM</button>
-                <button type="button" onClick={() => setShowAddModal(false)} className="flex-1 bg-white/5 font-black py-3 rounded-xl hover:bg-white/10 transition-colors">CANCEL</button>
+                <button type="submit" className="flex-1 min-h-12 rounded-xl bg-[#c9a84c] py-3 font-black text-black">ADD ITEM</button>
+                <button type="button" onClick={() => setShowAddModal(false)} className="flex-1 min-h-12 rounded-xl bg-white/5 py-3 font-black hover:bg-white/10 transition-colors">CANCEL</button>
               </div>
             </form>
           </div>
@@ -523,7 +523,7 @@ function SuggestionForm({
           onClick={() => isConnected ? setExpanded(true) : onConnect()}
           aria-expanded={expanded}
           aria-controls="roadmap-suggestion-form"
-          className="w-full p-8 flex items-center justify-between group hover:bg-white/[0.01] transition-colors"
+          className="w-full min-h-16 p-8 flex items-center justify-between group hover:bg-white/[0.01] transition-colors"
         >
           <div className="text-left">
             <h3 className="text-xl font-bold mb-2 uppercase tracking-tight">Suggest a feature</h3>
@@ -556,15 +556,15 @@ function SuggestionForm({
                   type="button"
                   onClick={() => setCat(c)}
                   aria-pressed={cat === c}
-                  className={`px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest border transition-all ${cat === c ? 'bg-[#c9a84c] border-[#c9a84c] text-black' : 'border-white/10 text-[#555] hover:border-white/20'}`}
-                >
-                  {c}
-                </button>
-              ))}
-            </div>
-            <div className="flex gap-3 pt-4">
-              <button type="submit" className="flex-1 bg-[#c9a84c] text-black font-black py-3 rounded-xl">SUBMIT IDEA</button>
-              <button type="button" onClick={() => setExpanded(false)} className="flex-1 bg-white/5 font-black py-3 rounded-xl hover:bg-white/10 transition-colors">CANCEL</button>
+                className={`min-h-11 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest border transition-all ${cat === c ? 'bg-[#c9a84c] border-[#c9a84c] text-black' : 'border-white/10 text-[#555] hover:border-white/20'}`}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+          <div className="flex gap-3 pt-4">
+              <button type="submit" className="flex-1 min-h-12 rounded-xl bg-[#c9a84c] py-3 font-black text-black">SUBMIT IDEA</button>
+              <button type="button" onClick={() => setExpanded(false)} className="flex-1 min-h-12 rounded-xl bg-white/5 py-3 font-black hover:bg-white/10 transition-colors">CANCEL</button>
             </div>
           </form>
         </div>

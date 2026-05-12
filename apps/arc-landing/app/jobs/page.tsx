@@ -84,7 +84,7 @@ export default function JobsPage() {
   }, [jobs]);
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
+    <main className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white">
       {/* Navigation */}
       <nav className="fixed left-0 right-0 top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/85 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -151,7 +151,7 @@ export default function JobsPage() {
       {/* Filters & Search */}
       <section className="sticky top-16 z-40 border-y border-[#2a2a2a] bg-[#0a0a0a]/90 backdrop-blur-md">
         <div className="mx-auto max-w-7xl px-4 py-6">
-          <div className="grid gap-6 lg:grid-cols-[1fr_auto]">
+          <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_auto]">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#555]" size={20} />
               <input 
@@ -160,15 +160,15 @@ export default function JobsPage() {
                 aria-label="Search jobs"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-[#111] border border-[#2a2a2a] rounded-xl py-3 pl-12 pr-4 text-white placeholder:text-[#555] focus:outline-none focus:border-[#c9a84c]/50 transition-colors"
+                className="w-full min-h-12 bg-[#111] border border-[#2a2a2a] rounded-xl py-3 pl-12 pr-4 text-white placeholder:text-[#555] focus:outline-none focus:border-[#c9a84c]/50 transition-colors"
               />
             </div>
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="grid gap-3 sm:grid-cols-2 xl:flex xl:flex-wrap xl:items-center">
               <select 
                 aria-label="Filter jobs by category"
                 value={activeCategory}
                 onChange={(e) => setActiveCategory(e.target.value as any)}
-                className="bg-[#111] border border-[#2a2a2a] text-sm text-[#aaa] rounded-lg px-4 py-3 focus:outline-none focus:border-[#c9a84c]/50"
+                className="min-h-12 w-full bg-[#111] border border-[#2a2a2a] text-sm text-[#aaa] rounded-lg px-4 py-3 focus:outline-none focus:border-[#c9a84c]/50 xl:w-auto"
               >
                 {CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
               </select>
@@ -176,11 +176,11 @@ export default function JobsPage() {
                 aria-label="Filter jobs by type"
                 value={activeType}
                 onChange={(e) => setActiveType(e.target.value as any)}
-                className="bg-[#111] border border-[#2a2a2a] text-sm text-[#aaa] rounded-lg px-4 py-3 focus:outline-none focus:border-[#c9a84c]/50"
+                className="min-h-12 w-full bg-[#111] border border-[#2a2a2a] text-sm text-[#aaa] rounded-lg px-4 py-3 focus:outline-none focus:border-[#c9a84c]/50 xl:w-auto"
               >
                 {TYPES.map(t => <option key={t.id} value={t.id}>{t.label}</option>)}
               </select>
-              <div className="flex items-center gap-4 bg-[#111] border border-[#2a2a2a] rounded-lg px-4 py-2">
+              <div className="flex flex-col gap-3 rounded-lg border border-[#2a2a2a] bg-[#111] px-4 py-3 sm:col-span-2 xl:min-w-[280px]">
                 <span className="text-xs font-mono uppercase text-[#555]">Min Salary: ${salaryRange}k</span>
                 <input 
                   type="range" 
@@ -190,7 +190,7 @@ export default function JobsPage() {
                   value={salaryRange}
                   onChange={(e) => setSalaryRange(parseInt(e.target.value))}
                   aria-label="Minimum salary filter in thousands of USDC"
-                  className="accent-[#c9a84c]"
+                  className="accent-[#c9a84c] w-full"
                 />
               </div>
             </div>
@@ -221,7 +221,7 @@ export default function JobsPage() {
                 <button 
                   type="button"
                   onClick={() => {setSearch(''); setActiveCategory('all'); setActiveType('all'); setSalaryRange(0);}}
-                  className="mt-6 text-[#c9a84c] hover:underline"
+                  className="secondary-button mt-6"
                 >
                   Clear all filters
                 </button>
