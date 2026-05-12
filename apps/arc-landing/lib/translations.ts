@@ -25,6 +25,7 @@ export const translations = {
       vault: 'VAULT',
       signals: 'SIGNALS',
       learn: 'LEARN',
+      glossary: 'GLOSSARY',
     },
     hero: {
       tagline: '[ // ARC.ECOSYSTEM ]',
@@ -91,6 +92,7 @@ export const translations = {
       vault: 'KASA',
       signals: 'SİNYALLER',
       learn: 'ÖĞREN',
+      glossary: 'SÖZLÜK',
     },
     hero: {
       tagline: '[ // ARC.EKOSİSTEM ]',

@@ -193,6 +193,7 @@ export default function Page() {
     { href: '/vault', label: t.nav.vault },
     { href: '/signals', label: t.nav.signals },
     { href: '/learn', label: t.nav.learn },
+    { href: '/glossary', label: t.nav.glossary },
     { href: '#faq', label: t.nav.faq },
   ];
   const utilityNavLinks = [

@@ -20,6 +20,16 @@ export const hubLabelClass = 'font-mono text-[10px] uppercase tracking-[0.28em] 
 export const hubBadgeClass =
   'inline-flex items-center rounded-full border border-[#2a2a2a] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#aaa]';
 
+export function HubBadge({
+  children,
+  className = '',
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return <span className={`${hubBadgeClass} ${className}`.trim()}>{children}</span>;
+}
+
 export function HubBrackets() {
   return (
     <>
