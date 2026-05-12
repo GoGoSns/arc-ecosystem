@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Web3Provider from "@/components/Web3Provider";
+import AssistantWidget from "@/components/AssistantWidget";
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,8 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Arc Pay",
-  description: "USDC payments made simple",
+  title: "Arc Pay — USDC Payments on Arc Network",
+  description: "Send USDC, split bills, generate invoices, run payroll, and create escrow agreements. All on Arc Testnet.",
+  icons: { icon: "/favicon.svg" },
 };
 
 export default function RootLayout({
@@ -36,7 +39,11 @@ export default function RootLayout({
             __html: `(function(){try{if(localStorage.getItem('arc-pay-theme')==='light')document.documentElement.classList.remove('dark');}catch(e){}})();`,
           }}
         />
-        <Web3Provider>{children}</Web3Provider>
+        <Web3Provider>
+          {children}
+          <AssistantWidget />
+          <Footer />
+        </Web3Provider>
       </body>
     </html>
   );

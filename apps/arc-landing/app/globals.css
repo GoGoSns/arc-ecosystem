@@ -1,0 +1,473 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+  --muted: #555555;
+  --subtle: #2a2a2a;
+  --accent: #c9a84c;
+  --accent-dim: #c9a84c33;
+  --card-bg: rgba(255, 255, 255, 0.02);
+  --card-border: rgba(201, 168, 76, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--background);
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+::selection {
+  background: var(--accent-dim);
+  color: #fff;
+}
+
+@layer components {
+  .section {
+    @apply px-4 py-24 sm:px-6 lg:px-8 lg:py-32;
+  }
+
+  .nav-link {
+    @apply transition-colors hover:text-[#c9a84c];
+  }
+
+  .bracket-card {
+    position: relative;
+    border: 1px solid var(--subtle);
+    background:
+      linear-gradient(135deg, rgba(201, 168, 76, 0.055), transparent 32%),
+      var(--card-bg);
+  }
+
+  .bracket-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid rgba(201, 168, 76, 0.55);
+    padding: 0.78rem 1.15rem;
+    font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    color: #fff;
+    transition: border-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
+  }
+
+  .bracket-button::before,
+  .bracket-button::after {
+    content: "";
+    position: absolute;
+    height: 8px;
+    width: 8px;
+    border-color: var(--accent);
+  }
+
+  .bracket-button::before {
+    left: -1px;
+    top: -1px;
+    border-left: 1px solid;
+    border-top: 1px solid;
+  }
+
+  .bracket-button::after {
+    bottom: -1px;
+    right: -1px;
+    border-bottom: 1px solid;
+    border-right: 1px solid;
+  }
+
+  .bracket-button:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 26px rgba(201, 168, 76, 0.12);
+  }
+
+  .primary-button,
+  .secondary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3.25rem;
+    padding: 0 1.25rem;
+    font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease, color 200ms ease;
+  }
+
+  .primary-button {
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: #0a0a0a;
+    font-weight: 800;
+  }
+
+  .secondary-button {
+    border: 1px solid rgba(201, 168, 76, 0.55);
+    color: #fff;
+  }
+
+  .primary-button:hover,
+  .secondary-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 32px rgba(201, 168, 76, 0.16);
+  }
+
+  .secondary-button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .feature-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid rgba(42, 42, 42, 0.85);
+    padding: 0.9rem 1rem;
+    font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+    font-size: 0.82rem;
+    color: #d8d8d8;
+    transition: border-color 200ms ease, color 200ms ease, background 200ms ease, box-shadow 200ms ease;
+  }
+
+  .feature-link:hover {
+    border-color: rgba(201, 168, 76, 0.55);
+    background: rgba(201, 168, 76, 0.035);
+    color: var(--accent);
+    box-shadow: 0 0 26px rgba(201, 168, 76, 0.08);
+  }
+
+  .feature-link:hover .feature-arrow {
+    transform: translateX(4px);
+  }
+
+  .feature-arrow {
+    transition: transform 200ms ease;
+  }
+
+  .soon-badge {
+    border: 1px solid rgba(201, 168, 76, 0.25);
+    padding: 0.1rem 0.45rem;
+    color: var(--accent);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+  }
+}
+
+.corner {
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  border-color: var(--accent);
+  pointer-events: none;
+}
+
+.corner-tl {
+  top: -1px;
+  left: -1px;
+  border-left: 1px solid;
+  border-top: 1px solid;
+}
+
+.corner-tr {
+  top: -1px;
+  right: -1px;
+  border-right: 1px solid;
+  border-top: 1px solid;
+}
+
+.corner-bl {
+  bottom: -1px;
+  left: -1px;
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+}
+
+.corner-br {
+  right: -1px;
+  bottom: -1px;
+  border-bottom: 1px solid;
+  border-right: 1px solid;
+}
+
+.hero-grid {
+  background:
+    linear-gradient(rgba(201, 168, 76, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 168, 76, 0.035) 1px, transparent 1px),
+    radial-gradient(circle at 50% 20%, rgba(201, 168, 76, 0.11), transparent 35%),
+    #0a0a0a;
+  background-size: 52px 52px, 52px 52px, auto, auto;
+}
+
+.hero-grid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.025),
+    rgba(255, 255, 255, 0.025) 1px,
+    transparent 1px,
+    transparent 5px
+  );
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+.hex-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hex-field span {
+  position: absolute;
+  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+  font-size: 0.72rem;
+  color: rgba(201, 168, 76, 0.13);
+  white-space: nowrap;
+}
+
+.hex-field span:nth-child(1) { left: 8%; top: 24%; }
+.hex-field span:nth-child(2) { right: 8%; top: 34%; }
+.hex-field span:nth-child(3) { left: 12%; bottom: 26%; }
+.hex-field span:nth-child(4) { right: 14%; bottom: 22%; }
+.hex-field span:nth-child(5) { left: 48%; top: 18%; }
+
+.glitch {
+  position: relative;
+  display: inline-block;
+  letter-spacing: 0;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.glitch::before {
+  color: #ff3b77;
+  animation: glitch1 3.2s infinite linear alternate-reverse;
+  transform: translate(-1px, 0);
+}
+
+.glitch::after {
+  color: #3df5ff;
+  animation: glitch2 2.7s infinite linear alternate-reverse;
+  transform: translate(1px, 0);
+}
+
+@keyframes glitch1 {
+  0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+  20% { clip-path: inset(20% 0 30% 0); transform: translate(-2px, 1px); }
+  40% { clip-path: inset(50% 0 10% 0); transform: translate(2px, -1px); }
+  60% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, 0); }
+  80% { clip-path: inset(80% 0 5% 0); transform: translate(0, 2px); }
+}
+
+@keyframes glitch2 {
+  0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+  22% { clip-path: inset(65% 0 8% 0); transform: translate(2px, 0); }
+  44% { clip-path: inset(12% 0 58% 0); transform: translate(-2px, -1px); }
+  66% { clip-path: inset(36% 0 35% 0); transform: translate(1px, 1px); }
+  88% { clip-path: inset(4% 0 78% 0); transform: translate(-1px, 2px); }
+}
+
+.pulse-dot,
+.green-dot {
+  display: inline-block;
+  width: 0.48rem;
+  height: 0.48rem;
+  margin-right: 0.35rem;
+  border-radius: 999px;
+  background: #30d158;
+  box-shadow: 0 0 16px rgba(48, 209, 88, 0.65);
+  animation: pulse 1.5s infinite;
+}
+
+.green-dot {
+  margin-right: 0;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.76); }
+}
+
+.architecture {
+  position: relative;
+}
+
+.architecture::before,
+.architecture::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 18%;
+  border-top: 1px dashed var(--subtle);
+}
+
+.architecture::before {
+  left: 25%;
+}
+
+.architecture::after {
+  right: 25%;
+}
+
+.diagram-column {
+  border: 1px solid var(--subtle);
+  background: rgba(255, 255, 255, 0.015);
+  padding: 1.5rem;
+}
+
+.diagram-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.6rem;
+  border: 1px solid rgba(42, 42, 42, 0.85);
+  padding: 0 0.85rem;
+  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+  font-size: 0.82rem;
+  color: #bdbdbd;
+}
+
+.core-box {
+  min-height: 300px;
+}
+
+.step-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid var(--subtle);
+  background: rgba(255, 255, 255, 0.018);
+  padding: 1.25rem;
+}
+
+.step-row span,
+.step-row h3 {
+  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+}
+
+.step-row span {
+  color: var(--accent);
+  font-size: 0.78rem;
+}
+
+.step-row h3 {
+  color: #fff;
+  font-size: 0.9rem;
+  letter-spacing: 0.18em;
+}
+
+.step-row p {
+  margin-top: 0.35rem;
+  color: #8b8b8b;
+}
+
+.resource-card {
+  background-image:
+    radial-gradient(rgba(201, 168, 76, 0.16) 1px, transparent 1px),
+    linear-gradient(135deg, rgba(201, 168, 76, 0.035), transparent 42%);
+  background-size: 18px 18px, auto;
+  transition: border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+}
+
+.resource-card:hover {
+  border-color: rgba(201, 168, 76, 0.45);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35), 0 0 34px rgba(201, 168, 76, 0.08);
+}
+
+.faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 240ms ease;
+}
+
+.faq-answer.open {
+  grid-template-rows: 1fr;
+}
+
+.faq-answer p {
+  overflow: hidden;
+  padding-top: 0;
+  color: #8b8b8b;
+  line-height: 1.75;
+  transition: padding-top 240ms ease;
+}
+
+.faq-answer.open p {
+  padding-top: 1rem;
+}
+
+.faq-row:hover h3,
+.faq-row:hover .faq-plus {
+  color: var(--accent);
+}
+
+.faq-plus {
+  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: #777;
+  transition: color 200ms ease, transform 200ms ease;
+}
+
+.faq-plus.open {
+  transform: rotate(45deg);
+  color: var(--accent);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 700ms ease, transform 700ms ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 1023px) {
+  .architecture::before,
+  .architecture::after {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .glitch::before,
+  .glitch::after {
+    display: none;
+  }
+
+  .primary-button,
+  .secondary-button {
+    width: 100%;
+  }
+}

@@ -8,21 +8,21 @@ const features = [
     description: "Bet on real-world outcomes with USDC.",
     icon: TrendingUp,
     href: "/prediction",
-    comingSoon: true,
+    comingSoon: false,
   },
   {
     title: "NFT Raffle",
     description: "Fair raffles with onchain randomness.",
     icon: Ticket,
     href: "/raffle",
-    comingSoon: true,
+    comingSoon: false,
   },
   {
     title: "Play to Earn",
     description: "Mini-games with USDC rewards.",
     icon: Gamepad2,
     href: "/games",
-    comingSoon: true,
+    comingSoon: false,
   },
   {
     title: "Portfolio Tracker",
@@ -36,7 +36,7 @@ const features = [
     description: "Discover new tokens early.",
     icon: Rocket,
     href: "/launchpad",
-    comingSoon: true,
+    comingSoon: false,
   },
 ];
 
@@ -46,10 +46,10 @@ export default function Home() {
       <Navbar />
       <main className="flex-1 max-w-6xl mx-auto w-full px-4 py-16">
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold mb-4 tracking-tight" style={{ color: "var(--accent)" }}>
+          <h1 className="text-3xl sm:text-5xl font-bold mb-4 tracking-tight" style={{ color: "var(--accent)" }}>
             Arc Play
           </h1>
-          <p className="text-xl" style={{ color: "var(--fg)", opacity: 0.65 }}>
+          <p className="text-base sm:text-xl" style={{ color: "var(--fg)", opacity: 0.65 }}>
             Play, predict, profit
           </p>
         </div>
@@ -61,7 +61,7 @@ export default function Home() {
               <Link
                 key={feature.href}
                 href={feature.href}
-                className="sweep rounded-xl p-6 flex flex-col gap-4 transition-colors"
+                className="sweep rounded-xl p-4 sm:p-6 flex flex-col gap-4 transition-colors"
                 style={{
                   border: "1px solid var(--border)",
                   background: "var(--card)",

@@ -22,14 +22,14 @@ const features = [
     description: "Post tasks, pay on completion.",
     icon: Trophy,
     href: "/bounty",
-    comingSoon: true,
+    comingSoon: false,
   },
   {
     title: "Freelance Marketplace",
     description: "Full-service marketplace with escrow.",
     icon: Briefcase,
     href: "/marketplace",
-    comingSoon: true,
+    comingSoon: false,
   },
 ];
 
@@ -39,20 +39,20 @@ export default function Home() {
       <Navbar />
       <main className="flex-1 max-w-6xl mx-auto w-full px-4 py-16">
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold mb-4 tracking-tight" style={{ color: "var(--accent)" }}>
+          <h1 className="text-3xl sm:text-5xl font-bold mb-4 tracking-tight" style={{ color: "var(--accent)" }}>
             Arc Creator
           </h1>
-          <p className="text-xl" style={{ color: "var(--fg)", opacity: 0.65 }}>
+          <p className="text-base sm:text-xl" style={{ color: "var(--fg)", opacity: 0.65 }}>
             Monetize your creativity
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
           {features.map((feature) => {
             const Icon = feature.icon;
             const card = (
               <div
-                className="sweep rounded-xl p-6 flex flex-col gap-4 transition-colors h-full"
+                className="sweep rounded-xl p-4 sm:p-6 flex flex-col gap-4 transition-colors h-full"
                 style={{
                   border: "1px solid var(--border)",
                   background: "var(--card)",
