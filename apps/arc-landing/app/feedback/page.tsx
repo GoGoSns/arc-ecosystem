@@ -45,7 +45,9 @@ function WalletConnect() {
   if (isConnected && address) {
     return (
       <button
+        type="button"
         onClick={disconnect}
+        aria-label={`Disconnect wallet ${shortenAddress(address)}`}
         className="px-3 py-1.5 rounded-lg text-xs font-mono border"
         style={{ borderColor: '#c9a84c', color: '#c9a84c', background: 'rgba(201,168,76,0.08)' }}
       >
@@ -55,7 +57,9 @@ function WalletConnect() {
   }
   return (
     <button
+      type="button"
       onClick={connect}
+      aria-label="Connect wallet"
       className="px-3 py-1.5 rounded-lg text-xs font-bold"
       style={{ background: '#c9a84c', color: '#0a0a0a' }}
     >
@@ -150,7 +154,9 @@ export default function FeedbackBrowse() {
           {/* Category tabs */}
           <div className="flex flex-wrap gap-2">
             <button
+              type="button"
               onClick={() => setCategory('all')}
+              aria-pressed={category === 'all'}
               className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all"
               style={{
                 background: category === 'all' ? 'rgba(201,168,76,0.15)' : 'rgba(255,255,255,0.03)',
@@ -165,8 +171,10 @@ export default function FeedbackBrowse() {
               const active = category === cat;
               return (
                 <button
+                  type="button"
                   key={cat}
                   onClick={() => setCategory(cat)}
+                  aria-pressed={category === cat}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all"
                   style={{
                     background: active ? `${cfg.color}15` : 'rgba(255,255,255,0.03)',
@@ -188,6 +196,7 @@ export default function FeedbackBrowse() {
               <input
                 type="text"
                 placeholder="Search feedback..."
+                aria-label="Search feedback"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full rounded-lg pl-9 pr-3 py-2 text-sm text-white placeholder-[#555] outline-none transition-colors"
@@ -195,6 +204,7 @@ export default function FeedbackBrowse() {
               />
             </div>
             <select
+              aria-label="Filter feedback by status"
               value={status}
               onChange={(e) => setStatus(e.target.value as FeedbackStatus | 'all')}
               className="rounded-lg px-3 py-2 text-sm text-[#aaa] outline-none"
@@ -206,6 +216,7 @@ export default function FeedbackBrowse() {
               ))}
             </select>
             <select
+              aria-label="Sort feedback"
               value={sort}
               onChange={(e) => setSort(e.target.value as 'votes' | 'newest' | 'oldest')}
               className="rounded-lg px-3 py-2 text-sm text-[#aaa] outline-none"
@@ -249,7 +260,16 @@ export default function FeedbackBrowse() {
                 >
                   {/* Vote */}
                   <button
+                    type="button"
                     onClick={() => address && toggleVote(fb.id, address)}
+                    aria-pressed={hasVoted}
+                    aria-label={
+                      address
+                        ? hasVoted
+                          ? `Remove vote from ${fb.title}`
+                          : `Upvote ${fb.title}`
+                        : 'Connect wallet to vote'
+                    }
                     className="flex flex-col items-center justify-start gap-1 pt-1 min-w-[40px] transition-all hover:scale-110"
                     title={address ? (hasVoted ? 'Remove vote' : 'Upvote') : 'Connect wallet to vote'}
                   >

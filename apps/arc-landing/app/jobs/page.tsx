@@ -106,7 +106,9 @@ export default function JobsPage() {
                 {address?.slice(0, 6)}...{address?.slice(-4)}
               </div>
             ) : (
-              <button onClick={connect} className="bracket-button">CONNECT WALLET</button>
+              <button type="button" onClick={connect} aria-label="Connect wallet" className="bracket-button">
+                CONNECT WALLET
+              </button>
             )}
           </div>
         </div>
@@ -155,6 +157,7 @@ export default function JobsPage() {
               <input 
                 type="text" 
                 placeholder="Search by title, company, or tech stack..."
+                aria-label="Search jobs"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full bg-[#111] border border-[#2a2a2a] rounded-xl py-3 pl-12 pr-4 text-white placeholder:text-[#555] focus:outline-none focus:border-[#c9a84c]/50 transition-colors"
@@ -162,6 +165,7 @@ export default function JobsPage() {
             </div>
             <div className="flex flex-wrap items-center gap-4">
               <select 
+                aria-label="Filter jobs by category"
                 value={activeCategory}
                 onChange={(e) => setActiveCategory(e.target.value as any)}
                 className="bg-[#111] border border-[#2a2a2a] text-sm text-[#aaa] rounded-lg px-4 py-3 focus:outline-none focus:border-[#c9a84c]/50"
@@ -169,6 +173,7 @@ export default function JobsPage() {
                 {CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
               </select>
               <select 
+                aria-label="Filter jobs by type"
                 value={activeType}
                 onChange={(e) => setActiveType(e.target.value as any)}
                 className="bg-[#111] border border-[#2a2a2a] text-sm text-[#aaa] rounded-lg px-4 py-3 focus:outline-none focus:border-[#c9a84c]/50"
@@ -184,6 +189,7 @@ export default function JobsPage() {
                   step="10"
                   value={salaryRange}
                   onChange={(e) => setSalaryRange(parseInt(e.target.value))}
+                  aria-label="Minimum salary filter in thousands of USDC"
                   className="accent-[#c9a84c]"
                 />
               </div>
@@ -213,6 +219,7 @@ export default function JobsPage() {
                 <h3 className="mt-4 text-xl font-bold">No jobs matching your criteria</h3>
                 <p className="mt-2 text-[#777]">Try adjusting your search or filters.</p>
                 <button 
+                  type="button"
                   onClick={() => {setSearch(''); setActiveCategory('all'); setActiveType('all'); setSalaryRange(0);}}
                   className="mt-6 text-[#c9a84c] hover:underline"
                 >

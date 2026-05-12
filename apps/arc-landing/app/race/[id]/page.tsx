@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import {
   ArrowLeft,
   ArrowRight,
@@ -166,28 +166,6 @@ function RankBadge({ rank }: { rank: number }) {
   );
 }
 
-function NotFoundState({ raceId }: { raceId: string }) {
-  return (
-    <HubEmptyState
-      icon={ShieldAlert}
-      title="Race not found"
-      description={
-        raceId
-          ? `No race matching "${raceId}" exists in the local archive. The id may be invalid, or the race may have been removed.`
-          : 'The requested race id is missing or invalid.'
-      }
-      tone="error"
-    >
-      <Link href="/race" className="primary-button">
-        BACK TO HUB
-      </Link>
-      <Link href="/race/history" className="secondary-button">
-        VIEW HISTORY
-      </Link>
-    </HubEmptyState>
-  );
-}
-
 function SortButton({
   active,
   direction,
@@ -260,15 +238,7 @@ export default function RaceDetailPage() {
   }, [currentParticipant, race]);
 
   if (!race) {
-    return (
-      <main className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white">
-        <section className="section pt-32">
-          <div className="mx-auto max-w-3xl">
-            <NotFoundState raceId={raceId} />
-          </div>
-        </section>
-      </main>
-    );
+    notFound();
   }
 
   const handleJoin = (event: FormEvent<HTMLFormElement>) => {

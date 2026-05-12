@@ -1,7 +1,7 @@
 'use client';
 
 import { use, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   ArrowLeft, ArrowUp, ArrowDown, MessageCircle,
@@ -40,6 +40,7 @@ export default function ThreadPage({ params }: { params: Promise<{ id: string }>
   const admin = isForumAdmin(address);
 
   if (!thread) {
+    notFound();
     return (
       <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center justify-center gap-4">
         <p className="text-[#777]">Thread not found.</p>

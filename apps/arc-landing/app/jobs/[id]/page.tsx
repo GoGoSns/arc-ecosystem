@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { useWallet } from '@/contexts/WalletContext';
 import { useJobsStore, Job } from '@/lib/jobsStore';
+import { notFound } from 'next/navigation';
 import { 
   ArrowLeft, 
   Building2, 
@@ -66,6 +67,7 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
   };
 
   if (!job) {
+    notFound();
     return (
       <main className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center">
         <div className="text-center">

@@ -1,7 +1,7 @@
 'use client';
 
 import { use, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   Bug, Sparkles, Lightbulb, MessageCircle,
@@ -79,6 +79,7 @@ export default function FeedbackDetail({ params }: { params: Promise<{ id: strin
   const [posting, setPosting]           = useState(false);
 
   if (!fb) {
+    notFound();
     return (
       <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center">
         <div className="text-center">

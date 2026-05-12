@@ -97,7 +97,9 @@ export default function QuestsPage() {
                 {address?.slice(0, 6)}...{address?.slice(-4)}
               </Link>
             ) : (
-              <button onClick={connect} className="bracket-button">CONNECT WALLET</button>
+              <button type="button" onClick={connect} aria-label="Connect wallet" className="bracket-button">
+                CONNECT WALLET
+              </button>
             )}
           </div>
         </div>
@@ -188,8 +190,10 @@ export default function QuestsPage() {
           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2">
             {CATEGORIES.map((cat) => (
               <button
+                type="button"
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
+                aria-pressed={activeCategory === cat.id}
                 className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all whitespace-nowrap text-sm ${
                   activeCategory === cat.id 
                     ? 'bg-[#c9a84c] border-[#c9a84c] text-black font-bold' 
@@ -204,6 +208,7 @@ export default function QuestsPage() {
 
           <div className="flex items-center gap-4 ml-auto">
              <select 
+              aria-label="Filter quests by difficulty"
               value={activeDifficulty} 
               onChange={(e) => setActiveDifficulty(e.target.value as any)}
               className="bg-transparent border border-[#2a2a2a] text-[#777] text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#c9a84c]"
@@ -217,8 +222,10 @@ export default function QuestsPage() {
             <div className="flex bg-[#111] p-1 rounded-lg border border-[#2a2a2a]">
               {(['all', 'available', 'completed'] as const).map((s) => (
                 <button
+                  type="button"
                   key={s}
                   onClick={() => setActiveStatus(s)}
+                  aria-pressed={activeStatus === s}
                   className={`px-4 py-1.5 rounded-md text-xs font-mono uppercase transition-all ${
                     activeStatus === s ? 'bg-[#222] text-white shadow-lg' : 'text-[#555] hover:text-[#777]'
                   }`}

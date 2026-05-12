@@ -204,8 +204,12 @@ export default function MonitorPage() {
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-xs text-[#555] font-mono hidden sm:block">{rpc.url}</span>
-                  <button onClick={() => { setRpcUrl(rpc.url); }}
-                    className="text-[11px] text-[#c9a84c] hover:underline">
+                  <button
+                    type="button"
+                    onClick={() => { setRpcUrl(rpc.url); }}
+                    aria-label={`Monitor ${rpc.name}`}
+                    className="text-[11px] text-[#c9a84c] hover:underline"
+                  >
                     Monitor
                   </button>
                 </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { 
   ArrowLeft, 
@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { useRoadmapStore, RoadmapItem, RoadmapStatus, RoadmapQuarter, RoadmapCategory, ADMIN_ADDRESS } from '@/lib/roadmapStore';
 import { useWallet } from '@/contexts/WalletContext';
+import { HubEmptyState } from '@/components/HubPrimitives';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -100,6 +101,21 @@ export default function RoadmapPage() {
   const [newDesc, setNewDesc] = useState('');
   const [newCat, setNewCat] = useState<RoadmapCategory>('feature');
   const [newQuarter, setNewQuarter] = useState<RoadmapQuarter>('Q1-2027');
+
+  useEffect(() => {
+    if (!showAddModal) {
+      return;
+    }
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setShowAddModal(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [showAddModal]);
 
   // Stats
   const stats = useMemo(() => ({
@@ -181,7 +197,7 @@ export default function RoadmapPage() {
           <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">// Public Roadmap</span>
           <div className="w-24 flex justify-end">
             {!isConnected ? (
-              <button onClick={connect} className="text-[10px] font-bold text-[#c9a84c] border border-[#c9a84c]/30 px-3 py-1 rounded-full hover:bg-[#c9a84c]/10">CONNECT</button>
+              <button type="button" onClick={connect} aria-label="Connect wallet" className="text-[10px] font-bold text-[#c9a84c] border border-[#c9a84c]/30 px-3 py-1 rounded-full hover:bg-[#c9a84c]/10">CONNECT</button>
             ) : (
               <span className="text-[10px] text-[#555] font-mono">{address?.slice(0,6)}...{address?.slice(-4)}</span>
             )}
@@ -216,6 +232,7 @@ export default function RoadmapPage() {
                 <Calendar size={10} /> Quarter
               </label>
               <select 
+                aria-label="Filter roadmap by quarter"
                 value={quarterFilter}
                 onChange={(e) => setQuarterFilter(e.target.value as any)}
                 className="bg-[#111] border border-[#2a2a2a] rounded-lg px-3 py-1.5 text-xs text-[#aaa] focus:outline-none focus:border-[#c9a84c]/50 appearance-none min-w-[120px]"
@@ -231,6 +248,7 @@ export default function RoadmapPage() {
                 <Filter size={10} /> Status
               </label>
               <select 
+                aria-label="Filter roadmap by status"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value as any)}
                 className="bg-[#111] border border-[#2a2a2a] rounded-lg px-3 py-1.5 text-xs text-[#aaa] focus:outline-none focus:border-[#c9a84c]/50 appearance-none min-w-[120px]"
@@ -246,6 +264,7 @@ export default function RoadmapPage() {
                 <Layers size={10} /> Category
               </label>
               <select 
+                aria-label="Filter roadmap by category"
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value as any)}
                 className="bg-[#111] border border-[#2a2a2a] rounded-lg px-3 py-1.5 text-xs text-[#aaa] focus:outline-none focus:border-[#c9a84c]/50 appearance-none min-w-[120px]"
@@ -263,8 +282,10 @@ export default function RoadmapPage() {
             <div className="flex border border-[#2a2a2a] rounded-lg overflow-hidden">
               {(['quarter', 'votes', 'newest'] as const).map((sort) => (
                 <button
+                  type="button"
                   key={sort}
                   onClick={() => setSortBy(sort)}
+                  aria-pressed={sortBy === sort}
                   className={`px-4 py-1.5 text-[10px] uppercase font-bold tracking-wider transition-colors ${sortBy === sort ? 'bg-[#c9a84c] text-black' : 'bg-[#111] text-[#777] hover:text-white'}`}
                 >
                   {sort}
@@ -278,7 +299,11 @@ export default function RoadmapPage() {
         {isAdmin && (
           <div className="mb-8 flex justify-end">
             <button 
+              type="button"
               onClick={() => setShowAddModal(true)}
+              aria-haspopup="dialog"
+              aria-expanded={showAddModal}
+              aria-controls="roadmap-add-modal"
               className="flex items-center gap-2 bg-[#c9a84c] text-black font-black px-6 py-3 rounded-xl hover:scale-105 transition-transform"
             >
               <Plus size={18} /> ADD NEW ITEM
@@ -287,6 +312,28 @@ export default function RoadmapPage() {
         )}
 
         {/* Timeline */}
+        {filteredItems.length === 0 ? (
+          <div className="mb-12">
+            <HubEmptyState
+              icon={Layers}
+              title="No roadmap items found"
+              description="No roadmap items match your current filters. Clear filters to review the full public roadmap."
+            >
+              <button
+                type="button"
+                onClick={() => {
+                  setQuarterFilter('All');
+                  setStatusFilter('All');
+                  setCategoryFilter('All');
+                  setSortBy('quarter');
+                }}
+                className="primary-button"
+              >
+                CLEAR FILTERS
+              </button>
+            </HubEmptyState>
+          </div>
+        ) : null}
         <div className="relative">
           {/* Vertical Line */}
           <div className="absolute left-[15px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-[#c9a84c]/50 via-[#2a2a2a] to-transparent hidden md:block" />
@@ -335,7 +382,16 @@ export default function RoadmapPage() {
 
                           <div className="flex flex-row md:flex-col items-center gap-3">
                             <button 
+                              type="button"
                               onClick={() => isConnected ? toggleVote(item.id, address!) : connect()}
+                              aria-pressed={item.votes.includes(address || '')}
+                              aria-label={
+                                isConnected
+                                  ? item.votes.includes(address || '')
+                                    ? `Remove vote from ${item.title}`
+                                    : `Vote for ${item.title}`
+                                  : `Connect wallet to vote on ${item.title}`
+                              }
                               className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-black text-xs transition-all ${item.votes.includes(address || '') ? 'bg-[#c9a84c] text-black' : 'bg-[#1a1a1a] text-[#aaa] hover:bg-[#2a2a2a]'}`}
                             >
                               <ThumbsUp size={14} />
@@ -344,6 +400,7 @@ export default function RoadmapPage() {
                             {isAdmin && (
                               <div className="relative group/admin">
                                 <select 
+                                  aria-label={`Update ${item.title} status`}
                                   value={item.status}
                                   onChange={(e) => updateStatus(item.id, e.target.value as RoadmapStatus)}
                                   className="appearance-none bg-[#111] border border-[#2a2a2a] text-[10px] font-bold uppercase px-4 py-2 rounded-xl text-[#777] cursor-pointer hover:border-[#c9a84c]/50 focus:outline-none"
@@ -373,8 +430,14 @@ export default function RoadmapPage() {
       {/* Add Modal (Admin Only) */}
       {showAddModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-[#111] border border-[#2a2a2a] rounded-3xl p-8 max-w-lg w-full">
-            <h3 className="text-2xl font-black mb-6">ADD ROADMAP ITEM</h3>
+          <div
+            id="roadmap-add-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="roadmap-add-modal-title"
+            className="bg-[#111] border border-[#2a2a2a] rounded-3xl p-8 max-w-lg w-full"
+          >
+            <h3 id="roadmap-add-modal-title" className="text-2xl font-black mb-6">ADD ROADMAP ITEM</h3>
             <form onSubmit={handleAddItem} className="space-y-4">
               <div>
                 <label className="text-[10px] uppercase font-bold text-[#555] mb-1 block">Title</label>
@@ -455,8 +518,11 @@ function SuggestionForm({
   return (
     <div className="bg-white/[0.02] border border-white/[0.05] rounded-3xl overflow-hidden">
       {!expanded ? (
-        <button 
+        <button
+          type="button"
           onClick={() => isConnected ? setExpanded(true) : onConnect()}
+          aria-expanded={expanded}
+          aria-controls="roadmap-suggestion-form"
           className="w-full p-8 flex items-center justify-between group hover:bg-white/[0.01] transition-colors"
         >
           <div className="text-left">
@@ -468,7 +534,7 @@ function SuggestionForm({
           </div>
         </button>
       ) : (
-        <div className="p-8">
+        <div id="roadmap-suggestion-form" className="p-8">
           <h3 className="text-xl font-bold mb-6 uppercase tracking-tight">New Suggestion</h3>
           <form onSubmit={handleSubmit} className="space-y-4">
             <input 
@@ -489,6 +555,7 @@ function SuggestionForm({
                   key={c}
                   type="button"
                   onClick={() => setCat(c)}
+                  aria-pressed={cat === c}
                   className={`px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest border transition-all ${cat === c ? 'bg-[#c9a84c] border-[#c9a84c] text-black' : 'border-white/10 text-[#555] hover:border-white/20'}`}
                 >
                   {c}

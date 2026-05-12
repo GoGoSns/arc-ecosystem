@@ -19,6 +19,7 @@ import {
   UserCheck
 } from 'lucide-react';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import AppSwitcher from '@/components/AppSwitcher';
 import { translations, type Lang } from '@/lib/translations';
 
@@ -131,15 +132,7 @@ export default function DropDetailPage({ params }: { params: Promise<{ id: strin
   };
 
   if (!drop) {
-    return (
-      <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center p-4">
-        <div className="text-center">
-          <ShieldAlert className="mx-auto mb-4 text-red-500" size={48} />
-          <h1 className="text-2xl font-black uppercase mb-4">Drop Not Found</h1>
-          <Link href="/drops" className="primary-button inline-flex">BACK TO DROPS</Link>
-        </div>
-      </div>
-    );
+    notFound();
   }
 
   return (
