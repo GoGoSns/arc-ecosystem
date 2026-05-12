@@ -1,405 +1,696 @@
 'use client';
 
-import React, { useEffect, useState, useMemo } from 'react';
+import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import Link from 'next/link';
-import { 
-  ArrowLeft, 
-  Trophy, 
-  Timer, 
-  Users, 
-  Coins, 
-  CheckCircle2, 
+import { useParams } from 'next/navigation';
+import {
+  ArrowLeft,
+  ArrowRight,
+  CalendarDays,
+  ChevronDown,
+  ChevronUp,
+  Coins,
+  Info,
   Medal,
   ShieldAlert,
-  Edit3,
-  UserPlus,
-  Info,
-  ChevronUp,
-  ChevronDown
+  Users,
 } from 'lucide-react';
-import { useRaceStore, Race, ADMIN_ADDRESS } from '@/lib/raceStore';
-import { useWallet } from '@/contexts/WalletContext';
-import AppSwitcher from '@/components/AppSwitcher';
+import {
+  HubBadge,
+  HubCard,
+  HubEmptyState,
+  hubInputClass,
+  hubLabelClass,
+} from '@/components/HubPrimitives';
+import {
+  ADMIN_ADDRESS,
+  RACE_CATEGORY_LABELS,
+  RACE_STATUS_LABELS,
+  formatRaceAddress,
+  formatRaceDate,
+  formatRacePrize,
+  getRaceOrdinal,
+  normalizeRaceAddress,
+  readStoredRaceDemoAddress,
+  sortParticipants,
+  useRaceStore,
+  writeStoredRaceDemoAddress,
+  type Race,
+  type RaceLeaderboardSortDirection,
+  type RaceLeaderboardSortField,
+} from '@/lib/raceStore';
 
-function Brackets() {
-  return (
-    <>
-      <span className="corner corner-tl" />
-      <span className="corner corner-tr" />
-      <span className="corner corner-bl" />
-      <span className="corner corner-br" />
-    </>
-  );
+type NoticeTone = 'success' | 'error' | 'info';
+
+function formatCountdownParts(ms: number): { value: number; label: string }[] {
+  const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+  const days = Math.floor(totalSeconds / 86_400);
+  const hours = Math.floor((totalSeconds % 86_400) / 3_600);
+  const minutes = Math.floor((totalSeconds % 3_600) / 60);
+  const seconds = totalSeconds % 60;
+
+  return [
+    { value: days, label: 'Days' },
+    { value: hours, label: 'Hours' },
+    { value: minutes, label: 'Minutes' },
+    { value: seconds, label: 'Seconds' },
+  ];
 }
 
-function Countdown({ targetDate }: { targetDate: number }) {
-  const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number } | null>(null);
+function useStoredDemoAddress() {
+  const [value, setValue] = useState('');
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      const now = Date.now();
-      const diff = targetDate - now;
+    setValue(readStoredRaceDemoAddress());
+    setHydrated(true);
+  }, []);
 
-      if (diff <= 0) {
-        clearInterval(timer);
-        setTimeLeft(null);
-      } else {
-        setTimeLeft({
-          days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-          minutes: Math.floor((diff / 1000 / 60) % 60),
-          seconds: Math.floor((diff / 1000) % 60),
-        });
-      }
-    }, 1000);
+  useEffect(() => {
+    if (!hydrated) {
+      return;
+    }
 
-    return () => clearInterval(timer);
-  }, [targetDate]);
+    writeStoredRaceDemoAddress(value);
+  }, [hydrated, value]);
 
-  if (!timeLeft) return <span className="text-red-500 font-bold uppercase tracking-widest">Race Ended</span>;
-
-  return (
-    <div className="flex gap-4 font-mono">
-      <div className="flex flex-col items-center">
-        <span className="text-2xl font-black">{timeLeft.days}</span>
-        <span className="text-[10px] text-[#777] uppercase">Days</span>
-      </div>
-      <div className="flex flex-col items-center">
-        <span className="text-2xl font-black">{timeLeft.hours}</span>
-        <span className="text-[10px] text-[#777] uppercase">Hrs</span>
-      </div>
-      <div className="flex flex-col items-center">
-        <span className="text-2xl font-black">{timeLeft.minutes}</span>
-        <span className="text-[10px] text-[#777] uppercase">Min</span>
-      </div>
-      <div className="flex flex-col items-center">
-        <span className="text-2xl font-black text-[#c9a84c]">{timeLeft.seconds}</span>
-        <span className="text-[10px] text-[#777] uppercase">Sec</span>
-      </div>
-    </div>
-  );
+  return [value, setValue] as const;
 }
 
-export default function RaceDetail({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = React.use(params);
-  const { races, joinRace, updateScore, endRace } = useRaceStore();
-  const { address, isConnected } = useWallet();
-  
-  const race = useMemo(() => races.find(r => r.id === id), [races, id]);
-  const isAdmin = address?.toLowerCase() === ADMIN_ADDRESS.toLowerCase();
-  
-  const [joinName, setJoinName] = useState('');
-  const [newScore, setNewScore] = useState('');
-  const [sortField, setSortField] = useState<'score' | 'joinedAt'>('score');
-  const [sortDir, setSortFieldDir] = useState<'asc' | 'desc'>('desc');
+function RaceCountdown({
+  status,
+  targetDate,
+}: {
+  status: Race['status'];
+  targetDate: number;
+}) {
+  const [now, setNow] = useState(() => Date.now());
 
-  if (!race) {
+  useEffect(() => {
+    if (status === 'ended') {
+      return;
+    }
+
+    const timer = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(timer);
+  }, [status, targetDate]);
+
+  if (status === 'ended') {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center p-4">
-        <div className="text-center">
-          <ShieldAlert className="mx-auto mb-4 text-red-500" size={48} />
-          <h1 className="text-2xl font-black uppercase mb-4">Race Not Found</h1>
-          <Link href="/race" className="primary-button inline-flex">BACK TO RACE HUB</Link>
-        </div>
+      <div className="text-center">
+        <p className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">Finalised</p>
+        <p className="mt-2 text-2xl font-black text-white">Ended on {formatRaceDate(targetDate)}</p>
       </div>
     );
   }
 
-  const sortedParticipants = [...race.participants].sort((a, b) => {
-    const valA = a[sortField];
-    const valB = b[sortField];
-    if (sortDir === 'asc') return valA > valB ? 1 : -1;
-    return valA < valB ? 1 : -1;
-  });
+  const remaining = Math.max(0, targetDate - now);
 
-  const isJoined = isConnected && !!address && race.participants.some(p => p.address.toLowerCase() === address.toLowerCase());
-  const userParticipant = race.participants.find(p => p.address.toLowerCase() === address?.toLowerCase());
+  if (remaining === 0) {
+    return (
+      <div className="text-center" aria-live="polite">
+        <p className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">
+          {status === 'active' ? 'Closing now' : 'Opening now'}
+        </p>
+        <p className="mt-2 text-2xl font-black text-[#c9a84c]">
+          {status === 'active' ? 'Race is wrapping up' : 'Race is starting'}
+        </p>
+      </div>
+    );
+  }
 
-  const handleJoin = () => {
-    if (!address) return;
-    joinRace(race.id, address, joinName);
-    setJoinName('');
-  };
+  return (
+    <div className="grid grid-cols-4 gap-2 sm:gap-3" aria-live="polite">
+      {formatCountdownParts(remaining).map((part) => (
+        <div key={part.label} className="rounded-2xl border border-[#2a2a2a] bg-black/40 px-2 py-3 text-center">
+          <div className="text-xl font-black text-white sm:text-2xl">{part.value}</div>
+          <div className="mt-1 text-[9px] font-mono uppercase tracking-[0.24em] text-[#777]">{part.label}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
-  const handleUpdateScore = () => {
-    if (!address) return;
-    const scoreNum = parseInt(newScore);
-    if (!isNaN(scoreNum)) {
-      updateScore(race.id, address, scoreNum);
-      setNewScore('');
+function FeedbackBanner({ notice }: { notice: { tone: NoticeTone; message: string } | null }) {
+  if (!notice) {
+    return null;
+  }
+
+  const toneClass =
+    notice.tone === 'error'
+      ? 'border-red-500/20 bg-red-500/10 text-red-100'
+      : notice.tone === 'success'
+        ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-100'
+        : 'border-[#c9a84c]/20 bg-[#c9a84c]/10 text-[#f5e1aa]';
+
+  return (
+    <div className={`rounded-2xl border px-4 py-3 text-sm leading-6 ${toneClass}`} role={notice.tone === 'error' ? 'alert' : 'status'} aria-live="polite">
+      {notice.message}
+    </div>
+  );
+}
+
+function RankBadge({ rank }: { rank: number }) {
+  const isPodium = rank <= 3;
+
+  return (
+    <span
+      className={`inline-flex min-w-16 items-center justify-center gap-1 rounded-full border px-3 py-1 text-[10px] font-mono uppercase tracking-[0.24em] ${
+        isPodium ? 'border-[#c9a84c]/40 bg-[#c9a84c]/10 text-[#f3dfaa]' : 'border-[#2a2a2a] bg-white/[0.02] text-white'
+      }`}
+      aria-label={`${getRaceOrdinal(rank)} place`}
+    >
+      {isPodium ? <Medal size={11} aria-hidden="true" /> : null}
+      {getRaceOrdinal(rank)}
+    </span>
+  );
+}
+
+function NotFoundState({ raceId }: { raceId: string }) {
+  return (
+    <HubEmptyState
+      icon={ShieldAlert}
+      title="Race not found"
+      description={
+        raceId
+          ? `No race matching "${raceId}" exists in the local archive. The id may be invalid, or the race may have been removed.`
+          : 'The requested race id is missing or invalid.'
+      }
+      tone="error"
+    >
+      <Link href="/race" className="primary-button">
+        BACK TO HUB
+      </Link>
+      <Link href="/race/history" className="secondary-button">
+        VIEW HISTORY
+      </Link>
+    </HubEmptyState>
+  );
+}
+
+function SortButton({
+  active,
+  direction,
+  children,
+  onClick,
+  label,
+}: {
+  active: boolean;
+  direction: RaceLeaderboardSortDirection;
+  children: string;
+  onClick: () => void;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      className="inline-flex items-center gap-1 transition-colors hover:text-white focus-visible:text-white"
+    >
+      <span>{children}</span>
+      {active ? direction === 'asc' ? <ChevronUp size={10} aria-hidden="true" /> : <ChevronDown size={10} aria-hidden="true" /> : null}
+    </button>
+  );
+}
+
+export default function RaceDetailPage() {
+  const params = useParams<{ id?: string | string[] }>();
+  const rawId = params?.id;
+  const raceId = Array.isArray(rawId) ? rawId[0] : rawId ?? '';
+
+  const { races, joinRace, updateScore, endRace } = useRaceStore();
+  const [demoAddress, setDemoAddress] = useStoredDemoAddress();
+  const [participantName, setParticipantName] = useState('');
+  const [scoreValue, setScoreValue] = useState('');
+  const [sortField, setSortField] = useState<RaceLeaderboardSortField>('score');
+  const [sortDirection, setSortDirection] = useState<RaceLeaderboardSortDirection>('desc');
+  const [notice, setNotice] = useState<{ tone: NoticeTone; message: string } | null>(null);
+
+  const race = useMemo(() => races.find((entry) => entry.id === raceId), [races, raceId]);
+
+  const leaderboard = useMemo(() => {
+    if (!race) {
+      return [];
+    }
+
+    return sortParticipants(race.participants, sortField, sortDirection);
+  }, [race, sortDirection, sortField]);
+
+  const normalizedDemoAddress = normalizeRaceAddress(demoAddress);
+  const currentParticipant = useMemo(() => {
+    if (!race || !normalizedDemoAddress) {
+      return undefined;
+    }
+
+    return race.participants.find((participant) => normalizeRaceAddress(participant.address) === normalizedDemoAddress);
+  }, [race, normalizedDemoAddress]);
+
+  const isJoined = !!currentParticipant;
+  const isAdmin = normalizedDemoAddress === normalizeRaceAddress(ADMIN_ADDRESS);
+
+  useEffect(() => {
+    if (!race) {
+      return;
+    }
+
+    if (currentParticipant) {
+      setScoreValue(currentParticipant.score.toString());
+    }
+  }, [currentParticipant, race]);
+
+  if (!race) {
+    return (
+      <main className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white">
+        <section className="section pt-32">
+          <div className="mx-auto max-w-3xl">
+            <NotFoundState raceId={raceId} />
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  const handleJoin = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setNotice(null);
+
+    const address = demoAddress.trim();
+    if (!address) {
+      setNotice({ tone: 'error', message: 'Enter a demo address before joining this race.' });
+      return;
+    }
+
+    const result = joinRace(race.id, address, participantName.trim() || undefined);
+    setNotice(result.ok ? { tone: 'success', message: result.message } : { tone: 'error', message: result.message });
+
+    if (result.ok) {
+      setDemoAddress(address);
+      setParticipantName('');
+      const joinedParticipant = race.participants.find((participant) => normalizeRaceAddress(participant.address) === normalizeRaceAddress(address));
+      setScoreValue(joinedParticipant?.score.toString() ?? '0');
     }
   };
 
+  const handleScoreUpdate = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setNotice(null);
+
+    const address = demoAddress.trim();
+    if (!address) {
+      setNotice({ tone: 'error', message: 'Enter the same demo address used to join this race.' });
+      return;
+    }
+
+    const parsedScore = Number(scoreValue);
+    if (!Number.isFinite(parsedScore) || parsedScore < 0) {
+      setNotice({ tone: 'error', message: 'Score must be a finite number greater than or equal to zero.' });
+      return;
+    }
+
+    const result = updateScore(race.id, address, parsedScore);
+    setNotice(result.ok ? { tone: 'success', message: result.message } : { tone: 'error', message: result.message });
+
+    if (result.ok) {
+      setDemoAddress(address);
+      setScoreValue(Math.max(0, Math.round(parsedScore)).toString());
+    }
+  };
+
+  const handleEndRace = () => {
+    const result = endRace(race.id);
+    setNotice(result.ok ? { tone: 'success', message: result.message } : { tone: 'error', message: result.message });
+  };
+
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
+    <main className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white">
       <nav className="fixed left-0 right-0 top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/85 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/race" className="flex items-center gap-3 font-mono text-sm uppercase tracking-[0.18em] text-white">
-            <span className="relative grid h-8 w-8 place-items-center border border-[#c9a84c]/60">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+          <Link href="/race" className="flex min-w-0 items-center gap-3 font-mono text-sm uppercase tracking-[0.18em] text-white">
+            <span className="relative grid h-8 w-8 shrink-0 place-items-center border border-[#c9a84c]/60">
               <span className="h-3.5 w-3.5 rotate-45 border border-[#c9a84c]" />
             </span>
-            Arc Race
+            <span className="truncate">Arc Race</span>
           </Link>
-          <div className="hidden items-center gap-8 font-mono text-xs uppercase text-[#777] md:flex">
-            <Link href="/race" className="nav-link">HUB</Link>
-            <Link href="/race/history" className="nav-link">HISTORY</Link>
+          <div className="hidden items-center gap-8 overflow-x-auto whitespace-nowrap font-mono text-xs uppercase text-[#777] md:flex" aria-label="Race navigation">
+            <Link href="/race" className="nav-link">
+              HUB
+            </Link>
+            <Link href="/race/history" className="nav-link">
+              HISTORY
+            </Link>
           </div>
-          <div className="flex items-center gap-3">
-            <AppSwitcher />
-            {isConnected ? (
-              <div className="bracket-button">
-                {address?.slice(0, 6)}...{address?.slice(-4)}
-              </div>
-            ) : (
-              <div className="bracket-button opacity-50 cursor-not-allowed">WALLET DISCONNECTED</div>
-            )}
-          </div>
+          <Link href="/race/history" className="bracket-button">
+            ARCHIVE
+          </Link>
         </div>
       </nav>
 
-      <section className="pt-32 pb-24 px-4">
-        <div className="mx-auto max-w-6xl">
-          <Link href="/race" className="flex items-center gap-2 text-[#777] hover:text-[#c9a84c] transition-colors mb-8 font-mono text-xs uppercase tracking-widest">
-            <ArrowLeft size={14} /> Back to Hub
+      <section className="section pt-32 sm:pt-36">
+        <div className="mx-auto max-w-7xl">
+          <Link href="/race" className="mb-8 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[#777] transition-colors hover:text-[#c9a84c]">
+            <ArrowLeft size={14} aria-hidden="true" />
+            Back to Hub
           </Link>
 
-          <div className="grid gap-12 lg:grid-cols-[1fr_380px]">
-            {/* Main Content */}
-            <div className="space-y-12">
-              <div className="reveal">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className={`px-3 py-1 rounded text-[10px] font-black uppercase border ${
-                    race.status === 'active' ? 'bg-green-500/10 text-green-500 border-green-500/20' :
-                    race.status === 'upcoming' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' :
-                    'bg-white/5 text-[#777] border-white/10'
-                  }`}>
-                    {race.status}
-                  </div>
-                  <div className="px-3 py-1 bg-white/5 border border-white/10 rounded text-[10px] font-black uppercase text-[#777]">
-                    {race.category.replace('-', ' ')}
-                  </div>
+          <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
+            <div className="space-y-6">
+              <HubCard as="section" className="p-6 sm:p-8">
+                <div className="flex flex-wrap items-center gap-2">
+                  <HubBadge className={race.status === 'active' ? 'border-[#30d158]/30 bg-[#30d158]/10 text-[#a6f4bf]' : race.status === 'upcoming' ? 'border-[#60a5fa]/30 bg-[#60a5fa]/10 text-[#cfe6ff]' : 'border-[#777]/20 bg-white/5 text-[#cfcfcf]'}>
+                    {race.status.toUpperCase()}
+                  </HubBadge>
+                  <HubBadge>{race.category.replace('-', ' ')}</HubBadge>
+                  <HubBadge>{RACE_CATEGORY_LABELS[race.category]}</HubBadge>
+                  <HubBadge>{race.participants.length} participants</HubBadge>
                 </div>
-                <h1 className="text-4xl font-black uppercase sm:text-5xl lg:text-6xl mb-6">{race.title}</h1>
-                <p className="text-[#9a9a9a] text-lg leading-relaxed max-w-2xl">{race.description}</p>
-              </div>
 
-              {/* Leaderboard */}
-              <div className="bracket-card p-0 overflow-hidden bg-white/[0.01]">
-                <Brackets />
-                <div className="p-6 border-b border-white/5 flex items-center justify-between">
-                  <h2 className="text-xl font-black uppercase tracking-wider flex items-center gap-3">
-                    <Medal className="text-[#c9a84c]" size={20} /> Leaderboard
-                  </h2>
-                  <div className="text-xs font-mono text-[#555] uppercase">
-                    {race.participants.length} Participants
+                <div className="mt-5 space-y-3">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#777]">Race detail</p>
+                  <h1 className="text-4xl font-black uppercase leading-tight sm:text-5xl lg:text-6xl">{race.title}</h1>
+                  <p className="max-w-3xl text-base leading-7 text-[#9a9a9a] sm:text-lg">{race.description}</p>
+                </div>
+
+                <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                  <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
+                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Prize pool</div>
+                    <div className="mt-2 text-xl font-black text-[#c9a84c]">{formatRacePrize(race.prizePool)}</div>
+                  </div>
+                  <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
+                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Start</div>
+                    <div className="mt-2 text-sm font-semibold text-white">{formatRaceDate(race.startDate)}</div>
+                  </div>
+                  <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
+                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">End</div>
+                    <div className="mt-2 text-sm font-semibold text-white">{formatRaceDate(race.endDate)}</div>
+                  </div>
+                  <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
+                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Leader</div>
+                    <div className="mt-2 text-sm font-semibold text-white">
+                      {leaderboard[0] ? leaderboard[0].name ?? formatRaceAddress(leaderboard[0].address) : 'No entries yet'}
+                    </div>
                   </div>
                 </div>
-                
+              </HubCard>
+
+              <HubCard as="section" className="p-0 overflow-hidden">
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#2a2a2a] px-6 py-5">
+                  <div className="flex items-center gap-3">
+                    <Medal className="text-[#c9a84c]" size={18} aria-hidden="true" />
+                    <div>
+                      <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#777]">Leaderboard</p>
+                      <h2 className="mt-1 text-xl font-black uppercase">Stable rankings</h2>
+                    </div>
+                  </div>
+                  <HubBadge>{sortedParticipantsLabel(race.participants.length)}</HubBadge>
+                </div>
+
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse">
+                  <table className="min-w-[760px] w-full border-collapse text-left">
                     <thead>
-                      <tr className="border-b border-white/5 text-[10px] font-mono uppercase text-[#555]">
-                        <th className="px-6 py-4">Rank</th>
-                        <th className="px-6 py-4">Participant</th>
-                        <th className="px-6 py-4 cursor-pointer hover:text-white" onClick={() => {
-                          if (sortField === 'score') setSortFieldDir(sortDir === 'asc' ? 'desc' : 'asc');
-                          else { setSortField('score'); setSortFieldDir('desc'); }
-                        }}>
-                          <div className="flex items-center gap-1">
-                            Score {sortField === 'score' && (sortDir === 'asc' ? <ChevronUp size={10}/> : <ChevronDown size={10}/>)}
-                          </div>
+                      <tr className="border-b border-[#2a2a2a] text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">
+                        <th scope="col" className="px-6 py-4">
+                          Rank
                         </th>
-                        <th className="px-6 py-4 cursor-pointer hover:text-white" onClick={() => {
-                          if (sortField === 'joinedAt') setSortFieldDir(sortDir === 'asc' ? 'desc' : 'asc');
-                          else { setSortField('joinedAt'); setSortFieldDir('desc'); }
-                        }}>
-                          <div className="flex items-center gap-1">
-                            Joined {sortField === 'joinedAt' && (sortDir === 'asc' ? <ChevronUp size={10}/> : <ChevronDown size={10}/>)}
-                          </div>
+                        <th scope="col" className="px-6 py-4">
+                          Participant
+                        </th>
+                        <th scope="col" className="px-6 py-4" aria-sort={sortField === 'score' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'}>
+                          <SortButton
+                            active={sortField === 'score'}
+                            direction={sortDirection}
+                            label={`Sort leaderboard by score ${sortField === 'score' && sortDirection === 'asc' ? 'descending' : 'ascending'}`}
+                            onClick={() => {
+                              if (sortField === 'score') {
+                                setSortDirection((value) => (value === 'asc' ? 'desc' : 'asc'));
+                                return;
+                              }
+
+                              setSortField('score');
+                              setSortDirection('desc');
+                            }}
+                          >
+                            Score
+                          </SortButton>
+                        </th>
+                        <th scope="col" className="px-6 py-4" aria-sort={sortField === 'joinedAt' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'}>
+                          <SortButton
+                            active={sortField === 'joinedAt'}
+                            direction={sortDirection}
+                            label={`Sort leaderboard by join date ${sortField === 'joinedAt' && sortDirection === 'asc' ? 'descending' : 'ascending'}`}
+                            onClick={() => {
+                              if (sortField === 'joinedAt') {
+                                setSortDirection((value) => (value === 'asc' ? 'desc' : 'asc'));
+                                return;
+                              }
+
+                              setSortField('joinedAt');
+                              setSortDirection('desc');
+                            }}
+                          >
+                            Joined
+                          </SortButton>
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/5">
-                      {sortedParticipants.map((p, idx) => {
-                        const rank = idx + 1;
-                        const isUser = p.address.toLowerCase() === address?.toLowerCase();
-                        return (
-                          <tr key={p.address} className={`group hover:bg-white/[0.02] transition-colors ${isUser ? 'bg-[#c9a84c]/5' : ''}`}>
-                            <td className="px-6 py-4">
-                              {rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank}
-                            </td>
-                            <td className="px-6 py-4">
-                              <div className="flex flex-col">
-                                <span className={`text-sm font-bold ${isUser ? 'text-[#c9a84c]' : 'text-white'}`}>
-                                  {p.name || `${p.address.slice(0, 6)}...${p.address.slice(-4)}`}
-                                  {isUser && <span className="ml-2 text-[8px] border border-[#c9a84c]/30 px-1 py-0.5 rounded">YOU</span>}
-                                </span>
-                                <span className="text-[10px] font-mono text-[#555]">{p.address}</span>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 font-mono text-sm font-black text-white group-hover:text-[#c9a84c]">
-                              {p.score.toLocaleString()}
-                            </td>
-                            <td className="px-6 py-4 text-[10px] font-mono text-[#555]">
-                              {new Date(p.joinedAt).toLocaleDateString()}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                      {race.participants.length === 0 && (
+                    <tbody className="divide-y divide-[#2a2a2a]">
+                      {leaderboard.length > 0 ? (
+                        leaderboard.map((participant, index) => {
+                          const rank = index + 1;
+                          const isCurrentUser = normalizedDemoAddress && normalizeRaceAddress(participant.address) === normalizedDemoAddress;
+
+                          return (
+                            <tr
+                              key={participant.address}
+                              aria-current={isCurrentUser ? 'true' : undefined}
+                              className={`transition-colors ${
+                                isCurrentUser ? 'bg-[#c9a84c]/10 ring-1 ring-inset ring-[#c9a84c]/20' : 'hover:bg-white/[0.02]'
+                              }`}
+                            >
+                              <td className="px-6 py-4">
+                                <RankBadge rank={rank} />
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="min-w-0">
+                                  <div className="flex flex-wrap items-center gap-2">
+                                    <span className={`text-sm font-semibold ${isCurrentUser ? 'text-[#f3dfaa]' : 'text-white'}`}>
+                                      {participant.name ?? formatRaceAddress(participant.address)}
+                                    </span>
+                                    {isCurrentUser ? <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f3dfaa]">YOU</HubBadge> : null}
+                                  </div>
+                                  <div className="mt-1 truncate text-[10px] font-mono uppercase tracking-[0.18em] text-[#777]">
+                                    {participant.address}
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="font-mono text-sm font-black text-white">{participant.score.toLocaleString()}</div>
+                                <div className="mt-1 text-[10px] uppercase tracking-[0.24em] text-[#777]">current score</div>
+                              </td>
+                              <td className="px-6 py-4 text-sm text-[#9a9a9a]">{formatRaceDate(participant.joinedAt)}</td>
+                            </tr>
+                          );
+                        })
+                      ) : (
                         <tr>
-                          <td colSpan={4} className="px-6 py-12 text-center text-[#555] font-mono uppercase text-sm">
-                            No participants yet
+                          <td colSpan={4} className="px-6 py-12">
+                            <div className="rounded-3xl border border-dashed border-[#2a2a2a] bg-black/20 px-5 py-10 text-center">
+                              <Users className="mx-auto text-[#333]" size={40} aria-hidden="true" />
+                              <p className="mt-4 text-sm font-semibold text-white">No participants yet</p>
+                              <p className="mt-2 text-sm text-[#9a9a9a]">The leaderboard will populate as competitors join this race.</p>
+                            </div>
                           </td>
                         </tr>
                       )}
                     </tbody>
                   </table>
                 </div>
-              </div>
+              </HubCard>
 
-              {/* Rules & Info */}
               <div className="grid gap-6 md:grid-cols-2">
-                <div className="bracket-card p-6 bg-white/[0.02]">
-                  <Brackets />
-                  <h3 className="text-lg font-black uppercase mb-4 flex items-center gap-2">
-                    <Info className="text-[#c9a84c]" size={18} /> Race Rules
-                  </h3>
-                  <ul className="space-y-3 text-sm text-[#777]">
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-[#c9a84c] mt-1.5 shrink-0" />
-                      Participants must join the race before the end date.
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-[#c9a84c] mt-1.5 shrink-0" />
-                      Scores are calculated based on the {race.category} category.
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-[#c9a84c] mt-1.5 shrink-0" />
-                      Top 5 participants at the end of the race will receive rewards.
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-[#c9a84c] mt-1.5 shrink-0" />
-                      Winners are announced 24 hours after the race ends.
-                    </li>
-                  </ul>
-                </div>
-                <div className="bracket-card p-6 bg-white/[0.02]">
-                  <Brackets />
-                  <h3 className="text-lg font-black uppercase mb-4 flex items-center gap-2">
-                    <Coins className="text-[#c9a84c]" size={18} /> Prize Breakdown
-                  </h3>
-                  <div className="space-y-4">
-                    {race.prizes.map((amount, i) => (
-                      <div key={i} className="flex justify-between items-center text-sm">
-                        <span className="font-mono text-[#555]">{i+1}{i === 0 ? 'st' : i === 1 ? 'nd' : i === 2 ? 'rd' : 'th'} Place</span>
-                        <span className={`font-black ${i < 3 ? 'text-white' : 'text-[#777]'}`}>${amount} USDC</span>
+                <HubCard as="section" className="p-6">
+                  <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[#777]">
+                    <Info size={14} className="text-[#c9a84c]" aria-hidden="true" />
+                    Race rules
+                  </div>
+                  <div className="mt-4 space-y-3 text-sm leading-7 text-[#9a9a9a]">
+                    <p>Participants must join while the race is active to appear in the live leaderboard.</p>
+                    <p>Scores are stored locally and sorted deterministically by score, then join time, then address.</p>
+                    <p>Top five finishers receive prize allocations from the published payout pool.</p>
+                    <p>Ended races remain readable in the archive for historical review and winner lookup.</p>
+                  </div>
+                </HubCard>
+
+                <HubCard as="section" className="p-6">
+                  <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[#777]">
+                    <Coins size={14} className="text-[#c9a84c]" aria-hidden="true" />
+                    Prize breakdown
+                  </div>
+                  <div className="mt-4 space-y-3">
+                    {race.prizes.map((prize, index) => (
+                      <div key={`${race.id}-prize-${index}`} className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm">
+                        <span className="text-[#9a9a9a]">{getRaceOrdinal(index + 1)} place</span>
+                        <span className="font-black text-[#c9a84c]">{formatRacePrize(prize)}</span>
                       </div>
                     ))}
                   </div>
-                </div>
+                </HubCard>
               </div>
             </div>
 
-            {/* Sidebar */}
-            <div className="space-y-8">
-              {/* Status & Timer Card */}
-              <div className="bracket-card p-8 bg-black/40 border-white/5 text-center">
-                <Brackets />
-                <Timer className="mx-auto mb-4 text-[#c9a84c]" size={32} />
-                <p className="text-[10px] font-mono text-[#777] uppercase mb-4">
-                  {race.status === 'upcoming' ? 'Starts In' : race.status === 'active' ? 'Ends In' : 'Race Finished'}
-                </p>
-                <Countdown targetDate={race.status === 'upcoming' ? race.startDate : race.endDate} />
-              </div>
-
-              {/* Interaction Card */}
-              <div className="bracket-card p-8 bg-[#c9a84c]/5 border-[#c9a84c]/20">
-                <Brackets />
-                {isConnected ? (
-                  <>
-                    {race.status === 'active' && !isJoined ? (
-                      <div className="space-y-6">
-                        <div className="flex items-center gap-3 mb-2">
-                          <UserPlus className="text-[#c9a84c]" size={20} />
-                          <h3 className="text-xl font-black uppercase">Join Race</h3>
-                        </div>
-                        <p className="text-xs text-[#777] mb-6">Enter your display name and join the competition for the ${race.prizePool} prize pool.</p>
-                        <input 
-                          type="text" 
-                          placeholder="Display Name (optional)"
-                          className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-[#c9a84c] outline-none transition-colors"
-                          value={joinName}
-                          onChange={(e) => setJoinName(e.target.value)}
-                        />
-                        <button onClick={handleJoin} className="primary-button w-full justify-center">JOIN NOW</button>
-                      </div>
-                    ) : isJoined && race.status === 'active' ? (
-                      <div className="space-y-6">
-                        <div className="flex items-center gap-3 mb-2">
-                          <Edit3 className="text-[#c9a84c]" size={20} />
-                          <h3 className="text-xl font-black uppercase">Update Score</h3>
-                        </div>
-                        <div className="p-4 bg-white/5 rounded-lg border border-white/10 mb-6">
-                          <p className="text-[10px] font-mono text-[#555] uppercase mb-1">Your Current Score</p>
-                          <p className="text-3xl font-black text-[#c9a84c]">{userParticipant?.score.toLocaleString()}</p>
-                        </div>
-                        <input 
-                          type="number" 
-                          placeholder="New Score"
-                          className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-[#c9a84c] outline-none transition-colors mb-4"
-                          value={newScore}
-                          onChange={(e) => setNewScore(e.target.value)}
-                        />
-                        <button onClick={handleUpdateScore} className="secondary-button w-full justify-center">SUBMIT SCORE</button>
-                        <p className="text-[10px] text-center text-[#555] mt-4 font-mono">// HONOR SYSTEM ACTIVE</p>
-                      </div>
-                    ) : isJoined && race.status === 'ended' ? (
-                      <div className="text-center py-4">
-                        <Trophy className="mx-auto mb-4 text-[#c9a84c]" size={32} />
-                        <h3 className="text-xl font-black uppercase mb-2">Well Played!</h3>
-                        <p className="text-xs text-[#777]">The race has ended. Check the leaderboard for final standings and winners.</p>
-                      </div>
-                    ) : (
-                      <div className="text-center py-4">
-                        <ShieldAlert className="mx-auto mb-4 text-[#777]" size={32} />
-                        <p className="text-xs text-[#777] uppercase font-black">Participation Closed</p>
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <div className="text-center space-y-4">
-                    <p className="text-xs text-[#777] uppercase font-mono tracking-widest">Connect wallet to join</p>
-                    <div className="bracket-button opacity-50 cursor-not-allowed">WALLET DISCONNECTED</div>
+            <div className="space-y-6">
+              <HubCard as="aside" className="p-6">
+                <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[#777]">
+                  <CalendarDays size={14} className="text-[#c9a84c]" aria-hidden="true" />
+                  Countdown
+                </div>
+                <div className="mt-4 rounded-3xl border border-[#2a2a2a] bg-white/[0.015] p-5">
+                  <p className="text-center text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">
+                    {race.status === 'active' ? 'Ends In' : race.status === 'upcoming' ? 'Starts In' : 'Finalised'}
+                  </p>
+                  <div className="mt-4">
+                    <RaceCountdown status={race.status} targetDate={race.status === 'upcoming' ? race.startDate : race.endDate} />
                   </div>
-                )}
-              </div>
+                </div>
+                <div className="mt-4 grid grid-cols-2 gap-3">
+                  <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
+                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Status</div>
+                    <div className="mt-2 text-sm font-semibold text-white">{RACE_STATUS_LABELS[race.status]}</div>
+                  </div>
+                  <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
+                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Category</div>
+                    <div className="mt-2 text-sm font-semibold text-white">{RACE_CATEGORY_LABELS[race.category]}</div>
+                  </div>
+                </div>
+              </HubCard>
 
-              {/* Admin Panel */}
-              {isAdmin && (
-                <div className="bracket-card p-6 bg-red-500/5 border-red-500/20">
-                  <Brackets />
-                  <h3 className="text-lg font-black uppercase text-red-500 mb-4 flex items-center gap-2">
-                    <ShieldAlert size={18} /> Admin Panel
-                  </h3>
-                  <div className="space-y-4">
-                    <button 
-                      onClick={() => endRace(race.id)}
+              <HubCard as="aside" className="p-6">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#777]">Demo address</p>
+                    <h2 className="mt-2 text-2xl font-black uppercase">Join and score</h2>
+                  </div>
+                  <HubBadge>{demoAddress ? formatRaceAddress(demoAddress) : 'Not set'}</HubBadge>
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  <label className={hubLabelClass} htmlFor="race-demo-address">
+                    Participant address
+                  </label>
+                  <input
+                    id="race-demo-address"
+                    type="text"
+                    inputMode="text"
+                    autoComplete="off"
+                    value={demoAddress}
+                    onChange={(event) => setDemoAddress(event.target.value)}
+                    placeholder="0x1234...abcd"
+                    className={`w-full ${hubInputClass}`}
+                  />
+                  <label className={hubLabelClass} htmlFor="race-participant-name">
+                    Display name
+                  </label>
+                  <input
+                    id="race-participant-name"
+                    type="text"
+                    autoComplete="nickname"
+                    value={participantName}
+                    onChange={(event) => setParticipantName(event.target.value)}
+                    placeholder="Optional label"
+                    className={`w-full ${hubInputClass}`}
+                  />
+                </div>
+
+                <div className="mt-5 space-y-4">
+                  <FeedbackBanner notice={notice} />
+
+                  {race.status === 'active' && !isJoined ? (
+                    <form className="space-y-4" onSubmit={handleJoin}>
+                      <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4 text-sm text-[#9a9a9a]">
+                        Join the race with your local demo address. The entry is saved only in your browser.
+                      </div>
+                      <button type="submit" className="primary-button w-full justify-center">
+                        JOIN RACE
+                        <ArrowRight size={15} />
+                      </button>
+                    </form>
+                  ) : race.status === 'active' && isJoined ? (
+                    <form className="space-y-4" onSubmit={handleScoreUpdate}>
+                      <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
+                        <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Current score</div>
+                        <div className="mt-2 text-3xl font-black text-[#c9a84c]">{currentParticipant?.score.toLocaleString() ?? '0'}</div>
+                        <p className="mt-2 text-sm text-[#9a9a9a]">
+                          This address is already in the leaderboard. Update the score below to reflect a new local result.
+                        </p>
+                      </div>
+                      <div>
+                        <label className={hubLabelClass} htmlFor="race-score">
+                          New score
+                        </label>
+                        <input
+                          id="race-score"
+                          type="number"
+                          min="0"
+                          step="1"
+                          value={scoreValue}
+                          onChange={(event) => setScoreValue(event.target.value)}
+                          placeholder="0"
+                          className={`mt-2 w-full ${hubInputClass}`}
+                        />
+                      </div>
+                      <button type="submit" className="secondary-button w-full justify-center">
+                        UPDATE SCORE
+                      </button>
+                    </form>
+                  ) : race.status === 'active' ? (
+                    <div className="rounded-2xl border border-dashed border-[#2a2a2a] bg-black/20 px-4 py-4 text-sm text-[#9a9a9a]">
+                      Enter a demo address above to join the active race and unlock the score update form.
+                    </div>
+                  ) : race.status === 'ended' && isJoined ? (
+                    <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4 text-sm text-[#9a9a9a]">
+                      This race has ended. Your archived result remains visible in the leaderboard and winner feed.
+                    </div>
+                  ) : (
+                    <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4 text-sm text-[#9a9a9a]">
+                      This race is not open for participation yet. Watch the countdown for the live join window.
+                    </div>
+                  )}
+                </div>
+              </HubCard>
+
+              {isAdmin ? (
+                <HubCard as="aside" className="border border-red-500/20 bg-red-500/5 p-6">
+                  <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-red-200">
+                    <ShieldAlert size={14} aria-hidden="true" />
+                    Admin tools
+                  </div>
+                  <h2 className="mt-3 text-2xl font-black uppercase text-red-50">Visible only to the ops address</h2>
+                  <p className="mt-2 text-sm leading-7 text-red-100/80">
+                    These placeholders are intentionally hidden unless the demo address matches the Arc admin address.
+                  </p>
+                  <div className="mt-5 space-y-3">
+                    <button
+                      type="button"
+                      onClick={handleEndRace}
                       disabled={race.status === 'ended'}
-                      className="w-full px-4 py-3 bg-red-500 text-white font-black text-xs uppercase rounded hover:bg-red-600 disabled:opacity-50"
+                      className="w-full rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-xs font-black uppercase tracking-[0.18em] text-red-100 transition-colors hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       END RACE
                     </button>
-                    <button className="w-full px-4 py-3 border border-red-500/30 text-red-500 font-black text-xs uppercase rounded hover:bg-red-500/10">
-                      DISTRIBUTE PRIZES
-                    </button>
+                    <div className="rounded-2xl border border-red-500/20 bg-black/30 px-4 py-3 text-sm text-red-100/80">
+                      Prize distribution placeholders stay visible only in this admin-only state.
+                    </div>
                   </div>
-                </div>
-              )}
+                </HubCard>
+              ) : null}
             </div>
           </div>
         </div>
       </section>
     </main>
   );
+}
+
+function sortedParticipantsLabel(count: number): string {
+  return `${count} ${count === 1 ? 'entry' : 'entries'}`;
 }
