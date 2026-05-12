@@ -5,7 +5,6 @@ import { useMemo, useState } from 'react';
 import {
   ArrowRight,
   Eye,
-  Layers3,
   Search,
   Shield,
   SquareArrowOutUpRight,
@@ -13,6 +12,7 @@ import {
   Vault,
 } from 'lucide-react';
 import AppSwitcher from '@/components/AppSwitcher';
+import { HubBrackets, HubEmptyState, HubMetricCard, hubInputClass, hubSelectClass, hubTextareaClass } from '@/components/HubPrimitives';
 import { useVaultStore, type VaultAccess, type VaultCategory } from '@/lib/vaultStore';
 
 type SortMode = 'featured' | 'accesses' | 'newest';
@@ -65,41 +65,6 @@ const INITIAL_FORM = {
   size: '',
   tags: '',
 };
-
-function Brackets() {
-  return (
-    <>
-      <span className="corner corner-tl" />
-      <span className="corner corner-tr" />
-      <span className="corner corner-bl" />
-      <span className="corner corner-br" />
-    </>
-  );
-}
-
-type IconType = typeof Layers3;
-
-function StatCard({
-  label,
-  value,
-  icon: Icon,
-}: {
-  label: string;
-  value: string | number;
-  icon: IconType;
-}) {
-  return (
-    <div className="bracket-card relative overflow-hidden rounded-3xl p-5">
-      <Brackets />
-      <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">
-        <Icon size={14} className="text-[#c9a84c]" />
-        {label}
-      </div>
-      <div className="mt-3 text-3xl font-black">{value}</div>
-    </div>
-  );
-}
-
 export default function VaultPage() {
   const { items, addVaultItem, toggleUnlock, trackAccess } = useVaultStore();
   const [search, setSearch] = useState('');
@@ -140,6 +105,13 @@ export default function VaultPage() {
     }),
     [items],
   );
+
+  const resetFilters = () => {
+    setSearch('');
+    setCategory('all');
+    setAccess('all');
+    setSortBy('featured');
+  };
 
   const isUnlocked = (item: (typeof items)[number]) => item.access === 'open' || item.unlockedBy.includes(viewerId);
 
@@ -211,10 +183,10 @@ export default function VaultPage() {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <StatCard label="ITEMS" value={stats.total} icon={Vault} />
-              <StatCard label="OPEN" value={stats.open} icon={Unlock} />
-              <StatCard label="UNLOCKED" value={stats.unlocked} icon={Shield} />
-              <StatCard label="ACCESSES" value={stats.accesses} icon={Eye} />
+              <HubMetricCard label="ITEMS" value={stats.total} icon={Vault} />
+              <HubMetricCard label="OPEN" value={stats.open} icon={Unlock} />
+              <HubMetricCard label="UNLOCKED" value={stats.unlocked} icon={Shield} />
+              <HubMetricCard label="ACCESSES" value={stats.accesses} icon={Eye} />
             </div>
           </div>
         </div>
@@ -225,17 +197,18 @@ export default function VaultPage() {
           <div className="grid gap-8 lg:grid-cols-[1.3fr_0.9fr]">
             <div className="space-y-5">
               <div className="bracket-card rounded-3xl p-5 sm:p-6">
-                <Brackets />
+                <HubBrackets />
                 <div className="grid gap-5 lg:grid-cols-[1fr_auto_auto] lg:items-end">
                   <div className="relative">
                     <label className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Search</label>
                     <div className="relative mt-2">
                       <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#555]" size={16} />
                       <input
+                        aria-label="Search vault items"
                         value={search}
                         onChange={(event) => setSearch(event.target.value)}
                         placeholder="Find a resource, format, or tag"
-                        className="w-full border border-[#2a2a2a] bg-black/30 py-3.5 pl-11 pr-4 text-sm outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/50"
+                        className={`w-full ${hubInputClass} py-3.5 !pl-11 !pr-4`}
                       />
                     </div>
                   </div>
@@ -245,9 +218,10 @@ export default function VaultPage() {
                       Category
                     </label>
                     <select
+                      aria-label="Filter vault category"
                       value={category}
                       onChange={(event) => setCategory(event.target.value as VaultCategory | 'all')}
-                      className="min-w-[190px] border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm uppercase tracking-[0.14em] text-white outline-none transition-colors focus:border-[#c9a84c]/50"
+                      className={`min-w-[190px] ${hubSelectClass}`}
                     >
                       {CATEGORY_OPTIONS.map((option) => (
                         <option key={option.id} value={option.id}>
@@ -262,9 +236,10 @@ export default function VaultPage() {
                       Access
                     </label>
                     <select
+                      aria-label="Filter vault access"
                       value={access}
                       onChange={(event) => setAccess(event.target.value as VaultAccess | 'all')}
-                      className="min-w-[170px] border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm uppercase tracking-[0.14em] text-white outline-none transition-colors focus:border-[#c9a84c]/50"
+                      className={`min-w-[170px] ${hubSelectClass}`}
                     >
                       {ACCESS_OPTIONS.map((option) => (
                         <option key={option.id} value={option.id}>
@@ -289,7 +264,7 @@ export default function VaultPage() {
                       onClick={() => setSelectedId(item.id)}
                       className={`bracket-card flex min-h-[280px] flex-col rounded-3xl p-6 text-left transition-colors ${selected ? 'border-[#c9a84c]/40' : ''}`}
                     >
-                      <Brackets />
+                      <HubBrackets />
                       <div className="flex items-start justify-between gap-4">
                         <div>
                           <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#c9a84c]">
@@ -362,10 +337,16 @@ export default function VaultPage() {
                 })}
 
                 {filteredItems.length === 0 ? (
-                  <div className="md:col-span-2 rounded-3xl border border-dashed border-[#2a2a2a] bg-white/[0.015] p-10 text-center text-[#777]">
-                    <Vault size={42} className="mx-auto text-[#333]" />
-                    <h3 className="mt-5 text-2xl font-black text-white">No vault items found</h3>
-                    <p className="mt-2 text-sm">Try a different search term or widen the category filter.</p>
+                  <div className="md:col-span-2">
+                    <HubEmptyState
+                      icon={Vault}
+                      title="No vault items found"
+                      description="Try a different search term or widen the category filter."
+                    >
+                      <button type="button" onClick={resetFilters} className="primary-button">
+                        RESET FILTERS
+                      </button>
+                    </HubEmptyState>
                   </div>
                 ) : null}
               </div>
@@ -373,7 +354,7 @@ export default function VaultPage() {
 
             <aside className="space-y-6">
               <div className="bracket-card rounded-3xl p-6 sm:p-8">
-                <Brackets />
+                <HubBrackets />
                 <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#c9a84c]">// selected</p>
                 <h2 className="mt-4 text-3xl font-black uppercase leading-tight">Vault details</h2>
                 {selectedItem ? (
@@ -408,32 +389,44 @@ export default function VaultPage() {
                     </div>
                   </div>
                 ) : (
-                  <p className="mt-6 text-sm text-[#777]">Select an item to inspect the vault contents.</p>
+                  <HubEmptyState
+                    icon={Vault}
+                    title="No vault selection"
+                    description="Select a vault item to inspect the contents and access status."
+                    className="mt-6 !p-8"
+                  >
+                    <button type="button" onClick={resetFilters} className="secondary-button">
+                      SHOW ALL
+                    </button>
+                  </HubEmptyState>
                 )}
               </div>
 
               <div className="bracket-card rounded-3xl p-6 sm:p-8">
-                <Brackets />
+                <HubBrackets />
                 <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#c9a84c]">// add asset</p>
                 <h2 className="mt-4 text-3xl font-black uppercase leading-tight">Publish to vault</h2>
                 <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
                   <input
+                    aria-label="Vault title"
                     value={form.title}
                     onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))}
                     placeholder="Title"
-                    className="w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/50"
+                    className={`w-full ${hubInputClass}`}
                   />
                   <textarea
+                    aria-label="Vault description"
                     value={form.description}
                     onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))}
                     placeholder="Describe the vault item"
-                    className="min-h-[120px] w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/50"
+                    className={`w-full ${hubTextareaClass}`}
                   />
                   <div className="grid gap-4 sm:grid-cols-2">
                     <select
+                      aria-label="Vault category"
                       value={form.category}
                       onChange={(event) => setForm((current) => ({ ...current, category: event.target.value as VaultCategory }))}
-                      className="w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm uppercase tracking-[0.14em] outline-none transition-colors focus:border-[#c9a84c]/50"
+                      className={`w-full ${hubSelectClass}`}
                     >
                       {CATEGORY_OPTIONS.filter((option) => option.id !== 'all').map((option) => (
                         <option key={option.id} value={option.id}>
@@ -442,9 +435,10 @@ export default function VaultPage() {
                       ))}
                     </select>
                     <select
+                      aria-label="Vault access"
                       value={form.access}
                       onChange={(event) => setForm((current) => ({ ...current, access: event.target.value as VaultAccess }))}
-                      className="w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm uppercase tracking-[0.14em] outline-none transition-colors focus:border-[#c9a84c]/50"
+                      className={`w-full ${hubSelectClass}`}
                     >
                       {ACCESS_OPTIONS.filter((option) => option.id !== 'all').map((option) => (
                         <option key={option.id} value={option.id}>
@@ -455,29 +449,33 @@ export default function VaultPage() {
                   </div>
                   <div className="grid gap-4 sm:grid-cols-2">
                     <input
+                      aria-label="Vault format"
                       value={form.format}
                       onChange={(event) => setForm((current) => ({ ...current, format: event.target.value }))}
                       placeholder="PDF"
-                      className="w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/50"
+                      className={`w-full ${hubInputClass}`}
                     />
                     <input
+                      aria-label="Vault size"
                       value={form.size}
                       onChange={(event) => setForm((current) => ({ ...current, size: event.target.value }))}
                       placeholder="8 MB"
-                      className="w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/50"
+                      className={`w-full ${hubInputClass}`}
                     />
                   </div>
                   <input
+                    aria-label="Vault URL"
                     value={form.url}
                     onChange={(event) => setForm((current) => ({ ...current, url: event.target.value }))}
                     placeholder="/forum"
-                    className="w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/50"
+                    className={`w-full ${hubInputClass}`}
                   />
                   <input
+                    aria-label="Vault tags"
                     value={form.tags}
                     onChange={(event) => setForm((current) => ({ ...current, tags: event.target.value }))}
                     placeholder="Tags separated by commas"
-                    className="w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/50"
+                    className={`w-full ${hubInputClass}`}
                   />
                   <button type="submit" className="primary-button w-full">
                     <ArrowRight size={16} />

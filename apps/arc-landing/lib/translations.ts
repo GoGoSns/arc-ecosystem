@@ -3,6 +3,7 @@ export type Lang = 'en' | 'tr';
 export const translations = {
   en: {
     nav: {
+      home: 'HOME',
       apps: 'APPS',
       architecture: 'ARCHITECTURE',
       sdk: 'SDK',
@@ -68,6 +69,7 @@ export const translations = {
   },
   tr: {
     nav: {
+      home: 'ANA SAYFA',
       apps: 'UYGULAMALAR',
       architecture: 'MİMARİ',
       sdk: 'SDK',

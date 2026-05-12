@@ -15,6 +15,7 @@ import {
   Zap,
 } from 'lucide-react';
 import AppSwitcher from '@/components/AppSwitcher';
+import { HubBrackets, HubEmptyState, HubMetricCard, hubInputClass, hubSelectClass, hubTextareaClass } from '@/components/HubPrimitives';
 import { useSignalsStore, type SignalBias, type SignalCategory, type SignalTimeframe } from '@/lib/signalsStore';
 
 type SortMode = 'hot' | 'confidence' | 'newest';
@@ -75,40 +76,6 @@ const INITIAL_FORM = {
   tags: '',
 };
 
-function Brackets() {
-  return (
-    <>
-      <span className="corner corner-tl" />
-      <span className="corner corner-tr" />
-      <span className="corner corner-bl" />
-      <span className="corner corner-br" />
-    </>
-  );
-}
-
-type IconType = typeof Activity;
-
-function StatCard({
-  label,
-  value,
-  icon: Icon,
-}: {
-  label: string;
-  value: string | number;
-  icon: IconType;
-}) {
-  return (
-    <div className="bracket-card relative overflow-hidden rounded-3xl p-5">
-      <Brackets />
-      <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">
-        <Icon size={14} className="text-[#c9a84c]" />
-        {label}
-      </div>
-      <div className="mt-3 text-3xl font-black">{value}</div>
-    </div>
-  );
-}
-
 const biasAccent: Record<SignalBias, string> = {
   bullish: '#4ade80',
   bearish: '#f87171',
@@ -156,6 +123,13 @@ export default function SignalsPage() {
     }),
     [signals],
   );
+
+  const resetFilters = () => {
+    setSearch('');
+    setCategory('all');
+    setBias('all');
+    setSortBy('hot');
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -225,10 +199,10 @@ export default function SignalsPage() {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <StatCard label="SIGNALS" value={stats.total} icon={Activity} />
-              <StatCard label="BULLISH" value={stats.bullish} icon={TrendingUp} />
-              <StatCard label="BEARISH" value={stats.bearish} icon={TrendingDown} />
-              <StatCard label="AVG CONF" value={`${stats.confidence}%`} icon={BarChart3} />
+              <HubMetricCard label="SIGNALS" value={stats.total} icon={Activity} />
+              <HubMetricCard label="BULLISH" value={stats.bullish} icon={TrendingUp} />
+              <HubMetricCard label="BEARISH" value={stats.bearish} icon={TrendingDown} />
+              <HubMetricCard label="AVG CONF" value={`${stats.confidence}%`} icon={BarChart3} />
             </div>
           </div>
         </div>
@@ -239,17 +213,18 @@ export default function SignalsPage() {
           <div className="grid gap-8 lg:grid-cols-[1.3fr_0.9fr]">
             <div className="space-y-5">
               <div className="bracket-card rounded-3xl p-5 sm:p-6">
-                <Brackets />
+                <HubBrackets />
                 <div className="grid gap-5 lg:grid-cols-[1fr_auto_auto] lg:items-end">
                   <div className="relative">
                     <label className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Search</label>
                     <div className="relative mt-2">
                       <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#555]" size={16} />
                       <input
+                        aria-label="Search signals"
                         value={search}
                         onChange={(event) => setSearch(event.target.value)}
                         placeholder="Search by signal, source, or tag"
-                        className="w-full border border-[#2a2a2a] bg-black/30 py-3.5 pl-11 pr-4 text-sm outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/50"
+                        className={`w-full ${hubInputClass} py-3.5 !pl-11 !pr-4`}
                       />
                     </div>
                   </div>
@@ -259,9 +234,10 @@ export default function SignalsPage() {
                       Category
                     </label>
                     <select
+                      aria-label="Filter signal category"
                       value={category}
                       onChange={(event) => setCategory(event.target.value as SignalCategory | 'all')}
-                      className="min-w-[180px] border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm uppercase tracking-[0.14em] text-white outline-none transition-colors focus:border-[#c9a84c]/50"
+                      className={`min-w-[180px] ${hubSelectClass}`}
                     >
                       {CATEGORY_OPTIONS.map((option) => (
                         <option key={option.id} value={option.id}>
@@ -276,9 +252,10 @@ export default function SignalsPage() {
                       Bias
                     </label>
                     <select
+                      aria-label="Filter signal bias"
                       value={bias}
                       onChange={(event) => setBias(event.target.value as SignalBias | 'all')}
-                      className="min-w-[160px] border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm uppercase tracking-[0.14em] text-white outline-none transition-colors focus:border-[#c9a84c]/50"
+                      className={`min-w-[160px] ${hubSelectClass}`}
                     >
                       {BIAS_OPTIONS.map((option) => (
                         <option key={option.id} value={option.id}>
@@ -319,7 +296,7 @@ export default function SignalsPage() {
                       className="bracket-card flex min-h-[300px] flex-col rounded-3xl p-6 transition-colors"
                       style={{ borderColor: `${accent}40` }}
                     >
-                      <Brackets />
+                      <HubBrackets />
                       <div className="flex items-start justify-between gap-4">
                         <div>
                           <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#c9a84c]">
@@ -392,10 +369,16 @@ export default function SignalsPage() {
                 })}
 
                 {filteredSignals.length === 0 ? (
-                  <div className="md:col-span-2 rounded-3xl border border-dashed border-[#2a2a2a] bg-white/[0.015] p-10 text-center text-[#777]">
-                    <Activity size={42} className="mx-auto text-[#333]" />
-                    <h3 className="mt-5 text-2xl font-black text-white">No signals match the filter</h3>
-                    <p className="mt-2 text-sm">Widen the filter or clear the search box to reveal more readings.</p>
+                  <div className="md:col-span-2">
+                    <HubEmptyState
+                      icon={Activity}
+                      title="No signals match the filter"
+                      description="Widen the filter or clear the search box to reveal more readings."
+                    >
+                      <button type="button" onClick={resetFilters} className="primary-button">
+                        RESET FILTERS
+                      </button>
+                    </HubEmptyState>
                   </div>
                 ) : null}
               </div>
@@ -403,7 +386,7 @@ export default function SignalsPage() {
 
             <aside className="space-y-6">
               <div className="bracket-card rounded-3xl p-6 sm:p-8">
-                <Brackets />
+                <HubBrackets />
                 <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#c9a84c]">// spotlight</p>
                 <h2 className="mt-4 text-3xl font-black uppercase leading-tight">Top signal</h2>
                 {spotlight ? (
@@ -431,38 +414,51 @@ export default function SignalsPage() {
                     </div>
                   </div>
                 ) : (
-                  <p className="mt-6 text-sm text-[#777]">Nothing to highlight yet.</p>
+                  <HubEmptyState
+                    icon={Activity}
+                    title="Nothing to highlight yet"
+                    description="Signal a trend or update the feed to surface the current top reading."
+                    className="mt-6 p-8"
+                  >
+                    <Link href="/forum" className="secondary-button">
+                      OPEN FORUM
+                    </Link>
+                  </HubEmptyState>
                 )}
               </div>
 
               <div className="bracket-card rounded-3xl p-6 sm:p-8">
-                <Brackets />
+                <HubBrackets />
                 <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#c9a84c]">// compose</p>
                 <h2 className="mt-4 text-3xl font-black uppercase leading-tight">Post a signal</h2>
                 <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
                   <input
+                    aria-label="Signal title"
                     value={form.title}
                     onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))}
                     placeholder="Title"
-                    className="w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/50"
+                    className={`w-full ${hubInputClass}`}
                   />
                   <textarea
+                    aria-label="Signal summary"
                     value={form.summary}
                     onChange={(event) => setForm((current) => ({ ...current, summary: event.target.value }))}
                     placeholder="Summarize the signal"
-                    className="min-h-[120px] w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/50"
+                    className={`w-full ${hubTextareaClass}`}
                   />
                   <input
+                    aria-label="Signal source"
                     value={form.source}
                     onChange={(event) => setForm((current) => ({ ...current, source: event.target.value }))}
                     placeholder="Source"
-                    className="w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/50"
+                    className={`w-full ${hubInputClass}`}
                   />
                   <div className="grid gap-4 sm:grid-cols-2">
                     <select
+                      aria-label="Signal category"
                       value={form.category}
                       onChange={(event) => setForm((current) => ({ ...current, category: event.target.value as SignalCategory }))}
-                      className="w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm uppercase tracking-[0.14em] outline-none transition-colors focus:border-[#c9a84c]/50"
+                      className={`w-full ${hubSelectClass}`}
                     >
                       {CATEGORY_OPTIONS.filter((option) => option.id !== 'all').map((option) => (
                         <option key={option.id} value={option.id}>
@@ -471,9 +467,10 @@ export default function SignalsPage() {
                       ))}
                     </select>
                     <select
+                      aria-label="Signal bias"
                       value={form.bias}
                       onChange={(event) => setForm((current) => ({ ...current, bias: event.target.value as SignalBias }))}
-                      className="w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm uppercase tracking-[0.14em] outline-none transition-colors focus:border-[#c9a84c]/50"
+                      className={`w-full ${hubSelectClass}`}
                     >
                       {BIAS_OPTIONS.filter((option) => option.id !== 'all').map((option) => (
                         <option key={option.id} value={option.id}>
@@ -484,9 +481,10 @@ export default function SignalsPage() {
                   </div>
                   <div className="grid gap-4 sm:grid-cols-2">
                     <select
+                      aria-label="Signal timeframe"
                       value={form.timeframe}
                       onChange={(event) => setForm((current) => ({ ...current, timeframe: event.target.value as SignalTimeframe }))}
-                      className="w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm uppercase tracking-[0.14em] outline-none transition-colors focus:border-[#c9a84c]/50"
+                      className={`w-full ${hubSelectClass}`}
                     >
                       {Object.entries(TIMEFRAME_LABELS).map(([key, label]) => (
                         <option key={key} value={key}>
@@ -495,6 +493,7 @@ export default function SignalsPage() {
                       ))}
                     </select>
                     <input
+                      aria-label="Signal confidence"
                       type="number"
                       min={0}
                       max={100}
@@ -506,14 +505,15 @@ export default function SignalsPage() {
                         }))
                       }
                       placeholder="80"
-                      className="w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/50"
+                      className={`w-full ${hubInputClass}`}
                     />
                   </div>
                   <input
+                    aria-label="Signal tags"
                     value={form.tags}
                     onChange={(event) => setForm((current) => ({ ...current, tags: event.target.value }))}
                     placeholder="Tags separated by commas"
-                    className="w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/50"
+                    className={`w-full ${hubInputClass}`}
                   />
                   <button type="submit" className="primary-button w-full">
                     <Sparkles size={16} />

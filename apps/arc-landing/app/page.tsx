@@ -180,24 +180,27 @@ export default function Page() {
     { title: t.apps.creatorTitle, description: t.apps.creatorDescription },
     { title: t.apps.playTitle, description: t.apps.playDescription },
   ];
-  const navLinks = [
+  const primaryNavLinks = [
+    { href: '#top', label: t.nav.home },
+    { href: '/value', label: t.nav.value },
+    { href: '/quests', label: t.nav.quests },
+    { href: '/roadmap', label: t.nav.roadmap },
+    { href: '/showcase', label: t.nav.showcase },
+    { href: '/jobs', label: t.nav.jobs },
+    { href: '/roulette', label: t.nav.roulette },
+    { href: '/race', label: t.nav.race },
+    { href: '/drops', label: t.nav.drops },
+    { href: '/vault', label: t.nav.vault },
+    { href: '/signals', label: t.nav.signals },
+    { href: '/learn', label: t.nav.learn },
+    { href: '#faq', label: t.nav.faq },
+  ];
+  const utilityNavLinks = [
     { href: '#apps', label: t.nav.apps },
     { href: '#architecture', label: t.nav.architecture },
     { href: '#sdk', label: t.nav.sdk },
     { href: '#resources', label: t.nav.docs },
     { href: '/stats', label: t.nav.stats },
-    { href: '/value', label: t.nav.value },
-    { href: '/quests', label: t.nav.quests },
-    { href: '/jobs', label: t.nav.jobs },
-    { href: '/roulette', label: t.nav.roulette },
-    { href: '/drops', label: t.nav.drops },
-    { href: '/roadmap', label: t.nav.roadmap },
-    { href: '/showcase', label: t.nav.showcase },
-    { href: '/vault', label: t.nav.vault },
-    { href: '/signals', label: t.nav.signals },
-    { href: '/learn', label: t.nav.learn },
-    { href: '/race', label: t.nav.race },
-    { href: '#faq', label: t.nav.faq },
     { href: '/feedback', label: t.nav.feedback },
     { href: '/forum', label: t.nav.forum },
     { href: '/node', label: t.nav.node },
@@ -213,8 +216,17 @@ export default function Page() {
             </span>
             Arc Ecosystem
           </a>
-          <div className="hidden items-center gap-6 font-mono text-xs uppercase text-[#777] md:flex">
-            {navLinks.map((item) => (
+          <div
+            className="hidden flex-1 items-center justify-center gap-4 overflow-x-auto whitespace-nowrap font-mono text-xs uppercase text-[#777] md:flex"
+            aria-label="Primary navigation"
+          >
+            {primaryNavLinks.map((item) => (
+              <a key={item.href} href={item.href} className="nav-link">
+                {item.label}
+              </a>
+            ))}
+            <span className="mx-2 h-4 w-px bg-[#2a2a2a]" aria-hidden="true" />
+            {utilityNavLinks.map((item) => (
               <a key={item.href} href={item.href} className="nav-link">
                 {item.label}
               </a>
@@ -226,16 +238,31 @@ export default function Page() {
             <a href="#apps" className="bracket-button">{t.nav.launch}</a>
           </div>
           <button
+            type="button"
             aria-label="Open menu"
-            className="grid h-10 w-10 place-items-center border border-[#2a2a2a] text-[#c9a84c] md:hidden"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav"
+            className="grid h-10 w-10 place-items-center border border-[#2a2a2a] text-[#c9a84c] transition-colors hover:border-[#c9a84c]/60 md:hidden"
             onClick={() => setMenuOpen((value) => !value)}
           >
             {menuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
         {menuOpen ? (
-          <div className="border-t border-[#2a2a2a] bg-[#0a0a0a] px-4 py-4 font-mono text-sm uppercase text-[#aaa] md:hidden">
-            {navLinks.map((item) => (
+          <div id="mobile-nav" className="border-t border-[#2a2a2a] bg-[#0a0a0a] px-4 py-4 font-mono text-sm uppercase text-[#aaa] md:hidden">
+            <p className="pb-2 text-[10px] tracking-[0.3em] text-[#777]">CORE</p>
+            {primaryNavLinks.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="block border-b border-[#1f1f1f] py-3"
+                onClick={() => setMenuOpen(false)}
+              >
+                {item.label}
+              </a>
+            ))}
+            <p className="pb-2 pt-4 text-[10px] tracking-[0.3em] text-[#777]">UTILITY</p>
+            {utilityNavLinks.map((item) => (
               <a
                 key={item.href}
                 href={item.href}

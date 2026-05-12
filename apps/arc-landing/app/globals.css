@@ -28,6 +28,43 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.55;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a,
+input,
+select,
+textarea,
+summary,
+[role="button"] {
+  outline: none;
+}
+
+:where(a, button, input, select, textarea, summary, [role="button"]):focus-visible {
+  box-shadow:
+    0 0 0 2px rgba(10, 10, 10, 0.95),
+    0 0 0 4px rgba(201, 168, 76, 0.65);
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p,
+li {
+  text-wrap: pretty;
 }
 
 ::selection {
@@ -161,9 +198,12 @@ body {
   }
 
   .soon-badge {
+    display: inline-flex;
+    align-items: center;
     border: 1px solid rgba(201, 168, 76, 0.25);
-    padding: 0.1rem 0.45rem;
-    color: var(--accent);
+    background: rgba(201, 168, 76, 0.08);
+    padding: 0.1rem 0.55rem;
+    color: #e7cb85;
     font-size: 0.65rem;
     text-transform: uppercase;
   }
@@ -451,6 +491,27 @@ body {
 .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .glitch::before,
+  .glitch::after {
+    animation: none;
+    display: none;
+  }
 }
 
 @media (max-width: 1023px) {

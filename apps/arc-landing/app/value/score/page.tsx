@@ -6,6 +6,7 @@ import {
   ArrowLeft, Gem, Loader2, Info, CheckCircle2, 
   ExternalLink, Share2, Copy, Twitter, Trophy
 } from 'lucide-react';
+import { HubCard, HubEmptyState, HubSkeletonCard, hubInputClass } from '@/components/HubPrimitives';
 import { useValueStore, type WalletScoreData } from '@/lib/valueStore';
 import { useForumStore } from '@/lib/forumStore';
 import { useFeedbackStore } from '@/lib/feedbackStore';
@@ -34,6 +35,7 @@ export default function WalletScorePage() {
     if (!address) return;
     setLoading(true);
     setError(null);
+    setResult(null);
 
     // Check cache first
     const addr = address.toLowerCase();
@@ -132,31 +134,54 @@ export default function WalletScorePage() {
         </div>
 
         {/* Input Section */}
-        <div className="bg-white/[0.02] border border-white/[0.05] rounded-3xl p-8 mb-12">
-          <div className="flex flex-col md:flex-row gap-4">
-            <input
-              type="text"
-              placeholder="Enter wallet address (0x...)"
-              className="flex-1 bg-black/40 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-[#c9a84c]/50 transition-colors font-mono"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-            />
+        <HubCard className="mb-12 p-8">
+          <form className="flex flex-col gap-4 md:flex-row md:items-end" onSubmit={(event) => { event.preventDefault(); calculateScore(); }}>
+            <div className="flex-1">
+              <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]" htmlFor="wallet-address">
+                Wallet Address
+              </label>
+              <input
+                id="wallet-address"
+                aria-label="Enter wallet address"
+                type="text"
+                placeholder="Enter wallet address (0x...)"
+                className={`w-full font-mono ${hubInputClass}`}
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+            </div>
             <button
-              onClick={calculateScore}
+              type="submit"
               disabled={loading || !address}
-              className="bg-[#c9a84c] hover:bg-[#d4b96a] disabled:opacity-50 disabled:cursor-not-allowed text-black font-black px-10 py-4 rounded-2xl transition-all"
+              className="primary-button px-10 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {loading ? <Loader2 className="animate-spin" /> : "CALCULATE SCORE"}
+              {loading ? <Loader2 className="animate-spin" /> : 'CALCULATE SCORE'}
             </button>
-          </div>
-        </div>
+          </form>
+        </HubCard>
 
         {loading && (
-          <div className="text-center py-20">
-            <Loader2 size={48} className="animate-spin text-[#c9a84c] mx-auto mb-6" />
-            <p className="text-[#555] font-mono animate-pulse uppercase tracking-widest">Analyzing on-chain footprint...</p>
+          <div className="space-y-4">
+            <HubSkeletonCard lines={4} />
+            <p className="text-center font-mono text-xs uppercase tracking-[0.28em] text-[#555]">
+              Analyzing on-chain footprint...
+            </p>
           </div>
         )}
+
+        {error && !loading ? (
+          <HubEmptyState
+            icon={Info}
+            title="Unable to calculate wallet score"
+            description={error}
+            tone="error"
+            className="mb-12"
+          >
+            <button type="button" onClick={calculateScore} className="primary-button">
+              RETRY
+            </button>
+          </HubEmptyState>
+        ) : null}
 
         {result && !loading && (
           <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">

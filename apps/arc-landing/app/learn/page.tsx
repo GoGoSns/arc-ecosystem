@@ -13,6 +13,7 @@ import {
   Trophy,
 } from 'lucide-react';
 import AppSwitcher from '@/components/AppSwitcher';
+import { HubBrackets, HubEmptyState, HubMetricCard, hubInputClass, hubSelectClass } from '@/components/HubPrimitives';
 import { useWallet } from '@/contexts/WalletContext';
 import {
   LESSONS,
@@ -75,40 +76,6 @@ const SORT_OPTIONS: Array<{ id: SortMode; label: string }> = [
   { id: 'newest', label: 'NEWEST' },
 ];
 
-function Brackets() {
-  return (
-    <>
-      <span className="corner corner-tl" />
-      <span className="corner corner-tr" />
-      <span className="corner corner-bl" />
-      <span className="corner corner-br" />
-    </>
-  );
-}
-
-type IconType = typeof BookOpen;
-
-function StatCard({
-  label,
-  value,
-  icon: Icon,
-}: {
-  label: string;
-  value: string | number;
-  icon: IconType;
-}) {
-  return (
-    <div className="bracket-card relative overflow-hidden rounded-3xl p-5">
-      <Brackets />
-      <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">
-        <Icon size={14} className="text-[#c9a84c]" />
-        {label}
-      </div>
-      <div className="mt-3 text-3xl font-black">{value}</div>
-    </div>
-  );
-}
-
 export default function LearnPage() {
   const { address, isConnected, connect } = useWallet();
   const { lessons, getProgress, completeLesson, toggleBookmark } = useLearnStore();
@@ -163,6 +130,14 @@ export default function LearnPage() {
     [lessons.length, progress],
   );
 
+  const resetFilters = () => {
+    setSearch('');
+    setCategory('all');
+    setLevel('all');
+    setStatus('all');
+    setSortBy('recommended');
+  };
+
   return (
     <main className="min-h-screen bg-[#0a0a0a] text-white">
       <nav className="sticky top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/90 backdrop-blur-xl">
@@ -216,10 +191,10 @@ export default function LearnPage() {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <StatCard label="LESSONS" value={stats.total} icon={BookOpen} />
-              <StatCard label="COMPLETED" value={stats.completed} icon={CheckCircle2} />
-              <StatCard label="BOOKMARKS" value={stats.bookmarked} icon={Bookmark} />
-              <StatCard label="XP" value={stats.xp} icon={Trophy} />
+              <HubMetricCard label="LESSONS" value={stats.total} icon={BookOpen} />
+              <HubMetricCard label="COMPLETED" value={stats.completed} icon={CheckCircle2} />
+              <HubMetricCard label="BOOKMARKS" value={stats.bookmarked} icon={Bookmark} />
+              <HubMetricCard label="XP" value={stats.xp} icon={Trophy} />
             </div>
           </div>
         </div>
@@ -230,17 +205,18 @@ export default function LearnPage() {
           <div className="grid gap-8 lg:grid-cols-[1.3fr_0.9fr]">
             <div className="space-y-5">
               <div className="bracket-card rounded-3xl p-5 sm:p-6">
-                <Brackets />
+                <HubBrackets />
                 <div className="grid gap-5 lg:grid-cols-[1fr_auto_auto] lg:items-end">
                   <div className="relative">
                     <label className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Search</label>
                     <div className="relative mt-2">
                       <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#555]" size={16} />
                       <input
+                        aria-label="Search lessons"
                         value={search}
                         onChange={(event) => setSearch(event.target.value)}
                         placeholder="Search lessons, steps, or resources"
-                        className="w-full border border-[#2a2a2a] bg-black/30 py-3.5 pl-11 pr-4 text-sm outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/50"
+                        className={`w-full ${hubInputClass} py-3.5 !pl-11 !pr-4`}
                       />
                     </div>
                   </div>
@@ -250,9 +226,10 @@ export default function LearnPage() {
                       Category
                     </label>
                     <select
+                      aria-label="Filter lesson category"
                       value={category}
                       onChange={(event) => setCategory(event.target.value as LearnCategory | 'all')}
-                      className="min-w-[180px] border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm uppercase tracking-[0.14em] text-white outline-none transition-colors focus:border-[#c9a84c]/50"
+                      className={`min-w-[180px] ${hubSelectClass}`}
                     >
                       {CATEGORY_OPTIONS.map((option) => (
                         <option key={option.id} value={option.id}>
@@ -267,9 +244,10 @@ export default function LearnPage() {
                       Level
                     </label>
                     <select
+                      aria-label="Filter lesson level"
                       value={level}
                       onChange={(event) => setLevel(event.target.value as LearnLevel | 'all')}
-                      className="min-w-[170px] border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm uppercase tracking-[0.14em] text-white outline-none transition-colors focus:border-[#c9a84c]/50"
+                      className={`min-w-[170px] ${hubSelectClass}`}
                     >
                       {LEVEL_OPTIONS.map((option) => (
                         <option key={option.id} value={option.id}>
@@ -327,7 +305,7 @@ export default function LearnPage() {
                         completed ? 'opacity-75' : ''
                       }`}
                     >
-                      <Brackets />
+                      <HubBrackets />
                       <div className="flex items-start justify-between gap-4">
                         <div>
                           <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#c9a84c]">
@@ -419,10 +397,16 @@ export default function LearnPage() {
                 })}
 
                 {filteredLessons.length === 0 ? (
-                  <div className="md:col-span-2 rounded-3xl border border-dashed border-[#2a2a2a] bg-white/[0.015] p-10 text-center text-[#777]">
-                    <Layers3 size={42} className="mx-auto text-[#333]" />
-                    <h3 className="mt-5 text-2xl font-black text-white">No lessons match the filter</h3>
-                    <p className="mt-2 text-sm">Adjust your filters or clear search to bring the path back.</p>
+                  <div className="md:col-span-2">
+                    <HubEmptyState
+                      icon={Layers3}
+                      title="No lessons match the filter"
+                      description="Adjust your filters or clear search to bring the path back."
+                    >
+                      <button type="button" onClick={resetFilters} className="primary-button">
+                        RESET FILTERS
+                      </button>
+                    </HubEmptyState>
                   </div>
                 ) : null}
               </div>
@@ -430,7 +414,7 @@ export default function LearnPage() {
 
             <aside className="space-y-6">
               <div className="bracket-card rounded-3xl p-6 sm:p-8">
-                <Brackets />
+                <HubBrackets />
                 <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#c9a84c]">// progress</p>
                 <h2 className="mt-4 text-3xl font-black uppercase leading-tight">Your learning path</h2>
                 {isConnected && progress ? (
@@ -480,7 +464,7 @@ export default function LearnPage() {
               </div>
 
               <div className="bracket-card rounded-3xl p-6 sm:p-8">
-                <Brackets />
+                <HubBrackets />
                 <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#c9a84c]">// next up</p>
                 <h2 className="mt-4 text-3xl font-black uppercase leading-tight">Recommended lesson</h2>
                 {nextLesson ? (
@@ -498,12 +482,21 @@ export default function LearnPage() {
                     </div>
                   </div>
                 ) : (
-                  <p className="mt-6 text-sm text-[#777]">No lessons available.</p>
+                  <HubEmptyState
+                    icon={Layers3}
+                    title="No lessons available"
+                    description="Complete the current path or reset your filters to surface lessons again."
+                    className="mt-6 !p-8"
+                  >
+                    <button type="button" onClick={resetFilters} className="secondary-button">
+                      SHOW ALL
+                    </button>
+                  </HubEmptyState>
                 )}
               </div>
 
               <div className="bracket-card rounded-3xl p-6 sm:p-8">
-                <Brackets />
+                <HubBrackets />
                 <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#c9a84c]">// path notes</p>
                 <div className="mt-4 space-y-3 text-sm leading-7 text-[#9a9a9a]">
                   <p>Use the lesson cards to move between the ecosystem surfaces you already know.</p>

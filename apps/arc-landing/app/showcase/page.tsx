@@ -12,6 +12,7 @@ import {
   Upload,
 } from 'lucide-react';
 import AppSwitcher from '@/components/AppSwitcher';
+import { HubBrackets, HubEmptyState, HubMetricCard, hubInputClass, hubSelectClass, hubTextareaClass } from '@/components/HubPrimitives';
 import { useShowcaseStore, type ShowcaseCategory } from '@/lib/showcaseStore';
 
 type SortMode = 'featured' | 'likes' | 'newest';
@@ -50,38 +51,6 @@ const INITIAL_FORM = {
   tags: '',
 };
 
-function Brackets() {
-  return (
-    <>
-      <span className="corner corner-tl" />
-      <span className="corner corner-tr" />
-      <span className="corner corner-bl" />
-      <span className="corner corner-br" />
-    </>
-  );
-}
-
-function StatCard({
-  label,
-  value,
-  icon: Icon,
-}: {
-  label: string;
-  value: string | number;
-  icon: typeof Layers3;
-}) {
-  return (
-    <div className="bracket-card relative overflow-hidden rounded-3xl p-5">
-      <Brackets />
-      <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">
-        <Icon size={14} className="text-[#c9a84c]" />
-        {label}
-      </div>
-      <div className="mt-3 text-3xl font-black">{value}</div>
-    </div>
-  );
-}
-
 export default function ShowcasePage() {
   const { items, addShowcase, toggleLike } = useShowcaseStore();
   const [search, setSearch] = useState('');
@@ -119,6 +88,12 @@ export default function ShowcasePage() {
     }),
     [items],
   );
+
+  const resetFilters = () => {
+    setSearch('');
+    setCategory('all');
+    setSortBy('featured');
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -186,10 +161,10 @@ export default function ShowcasePage() {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <StatCard label="ITEMS" value={stats.total} icon={Sparkles} />
-              <StatCard label="FEATURED" value={stats.featured} icon={Star} />
-              <StatCard label="CREATORS" value={stats.creators} icon={Layers3} />
-              <StatCard label="LIKES" value={stats.likes} icon={Heart} />
+              <HubMetricCard label="ITEMS" value={stats.total} icon={Sparkles} />
+              <HubMetricCard label="FEATURED" value={stats.featured} icon={Star} />
+              <HubMetricCard label="CREATORS" value={stats.creators} icon={Layers3} />
+              <HubMetricCard label="LIKES" value={stats.likes} icon={Heart} />
             </div>
           </div>
         </div>
@@ -200,17 +175,18 @@ export default function ShowcasePage() {
           <div className="grid gap-8 lg:grid-cols-[1.35fr_0.85fr]">
             <div className="space-y-5">
               <div className="bracket-card rounded-3xl p-5 sm:p-6">
-                <Brackets />
+                <HubBrackets />
                 <div className="grid gap-5 lg:grid-cols-[1fr_auto_auto] lg:items-end">
                   <div className="relative">
                     <label className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Search</label>
                     <div className="relative mt-2">
                       <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#555]" size={16} />
                       <input
+                        aria-label="Search showcase items"
                         value={search}
                         onChange={(event) => setSearch(event.target.value)}
                         placeholder="Find a highlight, creator, or tag"
-                        className="w-full border border-[#2a2a2a] bg-black/30 py-3.5 pl-11 pr-4 text-sm outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/50"
+                        className={`w-full ${hubInputClass} py-3.5 !pl-11 !pr-4`}
                       />
                     </div>
                   </div>
@@ -220,9 +196,10 @@ export default function ShowcasePage() {
                       Category
                     </label>
                     <select
+                      aria-label="Filter showcase category"
                       value={category}
                       onChange={(event) => setCategory(event.target.value as ShowcaseCategory | 'all')}
-                      className="min-w-[190px] border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm uppercase tracking-[0.14em] text-white outline-none transition-colors focus:border-[#c9a84c]/50"
+                      className={`min-w-[190px] ${hubSelectClass}`}
                     >
                       {CATEGORY_OPTIONS.map((option) => (
                         <option key={option.id} value={option.id}>
@@ -237,9 +214,10 @@ export default function ShowcasePage() {
                       Sort
                     </label>
                     <select
+                      aria-label="Sort showcase items"
                       value={sortBy}
                       onChange={(event) => setSortBy(event.target.value as SortMode)}
-                      className="min-w-[180px] border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm uppercase tracking-[0.14em] text-white outline-none transition-colors focus:border-[#c9a84c]/50"
+                      className={`min-w-[180px] ${hubSelectClass}`}
                     >
                       {SORT_OPTIONS.map((option) => (
                         <option key={option.id} value={option.id}>
@@ -260,7 +238,7 @@ export default function ShowcasePage() {
                       key={item.id}
                       className={`bracket-card flex min-h-[280px] flex-col rounded-3xl p-6 transition-colors ${item.featured ? 'border-[#c9a84c]/35' : ''}`}
                     >
-                      <Brackets />
+                      <HubBrackets />
                       <div className="flex items-start justify-between gap-4">
                         <div>
                           <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#c9a84c]">
@@ -310,10 +288,16 @@ export default function ShowcasePage() {
                 })}
 
                 {filteredItems.length === 0 ? (
-                  <div className="md:col-span-2 rounded-3xl border border-dashed border-[#2a2a2a] bg-white/[0.015] p-10 text-center text-[#777]">
-                    <Layers3 size={42} className="mx-auto text-[#333]" />
-                    <h3 className="mt-5 text-2xl font-black text-white">No showcase items found</h3>
-                    <p className="mt-2 text-sm">Try a different search term or reset the category filter.</p>
+                  <div className="md:col-span-2">
+                    <HubEmptyState
+                      icon={Layers3}
+                      title="No showcase items found"
+                      description="Try a different search term or reset the category filter."
+                    >
+                      <button type="button" onClick={resetFilters} className="primary-button">
+                        RESET FILTERS
+                      </button>
+                    </HubEmptyState>
                   </div>
                 ) : null}
               </div>
@@ -321,7 +305,7 @@ export default function ShowcasePage() {
 
             <aside className="space-y-6">
               <div className="bracket-card rounded-3xl p-6 sm:p-8">
-                <Brackets />
+                <HubBrackets />
                 <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#c9a84c]">// spotlight</p>
                 <h2 className="mt-4 text-3xl font-black uppercase leading-tight">Current highlight</h2>
                 {spotlight ? (
@@ -347,38 +331,51 @@ export default function ShowcasePage() {
                     </div>
                   </div>
                 ) : (
-                  <p className="mt-6 text-sm text-[#777]">Nothing to spotlight yet.</p>
+                  <HubEmptyState
+                    icon={Layers3}
+                    title="Nothing to spotlight yet"
+                    description="Publish the first highlight to seed the wall."
+                    className="mt-6 !p-8"
+                  >
+                    <Link href="/forum" className="secondary-button">
+                      BROWSE FORUM
+                    </Link>
+                  </HubEmptyState>
                 )}
               </div>
 
               <div className="bracket-card rounded-3xl p-6 sm:p-8">
-                <Brackets />
+                <HubBrackets />
                 <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#c9a84c]">// submit</p>
                 <h2 className="mt-4 text-3xl font-black uppercase leading-tight">Add a showcase</h2>
                 <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
                   <input
+                    aria-label="Showcase title"
                     value={form.title}
                     onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))}
                     placeholder="Title"
-                    className="w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/50"
+                    className={`w-full ${hubInputClass}`}
                   />
                   <input
+                    aria-label="Showcase creator"
                     value={form.creator}
                     onChange={(event) => setForm((current) => ({ ...current, creator: event.target.value }))}
                     placeholder="Creator"
-                    className="w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/50"
+                    className={`w-full ${hubInputClass}`}
                   />
                   <textarea
+                    aria-label="Showcase description"
                     value={form.description}
                     onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))}
                     placeholder="Describe the showcase"
-                    className="min-h-[120px] w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/50"
+                    className={`w-full ${hubTextareaClass}`}
                   />
                   <div className="grid gap-4 sm:grid-cols-2">
                     <select
+                      aria-label="Showcase category"
                       value={form.category}
                       onChange={(event) => setForm((current) => ({ ...current, category: event.target.value as ShowcaseCategory }))}
-                      className="w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm uppercase tracking-[0.14em] outline-none transition-colors focus:border-[#c9a84c]/50"
+                      className={`w-full ${hubSelectClass}`}
                     >
                       {CATEGORY_OPTIONS.filter((option) => option.id !== 'all').map((option) => (
                         <option key={option.id} value={option.id}>
@@ -387,17 +384,19 @@ export default function ShowcasePage() {
                       ))}
                     </select>
                     <input
+                      aria-label="Showcase URL"
                       value={form.url}
                       onChange={(event) => setForm((current) => ({ ...current, url: event.target.value }))}
                       placeholder="/forum"
-                      className="w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/50"
+                      className={`w-full ${hubInputClass}`}
                     />
                   </div>
                   <input
+                    aria-label="Showcase tags"
                     value={form.tags}
                     onChange={(event) => setForm((current) => ({ ...current, tags: event.target.value }))}
                     placeholder="Tags separated by commas"
-                    className="w-full border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/50"
+                    className={`w-full ${hubInputClass}`}
                   />
                   <button type="submit" className="primary-button w-full">
                     <Upload size={16} />

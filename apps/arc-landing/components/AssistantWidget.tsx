@@ -36,6 +36,8 @@ export default function AssistantWidget() {
   const recognitionRef = useRef<any>(null);
   const retryCountRef = useRef(0);
   const inputRef = useRef('');
+  const panelId = 'arc-assistant-panel';
+  const titleId = 'arc-assistant-title';
 
   useEffect(() => {
     inputRef.current = input;
@@ -244,25 +246,29 @@ export default function AssistantWidget() {
       {/* Chat Window */}
       {isOpen && (
         <div 
-          className="mb-4 w-[350px] md:w-[400px] h-[500px] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-[var(--border)] animate-in slide-in-from-bottom-4 duration-300"
+          id={panelId}
+          role="dialog"
+          aria-modal="false"
+          aria-labelledby={titleId}
+          className="mb-4 flex h-[500px] w-[350px] flex-col overflow-hidden rounded-2xl border border-[var(--border)] shadow-2xl animate-in slide-in-from-bottom-4 duration-300 md:w-[400px]"
           style={{ background: 'var(--bg)', backgroundColor: '#0a0a0a' }}
         >
           {/* Header */}
-          <div className="p-4 border-b border-[var(--border)] flex items-center justify-between bg-zinc-900">
+          <div className="flex items-center justify-between border-b border-[var(--border)] bg-zinc-900 p-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-[var(--accent)] flex items-center justify-center text-black">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--accent)] text-black">
                 <Bot size={18} />
               </div>
               <div>
-                <h3 className="font-bold text-sm text-white">Arc Assistant</h3>
+                <h3 id={titleId} className="text-sm font-bold text-white">Arc Assistant</h3>
                 <div className="flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
                   <span className="text-[10px] text-zinc-400">Online</span>
                   {isSpeaking && (
-                    <div className="flex gap-0.5 ml-1 items-end h-3">
-                      <div className="w-0.5 bg-[var(--accent)] animate-[bounce_1s_infinite] h-1.5" />
-                      <div className="w-0.5 bg-[var(--accent)] animate-[bounce_1s_infinite_0.2s] h-3" />
-                      <div className="w-0.5 bg-[var(--accent)] animate-[bounce_1s_infinite_0.4s] h-2" />
+                    <div className="ml-1 flex h-3 items-end gap-0.5" aria-hidden="true">
+                      <div className="h-1.5 w-0.5 animate-[bounce_1s_infinite] bg-[var(--accent)]" />
+                      <div className="h-3 w-0.5 animate-[bounce_1s_infinite_0.2s] bg-[var(--accent)]" />
+                      <div className="h-2 w-0.5 animate-[bounce_1s_infinite_0.4s] bg-[var(--accent)]" />
                     </div>
                   )}
                 </div>
@@ -270,15 +276,19 @@ export default function AssistantWidget() {
             </div>
             <div className="flex items-center gap-1">
               <button
+                type="button"
                 onClick={toggleTTS}
-                className={`p-1.5 rounded-lg transition-colors ${ttsEnabled ? 'text-[var(--accent)]' : 'text-zinc-500'} hover:bg-zinc-800`}
-                title="Toggle voice output"
+                aria-label={ttsEnabled ? 'Disable voice output' : 'Enable voice output'}
+                aria-pressed={ttsEnabled}
+                className={`rounded-lg p-1.5 transition-colors ${ttsEnabled ? 'text-[var(--accent)]' : 'text-zinc-500'} hover:bg-zinc-800`}
               >
                 {ttsEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
               </button>
               <button 
+                type="button"
                 onClick={() => setIsOpen(false)}
-                className="p-1 hover:bg-zinc-800 rounded-lg transition-colors text-zinc-400"
+                aria-label="Close assistant"
+                className="rounded-lg p-1 text-zinc-400 transition-colors hover:bg-zinc-800"
               >
                 <X size={20} />
               </button>
@@ -286,7 +296,13 @@ export default function AssistantWidget() {
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-black/20">
+          <div
+            className="flex-1 space-y-4 overflow-y-auto bg-black/20 p-4"
+            role="log"
+            aria-live="polite"
+            aria-relevant="additions text"
+            aria-atomic="false"
+          >
             {messages.map((m, i) => (
               <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[80%] p-3 rounded-2xl text-sm ${
@@ -309,16 +325,17 @@ export default function AssistantWidget() {
           </div>
 
           {errorMessage && !isListening && (
-            <div className="px-4 py-2 bg-red-500/10 border-t border-red-500/20 text-xs text-red-400">
+            <div className="border-t border-red-500/20 bg-red-500/10 px-4 py-2 text-xs text-red-400" role="alert" aria-live="assertive">
               {errorMessage}
             </div>
           )}
 
           {/* Input */}
-          <form onSubmit={handleSubmit} className="p-4 bg-zinc-900 border-t border-[var(--border)]">
+          <form onSubmit={handleSubmit} className="border-t border-[var(--border)] bg-zinc-900 p-4">
             <div className="relative flex items-center gap-2">
               <div className="relative flex-1">
                 <input
+                  aria-label="Message to Arc Assistant"
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
@@ -338,7 +355,8 @@ export default function AssistantWidget() {
                 <button 
                   type="submit"
                   disabled={!input.trim() || isLoading}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[var(--accent)] disabled:opacity-30 transition-opacity"
+                  aria-label="Send message"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[var(--accent)] transition-opacity disabled:opacity-30"
                 >
                   <Send size={18} />
                 </button>
@@ -351,6 +369,8 @@ export default function AssistantWidget() {
                   onMouseLeave={stopListening}
                   onTouchStart={startListening}
                   onTouchEnd={stopListening}
+                  aria-label={isListening ? 'Release microphone to send' : 'Hold microphone to speak'}
+                  aria-pressed={isListening}
                   className={`p-2 rounded-xl transition-all select-none cursor-pointer ${
                     isListening 
                       ? (retryCount > 0 
@@ -358,7 +378,6 @@ export default function AssistantWidget() {
                           : 'bg-red-500/20 text-red-500 animate-pulse scale-110')
                       : 'bg-zinc-800 text-zinc-400 hover:text-white'
                   }`}
-                  title="Hold to speak"
                 >
                   {isListening ? <MicOff size={20} /> : <Mic size={20} />}
                 </button>
@@ -373,8 +392,12 @@ export default function AssistantWidget() {
 
       {/* Toggle Button */}
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95 z-50"
+        aria-label={isOpen ? 'Close assistant' : 'Open assistant'}
+        aria-expanded={isOpen}
+        aria-controls={panelId}
+        className="z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all hover:scale-110 active:scale-95"
         style={{ background: 'var(--accent)', color: '#000' }}
       >
         {isOpen ? <X size={28} /> : <MessageSquare size={28} />}

@@ -20,8 +20,12 @@ export default function AppSwitcher() {
   }, []);
 
   return (
-    <div className="flex items-center gap-1 p-1 rounded-2xl border" 
-         style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(201,168,76,0.15)' }}>
+    <div
+      className="flex items-center gap-1 rounded-2xl border p-1"
+      aria-label="Switch between Arc apps"
+      role="navigation"
+      aria-roledescription="app switcher"
+      style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(201,168,76,0.15)' }}>
       {APPS.map((app) => {
         const Icon = app.icon;
         const isActive = currentPort === app.port;
@@ -29,7 +33,9 @@ export default function AppSwitcher() {
           <a
             key={app.name}
             href={app.url}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-all hover:scale-105"
+            aria-current={isActive ? 'page' : undefined}
+            aria-label={`Open Arc ${app.name}`}
+            className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold transition-all hover:scale-105 focus-visible:bg-white/5"
             style={{
               background: isActive ? 'rgba(201,168,76,0.15)' : 'transparent',
               color: isActive ? 'var(--accent)' : 'var(--fg)',

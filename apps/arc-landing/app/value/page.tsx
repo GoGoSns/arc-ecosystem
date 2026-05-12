@@ -90,7 +90,7 @@ export default function ValueHub() {
             Track activity, value portfolios, and price services.
           </p>
 
-          <form onSubmit={handleSearch} className="max-w-2xl mx-auto relative group">
+          <form onSubmit={handleSearch} className="max-w-2xl mx-auto relative group" role="search" aria-label="Search Arc wallet values">
             <div className="absolute inset-0 bg-[#c9a84c]/20 blur-2xl group-focus-within:bg-[#c9a84c]/30 transition-all duration-500 rounded-full" />
             <div className="relative flex items-center bg-zinc-900/80 border border-white/10 rounded-2xl p-2 backdrop-blur-xl">
               <div className="pl-4 pr-2 text-[#555]">
@@ -98,6 +98,7 @@ export default function ValueHub() {
               </div>
               <input
                 type="text"
+                aria-label="Search wallet address or ENS name"
                 placeholder="Enter wallet address or ENS name"
                 className="w-full bg-transparent border-none outline-none py-4 text-lg font-medium placeholder:text-[#333]"
                 value={search}
@@ -105,6 +106,7 @@ export default function ValueHub() {
               />
               <button
                 type="submit"
+                aria-label="Lookup wallet"
                 className="bg-[#c9a84c] hover:bg-[#d4b96a] text-black font-bold px-8 py-4 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 LOOKUP
