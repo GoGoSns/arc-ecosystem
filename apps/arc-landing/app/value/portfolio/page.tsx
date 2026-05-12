@@ -3,9 +3,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { 
-  ArrowLeft, Coins, Loader2, TrendingUp, History, 
+  ArrowLeft, Loader2, History, 
   Wallet, PieChart as PieIcon, ArrowRightLeft, Image as ImageIcon
 } from 'lucide-react';
+import { buildDemoPortfolio } from '@/lib/demoMetrics';
 
 interface PortfolioData {
   totalUsdc: number;
@@ -14,86 +15,27 @@ interface PortfolioData {
   transactions: Array<{ hash: string; type: 'in' | 'out'; amount: number; target: string; time: string }>;
 }
 
-const MOCK_DATA: PortfolioData = {
-  totalUsdc: 12450.75,
-  tokens: [
-    { symbol: 'USDC', balance: 10000, value: 10000, color: '#c9a84c' },
-    { symbol: 'ARC', balance: 500, value: 1250, color: '#e5e4e2' },
-    { symbol: 'WETH', balance: 0.5, value: 1200.75, color: '#b9f2ff' },
-  ],
-  nfts: [
-    { name: 'Arc Pioneer #124', id: '124', estValue: 450 },
-    { name: 'Genesis Node', id: '7', estValue: 1200 },
-  ],
-  transactions: [
-    { hash: '0x123...456', type: 'in', amount: 500, target: '0xabc...def', time: '2h ago' },
-    { hash: '0x789...012', type: 'out', amount: 50, target: '0xghi...jkl', time: '5h ago' },
-    { hash: '0x345...678', type: 'in', amount: 1200, target: '0xmno...pqr', time: '1d ago' },
-  ]
-};
-
 export default function PortfolioValuePage() {
   const [address, setAddress] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<PortfolioData | null>(null);
-
   const calculatePortfolio = async () => {
-    if (!address) return;
+    const trimmed = address.trim();
+    if (!trimmed) {
+      setError('Enter an address to generate a demo portfolio preview.');
+      setResult(null);
+      return;
+    }
+
     setLoading(true);
     setError(null);
+    setResult(null);
 
     try {
-      // 1. Fetch Native Balance (USDC on Arc)
-      const addrRes = await fetch(`https://testnet.arcscan.app/api/v2/addresses/${address}`);
-      const addrData = await addrRes.json();
-      const nativeBalance = parseFloat(addrData.coin_balance || "0") / 1e18; // USDC has 18 decimals on Arc
-
-      // 2. Fetch ERC-20 Tokens
-      const tokenRes = await fetch(`https://testnet.arcscan.app/api/v2/addresses/${address}/tokens`);
-      const tokenData = await tokenRes.json();
-      const tokens = (tokenData.items || []).map((t: any) => ({
-        symbol: t.token.symbol,
-        balance: parseFloat(t.value) / Math.pow(10, parseInt(t.token.decimals)),
-        value: (parseFloat(t.value) / Math.pow(10, parseInt(t.token.decimals))) * (t.token.symbol === 'USDC' ? 1 : Math.random() * 2), // Mock value for non-USDC
-        color: t.token.symbol === 'USDC' ? '#c9a84c' : t.token.symbol === 'ARC' ? '#e5e4e2' : '#b9f2ff'
-      }));
-
-      // 3. Fetch NFTs
-      const nftRes = await fetch(`https://testnet.arcscan.app/api/v2/addresses/${address}/nft`);
-      const nftData = await nftRes.json();
-      const nfts = (nftData.items || []).map((n: any) => ({
-        name: n.token.name || `NFT #${n.token_id}`,
-        id: n.token_id,
-        estValue: Math.floor(Math.random() * 450) + 50 // Mock NFT value
-      }));
-
-      // 4. Fetch Transactions for history
-      const txRes = await fetch(`https://testnet.arcscan.app/api/v2/addresses/${address}/token-transfers?type=ERC-20`);
-      const txData = await txRes.json();
-      const transactions = (txData.items || []).slice(0, 10).map((tx: any) => ({
-        hash: tx.tx_hash,
-        type: tx.to.hash.toLowerCase() === address.toLowerCase() ? 'in' : 'out',
-        amount: parseFloat(tx.total.value) / Math.pow(10, parseInt(tx.token.decimals)),
-        target: tx.to.hash.toLowerCase() === address.toLowerCase() ? tx.from.hash : tx.to.hash,
-        time: new Date(tx.timestamp).toLocaleDateString()
-      }));
-
-      const totalTokensValue = tokens.reduce((acc: number, t: any) => acc + t.value, 0);
-      const totalNftValue = nfts.reduce((acc: number, n: any) => acc + n.estValue, 0);
-
-      setResult({
-        totalUsdc: nativeBalance + totalTokensValue + totalNftValue,
-        tokens: [
-          { symbol: 'USDC (Native)', balance: nativeBalance, value: nativeBalance, color: '#c9a84c' },
-          ...tokens
-        ],
-        nfts,
-        transactions
-      });
-    } catch (err) {
-      console.error(err);
-      setError("Failed to fetch portfolio data. Using mock data for preview.");
-      setResult(MOCK_DATA);
+      await new Promise((resolve) => setTimeout(resolve, 180));
+      setResult(buildDemoPortfolio(trimmed));
+    } catch {
+      setError('Unable to build a demo portfolio snapshot.');
     } finally {
       setLoading(false);
     }
@@ -111,35 +53,64 @@ export default function PortfolioValuePage() {
 
         <div className="mb-12">
           <h1 className="text-5xl font-black mb-4">PORTFOLIO VALUE</h1>
-          <p className="text-[#888] text-lg">Total worth of your Arc Network holdings in USDC.</p>
+          <p className="text-[#888] text-lg">Total worth of your Arc Network holdings in a local demo snapshot.</p>
         </div>
 
         {/* Input Section */}
-        <div className="bg-white/[0.02] border border-white/[0.05] rounded-3xl p-8 mb-12">
-          <div className="flex flex-col md:flex-row gap-4">
-            <input
-              type="text"
-              placeholder="Enter wallet address (0x...)"
-              className="flex-1 bg-black/40 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-[#c9a84c]/50 transition-colors font-mono"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-            />
+        <div className="bg-white/[0.02] border border-white/[0.05] rounded-3xl p-8 mb-8">
+          <form
+            className="flex flex-col md:flex-row gap-4"
+            onSubmit={(event) => {
+              event.preventDefault();
+              void calculatePortfolio();
+            }}
+          >
+            <div className="flex-1">
+              <label className="mb-2 block text-xs font-mono uppercase tracking-widest text-[#555]" htmlFor="portfolio-address">
+                Wallet Address
+              </label>
+              <input
+                id="portfolio-address"
+                type="text"
+                placeholder="Enter wallet address (0x...)"
+                className="w-full rounded-2xl border border-white/10 bg-black/40 px-6 py-4 font-mono outline-none transition-colors focus:border-[#c9a84c]/50 focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                aria-describedby="portfolio-help"
+              />
+            </div>
             <button
-              onClick={calculatePortfolio}
-              disabled={loading || !address}
-              className="bg-[#c9a84c] hover:bg-[#d4b96a] disabled:opacity-50 disabled:cursor-not-allowed text-black font-black px-10 py-4 rounded-2xl transition-all"
+              type="submit"
+              disabled={loading || !address.trim()}
+              className="rounded-2xl bg-[#c9a84c] px-10 py-4 font-black text-black transition-all hover:bg-[#d4b96a] disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
               {loading ? <Loader2 className="animate-spin" /> : "VALUATE PORTFOLIO"}
             </button>
-          </div>
+          </form>
+          <p id="portfolio-help" className="mt-3 text-[11px] uppercase tracking-[0.24em] text-[#333]">
+            Demo preview only. No network requests are made.
+          </p>
         </div>
+
+        {error && !loading ? (
+          <div className="mb-8 rounded-2xl border border-red-500/20 bg-red-500/10 px-5 py-4 text-sm text-red-300">
+            {error}
+          </div>
+        ) : null}
 
         {loading && (
           <div className="text-center py-20">
             <Loader2 size={48} className="animate-spin text-[#c9a84c] mx-auto mb-6" />
-            <p className="text-[#555] font-mono animate-pulse uppercase tracking-widest">Querying chain state...</p>
+            <p className="text-[#555] font-mono animate-pulse uppercase tracking-widest">Generating demo snapshot...</p>
           </div>
         )}
+
+        {!loading && !result && !error ? (
+          <div className="rounded-3xl border border-dashed border-white/10 bg-white/[0.01] p-10 text-center text-[#777]">
+            <p className="font-mono text-xs uppercase tracking-[0.28em] text-[#c9a84c]">Demo Snapshot</p>
+            <p className="mt-4 text-lg">Enter any wallet address to generate a local portfolio preview.</p>
+          </div>
+        ) : null}
 
         {result && !loading && (
           <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">

@@ -9,14 +9,14 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import AssistantWidget from "@/components/AssistantWidget";
 import AppSwitcher from "@/components/AppSwitcher";
+import { getArcAppUrl, isExternalUrl } from "@/lib/arcAppLinks";
 import { translations, type Lang } from "@/lib/translations";
 import LanguageToggle from "@/components/LanguageToggle";
 
 type Feature = {
   name: string;
-  href: string;
+  href: string | null;
   soon?: boolean;
 };
 
@@ -24,51 +24,57 @@ type AppCard = {
   label: string;
   title: string;
   description: string;
-  url: string;
+  url: string | null;
   cta: string;
   features: Feature[];
 };
+
+const arcPayUrl = getArcAppUrl('pay');
+const arcCreatorUrl = getArcAppUrl('creator');
+const arcPlayUrl = getArcAppUrl('play');
+const docsHref = '/learn';
+const githubHref = 'https://github.com/GoGoSns/arc-ecosystem';
 
 const appCards = [
   {
     label: "// 01 · payments",
     title: "ARC PAY",
     description: "Send USDC instantly. No banks, no delays.",
-    url: "http://localhost:3000",
+    url: arcPayUrl,
     cta: "LAUNCH ARC PAY",
     features: [
-      { name: "QR Payment", href: "http://localhost:3000/qr" },
-      { name: "Split the Bill", href: "http://localhost:3000/split" },
-      { name: "Invoice + PDF", href: "http://localhost:3000/invoice" },
-      { name: "Payroll (Batch)", href: "http://localhost:3000/payroll" },
-      { name: "Trust Escrow", href: "http://localhost:3000/escrow" },
+      { name: "QR Payment", href: getArcAppUrl('pay', '/qr') },
+      { name: "Split the Bill", href: getArcAppUrl('pay', '/split') },
+      { name: "Invoice + PDF", href: getArcAppUrl('pay', '/invoice') },
+      { name: "Payroll (Batch)", href: getArcAppUrl('pay', '/payroll') },
+      { name: "Trust Escrow", href: getArcAppUrl('pay', '/escrow') },
     ],
   },
   {
     label: "// 02 · monetization",
     title: "ARC CREATOR",
     description: "Monetize your creativity with USDC.",
-    url: "http://localhost:3001",
+    url: arcCreatorUrl,
     cta: "LAUNCH ARC CREATOR",
     features: [
-      { name: "Tip Jar", href: "http://localhost:3001/tip" },
-      { name: "Subscription", href: "http://localhost:3001/subscription" },
-      { name: "Bounty Board", href: "#", soon: true },
-      { name: "Marketplace", href: "#", soon: true },
+      { name: "Tip Jar", href: getArcAppUrl('creator', '/tip') },
+      { name: "Subscription", href: getArcAppUrl('creator', '/subscription') },
+      { name: "Bounty Board", href: getArcAppUrl('creator', '/bounty'), soon: true },
+      { name: "Marketplace", href: getArcAppUrl('creator', '/marketplace'), soon: true },
     ],
   },
   {
     label: "// 03 · gaming + defi",
     title: "ARC PLAY",
     description: "Play, predict, profit on-chain.",
-    url: "http://localhost:3002",
+    url: arcPlayUrl,
     cta: "LAUNCH ARC PLAY",
     features: [
-      { name: "Portfolio Tracker", href: "http://localhost:3002/portfolio" },
-      { name: "Prediction Market", href: "http://localhost:3002/prediction" },
-      { name: "NFT Raffle", href: "http://localhost:3002/raffle" },
-      { name: "Play to Earn", href: "#", soon: true },
-      { name: "Token Launchpad", href: "#", soon: true },
+      { name: "Portfolio Tracker", href: getArcAppUrl('play', '/portfolio') },
+      { name: "Prediction Market", href: getArcAppUrl('play', '/prediction') },
+      { name: "NFT Raffle", href: getArcAppUrl('play', '/raffle') },
+      { name: "Play to Earn", href: getArcAppUrl('play', '/games'), soon: true },
+      { name: "Token Launchpad", href: getArcAppUrl('play', '/launchpad'), soon: true },
     ],
   },
 ] satisfies AppCard[];
@@ -303,9 +309,20 @@ export default function Page() {
             {t.hero.description}
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <a href="http://localhost:3000" target="_blank" rel="noopener noreferrer" className="primary-button">
-              {t.hero.ctaPrimary} <ArrowRight size={16} />
-            </a>
+            {arcPayUrl ? (
+              <a
+                href={arcPayUrl}
+                target={isExternalUrl(arcPayUrl) ? "_blank" : undefined}
+                rel={isExternalUrl(arcPayUrl) ? "noopener noreferrer" : undefined}
+                className="primary-button"
+              >
+                {t.hero.ctaPrimary} <ArrowRight size={16} />
+              </a>
+            ) : (
+              <span aria-disabled="true" className="primary-button cursor-not-allowed opacity-50">
+                {t.hero.ctaPrimary} <ArrowRight size={16} />
+              </span>
+            )}
             <a href="#apps" className="secondary-button">{t.hero.ctaSecondary}</a>
           </div>
         </div>
@@ -332,24 +349,49 @@ export default function Page() {
                 <p className="mt-4 min-h-14 text-[#8b8b8b]">{cardDesc[idx].description}</p>
                 <div className="mt-8 space-y-3">
                   {card.features.map((feature) => (
-                    <a
-                      key={feature.name}
-                      href={feature.href}
-                      target={feature.href === "#" ? undefined : "_blank"}
-                      rel={feature.href === "#" ? undefined : "noopener noreferrer"}
-                      className={`feature-link ${feature.soon ? "pointer-events-none opacity-45" : ""}`}
-                    >
-                      <span>{feature.name}</span>
-                      <span className="ml-auto flex items-center gap-2">
-                        {feature.soon ? <span className="soon-badge">soon</span> : null}
-                        <ChevronRight className="feature-arrow" size={16} />
+                    feature.href && !feature.soon ? (
+                      <a
+                        key={feature.name}
+                        href={feature.href}
+                        target={isExternalUrl(feature.href) ? "_blank" : undefined}
+                        rel={isExternalUrl(feature.href) ? "noopener noreferrer" : undefined}
+                        className="feature-link"
+                      >
+                        <span>{feature.name}</span>
+                        <span className="ml-auto flex items-center gap-2">
+                          <span className="soon-badge">soon</span>
+                          <ChevronRight className="feature-arrow" size={16} />
+                        </span>
+                      </a>
+                    ) : (
+                      <span
+                        key={feature.name}
+                        aria-disabled="true"
+                        className="feature-link cursor-not-allowed opacity-45"
+                      >
+                        <span>{feature.name}</span>
+                        <span className="ml-auto flex items-center gap-2">
+                          <span className="soon-badge">soon</span>
+                          <ChevronRight className="feature-arrow" size={16} />
+                        </span>
                       </span>
-                    </a>
+                    )
                   ))}
                 </div>
-                <a href={card.url} target="_blank" rel="noopener noreferrer" className="bracket-button mt-auto w-full justify-center">
-                  {card.cta} <ArrowRight size={15} />
-                </a>
+                {card.url ? (
+                  <a
+                    href={card.url}
+                    target={isExternalUrl(card.url) ? "_blank" : undefined}
+                    rel={isExternalUrl(card.url) ? "noopener noreferrer" : undefined}
+                    className="bracket-button mt-auto w-full justify-center"
+                  >
+                    {card.cta} <ArrowRight size={15} />
+                  </a>
+                ) : (
+                  <span aria-disabled="true" className="bracket-button mt-auto w-full justify-center cursor-not-allowed opacity-50">
+                    {card.cta} <ArrowRight size={15} />
+                  </span>
+                )}
               </article>
             ))}
           </div>
@@ -412,9 +454,9 @@ export default function Page() {
         <div className="reveal mx-auto max-w-7xl">
           <SectionTitle label={t.sections.resourcesTitle.toLowerCase()} title="Read the latest. Join the community." />
           <div className="mt-14 grid gap-6 lg:grid-cols-3">
-            <ResourceCard icon={<FileText size={42} />} label="[ RESOURCES ]" title="DOCUMENTATION" text="Architecture overview, integration guides, and API reference for Arc Ecosystem." footer="READ DOCS" href="#" />
-            <ResourceCard icon={<Github size={42} />} label="[ OPEN SOURCE ]" title="GITHUB" text="All apps, packages, and SDKs are open source. Contribute, fork, or audit." footer="VIEW REPO" href="https://github.com/GoGoSns/arc-payouts" />
-            <ResourceCard icon={<XLogo />} label="[ COMMUNITY ]" title={"X · UPDATES"} text="Follow @gogo for protocol updates, demos, and ecosystem developments." footer="FOLLOW" href="https://x.com/" />
+            <ResourceCard icon={<FileText size={42} />} label="[ RESOURCES ]" title="DOCUMENTATION" text="Architecture overview, integration guides, and API reference for Arc Ecosystem." footer="READ DOCS" href={docsHref} />
+            <ResourceCard icon={<Github size={42} />} label="[ OPEN SOURCE ]" title="GITHUB" text="All apps, packages, and SDKs are open source. Contribute, fork, or audit." footer="VIEW REPO" href={githubHref} />
+            <ResourceCard icon={<XLogo />} label="[ COMMUNITY ]" title={"X · UPDATES"} text="Follow @gogo for protocol updates, demos, and ecosystem developments." footer="COMING SOON" href={null} />
           </div>
         </div>
       </section>
@@ -429,9 +471,20 @@ export default function Page() {
           <p className="mx-auto mt-8 max-w-xl leading-7 text-[#9a9a9a]">
             {t.sections.ctaSubtitle}
           </p>
-          <a href="http://localhost:3000" target="_blank" rel="noopener noreferrer" className="primary-button mt-10">
-            GET STARTED
-          </a>
+          {arcPayUrl ? (
+            <a
+              href={arcPayUrl}
+              target={isExternalUrl(arcPayUrl) ? "_blank" : undefined}
+              rel={isExternalUrl(arcPayUrl) ? "noopener noreferrer" : undefined}
+              className="primary-button mt-10"
+            >
+              GET STARTED
+            </a>
+          ) : (
+            <span aria-disabled="true" className="primary-button mt-10 cursor-not-allowed opacity-50">
+              GET STARTED
+            </span>
+          )}
           <p className="mt-14 font-mono text-xs uppercase tracking-[0.35em] text-white/15">// arc &middot; stablecoin &middot; onchain</p>
         </div>
       </section>
@@ -469,13 +522,12 @@ export default function Page() {
         <div className="mx-auto flex max-w-7xl flex-col gap-5 font-mono text-xs uppercase tracking-[0.16em] text-[#777] md:flex-row md:items-center md:justify-between">
           <p>&copy; 2026 Arc Ecosystem &middot; {t.footer.builtOn} &middot; by GoGo</p>
           <div className="flex gap-5">
-            <a href="https://x.com/" target="_blank" rel="noopener noreferrer" className="nav-link">// X</a>
-            <a href="https://github.com/GoGoSns/arc-payouts" target="_blank" rel="noopener noreferrer" className="nav-link">// GitHub</a>
+            <span aria-disabled="true" className="nav-link cursor-not-allowed opacity-50">// X</span>
+            <a href={githubHref} target="_blank" rel="noopener noreferrer" className="nav-link">// GitHub</a>
             <a href="mailto:hello@arc.ecosystem" className="nav-link">// Email</a>
           </div>
         </div>
       </footer>
-      <AssistantWidget />
     </main>
   );
 }
@@ -561,9 +613,24 @@ function ResourceCard({
   title: string;
   text: string;
   footer: string;
-  href: string;
+  href: string | null;
 }) {
-  const external = href !== "#";
+  if (!href) {
+    return (
+      <div className="resource-card bracket-card group p-6" aria-disabled="true">
+        <Brackets />
+        <div className="grid min-h-56 place-items-center text-white transition-colors group-hover:text-[#c9a84c]">{icon}</div>
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">{label}</p>
+        <h3 className="mt-3 text-3xl font-black">{title}</h3>
+        <p className="mt-4 min-h-20 leading-7 text-[#8b8b8b]">{text}</p>
+        <p className="mt-7 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-white">
+          {footer} <ArrowRight className="transition-transform group-hover:translate-x-1" size={15} />
+        </p>
+      </div>
+    );
+  }
+
+  const external = isExternalUrl(href);
   return (
     <a
       href={href}

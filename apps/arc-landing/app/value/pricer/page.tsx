@@ -3,9 +3,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { 
-  ArrowLeft, Wrench, Calculator, Clock, Star, 
-  Layers, Rocket, Sparkles, FileCode, CheckCircle2
+  ArrowLeft, Calculator, Star,
+  Layers, Rocket, Sparkles
 } from 'lucide-react';
+import { getArcAppUrl, isExternalUrl } from '@/lib/arcAppLinks';
 
 const SERVICE_TYPES = [
   { id: 'logo', label: 'Logo Design', min: 25, max: 200 },
@@ -40,6 +41,7 @@ export default function ServicePricerPage() {
   });
 
   const [result, setResult] = useState<{ total: number; hourly: number; min: number; max: number } | null>(null);
+  const marketplaceUrl = getArcAppUrl('creator', '/marketplace/create');
 
   const calculatePrice = () => {
     const s = SERVICE_TYPES.find(x => x.id === service)!;
@@ -82,12 +84,13 @@ export default function ServicePricerPage() {
           {/* Form Side */}
           <div className="space-y-8">
             <div className="space-y-4">
-              <label className="text-xs font-mono text-[#555] uppercase tracking-widest">1. Service Type</label>
-              <select 
-                value={service}
-                onChange={(e) => setService(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-[#c9a84c]/50 appearance-none"
-              >
+                <label className="text-xs font-mono text-[#555] uppercase tracking-widest">1. Service Type</label>
+                <select 
+                  value={service}
+                  onChange={(e) => setService(e.target.value)}
+                  aria-label="Service type"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-[#c9a84c]/50 appearance-none"
+                >
                 {SERVICE_TYPES.map(s => <option key={s.id} value={s.id} className="bg-zinc-900">{s.label}</option>)}
               </select>
             </div>
@@ -97,8 +100,10 @@ export default function ServicePricerPage() {
               <div className="grid grid-cols-2 gap-3">
                 {EXPERIENCE_LEVELS.map(exp => (
                   <button
+                    type="button"
                     key={exp.id}
                     onClick={() => setExperience(exp.id)}
+                    aria-pressed={experience === exp.id}
                     className={`p-4 rounded-2xl border text-sm font-bold transition-all ${experience === exp.id ? 'bg-[#c9a84c] border-[#c9a84c] text-black' : 'bg-white/5 border-white/5 text-[#555] hover:border-white/20'}`}
                   >
                     {exp.label}
@@ -116,6 +121,7 @@ export default function ServicePricerPage() {
                 <input 
                   type="range" min="1" max="200" value={hours} 
                   onChange={(e) => setHours(parseInt(e.target.value))}
+                  aria-label="Project size in hours"
                   className="w-full accent-[#c9a84c]"
                 />
               </div>
@@ -128,6 +134,7 @@ export default function ServicePricerPage() {
                 <input 
                   type="range" min="1" max="10" value={complexity} 
                   onChange={(e) => setComplexity(parseInt(e.target.value))}
+                  aria-label="Project complexity"
                   className="w-full accent-[#c9a84c]"
                 />
               </div>
@@ -156,8 +163,9 @@ export default function ServicePricerPage() {
             </div>
 
             <button
+              type="button"
               onClick={calculatePrice}
-              className="w-full bg-[#c9a84c] hover:bg-[#d4b96a] text-black font-black py-6 rounded-3xl transition-all flex items-center justify-center gap-3 text-lg"
+              className="w-full bg-[#c9a84c] hover:bg-[#d4b96a] text-black font-black py-6 rounded-3xl transition-all flex items-center justify-center gap-3 text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
               <Calculator size={24} />
               CALCULATE SUGGESTED PRICE
@@ -205,16 +213,30 @@ export default function ServicePricerPage() {
                 </div>
 
                 <div className="flex flex-col gap-4">
-                  <Link 
-                    href="http://localhost:3001/marketplace/create"
-                    className="flex items-center justify-center gap-3 p-5 rounded-2xl bg-white text-black font-black hover:bg-[#c9a84c] transition-all"
-                  >
-                    <Rocket size={20} />
-                    CREATE SERVICE ON MARKETPLACE
-                  </Link>
+                  {marketplaceUrl ? (
+                    <a
+                      href={marketplaceUrl}
+                      target={isExternalUrl(marketplaceUrl) ? "_blank" : undefined}
+                      rel={isExternalUrl(marketplaceUrl) ? "noopener noreferrer" : undefined}
+                      className="flex items-center justify-center gap-3 p-5 rounded-2xl bg-white text-black font-black hover:bg-[#c9a84c] transition-all"
+                    >
+                      <Rocket size={20} />
+                      CREATE SERVICE ON MARKETPLACE
+                    </a>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled
+                      className="flex items-center justify-center gap-3 p-5 rounded-2xl bg-white text-black font-black transition-all opacity-50 cursor-not-allowed"
+                    >
+                      <Rocket size={20} />
+                      CREATE SERVICE ON MARKETPLACE
+                    </button>
+                  )}
                   <button 
                     onClick={() => setResult(null)}
-                    className="text-xs font-mono text-[#555] hover:text-white transition-colors"
+                    type="button"
+                    className="text-xs font-mono text-[#555] hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                   >
                     RESET CALCULATOR
                   </button>

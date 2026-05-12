@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Activity, RefreshCw } from 'lucide-react';
+import { buildDemoRpcStatus } from '@/lib/demoMetrics';
 import { useNodeStore } from '@/lib/nodeStore';
 
 interface RpcResult {
@@ -20,10 +21,19 @@ function dot(healthy: boolean) {
   );
 }
 
-function mockBlocks(topBlock: number) {
+function hashString(input: string) {
+  let hash = 0;
+  for (let index = 0; index < input.length; index += 1) {
+    hash = (hash * 31 + input.charCodeAt(index)) >>> 0;
+  }
+  return hash;
+}
+
+function mockBlocks(topBlock: number, seedSource: string) {
+  const seed = hashString(seedSource);
   return Array.from({ length: 10 }, (_, i) => ({
     height: topBlock - i,
-    txs: Math.floor(Math.random() * 12),
+    txs: (seed + i * 7) % 12,
     time: new Date(Date.now() - i * 6000).toLocaleTimeString(),
   }));
 }
@@ -38,25 +48,16 @@ export default function MonitorPage() {
 
   const checkStatus = useCallback(async () => {
     setLoading(true);
-    const t0 = performance.now();
-    try {
-      const res = await fetch(rpcUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jsonrpc: '2.0', method: 'eth_blockNumber', params: [], id: 1 }),
-        signal: AbortSignal.timeout(8000),
-      });
-      const latencyMs = Math.round(performance.now() - t0);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      const blockHeight = data.result ? parseInt(data.result as string, 16) : null;
-      setResult({ status: 'healthy', blockHeight, chainId: '5042002', latencyMs });
-      if (blockHeight) setBlocks(mockBlocks(blockHeight));
-    } catch (err) {
-      const latencyMs = Math.round(performance.now() - t0);
-      setResult({ status: 'down', blockHeight: null, chainId: null, latencyMs, error: String(err) });
-      setBlocks([]);
-    }
+    await new Promise((resolve) => setTimeout(resolve, 120));
+    const status = buildDemoRpcStatus(rpcUrl);
+    setResult({
+      status: status.healthy ? 'healthy' : 'down',
+      blockHeight: status.blockHeight,
+      chainId: status.chainId,
+      latencyMs: status.latencyMs,
+      error: status.error,
+    });
+    setBlocks(status.healthy && status.blockHeight ? mockBlocks(status.blockHeight, rpcUrl) : []);
     setLoading(false);
   }, [rpcUrl]);
 
@@ -83,32 +84,52 @@ export default function MonitorPage() {
           <Activity size={20} className="text-[#c9a84c]" />
           <h1 className="text-3xl font-black">RPC Monitor</h1>
         </div>
-        <p className="text-[#777] text-sm mb-8">Check live status of Arc Testnet RPC endpoints.</p>
+        <p className="text-[#777] text-sm mb-8">Check demo status of Arc Testnet RPC endpoints.</p>
 
         {/* URL input + controls */}
         <div className="rounded-2xl p-6 mb-6" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(201,168,76,0.15)' }}>
           <div className="flex flex-col sm:flex-row gap-3">
-            <input value={rpcUrl} onChange={(e) => setRpcUrl(e.target.value)}
+            <input
+              aria-label="RPC endpoint URL"
+              value={rpcUrl}
+              onChange={(e) => setRpcUrl(e.target.value)}
               placeholder="https://rpc.testnet.arc.network"
-              className="flex-1 rounded-xl px-4 py-2.5 text-sm text-white font-mono placeholder-[#555] outline-none"
+              className="flex-1 rounded-xl px-4 py-2.5 text-sm text-white font-mono placeholder-[#555] outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
               style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)' }} />
-            <button onClick={checkStatus} disabled={loading}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold shrink-0 disabled:opacity-60"
+            <button
+              type="button"
+              onClick={checkStatus}
+              disabled={loading}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold shrink-0 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
               style={{ background: '#c9a84c', color: '#0a0a0a' }}>
               <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
               {loading ? 'Checking...' : 'Check Status'}
             </button>
           </div>
-          <label className="flex items-center gap-2 mt-3 cursor-pointer">
-            <div onClick={() => setAuto(!autoRefresh)}
-              className="h-5 w-9 rounded-full transition-all relative"
-              style={{ background: autoRefresh ? '#c9a84c' : 'rgba(255,255,255,0.08)' }}>
-              <div className="absolute top-0.5 h-4 w-4 rounded-full bg-white transition-all"
-                style={{ left: autoRefresh ? '18px' : '2px' }} />
-            </div>
+          <div className="mt-3 flex items-center gap-2">
+            <button
+              type="button"
+              role="switch"
+              aria-checked={autoRefresh}
+              aria-label="Toggle auto refresh"
+              onClick={() => setAuto((value) => !value)}
+              className="relative h-5 w-9 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+              style={{ background: autoRefresh ? '#c9a84c' : 'rgba(255,255,255,0.08)' }}
+            >
+              <span
+                className="absolute top-0.5 h-4 w-4 rounded-full bg-white transition-all"
+                style={{ left: autoRefresh ? '18px' : '2px' }}
+              />
+            </button>
             <span className="text-xs text-[#777]">Auto-refresh every 30s</span>
-          </label>
+          </div>
         </div>
+
+        {!loading && !result ? (
+          <div className="rounded-2xl p-6 mb-6 text-sm text-[#777]" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)' }}>
+            Run a demo check to populate the RPC monitor.
+          </div>
+        ) : null}
 
         {/* Result cards */}
         {result && (

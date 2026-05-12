@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { 
   ArrowLeft, Gem, Loader2, Info, CheckCircle2, 
@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { HubCard, HubEmptyState, HubSkeletonCard, hubInputClass } from '@/components/HubPrimitives';
 import { useValueStore, type WalletScoreData } from '@/lib/valueStore';
+import { buildDemoWalletScore } from '@/lib/demoMetrics';
 import { useForumStore } from '@/lib/forumStore';
 import { useFeedbackStore } from '@/lib/feedbackStore';
 import { useNodeStore } from '@/lib/nodeStore';
@@ -32,87 +33,68 @@ export default function WalletScorePage() {
   const nodeData = useNodeStore((state) => state.operators);
 
   const calculateScore = async () => {
-    if (!address) return;
+    const trimmed = address.trim();
+    if (!trimmed) {
+      setError('Enter a wallet address to calculate a demo score.');
+      setResult(null);
+      return;
+    }
+
     setLoading(true);
     setError(null);
     setResult(null);
 
-    // Check cache first
-    const addr = address.toLowerCase();
-    const cached = getScore(addr);
-    if (cached) {
-      setTimeout(() => {
-        setResult(cached);
-        setLoading(false);
-      }, 1500); // Simulate network delay for UX
-      return;
-    }
-
     try {
-      // 1. Fetch main address info
-      const response = await fetch(`https://testnet.arcscan.app/api/v2/addresses/${address}`);
-      const data = await response.json().catch(() => ({}));
+      const addr = trimmed.toLowerCase();
+      const cached = getScore(addr);
+      if (cached) {
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        setResult(cached);
+        return;
+      }
 
-      // 2. Fetch tokens to count (for score)
-      const tokenRes = await fetch(`https://testnet.arcscan.app/api/v2/addresses/${address}/tokens`);
-      const tokenData = await tokenRes.json().catch(() => ({ items: [] }));
-      const tokenCount = tokenData.items?.length || 0;
+      const authorThreads = threads.filter((t) => t.authorAddress.toLowerCase() === addr).length;
+      const authorComments = threads.reduce((acc, t) => acc + t.comments.filter((c) => c.authorAddress.toLowerCase() === addr).length, 0);
+      const feedbackCount = feedbacks.filter((f) => f.authorAddress.toLowerCase() === addr).length;
+      const feedbackComments = feedbacks.reduce((acc, f) => acc + f.comments.filter((c) => c.authorAddress.toLowerCase() === addr).length, 0);
+      const isNodeOp = nodeData.some((o) => o.address.toLowerCase() === addr);
 
-      // 3. Fetch NFTs to count
-      const nftRes = await fetch(`https://testnet.arcscan.app/api/v2/addresses/${address}/nft`);
-      const nftData = await nftRes.json().catch(() => ({ items: [] }));
-      const nftCount = data.nfts_count || nftData.items?.length || Math.floor(Math.random() * 15);
+      const demoBase = buildDemoWalletScore(addr, {
+        threads: authorThreads,
+        feedbacks: feedbackCount + feedbackComments,
+        nodeOperators: isNodeOp ? 1 : 0,
+      });
 
-      const txCount = data.transactions_count || Math.floor(Math.random() * 500);
-      const volume = Math.floor(Math.random() * 5000);
-      const createdAt = data.creation_time || (Date.now() - Math.random() * 1000 * 60 * 60 * 24 * 365);
-      const monthsActive = Math.max(1, Math.floor((Date.now() - new Date(createdAt).getTime()) / (1000 * 60 * 60 * 24 * 30)));
-
-      // Community Score calculation
-      const authorThreads = threads.filter(t => t.authorAddress.toLowerCase() === addr).length;
-      const authorComments = threads.reduce((acc, t) => acc + t.comments.filter(c => c.authorAddress.toLowerCase() === addr).length, 0);
-      const feedbackCount = feedbacks.filter(f => f.authorAddress.toLowerCase() === addr).length;
-      const feedbackComments = feedbacks.reduce((acc, f) => acc + f.comments.filter(c => c.authorAddress.toLowerCase() === addr).length, 0);
-      const isNodeOp = nodeData.some(o => o.address.toLowerCase() === addr);
-      
       const communityScore = Math.min(
-        (authorThreads * 20) + 
-        (authorComments * 5) + 
-        (feedbackCount * 10) + 
-        (feedbackComments * 5) + 
-        (isNodeOp ? 50 : 0), 
-        100
+        (authorThreads * 20) +
+        (authorComments * 5) +
+        (feedbackCount * 10) +
+        (feedbackComments * 5) +
+        (isNodeOp ? 50 : 0),
+        100,
       );
 
-      const breakdown = {
-        age: Math.min(monthsActive * 30, 200),
-        txCount: Math.min(txCount, 200),
-        volume: Math.min(volume / 100, 200),
-        apps: Math.min(76 + (tokenCount * 5), 200), // More tokens suggest more app usage
-        nfts: Math.min(nftCount * 10, 100),
-        community: communityScore,
-      };
-
-      const totalScore = breakdown.age + breakdown.txCount + breakdown.volume + breakdown.apps + breakdown.nfts + breakdown.community;
-      
-      let tier: WalletScoreData['tier'] = 'bronze';
-      if (totalScore > 800) tier = 'diamond';
-      else if (totalScore > 600) tier = 'platinum';
-      else if (totalScore > 400) tier = 'gold';
-      else if (totalScore > 200) tier = 'silver';
-
+      const score = demoBase.score - demoBase.breakdown.community + communityScore;
       const finalResult: WalletScoreData = {
-        address,
-        score: totalScore,
-        tier,
-        breakdown,
+        ...demoBase,
+        score,
+        tier:
+          score > 800 ? 'diamond' :
+          score > 600 ? 'platinum' :
+          score > 400 ? 'gold' :
+          score > 200 ? 'silver' :
+          'bronze',
+        breakdown: {
+          ...demoBase.breakdown,
+          community: communityScore,
+        },
         computedAt: Date.now(),
       };
 
       setScore(finalResult);
       setResult(finalResult);
-    } catch (err) {
-      setError("Failed to fetch wallet data. Please check the address.");
+    } catch {
+      setError('Unable to calculate a demo score.');
     } finally {
       setLoading(false);
     }
@@ -130,7 +112,7 @@ export default function WalletScorePage() {
 
         <div className="mb-12">
           <h1 className="text-5xl font-black mb-4">WALLET SCORE</h1>
-          <p className="text-[#888] text-lg">Calculate your Arc activity rating based on on-chain participation.</p>
+          <p className="text-[#888] text-lg">Calculate your Arc activity rating from local demo data and community activity.</p>
         </div>
 
         {/* Input Section */}
@@ -152,7 +134,7 @@ export default function WalletScorePage() {
             </div>
             <button
               type="submit"
-              disabled={loading || !address}
+              disabled={loading || !address.trim()}
               className="primary-button px-10 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? <Loader2 className="animate-spin" /> : 'CALCULATE SCORE'}
@@ -164,7 +146,7 @@ export default function WalletScorePage() {
           <div className="space-y-4">
             <HubSkeletonCard lines={4} />
             <p className="text-center font-mono text-xs uppercase tracking-[0.28em] text-[#555]">
-              Analyzing on-chain footprint...
+              Analyzing demo footprint...
             </p>
           </div>
         )}
@@ -181,6 +163,13 @@ export default function WalletScorePage() {
               RETRY
             </button>
           </HubEmptyState>
+        ) : null}
+
+        {!loading && !result && !error ? (
+          <div className="mb-12 rounded-3xl border border-dashed border-white/10 bg-white/[0.01] p-8 text-center">
+            <p className="font-mono text-xs uppercase tracking-[0.28em] text-[#c9a84c]">Demo Preview</p>
+            <p className="mt-4 text-[#888]">Enter any wallet address to generate a local score snapshot.</p>
+          </div>
         ) : null}
 
         {result && !loading && (

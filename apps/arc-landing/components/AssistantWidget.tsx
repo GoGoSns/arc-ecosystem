@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { MessageSquare, X, Send, Bot, User, Loader2, Mic, MicOff, Volume2, VolumeX } from 'lucide-react';
+import { buildAssistantReply, type AssistantMessage } from '@/lib/assistantDemo';
 
 declare global {
   interface Window {
@@ -10,14 +11,9 @@ declare global {
   }
 }
 
-interface Message {
-  role: 'user' | 'assistant';
-  content: string;
-}
-
 export default function AssistantWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState<AssistantMessage[]>([
     { role: 'assistant', content: 'Hello! I am your Arc Assistant. How can I help you today?' }
   ]);
   const [input, setInput] = useState('');
@@ -211,28 +207,22 @@ export default function AssistantWidget() {
     if (!messageToSend.trim() || isLoading) return;
 
     const userMessage = messageToSend.trim();
+    const nextHistory: AssistantMessage[] = [...messages, { role: 'user', content: userMessage }];
     setInput('');
-    setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
+    setMessages(nextHistory);
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/assistant', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage, history: messages }),
-      });
-
-      const data = await response.json();
-      if (data.error) throw new Error(data.error);
-
-      setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
+      await new Promise((resolve) => setTimeout(resolve, 150));
+      const reply = buildAssistantReply(userMessage, nextHistory);
+      setMessages((prev) => [...prev, { role: 'assistant', content: reply }]);
       if (ttsEnabled) {
-        speakText(data.reply);
+        speakText(reply);
       }
     } catch (error) {
-      console.error('Error calling assistant:', error);
+      console.error('Error generating assistant reply:', error);
       const errorMessage = 'Sorry, I encountered an error. Please try again.';
-      setMessages(prev => [...prev, { role: 'assistant', content: errorMessage }]);
+      setMessages((prev) => [...prev, { role: 'assistant', content: errorMessage }]);
       if (ttsEnabled) {
         speakText(errorMessage);
       }
@@ -280,7 +270,7 @@ export default function AssistantWidget() {
                 onClick={toggleTTS}
                 aria-label={ttsEnabled ? 'Disable voice output' : 'Enable voice output'}
                 aria-pressed={ttsEnabled}
-                className={`rounded-lg p-1.5 transition-colors ${ttsEnabled ? 'text-[var(--accent)]' : 'text-zinc-500'} hover:bg-zinc-800`}
+                className={`rounded-lg p-1.5 transition-colors ${ttsEnabled ? 'text-[var(--accent)]' : 'text-zinc-500'} hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-black`}
               >
                 {ttsEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
               </button>
@@ -288,7 +278,7 @@ export default function AssistantWidget() {
                 type="button"
                 onClick={() => setIsOpen(false)}
                 aria-label="Close assistant"
-                className="rounded-lg p-1 text-zinc-400 transition-colors hover:bg-zinc-800"
+                className="rounded-lg p-1 text-zinc-400 transition-colors hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
               >
                 <X size={20} />
               </button>
@@ -348,7 +338,7 @@ export default function AssistantWidget() {
                     isListening 
                       ? (retryCount > 0 ? 'border-yellow-500/50' : 'border-red-500/50') 
                       : 'border-zinc-700'
-                  } text-white rounded-xl py-2 pl-4 pr-10 outline-none focus:border-[var(--accent)] transition-colors text-sm ${
+                  } text-white rounded-xl py-2 pl-4 pr-10 outline-none focus:border-[var(--accent)] focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-black transition-colors text-sm ${
                     interimTranscript ? 'text-zinc-400 italic' : ''
                   }`}
                 />
@@ -356,7 +346,7 @@ export default function AssistantWidget() {
                   type="submit"
                   disabled={!input.trim() || isLoading}
                   aria-label="Send message"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[var(--accent)] transition-opacity disabled:opacity-30"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[var(--accent)] transition-opacity disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 >
                   <Send size={18} />
                 </button>
@@ -371,7 +361,7 @@ export default function AssistantWidget() {
                   onTouchEnd={stopListening}
                   aria-label={isListening ? 'Release microphone to send' : 'Hold microphone to speak'}
                   aria-pressed={isListening}
-                  className={`p-2 rounded-xl transition-all select-none cursor-pointer ${
+                  className={`p-2 rounded-xl transition-all select-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
                     isListening 
                       ? (retryCount > 0 
                           ? 'bg-yellow-500/20 text-yellow-500 animate-pulse scale-110' 
@@ -397,7 +387,7 @@ export default function AssistantWidget() {
         aria-label={isOpen ? 'Close assistant' : 'Open assistant'}
         aria-expanded={isOpen}
         aria-controls={panelId}
-        className="z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all hover:scale-110 active:scale-95"
+        className="z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all hover:scale-110 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
         style={{ background: 'var(--accent)', color: '#000' }}
       >
         {isOpen ? <X size={28} /> : <MessageSquare size={28} />}

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { getArcAppUrl } from './arcAppLinks';
 
 export type QuestCategory = 'starter' | 'payment' | 'creator' | 'play' | 'community' | 'builder' | 'special';
 export type QuestStatus = 'available' | 'in-progress' | 'completed';
@@ -34,30 +35,34 @@ export interface Badge {
   rarity: 'common' | 'rare' | 'epic' | 'legendary';
 }
 
+const payUrl = (path: string) => getArcAppUrl('pay', path) ?? undefined;
+const creatorUrl = (path: string) => getArcAppUrl('creator', path) ?? undefined;
+const playUrl = (path: string) => getArcAppUrl('play', path) ?? undefined;
+
 export const QUESTS: Quest[] = [
   // STARTER
   { id: 'q1', title: 'Welcome to Arc', description: 'Connect your wallet for the first time', category: 'starter', difficulty: 'easy', xpReward: 10, requirement: 'Connect wallet on arc-landing', badgeId: 'b1' },
   { id: 'q2', title: 'Explorer', description: 'Visit all 4 apps in the ecosystem', category: 'starter', difficulty: 'easy', xpReward: 20, requirement: 'Open arc-pay, arc-creator, arc-play, arc-landing' },
   
   // PAYMENT (Arc Pay)
-  { id: 'q3', title: 'First Payment', description: 'Send your first USDC payment via QR', category: 'payment', difficulty: 'easy', xpReward: 30, externalUrl: 'http://localhost:3000/qr', requirement: 'Complete a QR payment' },
-  { id: 'q4', title: 'Split Master', description: 'Use Split the Bill feature', category: 'payment', difficulty: 'easy', xpReward: 25, externalUrl: 'http://localhost:3000/split', requirement: 'Split a bill' },
-  { id: 'q5', title: 'Invoice Pro', description: 'Create your first invoice', category: 'payment', difficulty: 'medium', xpReward: 40, externalUrl: 'http://localhost:3000/invoice', requirement: 'Generate invoice' },
-  { id: 'q6', title: 'Mass Payer', description: 'Run a batch payroll', category: 'payment', difficulty: 'medium', xpReward: 50, externalUrl: 'http://localhost:3000/payroll', requirement: 'Complete batch payment' },
-  { id: 'q7', title: 'Escrow Expert', description: 'Create an escrow agreement', category: 'payment', difficulty: 'hard', xpReward: 70, externalUrl: 'http://localhost:3000/escrow', requirement: 'Set up escrow' },
+  { id: 'q3', title: 'First Payment', description: 'Send your first USDC payment via QR', category: 'payment', difficulty: 'easy', xpReward: 30, externalUrl: payUrl('/qr'), requirement: 'Complete a QR payment' },
+  { id: 'q4', title: 'Split Master', description: 'Use Split the Bill feature', category: 'payment', difficulty: 'easy', xpReward: 25, externalUrl: payUrl('/split'), requirement: 'Split a bill' },
+  { id: 'q5', title: 'Invoice Pro', description: 'Create your first invoice', category: 'payment', difficulty: 'medium', xpReward: 40, externalUrl: payUrl('/invoice'), requirement: 'Generate invoice' },
+  { id: 'q6', title: 'Mass Payer', description: 'Run a batch payroll', category: 'payment', difficulty: 'medium', xpReward: 50, externalUrl: payUrl('/payroll'), requirement: 'Complete batch payment' },
+  { id: 'q7', title: 'Escrow Expert', description: 'Create an escrow agreement', category: 'payment', difficulty: 'hard', xpReward: 70, externalUrl: payUrl('/escrow'), requirement: 'Set up escrow' },
   
   // CREATOR (Arc Creator)
-  { id: 'q8', title: 'Tip Receiver', description: 'Set up your Tip Jar', category: 'creator', difficulty: 'easy', xpReward: 25, externalUrl: 'http://localhost:3001/tip', requirement: 'Create tip jar' },
-  { id: 'q9', title: 'Subscriber', description: 'Set up a subscription plan', category: 'creator', difficulty: 'medium', xpReward: 40, externalUrl: 'http://localhost:3001/subscription', requirement: 'Create subscription' },
-  { id: 'q10', title: 'Bounty Hunter', description: 'Post or claim a bounty', category: 'creator', difficulty: 'medium', xpReward: 45, externalUrl: 'http://localhost:3001/bounty', requirement: 'Use bounty board' },
-  { id: 'q11', title: 'Freelancer', description: 'List a service on Marketplace', category: 'creator', difficulty: 'medium', xpReward: 50, externalUrl: 'http://localhost:3001/marketplace', requirement: 'Create service listing' },
+  { id: 'q8', title: 'Tip Receiver', description: 'Set up your Tip Jar', category: 'creator', difficulty: 'easy', xpReward: 25, externalUrl: creatorUrl('/tip'), requirement: 'Create tip jar' },
+  { id: 'q9', title: 'Subscriber', description: 'Set up a subscription plan', category: 'creator', difficulty: 'medium', xpReward: 40, externalUrl: creatorUrl('/subscription'), requirement: 'Create subscription' },
+  { id: 'q10', title: 'Bounty Hunter', description: 'Post or claim a bounty', category: 'creator', difficulty: 'medium', xpReward: 45, externalUrl: creatorUrl('/bounty'), requirement: 'Use bounty board' },
+  { id: 'q11', title: 'Freelancer', description: 'List a service on Marketplace', category: 'creator', difficulty: 'medium', xpReward: 50, externalUrl: creatorUrl('/marketplace'), requirement: 'Create service listing' },
   
   // PLAY (Arc Play)
-  { id: 'q12', title: 'Player', description: 'Play any mini-game', category: 'play', difficulty: 'easy', xpReward: 20, externalUrl: 'http://localhost:3002/games', requirement: 'Play one game' },
-  { id: 'q13', title: 'High Score', description: 'Get a score on the leaderboard', category: 'play', difficulty: 'medium', xpReward: 40, externalUrl: 'http://localhost:3002/games', requirement: 'Top 10 game score' },
-  { id: 'q14', title: 'Predictor', description: 'Place a prediction', category: 'play', difficulty: 'medium', xpReward: 35, externalUrl: 'http://localhost:3002/prediction', requirement: 'Bet on prediction market' },
-  { id: 'q15', title: 'Raffle Winner', description: 'Enter an NFT raffle', category: 'play', difficulty: 'easy', xpReward: 30, externalUrl: 'http://localhost:3002/raffle', requirement: 'Enter raffle' },
-  { id: 'q16', title: 'Launcher', description: 'Launch your own token', category: 'play', difficulty: 'hard', xpReward: 80, externalUrl: 'http://localhost:3002/launchpad', requirement: 'Use token launchpad' },
+  { id: 'q12', title: 'Player', description: 'Play any mini-game', category: 'play', difficulty: 'easy', xpReward: 20, externalUrl: playUrl('/games'), requirement: 'Play one game' },
+  { id: 'q13', title: 'High Score', description: 'Get a score on the leaderboard', category: 'play', difficulty: 'medium', xpReward: 40, externalUrl: playUrl('/games'), requirement: 'Top 10 game score' },
+  { id: 'q14', title: 'Predictor', description: 'Place a prediction', category: 'play', difficulty: 'medium', xpReward: 35, externalUrl: playUrl('/prediction'), requirement: 'Bet on prediction market' },
+  { id: 'q15', title: 'Raffle Winner', description: 'Enter an NFT raffle', category: 'play', difficulty: 'easy', xpReward: 30, externalUrl: playUrl('/raffle'), requirement: 'Enter raffle' },
+  { id: 'q16', title: 'Launcher', description: 'Launch your own token', category: 'play', difficulty: 'hard', xpReward: 80, externalUrl: playUrl('/launchpad'), requirement: 'Use token launchpad' },
   
   // COMMUNITY
   { id: 'q17', title: 'First Post', description: 'Create a forum thread', category: 'community', difficulty: 'easy', xpReward: 15, externalUrl: '/forum/new', requirement: 'Post in forum' },

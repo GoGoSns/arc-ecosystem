@@ -6,6 +6,8 @@ import {
   ArrowLeft, Activity, Users, TrendingUp, Award,
   Zap, RefreshCw, ArrowRightLeft,
 } from 'lucide-react';
+import { getArcAppUrl, isExternalUrl } from '@/lib/arcAppLinks';
+import { buildDemoRpcStatus } from '@/lib/demoMetrics';
 import { useForumStore } from '@/lib/forumStore';
 import { useFeedbackStore } from '@/lib/feedbackStore';
 import { useNodeStore, shortenAddr } from '@/lib/nodeStore';
@@ -126,6 +128,9 @@ export default function StatsPage() {
   const { threads }              = useForumStore();
   const { feedbacks }            = useFeedbackStore();
   const { operators, validators, bugs, rpcProviders } = useNodeStore();
+  const payUrl = getArcAppUrl('pay');
+  const creatorUrl = getArcAppUrl('creator');
+  const playUrl = getArcAppUrl('play');
 
   // ── RPC health ──
   const [rpcStatus, setRpcStatus] = useState<{
@@ -135,35 +140,25 @@ export default function StatsPage() {
 
   const checkRpc = useCallback(async () => {
     setRpcLoading(true);
-    const t0 = performance.now();
-    try {
-      const res = await fetch('https://rpc.testnet.arc.network', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jsonrpc: '2.0', method: 'eth_blockNumber', params: [], id: 1 }),
-        signal: AbortSignal.timeout(8000),
-      });
-      const latency = Math.round(performance.now() - t0);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      const block = data.result ? parseInt(data.result as string, 16) : null;
-      setRpcStatus({ healthy: true, block, latency });
-    } catch {
-      setRpcStatus({ healthy: false, block: null, latency: Math.round(performance.now() - t0) });
-    }
+    await new Promise((resolve) => setTimeout(resolve, 120));
+    const status = buildDemoRpcStatus('https://rpc.testnet.arc.network');
+    setRpcStatus({
+      healthy: status.healthy,
+      block: status.blockHeight,
+      latency: status.latencyMs,
+      error: status.error,
+    });
     setRpcLoading(false);
   }, []);
 
   // ── Auto-refresh ──
   const [lastUpdated, setLastUpdated] = useState(Date.now());
-  const [tick, setTick] = useState(0);
 
   useEffect(() => { checkRpc(); }, [checkRpc]);
   useEffect(() => {
     const id = setInterval(() => {
       checkRpc();
       setLastUpdated(Date.now());
-      setTick((t) => t + 1);
     }, 30_000);
     return () => clearInterval(id);
   }, [checkRpc]);
@@ -282,10 +277,10 @@ export default function StatsPage() {
         <div className="mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-mono text-[#c9a84c] mb-4"
             style={{ background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.2)' }}>
-            <Activity size={11} /> LIVE METRICS
+            <Activity size={11} /> DEMO METRICS
           </div>
           <h1 className="text-4xl sm:text-5xl font-black mb-3">Arc Ecosystem Stats</h1>
-          <p className="text-[#777] text-lg">Live metrics across all 4 apps · Updated {updatedLabel}</p>
+          <p className="text-[#777] text-lg">Local metrics across all 4 apps · Updated {updatedLabel}</p>
         </div>
 
         {/* ── Top 4 stat cards ── */}
@@ -294,7 +289,7 @@ export default function StatsPage() {
           <StatCard icon={() => <span className="text-[#c9a84c] text-sm font-black">$</span>}
             label="USDC Volume" value={`$${fmt(MOCK.totalVolume)}`} sub="On-chain" gold />
           <StatCard icon={Users} label="Active Wallets" value={MOCK.activeWallets} sub="Last 24h" />
-          <StatCard icon={Activity} label="Network Status" value="LIVE" sub="Arc Testnet" green />
+          <StatCard icon={Activity} label="Network Status" value="DEMO" sub="Arc Testnet preview" green />
         </div>
 
         {/* ── Apps breakdown ── */}
@@ -327,10 +322,20 @@ export default function StatsPage() {
                   <span className="font-black">5 live</span>
                 </div>
               </div>
-              <a href="http://localhost:3000" target="_blank" rel="noopener noreferrer"
-                className="text-[11px] font-bold text-[#60a5fa] hover:underline mt-auto">
-                Open Arc Pay →
-              </a>
+              {payUrl ? (
+                <a
+                  href={payUrl}
+                  target={isExternalUrl(payUrl) ? "_blank" : undefined}
+                  rel={isExternalUrl(payUrl) ? "noopener noreferrer" : undefined}
+                  className="text-[11px] font-bold text-[#60a5fa] hover:underline mt-auto"
+                >
+                  Open Arc Pay →
+                </a>
+              ) : (
+                <span aria-disabled="true" className="text-[11px] font-bold text-[#60a5fa] mt-auto opacity-50">
+                  Open Arc Pay →
+                </span>
+              )}
             </div>
 
             {/* Arc Creator */}
@@ -357,10 +362,20 @@ export default function StatsPage() {
                   <span className="font-black">4 live</span>
                 </div>
               </div>
-              <a href="http://localhost:3001" target="_blank" rel="noopener noreferrer"
-                className="text-[11px] font-bold text-[#c9a84c] hover:underline mt-auto">
-                Open Arc Creator →
-              </a>
+              {creatorUrl ? (
+                <a
+                  href={creatorUrl}
+                  target={isExternalUrl(creatorUrl) ? "_blank" : undefined}
+                  rel={isExternalUrl(creatorUrl) ? "noopener noreferrer" : undefined}
+                  className="text-[11px] font-bold text-[#c9a84c] hover:underline mt-auto"
+                >
+                  Open Arc Creator →
+                </a>
+              ) : (
+                <span aria-disabled="true" className="text-[11px] font-bold text-[#c9a84c] mt-auto opacity-50">
+                  Open Arc Creator →
+                </span>
+              )}
             </div>
 
             {/* Arc Play */}
@@ -387,10 +402,20 @@ export default function StatsPage() {
                   <span className="font-black">5 live</span>
                 </div>
               </div>
-              <a href="http://localhost:3002" target="_blank" rel="noopener noreferrer"
-                className="text-[11px] font-bold text-[#4ade80] hover:underline mt-auto">
-                Open Arc Play →
-              </a>
+              {playUrl ? (
+                <a
+                  href={playUrl}
+                  target={isExternalUrl(playUrl) ? "_blank" : undefined}
+                  rel={isExternalUrl(playUrl) ? "noopener noreferrer" : undefined}
+                  className="text-[11px] font-bold text-[#4ade80] hover:underline mt-auto"
+                >
+                  Open Arc Play →
+                </a>
+              ) : (
+                <span aria-disabled="true" className="text-[11px] font-bold text-[#4ade80] mt-auto opacity-50">
+                  Open Arc Play →
+                </span>
+              )}
             </div>
 
             {/* Arc Landing (real data) */}
@@ -459,7 +484,7 @@ export default function StatsPage() {
                   <RefreshCw size={11} className={rpcLoading ? 'animate-spin' : ''} /> refresh
                 </button>
               </div>
-              <p className="text-[10px] text-[#444] font-mono mb-4">rpc.testnet.arc.network</p>
+              <p className="text-[10px] text-[#444] font-mono mb-4">rpc.testnet.arc.network · demo check</p>
               {rpcStatus ? (
                 <div className="grid grid-cols-2 gap-3">
                   {[

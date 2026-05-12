@@ -123,11 +123,14 @@ export default function NodeHub() {
               </Link>
               <CopyButton text="curl -sSL https://rpc.testnet.arc.network/install.sh | bash" />
               <button
-                onClick={() => alert('docker-compose.yml template is a placeholder — official config coming soon.')}
-                className="w-full text-xs text-[#555] hover:text-[#aaa] transition-colors py-1"
+                type="button"
+                disabled
+                aria-disabled="true"
+                className="w-full rounded-lg border border-white/5 py-2 text-xs text-[#555] transition-colors opacity-50 cursor-not-allowed"
               >
                 Download docker-compose.yml
               </button>
+              <p className="text-center text-[10px] uppercase tracking-[0.24em] text-[#333]">Coming soon</p>
             </div>
           </div>
 
