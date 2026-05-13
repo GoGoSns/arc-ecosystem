@@ -57,6 +57,22 @@ export interface GameStore {
   claimLuckyPack: (packId: string) => boolean;
 }
 
+export interface GameProgressSnapshot {
+  xp: number;
+  level: number;
+  levelProgress: number;
+  xpToNextLevel: number;
+  streak: number;
+  winRate: number;
+  activeChallenges: number;
+  completedChallenges: number;
+  openLuckyPacks: number;
+  totalWon: number;
+  recentTitle: string;
+  recentSubtitle: string;
+  badgeLabel: string;
+}
+
 const DAY_MS = 86_400_000;
 const NOW = Date.now();
 
@@ -287,6 +303,106 @@ export function formatTimeLeft(ms: number): string {
   }
 
   return `${minutes}m`;
+}
+
+export function buildGameProgressSnapshot(
+  state: Pick<GameStore, 'challenges' | 'luckyPacks' | 'history'>,
+  now = Date.now(),
+): GameProgressSnapshot {
+  const activeChallenges = state.challenges.filter((challenge) => resolveChallengeStatus(challenge, now) === 'open').length;
+  const completedChallenges = state.challenges.filter((challenge) => challenge.status === 'won').length;
+  const openLuckyPacks = state.luckyPacks.filter((pack) => pack.status === 'pending').length;
+  const totalWon = state.history.reduce((sum, item) => sum + (item.status === 'lost' ? 0 : item.amount), 0);
+  const positiveEvents = state.history.filter((item) => item.status !== 'lost').length;
+  const winRate = state.history.length === 0 ? 0 : Math.round((positiveEvents / state.history.length) * 100);
+  const recentHistory = [...state.history].sort((a, b) => b.createdAt - a.createdAt);
+
+  let streak = 0;
+  for (const item of recentHistory) {
+    if (item.status === 'lost') {
+      break;
+    }
+
+    if (item.status === 'won' || item.status === 'opened') {
+      streak += 1;
+    }
+  }
+
+  const historyXp = state.history.reduce((sum, item) => {
+    if (item.status === 'won') {
+      return sum + 120;
+    }
+
+    if (item.status === 'opened') {
+      return sum + 80;
+    }
+
+    return sum;
+  }, 0);
+
+  const challengeXp = state.challenges.reduce((sum, challenge) => {
+    const progressRatio = challenge.targetValue > 0 ? challenge.progress / challenge.targetValue : 0;
+
+    switch (challenge.status) {
+      case 'won':
+        return sum + 180;
+      case 'open':
+        return sum + Math.round(progressRatio * 90);
+      case 'expired':
+        return sum + Math.round(progressRatio * 30);
+      case 'lost':
+      default:
+        return sum + 20;
+    }
+  }, 0);
+
+  const luckyXp = state.luckyPacks.reduce((sum, pack) => {
+    switch (pack.status) {
+      case 'claimed':
+        return sum + 110;
+      case 'opened':
+        return sum + 70;
+      case 'pending':
+      default:
+        return sum + 25;
+    }
+  }, 0);
+
+  const xp = historyXp + challengeXp + luckyXp + streak * 50;
+  const level = Math.max(1, Math.floor(xp / 500) + 1);
+  const xpIntoLevel = xp % 500;
+  const levelProgress = xpIntoLevel / 500;
+  const xpToNextLevel = 500 - xpIntoLevel;
+  const recent = recentHistory[0];
+  const recentTitle = recent ? recent.title : 'No recent activity';
+  const recentSubtitle = recent
+    ? `${recent.type === 'challenge' ? 'Challenge' : 'Lucky'} · ${recent.status.toUpperCase()} · ${formatGameAmount(recent.amount)}`
+    : 'Play a challenge or open a lucky pack to populate this panel.';
+
+  let badgeLabel = 'READY';
+  if (streak >= 3) {
+    badgeLabel = 'HOT STREAK';
+  } else if (level >= 6) {
+    badgeLabel = 'ELITE';
+  } else if (completedChallenges >= 2 || positiveEvents >= 3) {
+    badgeLabel = 'ON A RUN';
+  }
+
+  return {
+    xp,
+    level,
+    levelProgress,
+    xpToNextLevel,
+    streak,
+    winRate,
+    activeChallenges,
+    completedChallenges,
+    openLuckyPacks,
+    totalWon,
+    recentTitle,
+    recentSubtitle,
+    badgeLabel,
+  };
 }
 
 export function formatCountdownParts(ms: number): { label: string; value: number }[] {

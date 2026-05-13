@@ -4,7 +4,9 @@ import Link from 'next/link';
 import { ArrowRight, BadgeCheck, Coins, Clock3, Percent, Sparkles, Trophy, type LucideIcon } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { HubBadge, HubCard, HubMetricCard, HubBrackets, HubSkeletonCard } from '@/components/HubPrimitives';
+import GameProgressPanel from '@/components/GameProgressPanel';
 import {
+  buildGameProgressSnapshot,
   formatGameAmount,
   formatTimeLeft,
   resolveChallengeStatus,
@@ -83,6 +85,11 @@ export default function GameHubHomePage() {
     };
   }, [challenges, history, luckyPacks, now]);
 
+  const progress = useMemo(
+    () => buildGameProgressSnapshot({ challenges, luckyPacks, history }, now),
+    [challenges, history, luckyPacks, now],
+  );
+
   if (!hydrated) {
     return (
       <section className="section pt-24 sm:pt-28">
@@ -109,7 +116,7 @@ export default function GameHubHomePage() {
       <div className="mx-auto max-w-7xl">
         <div className="reveal space-y-6">
           <div className="flex flex-wrap items-center gap-2">
-            <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">// phase 1</HubBadge>
+            <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">// phase 2</HubBadge>
             <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">Demo store only</HubBadge>
           </div>
           <h1 className="max-w-5xl text-4xl font-black uppercase leading-tight sm:text-5xl lg:text-7xl">
@@ -199,33 +206,40 @@ export default function GameHubHomePage() {
             </div>
           </HubCard>
 
-          <HubCard as="aside" className="p-6 sm:p-8">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Quick read</p>
-                <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">Current snapshot</h2>
-              </div>
-              <span className="inline-flex rounded-full border border-[#2a2a2a] bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#aaa]">
-                live
-              </span>
-            </div>
-            <div className="mt-6 space-y-4">
-              <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-                <span className="text-sm text-[#777]">Best active window</span>
-                <span className="text-sm font-semibold text-white">
-                  {stats.activeChallenges[0]
-                    ? `${stats.activeChallenges[0].title} - ${formatTimeLeft(Math.max(0, stats.activeChallenges[0].deadlineAt - now))}`
-                    : 'No active challenge'}
+          <div className="space-y-6">
+            <GameProgressPanel
+              snapshot={progress}
+              description="XP, streaks, and recent wins are derived from the same mock challenge and lucky store that powers the hub."
+            />
+
+            <HubCard as="aside" className="p-6 sm:p-8">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Quick read</p>
+                  <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">Current snapshot</h2>
+                </div>
+                <span className="inline-flex rounded-full border border-[#2a2a2a] bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#aaa]">
+                  live
                 </span>
               </div>
-              <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-                <span className="text-sm text-[#777]">Recent archive item</span>
-                <span className="text-sm font-semibold text-white">
-                  {history[0] ? history[0].title : 'No history yet'}
-                </span>
+              <div className="mt-6 space-y-4">
+                <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
+                  <span className="text-sm text-[#777]">Best active window</span>
+                  <span className="text-sm font-semibold text-white">
+                    {stats.activeChallenges[0]
+                      ? `${stats.activeChallenges[0].title} - ${formatTimeLeft(Math.max(0, stats.activeChallenges[0].deadlineAt - now))}`
+                      : 'No active challenge'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
+                  <span className="text-sm text-[#777]">Recent archive item</span>
+                  <span className="text-sm font-semibold text-white">
+                    {history[0] ? history[0].title : 'No history yet'}
+                  </span>
+                </div>
               </div>
-            </div>
-          </HubCard>
+            </HubCard>
+          </div>
         </div>
       </div>
     </section>

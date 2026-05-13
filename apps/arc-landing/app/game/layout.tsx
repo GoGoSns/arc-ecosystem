@@ -39,6 +39,9 @@ export default function GameLayout({
             <Link href="/game/lucky" className="nav-link">
               Lucky
             </Link>
+            <Link href="/game/quiz-pot" className="nav-link">
+              Quiz Pot
+            </Link>
             <Link href="/game/history" className="nav-link">
               History
             </Link>

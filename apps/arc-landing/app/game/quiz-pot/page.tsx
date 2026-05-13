@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { ArrowRight, Clock3, Coins, Plus, Sparkles, Users } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
+import GameProgressPanel from '@/components/GameProgressPanel';
 import { HubBadge, HubCard, HubEmptyState, HubMetricCard, HubSkeletonCard, hubInputClass, hubLabelClass, hubSelectClass } from '@/components/HubPrimitives';
 import {
   formatQuizAmount,
@@ -13,6 +14,7 @@ import {
   type QuizPot,
   type QuizPotDistribution,
 } from '@/lib/quizPotStore';
+import { buildGameProgressSnapshot, useGameStore } from '@/lib/gameStore';
 
 function useHydratedNow() {
   const [hydrated, setHydrated] = useState(false);
@@ -137,6 +139,12 @@ function QuizPotCard({ pot, now }: { pot: QuizPot; now: number }) {
 export default function QuizPotHubPage() {
   const { pots, createQuizPot } = useQuizPotStore();
   const { hydrated, now } = useHydratedNow();
+  const gameStore = useGameStore((state) => ({
+    challenges: state.challenges,
+    luckyPacks: state.luckyPacks,
+    history: state.history,
+  }));
+  const gameProgress = useMemo(() => buildGameProgressSnapshot(gameStore, now), [gameStore, now]);
   const [formTitle, setFormTitle] = useState('Weekend Trivia Night');
   const [formPot, setFormPot] = useState('500');
   const [formQuestionCount, setFormQuestionCount] = useState('5');
@@ -214,7 +222,7 @@ export default function QuizPotHubPage() {
       <div className="mx-auto max-w-7xl">
         <div className="reveal space-y-5">
           <div className="flex flex-wrap items-center gap-2">
-            <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">Quiz Pot</HubBadge>
+            <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">Phase 2</HubBadge>
             <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">Mock gameplay</HubBadge>
           </div>
           <h1 className="max-w-5xl text-4xl font-black uppercase leading-tight sm:text-5xl lg:text-7xl">
@@ -244,110 +252,117 @@ export default function QuizPotHubPage() {
             )}
           </div>
 
-          <HubCard as="aside" className="p-6 sm:p-8">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Create pot</p>
-                <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">Mock form</h2>
-              </div>
-              <span className="inline-flex rounded-full border border-[#2a2a2a] bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#aaa]">
-                {pots.length} total
-              </span>
-            </div>
+          <div className="space-y-6">
+            <GameProgressPanel
+              snapshot={gameProgress}
+              description="Streak, XP, and recent wins are shared with the rest of the Arc game store and update locally in the browser."
+            />
 
-            <form className="mt-6 space-y-4" onSubmit={handleCreatePot}>
-              <div className="space-y-2">
-                <label className={hubLabelClass} htmlFor="quiz-pot-title">
-                  Title
-                </label>
-                <input
-                  id="quiz-pot-title"
-                  type="text"
-                  value={formTitle}
-                  onChange={(event) => setFormTitle(event.target.value)}
-                  className={`w-full ${hubInputClass}`}
-                  placeholder="Weekend Trivia Night"
-                />
+            <HubCard as="aside" className="p-6 sm:p-8">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Create pot</p>
+                  <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">Mock form</h2>
+                </div>
+                <span className="inline-flex rounded-full border border-[#2a2a2a] bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#aaa]">
+                  {pots.length} total
+                </span>
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-2">
+              <form className="mt-6 space-y-4" onSubmit={handleCreatePot}>
                 <div className="space-y-2">
-                  <label className={hubLabelClass} htmlFor="quiz-pot-amount">
-                    Pot USD
+                  <label className={hubLabelClass} htmlFor="quiz-pot-title">
+                    Title
                   </label>
                   <input
-                    id="quiz-pot-amount"
-                    type="number"
-                    min={25}
-                    step={25}
-                    value={formPot}
-                    onChange={(event) => setFormPot(event.target.value)}
+                    id="quiz-pot-title"
+                    type="text"
+                    value={formTitle}
+                    onChange={(event) => setFormTitle(event.target.value)}
                     className={`w-full ${hubInputClass}`}
+                    placeholder="Weekend Trivia Night"
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className={hubLabelClass} htmlFor="quiz-pot-questions">
-                    Questions
-                  </label>
-                  <input
-                    id="quiz-pot-questions"
-                    type="number"
-                    min={3}
-                    max={10}
-                    step={1}
-                    value={formQuestionCount}
-                    onChange={(event) => setFormQuestionCount(event.target.value)}
-                    className={`w-full ${hubInputClass}`}
-                  />
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <label className={hubLabelClass} htmlFor="quiz-pot-amount">
+                      Pot USD
+                    </label>
+                    <input
+                      id="quiz-pot-amount"
+                      type="number"
+                      min={25}
+                      step={25}
+                      value={formPot}
+                      onChange={(event) => setFormPot(event.target.value)}
+                      className={`w-full ${hubInputClass}`}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className={hubLabelClass} htmlFor="quiz-pot-questions">
+                      Questions
+                    </label>
+                    <input
+                      id="quiz-pot-questions"
+                      type="number"
+                      min={3}
+                      max={10}
+                      step={1}
+                      value={formQuestionCount}
+                      onChange={(event) => setFormQuestionCount(event.target.value)}
+                      className={`w-full ${hubInputClass}`}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <label className={hubLabelClass} htmlFor="quiz-pot-duration">
-                    Duration hours
-                  </label>
-                  <input
-                    id="quiz-pot-duration"
-                    type="number"
-                    min={1}
-                    max={24}
-                    step={1}
-                    value={formDurationHours}
-                    onChange={(event) => setFormDurationHours(event.target.value)}
-                    className={`w-full ${hubInputClass}`}
-                  />
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <label className={hubLabelClass} htmlFor="quiz-pot-duration">
+                      Duration hours
+                    </label>
+                    <input
+                      id="quiz-pot-duration"
+                      type="number"
+                      min={1}
+                      max={24}
+                      step={1}
+                      value={formDurationHours}
+                      onChange={(event) => setFormDurationHours(event.target.value)}
+                      className={`w-full ${hubInputClass}`}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className={hubLabelClass} htmlFor="quiz-pot-distribution">
+                      Distribution
+                    </label>
+                    <select
+                      id="quiz-pot-distribution"
+                      value={formDistribution}
+                      onChange={(event) => setFormDistribution(event.target.value as QuizPotDistribution)}
+                      className={`w-full ${hubSelectClass}`}
+                    >
+                      <option value="winner-takes-all">Winner takes all</option>
+                      <option value="top3-split">Top 3 split</option>
+                    </select>
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <label className={hubLabelClass} htmlFor="quiz-pot-distribution">
-                    Distribution
-                  </label>
-                  <select
-                    id="quiz-pot-distribution"
-                    value={formDistribution}
-                    onChange={(event) => setFormDistribution(event.target.value as QuizPotDistribution)}
-                    className={`w-full ${hubSelectClass}`}
-                  >
-                    <option value="winner-takes-all">Winner takes all</option>
-                    <option value="top3-split">Top 3 split</option>
-                  </select>
+
+                <div className="rounded-2xl border border-[#2a2a2a] bg-black/25 px-4 py-3 text-sm leading-7 text-[#9a9a9a]">
+                  New pots start as open rooms with Arc Game Desk as the host. The countdown begins one hour from creation and uses only local mock data.
                 </div>
-              </div>
 
-              <div className="rounded-2xl border border-[#2a2a2a] bg-black/25 px-4 py-3 text-sm leading-7 text-[#9a9a9a]">
-                New pots start as open rooms with Arc Game Desk as the host. The countdown begins one hour from creation and uses only local mock data.
-              </div>
+                <button type="submit" className="primary-button w-full">
+                  <Plus size={15} />
+                  Create Mock Pot
+                </button>
 
-              <button type="submit" className="primary-button w-full">
-                <Plus size={15} />
-                Create Mock Pot
-              </button>
-
-              <p aria-live="polite" className="min-h-6 text-sm text-[#d8d8d8]">
-                {statusMessage}
-              </p>
-            </form>
-          </HubCard>
+                <p aria-live="polite" className="min-h-6 text-sm text-[#d8d8d8]">
+                  {statusMessage}
+                </p>
+              </form>
+            </HubCard>
+          </div>
         </div>
       </div>
     </section>

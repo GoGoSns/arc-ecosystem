@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, BadgeCheck, Clock3, Coins, Sparkles, Trophy, Users } from 'lucide-react';
+import { AlertTriangle, BadgeCheck, Check, Clock3, Coins, Copy, Link2, Sparkles, Trophy, Users } from 'lucide-react';
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { useParams } from 'next/navigation';
+import GameProgressPanel from '@/components/GameProgressPanel';
 import { HubBadge, HubCard, HubEmptyState, HubSkeletonCard, hubInputClass, hubLabelClass } from '@/components/HubPrimitives';
 import {
   buildQuizPrizeBreakdown,
@@ -18,6 +19,7 @@ import {
   type QuizPot,
   type QuizSubmissionResult,
 } from '@/lib/quizPotStore';
+import { buildGameProgressSnapshot, useGameStore } from '@/lib/gameStore';
 
 const QUIZ_NAME_KEY = 'arclanding:quiz-pot-name';
 const QUIZ_ADDRESS_KEY = 'arclanding:quiz-pot-address';
@@ -99,6 +101,38 @@ function useStoredQuizIdentity() {
   return { ready, name, setName, address } as const;
 }
 
+type InviteToastState = {
+  tone: 'success' | 'error';
+  message: string;
+};
+
+async function copyTextToClipboard(text: string): Promise<boolean> {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch {
+    // Fall through to the legacy path below.
+  }
+
+  try {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', 'true');
+    textarea.style.position = 'fixed';
+    textarea.style.left = '-9999px';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    const success = document.execCommand('copy');
+    document.body.removeChild(textarea);
+    return success;
+  } catch {
+    return false;
+  }
+}
+
 function statusTone(status: ReturnType<typeof resolveQuizPotStatus>) {
   switch (status) {
     case 'live':
@@ -178,13 +212,40 @@ function SubmissionReveal({
   answeredCount,
   totalQuestions,
   currentQuestionTitle,
+  rankEstimate,
+  payoutEligible,
+  projectedPayout,
+  payoutShare,
+  payoutLabel,
 }: {
   result: QuizSubmissionResult | null;
   currentScore: number;
   answeredCount: number;
   totalQuestions: number;
   currentQuestionTitle?: string;
+  rankEstimate: number | null;
+  payoutEligible: boolean;
+  projectedPayout: number;
+  payoutShare: number;
+  payoutLabel: string;
 }) {
+  const [pulse, setPulse] = useState(false);
+  const resultKey = result?.ok ? result.questionId : undefined;
+
+  useEffect(() => {
+    if (!result?.ok) {
+      setPulse(false);
+      return;
+    }
+
+    setPulse(false);
+    const frame = window.requestAnimationFrame(() => {
+      setPulse(true);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [result?.ok, resultKey]);
+
   if (!result) {
     return (
       <div className="rounded-3xl border border-dashed border-[#2a2a2a] bg-white/[0.015] p-5 text-sm leading-7 text-[#9a9a9a]">
@@ -202,13 +263,31 @@ function SubmissionReveal({
   }
 
   return (
-    <div className="rounded-3xl border border-[#2a2a2a] bg-black/30 p-5">
-      <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">
-        <BadgeCheck size={14} className={result.correct ? 'text-[#30d158]' : 'text-[#c9a84c]'} aria-hidden="true" />
-        Score reveal
+    <div
+      className={`relative overflow-hidden rounded-3xl border p-5 transition-all duration-500 ${
+        pulse
+          ? 'border-[#c9a84c]/35 bg-[linear-gradient(135deg,rgba(201,168,76,0.14),rgba(48,209,88,0.05)_50%,rgba(255,255,255,0.02))] shadow-[0_0_0_1px_rgba(201,168,76,0.08),0_22px_70px_rgba(0,0,0,0.45)]'
+          : 'border-[#2a2a2a] bg-black/30'
+      }`}
+    >
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c9a84c]/50 to-transparent" />
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">
+          <BadgeCheck size={14} className={result.correct ? 'text-[#30d158]' : 'text-[#c9a84c]'} aria-hidden="true" />
+          Score reveal
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-white">
+            {rankEstimate ? `Rank #${String(rankEstimate).padStart(2, '0')}` : 'Rank pending'}
+          </HubBadge>
+          <HubBadge className={payoutEligible ? 'border-[#30d158]/30 bg-[#30d158]/10 text-[#a6f4bf]' : 'border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]'}>
+            {payoutEligible ? 'Payout eligible' : 'Outside payout zone'}
+          </HubBadge>
+        </div>
       </div>
-      <div className="mt-3 text-sm text-white">{result.correct ? 'Correct answer locked in.' : 'Answer locked in.'}</div>
-      <div className="mt-3 grid gap-3 sm:grid-cols-3">
+
+      <div className="mt-4 text-sm text-white">{result.correct ? 'Correct answer locked in.' : 'Answer locked in.'}</div>
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
         <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
           <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Current score</div>
           <div className="mt-2 text-lg font-black text-[#c9a84c]">{currentScore}</div>
@@ -224,6 +303,22 @@ function SubmissionReveal({
           <div className="mt-2 truncate text-lg font-black text-white">{currentQuestionTitle ?? 'Completed'}</div>
         </div>
       </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
+          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Payout mode</div>
+          <div className="mt-2 text-sm font-semibold text-white">{payoutLabel}</div>
+        </div>
+        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
+          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Projected payout</div>
+          <div className="mt-2 text-lg font-black text-[#f0d79e]">{formatQuizAmount(projectedPayout)}</div>
+        </div>
+        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
+          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Share</div>
+          <div className="mt-2 text-lg font-black text-white">{payoutShare}%</div>
+        </div>
+      </div>
+
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
           <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Your answer</div>
@@ -311,6 +406,9 @@ function PrizePanel({ pot, now }: { pot: QuizPot; now: number }) {
   const leaderboard = sortQuizParticipants(pot.participants);
   const resolvedStatus = resolveQuizPotStatus(pot, now);
   const breakdown = buildQuizPrizeBreakdown(pot, leaderboard);
+  const isSplit = pot.distribution === 'top3-split';
+  const winner = breakdown[0];
+  const splitBreakdown = breakdown.slice(0, 3);
 
   return (
     <HubCard as="section" className="p-6 sm:p-8">
@@ -326,30 +424,63 @@ function PrizePanel({ pot, now }: { pot: QuizPot; now: number }) {
         <HubBadge className={resolvedStatus === 'ended' ? 'border-[#777]/30 bg-white/[0.02] text-[#d8d8d8]' : 'border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]'}>
           {resolvedStatus === 'ended' ? 'Final payouts' : 'Projected payouts'}
         </HubBadge>
-        <HubBadge>{pot.distribution.replace('-', ' ')}</HubBadge>
+        <HubBadge>{isSplit ? '50 / 30 / 20 split' : 'Winner takes all'}</HubBadge>
       </div>
 
       <div className="mt-5 space-y-3">
         {breakdown.length > 0 ? (
-          breakdown.map((entry) => (
-            <div key={`${entry.place}-${entry.participant.address}`} className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">
-                    {entry.place === 1 ? 'Winner' : `${entry.place} place`}
+          isSplit ? (
+            splitBreakdown.map((entry) => (
+              <div key={`${entry.place}-${entry.participant.address}`} className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">
+                      {entry.place === 1 ? '1st place' : `${entry.place} place`}
+                    </div>
+                    <div className="mt-2 truncate text-sm font-semibold text-white">{entry.participant.name}</div>
+                    <div className="mt-1 truncate text-[10px] font-mono uppercase tracking-[0.16em] text-[#777]">
+                      {formatQuizAddressLabel(entry.participant.address)}
+                    </div>
                   </div>
-                  <div className="mt-2 text-sm font-semibold text-white">{entry.participant.name}</div>
-                  <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.16em] text-[#777]">
-                    {formatQuizAddressLabel(entry.participant.address)}
+                  <div className="text-right">
+                    <div className="text-sm font-black text-[#c9a84c]">{formatQuizAmount(entry.amountUsd)}</div>
+                    <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-[#777]">{entry.share}%</div>
+                  </div>
+                </div>
+                <div className="mt-3 h-2 overflow-hidden rounded-full bg-black/40">
+                  <div
+                    className="h-full rounded-full bg-[linear-gradient(90deg,#c9a84c_0%,#f0d79e_100%)]"
+                    style={{ width: `${entry.share}%` }}
+                  />
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="rounded-3xl border border-[#c9a84c]/25 bg-[linear-gradient(135deg,rgba(201,168,76,0.16),rgba(255,255,255,0.02))] p-5">
+              <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.28em] text-[#f0d79e]">
+                <Trophy size={14} aria-hidden="true" />
+                Winner takes all
+              </div>
+              <div className="mt-4 flex items-start justify-between gap-4">
+                <div className="min-w-0">
+                  <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Current leader</div>
+                  <div className="mt-2 truncate text-lg font-semibold text-white">{winner?.participant.name ?? 'No winner yet'}</div>
+                  <div className="mt-1 truncate text-[10px] font-mono uppercase tracking-[0.16em] text-[#777]">
+                    {winner ? formatQuizAddressLabel(winner.participant.address) : 'Waiting for participants'}
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm font-black text-[#c9a84c]">{formatQuizAmount(entry.amountUsd)}</div>
-                  <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-[#777]">{entry.share}%</div>
+                  <div className="text-3xl font-black text-[#f0d79e]">{winner ? formatQuizAmount(winner.amountUsd) : '$0'}</div>
+                  <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-[#777]">100% of pot</div>
                 </div>
               </div>
+              <div className="mt-4 text-sm leading-7 text-[#d8d8d8]">
+                {resolvedStatus === 'ended'
+                  ? 'Final winner locked. The full pot pays out to the top rank.'
+                  : 'Projected payout updates as scores change. The top rank takes everything.'}
+              </div>
             </div>
-          ))
+          )
         ) : (
           <HubEmptyState
             icon={Sparkles}
@@ -358,6 +489,44 @@ function PrizePanel({ pot, now }: { pot: QuizPot; now: number }) {
           />
         )}
       </div>
+
+      {resolvedStatus === 'ended' && isSplit && splitBreakdown.length > 0 ? (
+        <div className="mt-5 rounded-3xl border border-[#2a2a2a] bg-black/25 p-5">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <div className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">Podium view</div>
+              <div className="mt-2 text-sm font-semibold text-white">Top 3 winners and payout split</div>
+            </div>
+            <HubBadge>50 / 30 / 20</HubBadge>
+          </div>
+          <div className="mt-4 grid grid-cols-3 items-end gap-3">
+            {[
+              { label: '2nd', entry: splitBreakdown[1], heightClass: 'min-h-36' },
+              { label: '1st', entry: splitBreakdown[0], heightClass: 'min-h-44' },
+              { label: '3rd', entry: splitBreakdown[2], heightClass: 'min-h-28' },
+            ].map((slot) => (
+              <div
+                key={slot.label}
+                className={`rounded-3xl border border-[#2a2a2a] bg-black/30 p-4 text-center ${slot.heightClass}`}
+              >
+                <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">{slot.label}</div>
+                {slot.entry ? (
+                  <>
+                    <div className="mt-3 truncate text-sm font-semibold text-white">{slot.entry.participant.name}</div>
+                    <div className="mt-1 truncate text-[10px] font-mono uppercase tracking-[0.16em] text-[#777]">
+                      {formatQuizAddressLabel(slot.entry.participant.address)}
+                    </div>
+                    <div className="mt-4 text-lg font-black text-[#c9a84c]">{formatQuizAmount(slot.entry.amountUsd)}</div>
+                    <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-[#777]">{slot.entry.share}%</div>
+                  </>
+                ) : (
+                  <div className="mt-6 text-sm leading-7 text-[#777]">Waiting for a finalist</div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       {resolvedStatus === 'ended' && breakdown.length > 0 ? (
         <div className="mt-5 rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3 text-sm leading-7 text-[#9a9a9a]">
@@ -390,6 +559,15 @@ function QuizFlowCard({
   const currentQuestion = pot.questions[answeredCount];
   const currentScore = participant?.score ?? 0;
   const resolvedStatus = resolveQuizPotStatus(pot, now);
+  const leaderboard = sortQuizParticipants(pot.participants);
+  const payoutBreakdown = buildQuizPrizeBreakdown(pot, leaderboard);
+  const rankEstimate = participant ? leaderboard.findIndex((entry) => entry.address.trim().toLowerCase() === normalizedAddress) + 1 : null;
+  const payoutSlotCount = pot.distribution === 'winner-takes-all' ? 1 : 3;
+  const payoutEligible = rankEstimate !== null && rankEstimate > 0 && rankEstimate <= payoutSlotCount;
+  const payoutEntry = payoutBreakdown.find((entry) => entry.participant.address.trim().toLowerCase() === normalizedAddress);
+  const projectedPayout = payoutEntry?.amountUsd ?? 0;
+  const payoutShare = payoutEntry?.share ?? 0;
+  const payoutLabel = pot.distribution === 'winner-takes-all' ? 'Winner takes all' : 'Top 3 split';
   const isJoined = Boolean(participant);
   const isReady = resolvedStatus === 'live' && isJoined;
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -550,6 +728,11 @@ function QuizFlowCard({
           answeredCount={answeredCount}
           totalQuestions={pot.questions.length}
           currentQuestionTitle={currentQuestion?.prompt}
+          rankEstimate={rankEstimate}
+          payoutEligible={payoutEligible}
+          projectedPayout={projectedPayout}
+          payoutShare={payoutShare}
+          payoutLabel={payoutLabel}
         />
       </div>
     </HubCard>
@@ -561,16 +744,45 @@ export default function QuizPotDetailPage() {
   const potId = Array.isArray(params?.id) ? params.id[0] : params?.id ?? '';
   const { hydrated, now } = useHydratedNow();
   const { ready: identityReady, name, setName, address } = useStoredQuizIdentity();
+  const gameStore = useGameStore((state) => ({
+    challenges: state.challenges,
+    luckyPacks: state.luckyPacks,
+    history: state.history,
+  }));
+  const gameProgress = useMemo(() => buildGameProgressSnapshot(gameStore, now), [gameStore, now]);
   const pot = useQuizPotStore((state) => (potId ? state.getQuizPotById(potId) : undefined));
   const joinQuizPot = useQuizPotStore((state) => state.joinQuizPot);
   const submitQuizAnswer = useQuizPotStore((state) => state.submitQuizAnswer);
   const [joinMessage, setJoinMessage] = useState('');
   const [submission, setSubmission] = useState<QuizSubmissionResult | null>(null);
+  const [inviteLink, setInviteLink] = useState('');
+  const [inviteToast, setInviteToast] = useState<InviteToastState | null>(null);
 
   useEffect(() => {
     setSubmission(null);
     setJoinMessage('');
   }, [potId]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    setInviteLink(`${window.location.origin}${window.location.pathname}`);
+    setInviteToast(null);
+  }, [potId]);
+
+  useEffect(() => {
+    if (!inviteToast) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setInviteToast(null);
+    }, 2500);
+
+    return () => window.clearTimeout(timer);
+  }, [inviteToast]);
 
   const normalizedAddress = address.trim().toLowerCase();
   const participant = pot?.participants.find((entry) => entry.address.trim().toLowerCase() === normalizedAddress);
@@ -599,6 +811,31 @@ export default function QuizPotDetailPage() {
     const result = submitQuizAnswer(pot.id, address, questionId, answerIndex);
     setSubmission(result);
   };
+
+  const handleCopyInviteLink = async () => {
+    if (!inviteLink) {
+      setInviteToast({
+        tone: 'error',
+        message: 'Invite link is not ready yet.',
+      });
+      return;
+    }
+
+    const success = await copyTextToClipboard(inviteLink);
+    setInviteToast(
+      success
+        ? {
+            tone: 'success',
+            message: 'Invite link copied to clipboard.',
+          }
+        : {
+            tone: 'error',
+            message: 'Copy failed. Use the visible route link instead.',
+        },
+    );
+  };
+
+  const inviteRoute = inviteLink ? inviteLink.replace(/^https?:\/\/[^/]+/, '') : 'Preparing current route...';
 
   if (!hydrated || !identityReady) {
     return (
@@ -639,6 +876,31 @@ export default function QuizPotDetailPage() {
 
   return (
     <section className="section pt-24 sm:pt-28">
+      {inviteToast ? (
+        <div
+          role="status"
+          aria-live="polite"
+          className={`fixed right-4 top-20 z-50 w-[calc(100vw-2rem)] max-w-sm rounded-3xl border px-4 py-3 shadow-[0_18px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl transition-all duration-300 ${
+            inviteToast.tone === 'success'
+              ? 'border-[#30d158]/30 bg-[#07160d]/95 text-[#d8ffe5]'
+              : 'border-red-500/30 bg-[#21090a]/95 text-red-100'
+          }`}
+        >
+          <div className="flex items-start gap-3">
+            <div
+              className={`grid h-9 w-9 shrink-0 place-items-center rounded-full border ${
+                inviteToast.tone === 'success' ? 'border-[#30d158]/30 bg-[#30d158]/10 text-[#a6f4bf]' : 'border-red-500/30 bg-red-500/10 text-red-100'
+              }`}
+            >
+              {inviteToast.tone === 'success' ? <Check size={15} aria-hidden="true" /> : <AlertTriangle size={15} aria-hidden="true" />}
+            </div>
+            <div className="min-w-0">
+              <div className="text-sm font-semibold text-white">{inviteToast.message}</div>
+              <div className="mt-1 truncate text-xs text-[#9a9a9a]">{inviteRoute}</div>
+            </div>
+          </div>
+        </div>
+      ) : null}
       <div className="mx-auto max-w-7xl">
         <div className="reveal space-y-5">
           <div className="flex flex-wrap items-center gap-2">
@@ -667,6 +929,36 @@ export default function QuizPotDetailPage() {
                 <div className="mt-2 text-3xl font-black text-[#c9a84c]">{formatQuizAmount(pot.potUsd)}</div>
               </div>
               <CountdownTile pot={pot} now={now} />
+              <div className="rounded-3xl border border-[#c9a84c]/20 bg-[linear-gradient(135deg,rgba(201,168,76,0.12),rgba(48,209,88,0.04)_55%,rgba(255,255,255,0.02))] p-5 sm:col-span-2">
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">
+                      <Link2 size={14} className="text-[#c9a84c]" aria-hidden="true" />
+                      Invite link
+                    </div>
+                    <div className="mt-2 truncate text-sm font-semibold text-white">{inviteRoute}</div>
+                    <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.16em] text-[#777]">
+                      Mock share link from the current route
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleCopyInviteLink}
+                    className="inline-flex items-center gap-2 rounded-full border border-[#c9a84c]/25 bg-[#c9a84c]/10 px-3 py-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#f0d79e] transition-colors hover:border-[#c9a84c]/40 hover:bg-[#c9a84c]/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                  >
+                    {inviteToast?.tone === 'success' ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
+                    {inviteToast?.tone === 'success' ? 'Copied' : 'Copy Invite Link'}
+                  </button>
+                </div>
+                <p
+                  className={`mt-3 text-xs leading-6 ${
+                    inviteToast?.tone === 'error' ? 'text-red-100' : inviteToast?.tone === 'success' ? 'text-[#a6f4bf]' : 'text-[#9a9a9a]'
+                  }`}
+                  aria-live="polite"
+                >
+                  {inviteToast ? inviteToast.message : 'Share the current room with another player without leaving the page.'}
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -756,6 +1048,10 @@ export default function QuizPotDetailPage() {
           </div>
 
           <div className="space-y-6">
+            <GameProgressPanel
+              snapshot={gameProgress}
+              description="Shared Arc game momentum carries into the quiz room. XP, streaks, and wins update from the same mock store."
+            />
             <LeaderboardCard pot={pot} address={address} />
             <PrizePanel pot={pot} now={now} />
           </div>
