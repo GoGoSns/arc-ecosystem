@@ -11,6 +11,7 @@ import {
   formatGameAmount,
   formatTimeLeft,
   resolveChallengeStatus,
+  resolveLuckyPackStatus,
   useGameStore,
 } from '@/lib/gameStore';
 import type { VoiceTourSectionId } from '@/lib/voiceTourStore';
@@ -77,11 +78,14 @@ export default function GameHubHomePage() {
   const { hydrated, now } = useHydratedNow();
 
   const stats = useMemo(() => {
-    const activeChallenges = challenges.filter((challenge) => resolveChallengeStatus(challenge, now) === 'open');
-    const openLuckyPacks = luckyPacks.filter((pack) => pack.status === 'pending');
-    const totalWon = history.reduce((sum, item) => sum + (item.status === 'lost' ? 0 : item.amount), 0);
-    const resolvedHistory = history.filter((item) => item.status === 'won' || item.status === 'lost' || item.status === 'opened');
-    const winRate = resolvedHistory.length === 0 ? 0 : Math.round((resolvedHistory.filter((item) => item.status !== 'lost').length / resolvedHistory.length) * 100);
+    const activeChallenges = [...challenges]
+      .filter((challenge) => resolveChallengeStatus(challenge, now) === 'open')
+      .sort((a, b) => a.deadlineAt - b.deadlineAt || a.title.localeCompare(b.title));
+    const openLuckyPacks = luckyPacks.filter((pack) => resolveLuckyPackStatus(pack, now) === 'pending');
+    const totalWon = history.reduce((sum, item) => sum + (item.status === 'lost' || item.status === 'expired' ? 0 : item.amount), 0);
+    const resolvedHistory = history.filter((item) => ['won', 'lost', 'opened', 'claimed', 'expired'].includes(item.status));
+    const positiveHistory = resolvedHistory.filter((item) => item.status === 'won' || item.status === 'opened' || item.status === 'claimed');
+    const winRate = resolvedHistory.length === 0 ? 0 : Math.round((positiveHistory.length / resolvedHistory.length) * 100);
 
     return {
       activeChallenges,
@@ -134,8 +138,8 @@ export default function GameHubHomePage() {
             readable on mobile.
           </p>
           <div className="flex flex-wrap gap-3">
-            <Link href="/game/challenges" className="primary-button">
-              Open Challenges
+            <Link href="/game/challenge" className="primary-button">
+              Open Challenge Pay
               <ArrowRight size={15} />
             </Link>
             <Link href="/game/lucky" className="secondary-button">
@@ -157,10 +161,10 @@ export default function GameHubHomePage() {
 
         <div className="mt-6 grid gap-6 lg:grid-cols-4">
           <GameLinkCard
-            href="/game/challenges"
+            href="/game/challenge"
             badge={`${stats.activeChallenges.length} live`}
-            title="Challenges"
-            description="Push progress bars toward their target values, watch the countdowns, and claim rewards when a run is ready to settle."
+            title="Challenge Pay"
+            description="Create a challenge, accept it, update progress, submit proof, and settle the reward with local mock state."
             meta="Manage missions"
             icon={Trophy}
           />
@@ -175,7 +179,7 @@ export default function GameHubHomePage() {
           <GameLinkCard
             href="/game/lucky"
             badge={`${stats.openLuckyPacks.length} pending`}
-            title="Lucky"
+            title="Lucky Card"
             description="Open weighted lucky cards, inspect the reveal amount, and keep the result in your local demo archive."
             meta="Open cards"
             icon={Sparkles}
@@ -241,14 +245,14 @@ export default function GameHubHomePage() {
                       : 'No active challenge'}
                   </span>
                 </div>
-                <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-                  <span className="text-sm text-[#777]">Recent archive item</span>
-                  <span className="text-sm font-semibold text-white">
-                    {history[0] ? history[0].title : 'No history yet'}
-                  </span>
-                </div>
+              <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
+                <span className="text-sm text-[#777]">Recent archive item</span>
+                <span className="text-sm font-semibold text-white">
+                    {[...history].sort((a, b) => b.createdAt - a.createdAt)[0]?.title ?? 'No history yet'}
+                </span>
               </div>
-            </HubCard>
+            </div>
+          </HubCard>
           </div>
         </div>
       </div>

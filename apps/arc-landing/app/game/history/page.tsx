@@ -21,10 +21,14 @@ function badgeTone(status: string) {
   switch (status) {
     case 'won':
       return 'border-[#30d158]/30 bg-[#30d158]/10 text-[#a6f4bf]';
+    case 'claimed':
+      return 'border-[#30d158]/30 bg-[#30d158]/10 text-[#a6f4bf]';
     case 'lost':
       return 'border-[#f87171]/30 bg-[#f87171]/10 text-[#fecaca]';
     case 'opened':
       return 'border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]';
+    case 'expired':
+      return 'border-[#f59e0b]/30 bg-[#f59e0b]/10 text-[#fde68a]';
     default:
       return 'border-[#2a2a2a] bg-white/[0.02] text-[#aaa]';
   }
@@ -48,9 +52,9 @@ export default function GameHistoryPage() {
   }, [filter, sortedHistory]);
 
   const stats = useMemo(() => {
-    const challengeWins = history.filter((item) => item.type === 'challenge' && item.status === 'won').length;
-    const luckyOpens = history.filter((item) => item.type === 'lucky' && item.status === 'opened').length;
-    const totalWon = history.reduce((sum, item) => sum + (item.status === 'lost' ? 0 : item.amount), 0);
+    const challengeWins = history.filter((item) => item.type === 'challenge' && (item.status === 'won' || item.status === 'claimed')).length;
+    const luckyOpens = history.filter((item) => item.type === 'lucky' && (item.status === 'opened' || item.status === 'claimed')).length;
+    const totalWon = history.reduce((sum, item) => sum + (item.status === 'lost' || item.status === 'expired' ? 0 : item.amount), 0);
 
     return {
       total: history.length,

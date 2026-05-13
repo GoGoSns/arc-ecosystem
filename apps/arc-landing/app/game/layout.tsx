@@ -33,8 +33,8 @@ export default function GameLayout({
             <Link href="/game" className="text-white">
               Hub
             </Link>
-            <Link href="/game/challenges" className="nav-link">
-              Challenges
+            <Link href="/game/challenge" className="nav-link">
+              Challenge
             </Link>
             <Link href="/game/lucky" className="nav-link">
               Lucky
