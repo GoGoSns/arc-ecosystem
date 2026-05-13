@@ -204,6 +204,7 @@ export default function Page() {
     { href: '/showcase', label: t.nav.showcase },
     { href: '/jobs', label: t.nav.jobs },
     { href: '/roulette', label: t.nav.roulette },
+    { href: '/game', label: t.nav.game },
     { href: '/race', label: t.nav.race },
     { href: '/drops', label: t.nav.drops },
     { href: '/vault', label: t.nav.vault },
