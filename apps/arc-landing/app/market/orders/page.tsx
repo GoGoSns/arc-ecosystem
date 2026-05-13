@@ -13,7 +13,7 @@ import {
   Search,
   ShoppingBag,
 } from 'lucide-react';
-import { HubBadge, HubCard, HubEmptyState, HubMetricCard, hubInputClass, hubSelectClass } from '@/components/HubPrimitives';
+import { HubBadge, HubCard, HubEmptyState, HubMetricCard, hubInputClass, hubLabelClass, hubSelectClass } from '@/components/HubPrimitives';
 import {
   formatMarketDateTime,
   formatMarketPrice,
@@ -213,22 +213,30 @@ export default function MarketOrdersPage() {
           </div>
 
           <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1fr)_240px]">
-            <div className="relative">
-              <Search size={16} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#777]" aria-hidden="true" />
-              <input
-                type="search"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search order id, buyer, or listing..."
-                aria-label="Search orders"
-                className={`${hubInputClass} w-full !pl-11`}
-              />
+            <div>
+              <label htmlFor="market-order-search" className={`mb-2 block ${hubLabelClass}`}>
+                Search orders
+              </label>
+              <div className="relative">
+                <Search size={16} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#777]" aria-hidden="true" />
+                <input
+                  id="market-order-search"
+                  type="search"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Search order id, buyer, or listing..."
+                  className={`${hubInputClass} w-full !pl-11`}
+                />
+              </div>
             </div>
             <div>
+              <label htmlFor="market-order-status" className={`mb-2 block ${hubLabelClass}`}>
+                Status
+              </label>
               <select
+                id="market-order-status"
                 value={statusFilter}
                 onChange={(event) => setStatusFilter(event.target.value as 'All' | MarketOrderStatus)}
-                aria-label="Filter orders by status"
                 className={`${hubSelectClass} w-full`}
               >
                 <option value="All">All statuses</option>

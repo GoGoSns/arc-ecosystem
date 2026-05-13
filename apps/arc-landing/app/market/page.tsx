@@ -96,7 +96,7 @@ function ListingCard({
             <div className="text-3xl font-black text-[#f4dc9f] sm:text-4xl">{formatMarketPrice(listing.priceUsd)}</div>
             <p className="mt-1 text-[10px] font-mono uppercase tracking-[0.22em] text-[#8b8b8b]">
               <MapPin size={10} className="mr-1 inline-block" aria-hidden="true" />
-              {listing.city} · {listing.condition}
+              {listing.city} &middot; {listing.condition}
             </p>
           </div>
         </div>
@@ -419,4 +419,3 @@ export default function MarketPage() {
     </section>
   );
 }
-

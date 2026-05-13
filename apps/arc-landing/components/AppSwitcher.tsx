@@ -1,11 +1,11 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { Home, Sparkles, Wallet, Gamepad2 } from 'lucide-react';
+import { Gamepad2, Home, ShoppingBag, Sparkles, Wallet } from 'lucide-react';
 import { getArcAppBaseUrl, isExternalUrl } from '@/lib/arcAppLinks';
 
 type AppItem = {
-  key: 'pay' | 'creator' | 'play' | 'hub';
+  key: 'pay' | 'creator' | 'play' | 'market' | 'hub';
   name: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement> & { size?: number }>;
   href: string | null;
@@ -16,12 +16,14 @@ const APPS: AppItem[] = [
   { key: 'pay', name: 'Pay', icon: Wallet, href: getArcAppBaseUrl('pay'), color: '#60a5fa' },
   { key: 'creator', name: 'Creator', icon: Sparkles, href: getArcAppBaseUrl('creator'), color: '#f472b6' },
   { key: 'play', name: 'Play', icon: Gamepad2, href: getArcAppBaseUrl('play'), color: '#34d399' },
+  { key: 'market', name: 'Market', icon: ShoppingBag, href: '/market', color: '#c9a84c' },
   { key: 'hub', name: 'Hub', icon: Home, href: '/', color: '#c9a84c' },
 ];
 
 export default function AppSwitcher() {
   const pathname = usePathname();
   const isHubActive = pathname === '/';
+  const isMarketActive = pathname === '/market' || pathname.startsWith('/market/');
 
   return (
     <nav
@@ -31,7 +33,7 @@ export default function AppSwitcher() {
     >
       {APPS.map((app) => {
         const Icon = app.icon;
-        const isActive = app.key === 'hub' && isHubActive;
+        const isActive = (app.key === 'hub' && isHubActive) || (app.key === 'market' && isMarketActive);
         const sharedClasses = [
           'flex shrink-0 items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold transition-all',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black',

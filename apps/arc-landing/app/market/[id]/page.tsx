@@ -186,7 +186,7 @@ export default function MarketListingPage() {
               <div className="text-4xl font-black text-[#f4dc9f] sm:text-5xl">{formatMarketPrice(listing.priceUsd)}</div>
               <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[#8b8b8b]">
                 <MapPin size={10} className="mr-1 inline-block" aria-hidden="true" />
-                {listing.city} · {listing.condition}
+                {listing.city} &middot; {listing.condition}
               </div>
             </div>
           </div>
@@ -293,13 +293,12 @@ export default function MarketListingPage() {
               </div>
 
               <div className="mt-6 flex flex-wrap gap-3">
-                {checkoutLink ? (
+                {checkoutLink && !isSold ? (
                   <a
                     href={checkoutLink}
                     target={checkoutIsExternal ? '_blank' : undefined}
                     rel={checkoutIsExternal ? 'noopener noreferrer' : undefined}
-                    className={`primary-button ${isSold ? 'pointer-events-none opacity-50' : ''}`}
-                    aria-disabled={isSold}
+                    className="primary-button"
                   >
                     Pay with Arc Pay
                     <ArrowRight size={15} />
@@ -387,4 +386,3 @@ export default function MarketListingPage() {
     </section>
   );
 }
-

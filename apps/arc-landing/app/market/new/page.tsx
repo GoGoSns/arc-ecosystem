@@ -192,7 +192,7 @@ export default function NewMarketListingPage() {
       return null;
     }
 
-    return `${successListing.title} · ${successListing.city} · $${Math.round(successListing.priceUsd).toLocaleString('en-US')}`;
+    return `${successListing.title} \u00b7 ${successListing.city} \u00b7 $${Math.round(successListing.priceUsd).toLocaleString('en-US')}`;
   }, [successListing]);
 
   return (
@@ -273,6 +273,7 @@ export default function NewMarketListingPage() {
                 <input
                   id="market-title"
                   type="text"
+                  required
                   value={form.title}
                   onChange={(event) => updateField('title', event.target.value)}
                   className={`${hubInputClass} w-full`}
@@ -292,16 +293,18 @@ export default function NewMarketListingPage() {
                   <label htmlFor="market-price" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
                     Price USD
                   </label>
-                  <input
-                    id="market-price"
-                    type="number"
-                    min="0"
-                    step="1"
-                    value={form.priceUsd}
-                    onChange={(event) => updateField('priceUsd', event.target.value)}
-                    className={`${hubInputClass} w-full`}
-                    aria-invalid={Boolean(errors.priceUsd)}
-                    aria-describedby={errors.priceUsd ? 'market-price-error' : undefined}
+                <input
+                  id="market-price"
+                  type="number"
+                  min="0"
+                  step="1"
+                  inputMode="decimal"
+                  required
+                  value={form.priceUsd}
+                  onChange={(event) => updateField('priceUsd', event.target.value)}
+                  className={`${hubInputClass} w-full`}
+                  aria-invalid={Boolean(errors.priceUsd)}
+                  aria-describedby={errors.priceUsd ? 'market-price-error' : undefined}
                     placeholder="420"
                   />
                   {errors.priceUsd ? (
@@ -335,14 +338,15 @@ export default function NewMarketListingPage() {
                   <label htmlFor="market-city" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
                     City
                   </label>
-                  <input
-                    id="market-city"
-                    type="text"
-                    value={form.city}
-                    onChange={(event) => updateField('city', event.target.value)}
-                    className={`${hubInputClass} w-full`}
-                    aria-invalid={Boolean(errors.city)}
-                    aria-describedby={errors.city ? 'market-city-error' : undefined}
+                <input
+                  id="market-city"
+                  type="text"
+                  required
+                  value={form.city}
+                  onChange={(event) => updateField('city', event.target.value)}
+                  className={`${hubInputClass} w-full`}
+                  aria-invalid={Boolean(errors.city)}
+                  aria-describedby={errors.city ? 'market-city-error' : undefined}
                     placeholder="Istanbul"
                   />
                   {errors.city ? (
@@ -377,6 +381,7 @@ export default function NewMarketListingPage() {
                 </label>
                 <textarea
                   id="market-description"
+                  required
                   value={form.description}
                   onChange={(event) => updateField('description', event.target.value)}
                   className={`${hubTextareaClass} w-full`}
@@ -398,6 +403,7 @@ export default function NewMarketListingPage() {
                 <input
                   id="market-image"
                   type="url"
+                  required
                   value={form.imageUrl}
                   onChange={(event) => updateField('imageUrl', event.target.value)}
                   className={`${hubInputClass} w-full`}
