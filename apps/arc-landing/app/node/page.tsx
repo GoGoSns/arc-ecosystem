@@ -109,7 +109,7 @@ export default function NodeHub() {
         </div>
 
         {/* Primary action cards */}
-        <div className="grid md:grid-cols-3 gap-4 mb-6">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4 mb-6">
           {/* Quick Setup */}
           <div className="rounded-2xl p-6 flex flex-col gap-4" style={{ background: 'rgba(201,168,76,0.06)', border: '1px solid rgba(201,168,76,0.2)' }}>
             <div>
@@ -148,6 +148,21 @@ export default function NodeHub() {
             </div>
             <Link href="/node/monitor" className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold w-full" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff' }}>
               Open Monitor
+            </Link>
+          </div>
+
+          {/* Node Map */}
+          <div className="rounded-2xl p-6 flex flex-col gap-4" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <div>
+              <Globe size={24} className="mb-2 text-[#c9a84c]" />
+              <h2 className="text-lg font-black mb-1">Node Map</h2>
+              <p className="text-sm text-[#777]">Explore operator coverage across regions</p>
+            </div>
+            <div className="text-sm text-[#aaa]">
+              Browse the live mock map with status colors, filters, and detailed operator info.
+            </div>
+            <Link href="/node/map" className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold w-full" style={{ background: '#c9a84c', color: '#0a0a0a' }}>
+              Open Node Map
             </Link>
           </div>
 
