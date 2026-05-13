@@ -221,6 +221,7 @@ export default function Page() {
     { href: '/roulette', label: t.nav.roulette },
     { href: '/game', label: t.nav.game },
     { href: '/market', label: t.nav.market },
+    { href: '/events', label: t.nav.events },
     { href: '/race', label: t.nav.race },
     { href: '/drops', label: t.nav.drops },
     { href: '/vault', label: t.nav.vault },
