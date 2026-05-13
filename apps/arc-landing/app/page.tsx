@@ -220,6 +220,7 @@ export default function Page() {
     { href: '/jobs', label: t.nav.jobs },
     { href: '/roulette', label: t.nav.roulette },
     { href: '/game', label: t.nav.game },
+    { href: '/market', label: t.nav.market },
     { href: '/race', label: t.nav.race },
     { href: '/drops', label: t.nav.drops },
     { href: '/vault', label: t.nav.vault },
