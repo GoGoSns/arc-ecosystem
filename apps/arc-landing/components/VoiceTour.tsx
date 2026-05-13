@@ -325,6 +325,13 @@ export default function VoiceTour({
 
   const activeSection = sections.find((section) => section.id === activeSectionId) ?? null;
   const activeSectionCopy = activeSection ? translations[language].voiceTour.sections[activeSection.id] : null;
+  const totalSections = Math.max(sections.length, 1);
+  const activePosition = activeSectionIndex >= 0 ? activeSectionIndex + 1 : 0;
+  const progressValue = (activePosition / totalSections) * 100;
+  const progressLabel = `${String(activePosition).padStart(2, '0')}/${String(totalSections).padStart(2, '0')}`;
+  const isPlaying = status === 'playing';
+  const isPaused = status === 'paused';
+  const statusLabel = isPlaying ? copy.play : isPaused ? copy.pause : copy.start;
 
   const onPlay = () => requestTour('tour');
   const onPause = () => {
@@ -349,7 +356,7 @@ export default function VoiceTour({
 
   if (!supported) {
     return (
-      <HubCard as="section" className={`p-4 sm:p-5 ${className}`.trim()}>
+      <HubCard as="section" className={`voice-tour-panel p-4 sm:p-5 ${className}`.trim()}>
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
@@ -401,14 +408,12 @@ export default function VoiceTour({
   }
 
   return (
-      <HubCard as="section" className={`p-4 sm:p-5 ${className}`.trim()}>
+    <HubCard as="section" className={`voice-tour-panel p-4 sm:p-5 ${className}`.trim()}>
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
             <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">{copy.title}</HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">
-              {status === 'playing' ? copy.play : status === 'paused' ? copy.pause : copy.start}
-            </HubBadge>
+            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">{statusLabel}</HubBadge>
           </div>
           <h2 className={`mt-3 font-black uppercase ${compact ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl'}`.trim()}>
             {copy.title}
@@ -424,6 +429,29 @@ export default function VoiceTour({
           <div className="max-w-[16rem] text-right text-lg font-black text-[#f4dc9f] sm:text-2xl">
             {activeSectionCopy?.label ?? copy.start}
           </div>
+        </div>
+      </div>
+
+      <div className="voice-tour-status mt-5">
+        <div className="voice-tour-status-top">
+          <span className="inline-flex items-center gap-2">
+            <span className="pulse-dot" aria-hidden="true" />
+            {isPlaying ? 'Now speaking' : isPaused ? 'Paused' : 'Ready'}
+          </span>
+          <span>{progressLabel}</span>
+        </div>
+        <div className="voice-tour-progress" aria-hidden="true">
+          <span className="voice-tour-progress-fill" style={{ width: `${progressValue}%` }} />
+        </div>
+        <div className="flex items-end justify-between gap-3">
+          <div className="voice-tour-equalizer" aria-hidden="true">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <span key={index} className={`voice-tour-eq-bar ${isPlaying ? 'is-playing' : ''}`} />
+            ))}
+          </div>
+          <p className="text-xs leading-6 text-[#8a8a8a]">
+            {activeSectionCopy?.summary ?? copy.fallbackHint}
+          </p>
         </div>
       </div>
 
@@ -529,7 +557,8 @@ export default function VoiceTour({
           return (
             <div
               key={section.id}
-              className={`rounded-2xl border p-4 text-left transition-all ${
+              data-active={isActive ? 'true' : undefined}
+              className={`voice-tour-card rounded-2xl border p-4 text-left transition-all ${
                 isActive
                   ? 'border-[#c9a84c]/55 bg-[linear-gradient(135deg,rgba(201,168,76,0.18),rgba(48,209,88,0.08)),rgba(255,255,255,0.03)] shadow-[0_20px_50px_rgba(0,0,0,0.35)]'
                   : 'border-[#2a2a2a] bg-black/30'

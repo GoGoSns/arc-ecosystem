@@ -136,6 +136,12 @@ const wallets = [
   "0x3C33...752D",
 ];
 
+const sdkSteps = [
+  { title: "CONNECT", body: "Reusable wagmi + Circle AppKit hooks" },
+  { title: "SEND", body: "USDC payments via kit.send()" },
+  { title: "CONFIRM", body: "Tx hash + ArcScan link" },
+];
+
 const revealDelay = (delayMs: number) => ({ transitionDelay: `${delayMs}ms` });
 
 function Brackets() {
@@ -164,6 +170,7 @@ export default function Page() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState(0);
   const [lang, setLang] = useState<Lang>('en');
+  const [sdkStep, setSdkStep] = useState(0);
   const activeVoiceSectionId = useVoiceTourStore((state) => state.activeSectionId);
   const requestVoiceTour = useVoiceTourStore((state) => state.requestTour);
 
@@ -187,6 +194,18 @@ export default function Page() {
     const saved = localStorage.getItem('arc-lang') as Lang | null;
     if (saved === 'tr' || saved === 'en') setLang(saved);
     else if (typeof navigator !== 'undefined' && navigator.language?.startsWith('tr')) setLang('tr');
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
+    const timer = window.setInterval(() => {
+      setSdkStep((value) => (value + 1) % sdkSteps.length);
+    }, 2600);
+
+    return () => window.clearInterval(timer);
   }, []);
 
   const handleLangChange = (newLang: Lang) => {
@@ -458,21 +477,23 @@ export default function Page() {
 
       <section id="apps" className="section">
         <div className="reveal mx-auto max-w-7xl" style={revealDelay(140)}>
-          <SectionTitle label={`// ${t.sections.pillarsTitle.toLowerCase()}`} title={t.sections.pillarsSubtitle} />
-          <div className="mt-14 grid gap-6 lg:grid-cols-3">
-            {appCards.map((card, idx) => (
-              <article
-                key={card.title}
-                className={`bracket-card flex min-h-[560px] flex-col p-6 sm:p-8 transition-all duration-300 ${
-                  activeVoiceSectionId === card.voiceId
-                    ? 'ring-1 ring-[#c9a84c]/45 shadow-[0_24px_80px_rgba(201,168,76,0.12)]'
-                    : ''
-                }`}
-              >
-                <Brackets />
-                <div className="mt-1 flex items-center justify-between gap-3">
-                  <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">{appCardLabels[idx]}</p>
-                  <button
+        <SectionTitle label={`// ${t.sections.pillarsTitle.toLowerCase()}`} title={t.sections.pillarsSubtitle} />
+        <div className="mt-14 grid gap-6 lg:grid-cols-3">
+          {appCards.map((card, idx) => (
+            <article
+              key={card.title}
+              data-active={activeVoiceSectionId === card.voiceId ? 'true' : undefined}
+              className={`reveal pillars-card bracket-card flex min-h-[560px] flex-col p-6 sm:p-8 transition-all duration-300 ${
+                activeVoiceSectionId === card.voiceId
+                  ? 'ring-1 ring-[#c9a84c]/45 shadow-[0_24px_80px_rgba(201,168,76,0.12)]'
+                  : ''
+              }`}
+              style={revealDelay(120 + idx * 90)}
+            >
+              <Brackets />
+              <div className="mt-1 flex items-center justify-between gap-3">
+                <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">{appCardLabels[idx]}</p>
+                <button
                     type="button"
                     onClick={() => requestVoiceTour('section', card.voiceId)}
                     aria-label={`${t.voiceTour.listen} ${card.title}`}
@@ -495,8 +516,8 @@ export default function Page() {
                       >
                         <span>{feature.name}</span>
                         <span className="ml-auto flex items-center gap-2">
-                          <span className="soon-badge">{t.home.soon}</span>
-                          <ChevronRight className="feature-arrow" size={16} />
+                          <span className="soon-badge soon-badge--pulse">{t.home.soon}</span>
+                          <ChevronRight className="feature-arrow pillars-arrow" size={16} />
                         </span>
                       </a>
                     ) : (
@@ -507,8 +528,8 @@ export default function Page() {
                       >
                         <span>{feature.name}</span>
                         <span className="ml-auto flex items-center gap-2">
-                          <span className="soon-badge">{t.home.soon}</span>
-                          <ChevronRight className="feature-arrow" size={16} />
+                          <span className="soon-badge soon-badge--pulse">{t.home.soon}</span>
+                          <ChevronRight className="feature-arrow pillars-arrow" size={16} />
                         </span>
                       </span>
                     )
@@ -538,6 +559,8 @@ export default function Page() {
         <div className="reveal mx-auto max-w-7xl">
           <SectionTitle label={`// ${t.sections.architectureTitle.toLowerCase()}`} title={t.sections.architectureSubtitle} />
           <div className="architecture mt-14 grid gap-8 lg:grid-cols-[1fr_1.1fr_1fr]">
+            <span className="architecture-flow architecture-flow-left" aria-hidden="true" />
+            <span className="architecture-flow architecture-flow-right" aria-hidden="true" />
             <DiagramColumn title={t.home.diagram.input} items={wallets} activeIndex={0} />
             <div className="bracket-card core-box p-8 text-center">
               <Brackets />
@@ -564,16 +587,16 @@ export default function Page() {
           <SectionTitle label={`// ${t.sections.sdkTitle.toLowerCase()}`} title={t.sections.sdkSubtitle} />
           <div className="mt-14 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
             <div className="space-y-5">
-              {["CONNECT|Reusable wagmi + Circle AppKit hooks", "SEND|USDC payments via kit.send()", "CONFIRM|Tx hash + ArcScan link"].map((step, index) => {
-                const [title, body] = step.split("|");
-                return (
-                  <div key={title} className="step-row">
-                    <span>[0{index + 1}]</span>
-                    <div><h3>{title}</h3><p>{body}</p></div>
-                    <ArrowRight className="ml-auto text-[#c9a84c]" size={18} />
+              {sdkSteps.map((step, index) => (
+                <div key={step.title} className="step-row" data-active={sdkStep === index ? 'true' : undefined}>
+                  <span>[0{index + 1}]</span>
+                  <div>
+                    <h3>{step.title}</h3>
+                    <p>{step.body}</p>
                   </div>
-                );
-              })}
+                  <ArrowRight className="ml-auto text-[#c9a84c]" size={18} />
+                </div>
+              ))}
               <div className="pt-6">
                 <p className="inline-flex border border-[#2a2a2a] px-3 py-1 font-mono text-xs uppercase text-[#777]">// arc-kit &middot; coming soon</p>
                 <p className="mt-5 max-w-xl leading-7 text-[#8b8b8b]">
@@ -581,7 +604,7 @@ export default function Page() {
                 </p>
               </div>
             </div>
-            <CodeTerminal />
+            <CodeTerminal activeStep={sdkStep} />
           </div>
         </div>
       </section>
@@ -590,59 +613,69 @@ export default function Page() {
         <div className="reveal mx-auto max-w-7xl">
           <SectionTitle label={t.sections.resourcesTitle.toLowerCase()} title={t.sections.resourcesSubtitle} />
           <div className="mt-14 grid gap-6 lg:grid-cols-3">
-            <ResourceCard
-              icon={<FileText size={42} />}
-              label={t.home.resources.docsLabel}
-              title={t.home.resources.docsTitle}
-              text={t.home.resources.docsText}
-              footer={t.home.resources.docsFooter}
-              href={docsHref}
-            />
-            <ResourceCard
-              icon={<Github size={42} />}
-              label={t.home.resources.githubLabel}
-              title={t.home.resources.githubTitle}
-              text={t.home.resources.githubText}
-              footer={t.home.resources.githubFooter}
-              href={githubHref}
-            />
-            <ResourceCard
-              icon={<XLogo />}
-              label={t.home.resources.communityLabel}
-              title={t.home.resources.communityTitle}
-              text={t.home.resources.communityText}
-              footer={t.home.resources.communityFooter}
-              href={null}
-            />
+            <div className="reveal" style={revealDelay(100)}>
+              <ResourceCard
+                icon={<FileText size={42} />}
+                label={t.home.resources.docsLabel}
+                title={t.home.resources.docsTitle}
+                text={t.home.resources.docsText}
+                footer={t.home.resources.docsFooter}
+                href={docsHref}
+              />
+            </div>
+            <div className="reveal" style={revealDelay(180)}>
+              <ResourceCard
+                icon={<Github size={42} />}
+                label={t.home.resources.githubLabel}
+                title={t.home.resources.githubTitle}
+                text={t.home.resources.githubText}
+                footer={t.home.resources.githubFooter}
+                href={githubHref}
+              />
+            </div>
+            <div className="reveal" style={revealDelay(260)}>
+              <ResourceCard
+                icon={<XLogo />}
+                label={t.home.resources.communityLabel}
+                title={t.home.resources.communityTitle}
+                text={t.home.resources.communityText}
+                footer={t.home.resources.communityFooter}
+                href={null}
+              />
+            </div>
           </div>
         </div>
       </section>
 
       <section className="section">
-        <div className="reveal bracket-card mx-auto max-w-7xl px-5 py-20 text-center sm:px-10 lg:py-28">
-          <Brackets />
-          <p className="font-mono text-xs uppercase tracking-[0.32em] text-[#c9a84c]">// ready</p>
-          <h2 className="mx-auto mt-8 max-w-5xl text-4xl font-black uppercase leading-tight sm:text-6xl lg:text-7xl">
-            {t.sections.ctaTitle}
-          </h2>
-          <p className="mx-auto mt-8 max-w-xl leading-7 text-[#9a9a9a]">
-            {t.sections.ctaSubtitle}
-          </p>
-          {arcPayUrl ? (
-            <a
-              href={arcPayUrl}
-              target={isExternalUrl(arcPayUrl) ? "_blank" : undefined}
-              rel={isExternalUrl(arcPayUrl) ? "noopener noreferrer" : undefined}
-              className="primary-button mt-10"
-            >
-              {t.home.cta.start}
-            </a>
-          ) : (
-            <span aria-disabled="true" className="primary-button mt-10 cursor-not-allowed opacity-50">
-              {t.home.cta.start}
-            </span>
-          )}
-          <p className="mt-14 font-mono text-xs uppercase tracking-[0.35em] text-white/15">// arc &middot; stablecoin &middot; onchain</p>
+        <div className="reveal cta-banner bracket-card mx-auto max-w-7xl px-5 py-20 text-center sm:px-10 lg:py-28">
+          <span className="cta-band" aria-hidden="true" />
+          <span className="cta-grid" aria-hidden="true" />
+          <div className="relative z-10">
+            <Brackets />
+            <p className="font-mono text-xs uppercase tracking-[0.32em] text-[#c9a84c]">// ready</p>
+            <h2 className="mx-auto mt-8 max-w-5xl text-4xl font-black uppercase leading-tight sm:text-6xl lg:text-7xl">
+              {t.sections.ctaTitle}
+            </h2>
+            <p className="mx-auto mt-8 max-w-xl leading-7 text-[#9a9a9a]">
+              {t.sections.ctaSubtitle}
+            </p>
+            {arcPayUrl ? (
+              <a
+                href={arcPayUrl}
+                target={isExternalUrl(arcPayUrl) ? "_blank" : undefined}
+                rel={isExternalUrl(arcPayUrl) ? "noopener noreferrer" : undefined}
+                className="primary-button mt-10"
+              >
+                {t.home.cta.start}
+              </a>
+            ) : (
+              <span aria-disabled="true" className="primary-button mt-10 cursor-not-allowed opacity-50">
+                {t.home.cta.start}
+              </span>
+            )}
+            <p className="mt-14 font-mono text-xs uppercase tracking-[0.35em] text-white/15">// arc &middot; stablecoin &middot; onchain</p>
+          </div>
         </div>
       </section>
 
@@ -652,17 +685,24 @@ export default function Page() {
           <div className="mt-12 border-t border-[#2a2a2a]">
             {faqs.map(([question, answer], index) => {
               const isOpen = openFaq === index;
+              const answerId = `faq-answer-${index}`;
               return (
                 <button
                   key={question}
+                  type="button"
+                  id={`faq-trigger-${index}`}
+                  aria-expanded={isOpen}
+                  aria-controls={answerId}
+                  data-open={isOpen ? 'true' : undefined}
                   className="faq-row w-full border-b border-[#2a2a2a] py-6 text-left"
                   onClick={() => setOpenFaq(isOpen ? -1 : index)}
                 >
+                  <span className="faq-accent" aria-hidden="true" />
                   <div className="flex items-start gap-5">
                     <span className="font-mono text-sm text-[#c9a84c]">{String(index + 1).padStart(2, "0")}</span>
                     <div className="min-w-0 flex-1">
                       <h3 className="text-lg font-semibold text-white">{question}</h3>
-                      <div className={`faq-answer ${isOpen ? "open" : ""}`}>
+                      <div id={answerId} className={`faq-answer ${isOpen ? "open" : ""}`}>
                         <p>{answer}</p>
                       </div>
                     </div>
@@ -714,10 +754,25 @@ function DiagramColumn({
       <p className="mb-5 font-mono text-xs uppercase tracking-[0.28em] text-[#c9a84c]">{title}</p>
       <div className="space-y-3">
         {items.map((item, index) => (
-          <div key={item} className={`diagram-item ${plannedStart !== undefined && index >= plannedStart ? "opacity-45" : ""}`}>
+          <div
+            key={item}
+            className={`diagram-item ${
+              index === activeIndex && (plannedStart === undefined || index < plannedStart) ? 'diagram-item--active' : ''
+            } ${plannedStart !== undefined && index >= plannedStart ? 'opacity-45' : ''}`.trim()}
+            data-active={index === activeIndex && (plannedStart === undefined || index < plannedStart) ? 'true' : undefined}
+          >
             <span>{item}</span>
-            {index <= activeIndex && (plannedStart === undefined || index < plannedStart) ? <span className="green-dot" /> : null}
-            {plannedStart !== undefined && index >= plannedStart ? <span className="ml-auto text-[#555]">(planned)</span> : null}
+            {index <= activeIndex && (plannedStart === undefined || index < plannedStart) ? (
+              <span
+                className={`diagram-item-ping ${index === activeIndex ? 'is-live' : 'is-muted'}`}
+                aria-hidden="true"
+              />
+            ) : null}
+            {index === activeIndex && (plannedStart === undefined || index < plannedStart) ? (
+              <span className="ml-auto text-[10px] uppercase tracking-[0.28em] text-[#f8e7b5]">live</span>
+            ) : plannedStart !== undefined && index >= plannedStart ? (
+              <span className="ml-auto text-[#555]">(planned)</span>
+            ) : null}
           </div>
         ))}
       </div>
@@ -725,9 +780,11 @@ function DiagramColumn({
   );
 }
 
-function CodeTerminal() {
+function CodeTerminal({ activeStep }: { activeStep: number }) {
+  const cursorTop = 0.6 + activeStep * 4.7;
+
   return (
-    <div className="bracket-card overflow-hidden">
+    <div className="code-terminal bracket-card overflow-hidden">
       <Brackets />
       <div className="flex items-center border-b border-[#2a2a2a] px-5 py-4 font-mono text-xs text-[#777]">
         <div className="flex gap-2">
@@ -736,23 +793,42 @@ function CodeTerminal() {
           <span className="h-3 w-3 rounded-full bg-[#28c840]" />
         </div>
         <span className="flex-1 text-center text-[#aaa]">send.ts</span>
-        <span>step 1/3</span>
+        <span>step {activeStep + 1}/3</span>
       </div>
-      <pre className="overflow-x-auto p-5 text-sm leading-7 text-[#d8d8d8] sm:p-8">
-        <code>
-          <span className="text-[#c9a84c]">arc@sdk:~$</span> node send.ts{"\n\n"}
-          <span className="text-[#c9a84c]">import</span> {"{ kit }"} <span className="text-[#c9a84c]">from</span> <span className="text-white">'@arc-ecosystem/arc-kit'</span>{"\n\n"}
-          <span className="text-[#777]">// arc testnet, native USDC</span>{"\n"}
-          <span className="text-[#c9a84c]">const</span> tx = <span className="text-[#c9a84c]">await</span> kit.send(&#123;{"\n"}
-          {"  "}to: <span className="text-white">'0xB87B6D1a56bB7942bd07b6B0e9540a63b3dA4365'</span>,{"\n"}
-          {"  "}amount: <span className="text-white">'10'</span>,{"\n"}
-          {"  "}token: <span className="text-white">'USDC'</span>,{"\n"}
-          {"  "}chain: <span className="text-white">'Arc_Testnet'</span>{"\n"}
-          &#125;){"\n\n"}
-          console.log(tx.hash){"\n"}
-          <span className="text-[#777]">// 0x62f9bbff19385f6ffb287ff7451b2229...</span>
-        </code>
-      </pre>
+      <div className="relative">
+        <span className="code-terminal-scanner z-0" aria-hidden="true" />
+        <span className="code-terminal-cursor z-0" style={{ transform: `translateY(${cursorTop}rem)` }} aria-hidden="true" />
+        <pre className="overflow-x-auto p-5 text-sm leading-7 text-[#d8d8d8] sm:p-8">
+          <code className="relative z-10 grid gap-1">
+            <div className={activeStep === 0 ? 'text-white' : 'text-[#d8d8d8]'}>
+              <span className="text-[#c9a84c]">arc@sdk:~$</span> node send.ts
+            </div>
+            <div className={activeStep === 0 ? 'text-white' : 'text-[#d8d8d8]'}>
+              <span className="text-[#c9a84c]">import</span> {"{ kit }"} <span className="text-[#c9a84c]">from</span>{" "}
+              <span className="text-white">'@arc-ecosystem/arc-kit'</span>
+            </div>
+            <div className={activeStep === 1 ? 'text-white' : 'text-[#777]'}>
+              <span className="text-[#777]">// arc testnet, native USDC</span>
+            </div>
+            <div className={activeStep === 1 ? 'text-white' : 'text-[#d8d8d8]'}>
+              <span className="text-[#c9a84c]">const</span> tx = <span className="text-[#c9a84c]">await</span> kit.send(&#123;
+            </div>
+            <div className={activeStep === 1 ? 'text-white' : 'text-[#d8d8d8]'}>  to: <span className="text-white">'0xB87B6D1a56bB7942bd07b6B0e9540a63b3dA4365'</span>,</div>
+            <div className={activeStep === 1 ? 'text-white' : 'text-[#d8d8d8]'}>  amount: <span className="text-white">'10'</span>,</div>
+            <div className={activeStep === 1 ? 'text-white' : 'text-[#d8d8d8]'}>  token: <span className="text-white">'USDC'</span>,</div>
+            <div className={activeStep === 1 ? 'text-white' : 'text-[#d8d8d8]'}>  chain: <span className="text-white">'Arc_Testnet'</span></div>
+            <div className={activeStep === 1 ? 'text-white' : 'text-[#d8d8d8]'}>
+              &#125;)
+            </div>
+            <div className={activeStep === 2 ? 'text-white' : 'text-[#d8d8d8]'}>
+              console.log(tx.hash)
+            </div>
+            <div className={activeStep === 2 ? 'text-white' : 'text-[#777]'}>
+              <span className="text-[#777]">// 0x62f9bbff19385f6ffb287ff7451b2229...</span>
+            </div>
+          </code>
+        </pre>
+      </div>
     </div>
   );
 }
@@ -776,12 +852,12 @@ function ResourceCard({
     return (
       <div className="resource-card bracket-card group p-6" aria-disabled="true">
         <Brackets />
-        <div className="grid min-h-56 place-items-center text-white transition-colors group-hover:text-[#c9a84c]">{icon}</div>
+        <div className="resource-card-icon grid min-h-56 place-items-center text-white">{icon}</div>
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">{label}</p>
-        <h3 className="mt-3 text-3xl font-black">{title}</h3>
+        <h3 className="resource-card-title mt-3 text-3xl font-black">{title}</h3>
         <p className="mt-4 min-h-20 leading-7 text-[#8b8b8b]">{text}</p>
-        <p className="mt-7 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-white">
-          {footer} <ArrowRight className="transition-transform group-hover:translate-x-1" size={15} />
+        <p className="resource-card-footer mt-7 font-mono text-xs uppercase tracking-[0.2em] text-white">
+          {footer} <ArrowRight className="resource-card-arrow transition-transform" size={15} />
         </p>
       </div>
     );
@@ -796,12 +872,12 @@ function ResourceCard({
       className="resource-card bracket-card group p-6"
     >
       <Brackets />
-      <div className="grid min-h-56 place-items-center text-white transition-colors group-hover:text-[#c9a84c]">{icon}</div>
+      <div className="resource-card-icon grid min-h-56 place-items-center text-white">{icon}</div>
       <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">{label}</p>
-      <h3 className="mt-3 text-3xl font-black">{title}</h3>
+      <h3 className="resource-card-title mt-3 text-3xl font-black">{title}</h3>
       <p className="mt-4 min-h-20 leading-7 text-[#8b8b8b]">{text}</p>
-      <p className="mt-7 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-white">
-        {footer} <ArrowRight className="transition-transform group-hover:translate-x-1" size={15} />
+      <p className="resource-card-footer mt-7 font-mono text-xs uppercase tracking-[0.2em] text-white">
+        {footer} <ArrowRight className="resource-card-arrow transition-transform" size={15} />
       </p>
     </a>
   );
