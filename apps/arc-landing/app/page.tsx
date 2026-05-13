@@ -8,6 +8,8 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import AppSwitcher from "@/components/AppSwitcher";
 import VoiceTour from "@/components/VoiceTour";
@@ -266,12 +268,15 @@ export default function Page() {
     <main className="page-shell min-h-screen overflow-x-clip text-white">
       <nav className="fixed left-0 right-0 top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/85 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <a href="#top" className="flex items-center gap-3 font-mono text-sm uppercase tracking-[0.18em] text-white">
-            <span className="relative grid h-8 w-8 place-items-center border border-[#c9a84c]/60">
-              <span className="h-3.5 w-3.5 rotate-45 border border-[#c9a84c]" />
-            </span>
-            Arc Ecosystem
-          </a>
+          <Link href="/" className="flex items-center gap-3">
+            <Image
+              src="/brand/arc-logo.svg"
+              alt="Arc Ecosystem"
+              width={180}
+              height={36}
+              priority
+            />
+          </Link>
           <div
             className="hidden flex-1 items-center justify-center gap-4 overflow-x-auto whitespace-nowrap font-mono text-xs uppercase text-[#777] md:flex"
             aria-label="Primary navigation"

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 36" width="180" height="36" fill="none" role="img" aria-labelledby="title">
+  <title>Arc Ecosystem</title>
+  <rect x="0.5" y="0.5" width="35" height="35" rx="8" fill="#0a0a0a" stroke="#2a2a2a" />
+  <path d="M18 5.5L30.5 18L18 30.5L5.5 18L18 5.5Z" stroke="#c9a84c" stroke-width="2" stroke-linejoin="round" />
+  <path d="M18 12.5L23.5 18L18 23.5L12.5 18L18 12.5Z" fill="#c9a84c" />
+  <text x="46" y="23" fill="#f6f1e6" font-family="Inter, Arial, sans-serif" font-size="13.5" font-weight="700" letter-spacing="1.8">
+    ARC
+    <tspan fill="#c9a84c" dx="7">ECOSYSTEM</tspan>
+  </text>
+</svg>

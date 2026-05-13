@@ -6,7 +6,11 @@ import { WalletProvider } from "@/contexts/WalletContext";
 export const metadata: Metadata = {
   title: "Arc Ecosystem — Three Apps, One USDC Economy",
   description: "Pay anyone, monetize creativity, play to earn — all powered by stablecoin rails on Arc Network.",
-  icons: { icon: "/favicon.svg" },
+  icons: {
+    icon: "/brand/arc-favicon.svg",
+    shortcut: "/brand/arc-favicon.svg",
+    apple: "/brand/arc-favicon.svg",
+  },
 };
 
 export default function RootLayout({
