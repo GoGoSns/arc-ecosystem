@@ -6,19 +6,19 @@ import type { LucideIcon } from 'lucide-react';
 type CardTag = 'div' | 'article' | 'section' | 'aside';
 
 const surfaceClass =
-  'bracket-card relative overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[linear-gradient(135deg,rgba(201,168,76,0.055),transparent_32%),rgba(255,255,255,0.02)] transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:border-[#c9a84c]/30 hover:shadow-[0_20px_60px_rgba(0,0,0,0.35)] focus-within:border-[#c9a84c]/30 focus-within:shadow-[0_20px_60px_rgba(0,0,0,0.35)]';
+  'bracket-card relative overflow-hidden rounded-[1.75rem] border border-[#2a2a2a] bg-[linear-gradient(135deg,rgba(201,168,76,0.06),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.012))] transition-[border-color,box-shadow,transform] duration-300 ease-out hover:-translate-y-1 hover:border-[#c9a84c]/30 hover:shadow-[0_24px_80px_rgba(0,0,0,0.38),0_0_0_1px_rgba(201,168,76,0.12)] focus-within:border-[#c9a84c]/30 focus-within:shadow-[0_24px_80px_rgba(0,0,0,0.38),0_0_0_1px_rgba(201,168,76,0.12)]';
 
 export const hubInputClass =
-  'rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm text-white outline-none transition-colors placeholder:text-[#444] focus:border-[#c9a84c]/70 focus:ring-2 focus:ring-[#c9a84c]/20';
+  'rounded-2xl border border-[#2a2a2a] bg-black/35 px-4 py-3 text-sm text-white outline-none transition-[border-color,box-shadow,background-color] duration-200 placeholder:text-[#4e4e4e] focus:border-[#c9a84c]/70 focus:bg-black/45 focus:ring-2 focus:ring-[#c9a84c]/20';
 
 export const hubSelectClass = `${hubInputClass} uppercase tracking-[0.14em]`;
 
 export const hubTextareaClass = `${hubInputClass} min-h-[120px] resize-y`;
 
-export const hubLabelClass = 'font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]';
+export const hubLabelClass = 'font-mono text-[10px] uppercase tracking-[0.3em] text-[#8a8a8a]';
 
 export const hubBadgeClass =
-  'inline-flex items-center rounded-full border border-[#2a2a2a] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#aaa]';
+  'inline-flex items-center gap-1 rounded-full border border-[#2a2a2a] bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#cfcfcf] backdrop-blur-sm';
 
 export function HubBadge({
   children,
@@ -71,11 +71,11 @@ export function HubMetricCard({
 }) {
   return (
     <HubCard className={`p-5 ${className}`.trim()}>
-      <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">
+      <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.26em] text-[#8a8a8a]">
         <Icon size={14} className="text-[#c9a84c]" />
         {label}
       </div>
-      <div className="mt-3 text-3xl font-black">{value}</div>
+      <div className="mt-3 text-[clamp(1.95rem,3vw,2.8rem)] font-black leading-none tracking-tight text-white">{value}</div>
     </HubCard>
   );
 }

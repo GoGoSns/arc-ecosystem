@@ -702,11 +702,11 @@ export default function EventsPage() {
   const featuredIsRsvped = featuredEvent ? rsvpedEventIds.includes(featuredEvent.id) : false;
 
   return (
-    <section className="section pt-24 sm:pt-28">
+    <section className="page-shell section pt-24 sm:pt-28">
       <NoticeBanner notice={notice} onDismiss={() => setNotice(null)} />
 
       <div className="mx-auto max-w-7xl">
-        <div className="reveal space-y-6">
+        <div className="reveal space-y-6" style={{ transitionDelay: '40ms' }}>
           <div className="flex flex-wrap items-center gap-2">
             <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">// event calendar</HubBadge>
             <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">Mock RSVP state</HubBadge>
@@ -736,7 +736,7 @@ export default function EventsPage() {
             </div>
 
             {featuredEvent ? (
-              <div className="reveal">
+              <div className="reveal" style={{ transitionDelay: '140ms' }}>
                 <FeaturedEventCard event={featuredEvent} now={now} isRsvped={featuredIsRsvped} onRsvp={handleRsvp} />
               </div>
             ) : null}
@@ -751,7 +751,8 @@ export default function EventsPage() {
         </div>
 
         <section id="browse" className="mt-6">
-          <HubCard as="div" className="p-6 sm:p-8">
+          <div className="reveal" style={{ transitionDelay: '120ms' }}>
+            <HubCard as="div" className="p-6 sm:p-8">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Browse & filters</p>
@@ -856,10 +857,11 @@ export default function EventsPage() {
                 </button>
               </div>
             </div>
-          </HubCard>
+            </HubCard>
+          </div>
         </section>
 
-        <div id="calendar" className="mt-6">
+        <div id="calendar" className="reveal mt-6" style={{ transitionDelay: '180ms' }}>
           {filteredEvents.length === 0 ? (
             <HubEmptyState
               icon={CalendarDays}

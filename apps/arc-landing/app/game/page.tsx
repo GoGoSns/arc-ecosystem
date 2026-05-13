@@ -56,7 +56,7 @@ function GameLinkCard({
   return (
     <Link
       href={href}
-      className="group relative block overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[linear-gradient(135deg,rgba(201,168,76,0.08),transparent_38%),rgba(255,255,255,0.02)] p-6 transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:border-[#c9a84c]/30 hover:shadow-[0_20px_60px_rgba(0,0,0,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+      className="bracket-card group relative block overflow-hidden p-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
     >
       <HubBrackets />
       <div className="flex items-start justify-between gap-4">
@@ -124,32 +124,82 @@ export default function GameHubHomePage() {
   return (
     <section className="section pt-24 sm:pt-28">
       <div className="mx-auto max-w-7xl">
-        <div className="reveal space-y-6">
-          <div className="flex flex-wrap items-center gap-2">
-            <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">// phase 2</HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">Demo store only</HubBadge>
-          </div>
-          <h1 className="max-w-5xl text-4xl font-black uppercase leading-tight sm:text-5xl lg:text-7xl">
-            Arc Game Hub
-          </h1>
-          <p className="max-w-3xl text-base leading-7 text-[#9a9a9a] sm:text-lg">
-            A premium game surface for challenge tracking, weighted lucky drops, and a local outcome archive.
-            Everything on this page is powered by mock data, persisted in the browser, and designed to stay
-            readable on mobile.
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <Link href="/game/challenge" className="primary-button">
-              Open Challenge Pay
-              <ArrowRight size={15} />
-            </Link>
-            <Link href="/game/lucky" className="secondary-button">
-              Try Lucky
-            </Link>
+        <div className="reveal grid gap-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-start" style={{ transitionDelay: '40ms' }}>
+          <div className="space-y-6">
+            <div className="flex flex-wrap items-center gap-2">
+              <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">// phase 2</HubBadge>
+              <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">Demo store only</HubBadge>
+            </div>
+            <h1 className="max-w-5xl text-4xl font-black uppercase leading-tight sm:text-5xl lg:text-7xl">
+              Arc Game Hub
+            </h1>
+            <p className="max-w-3xl text-base leading-7 text-[#9a9a9a] sm:text-lg">
+              A premium game surface for challenge tracking, weighted lucky drops, and a local outcome archive.
+              Everything on this page is powered by mock data, persisted in the browser, and designed to stay
+              readable on mobile.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/game/challenge" className="primary-button">
+                Open Challenge Pay
+                <ArrowRight size={15} />
+              </Link>
+              <Link href="/game/lucky" className="secondary-button">
+                Try Lucky
+              </Link>
+            </div>
+
+            <div className="pt-2">
+              <VoiceTour sections={gameVoiceTourSections} compact />
+            </div>
           </div>
 
-          <div className="pt-2">
-            <VoiceTour sections={gameVoiceTourSections} compact />
-          </div>
+          <HubCard as="aside" className="p-5 sm:p-6">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#8a8a8a]">Command deck</p>
+                <h2 className="mt-2 text-2xl font-black uppercase leading-tight sm:text-3xl">
+                  Local gameplay, premium shell
+                </h2>
+              </div>
+              <HubBadge className="border-[#30d158]/30 bg-[#30d158]/10 text-[#a6f4bf]">Mock store</HubBadge>
+            </div>
+            <p className="mt-3 text-sm leading-7 text-[#9a9a9a]">
+              Move between the active game loops without leaving browser state. Every route is designed to read
+              cleanly on mobile and keep the controls obvious.
+            </p>
+            <div className="mt-6 space-y-3">
+              <Link href="/game/challenge" className="feature-link">
+                <span>Challenge Pay</span>
+                <span className="ml-auto text-[#8a8a8a]">{stats.activeChallenges.length} live</span>
+              </Link>
+              <Link href="/game/lucky" className="feature-link">
+                <span>Lucky Card</span>
+                <span className="ml-auto text-[#8a8a8a]">{stats.openLuckyPacks.length} pending</span>
+              </Link>
+              <Link href="/game/quiz-pot" className="feature-link">
+                <span>Quiz Pot</span>
+                <span className="ml-auto text-[#8a8a8a]">Trivia rooms</span>
+              </Link>
+              <Link href="/game/history" className="feature-link">
+                <span>History</span>
+                <span className="ml-auto text-[#8a8a8a]">{history.length} events</span>
+              </Link>
+            </div>
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
+                <div className="text-[10px] font-mono uppercase tracking-[0.26em] text-[#8a8a8a]">Active</div>
+                <div className="mt-2 text-lg font-black text-white">{stats.activeChallenges.length}</div>
+              </div>
+              <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
+                <div className="text-[10px] font-mono uppercase tracking-[0.26em] text-[#8a8a8a]">Lucky</div>
+                <div className="mt-2 text-lg font-black text-white">{stats.openLuckyPacks.length}</div>
+              </div>
+              <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
+                <div className="text-[10px] font-mono uppercase tracking-[0.26em] text-[#8a8a8a]">Win rate</div>
+                <div className="mt-2 text-lg font-black text-[#f4dc9f]">{stats.winRate}%</div>
+              </div>
+            </div>
+          </HubCard>
         </div>
 
         <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">

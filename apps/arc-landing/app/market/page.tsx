@@ -219,9 +219,9 @@ export default function MarketPage() {
   }
 
   return (
-    <section className="section pt-24 sm:pt-28">
+    <section className="page-shell section pt-24 sm:pt-28">
       <div className="mx-auto max-w-7xl">
-        <div className="reveal space-y-6">
+        <div className="reveal space-y-6" style={{ transitionDelay: '40ms' }}>
           <div className="flex flex-wrap items-center gap-2">
             <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">// market v1</HubBadge>
             <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">Demo store only</HubBadge>
@@ -253,7 +253,8 @@ export default function MarketPage() {
           <HubMetricCard label="Cities" value={metrics.cities} icon={MapPin} />
         </div>
 
-        <HubCard as="section" className="mt-6 p-6 sm:p-8">
+        <div className="reveal" style={{ transitionDelay: '120ms' }}>
+          <HubCard as="section" className="p-6 sm:p-8">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Search & filters</p>
@@ -390,31 +391,34 @@ export default function MarketPage() {
               Clear filters
             </button>
           </div>
-        </HubCard>
+          </HubCard>
+        </div>
 
-        {filteredListings.length === 0 ? (
-          <div className="mt-6">
-            <HubEmptyState
-              icon={ShoppingBag}
-              title="No listings found"
-              description="Try a broader search or clear the filters to bring the market back into view."
-            >
-              <Link href="/market/new" className="primary-button">
-                Create Listing
-                <ArrowRight size={15} />
-              </Link>
-              <button type="button" onClick={clearFilters} className="secondary-button">
-                Reset Filters
-              </button>
-            </HubEmptyState>
-          </div>
-        ) : (
-          <div className={`mt-6 grid gap-6 ${viewMode === 'grid' ? 'md:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'}`}>
-            {filteredListings.map((listing) => (
-              <ListingCard key={listing.id} listing={listing} layout={viewMode} />
-            ))}
-          </div>
-        )}
+        <div className="reveal" style={{ transitionDelay: '180ms' }}>
+          {filteredListings.length === 0 ? (
+            <div className="mt-6">
+              <HubEmptyState
+                icon={ShoppingBag}
+                title="No listings found"
+                description="Try a broader search or clear the filters to bring the market back into view."
+              >
+                <Link href="/market/new" className="primary-button">
+                  Create Listing
+                  <ArrowRight size={15} />
+                </Link>
+                <button type="button" onClick={clearFilters} className="secondary-button">
+                  Reset Filters
+                </button>
+              </HubEmptyState>
+            </div>
+          ) : (
+            <div className={`mt-6 grid gap-6 ${viewMode === 'grid' ? 'md:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'}`}>
+              {filteredListings.map((listing) => (
+                <ListingCard key={listing.id} listing={listing} layout={viewMode} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );

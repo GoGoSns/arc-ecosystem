@@ -77,11 +77,8 @@ function VoiceActionButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={ariaLabel}
-      className={`inline-flex items-center justify-center gap-2 rounded-2xl border px-4 py-3 text-sm font-semibold uppercase tracking-[0.16em] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:cursor-not-allowed disabled:opacity-45 ${
-        active
-          ? 'border-[#c9a84c]/55 bg-[#c9a84c]/15 text-[#f8e7b5] shadow-[0_0_0_1px_rgba(201,168,76,0.15)]'
-          : 'border-[#2a2a2a] bg-black/35 text-white hover:border-[#c9a84c]/30 hover:bg-white/[0.04]'
-      }`}
+      data-active={active ? 'true' : undefined}
+      className="panel-button w-full justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:cursor-not-allowed disabled:opacity-45"
     >
       <Icon size={14} aria-hidden="true" />
       <span>{label}</span>
@@ -352,7 +349,7 @@ export default function VoiceTour({
 
   if (!supported) {
     return (
-      <HubCard as="section" className={`p-5 sm:p-6 ${className}`.trim()}>
+      <HubCard as="section" className={`p-4 sm:p-5 ${className}`.trim()}>
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
@@ -404,7 +401,7 @@ export default function VoiceTour({
   }
 
   return (
-    <HubCard as="section" className={`p-5 sm:p-6 ${className}`.trim()}>
+      <HubCard as="section" className={`p-4 sm:p-5 ${className}`.trim()}>
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">

@@ -19,6 +19,7 @@ import {
 import Link from 'next/link';
 import AppSwitcher from '@/components/AppSwitcher';
 import LanguageToggle from '@/components/LanguageToggle';
+import { HubMetricCard } from '@/components/HubPrimitives';
 import { translations, type Lang } from '@/lib/translations';
 
 function Brackets() {
@@ -112,7 +113,7 @@ export default function DropsPage() {
   }, [drops, activeDrops, address]);
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
+    <main className="page-shell min-h-screen overflow-x-clip text-white">
       {/* Nav */}
       <nav className="fixed left-0 right-0 top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/85 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -142,10 +143,10 @@ export default function DropsPage() {
         </div>
       </nav>
 
-      <section className="relative pt-32 pb-16 px-4">
+      <section className="relative px-4 pb-16 pt-32">
         <div className="mx-auto max-w-7xl">
-          <div className="flex flex-col lg:flex-row justify-between items-end gap-8 mb-16">
-            <div className="reveal">
+          <div className="reveal mb-16 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between" style={{ transitionDelay: '40ms' }}>
+            <div>
               <p className="font-mono text-xs uppercase tracking-[0.35em] text-[#c9a84c]">{copy.hero.tagline}</p>
               <h1 className="mt-6 text-5xl font-black uppercase sm:text-7xl lg:text-8xl">
                 {copy.hero.titlePrefix} <span className="text-[#c9a84c]">{copy.hero.titleAccent}</span>
@@ -159,43 +160,15 @@ export default function DropsPage() {
             </Link>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-16">
-            <div className="bracket-card p-6 bg-white/[0.02]">
-              <Brackets />
-              <div className="flex items-center justify-between mb-4">
-                <p className="font-mono text-[10px] uppercase text-[#777]">{copy.stats.active}</p>
-                <Zap size={16} className="text-[#c9a84c]/50" />
-              </div>
-              <p className="text-3xl font-black">{stats.activeCount}</p>
-            </div>
-            <div className="bracket-card p-6 bg-white/[0.02]">
-              <Brackets />
-              <div className="flex items-center justify-between mb-4">
-                <p className="font-mono text-[10px] uppercase text-[#777]">{copy.stats.pool}</p>
-                <Coins size={16} className="text-[#c9a84c]/50" />
-              </div>
-              <p className="text-3xl font-black">${stats.totalPrizePool.toLocaleString()}</p>
-            </div>
-            <div className="bracket-card p-6 bg-white/[0.02]">
-              <Brackets />
-              <div className="flex items-center justify-between mb-4">
-                <p className="font-mono text-[10px] uppercase text-[#777]">{copy.stats.entries}</p>
-                <Users size={16} className="text-[#c9a84c]/50" />
-              </div>
-              <p className="text-3xl font-black">{stats.totalEntries}</p>
-            </div>
-            <div className="bracket-card p-6 bg-[#c9a84c]/5 border-[#c9a84c]/20">
-              <Brackets />
-              <div className="flex items-center justify-between mb-4">
-                <p className="font-mono text-[10px] uppercase text-[#c9a84c]">{copy.stats.yours}</p>
-                <CheckCircle2 size={16} className="text-[#c9a84c]" />
-              </div>
-              <p className="text-3xl font-black">{stats.userEntries}</p>
-            </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-16">
+            <HubMetricCard label={copy.stats.active} value={stats.activeCount} icon={Zap} />
+            <HubMetricCard label={copy.stats.pool} value={`$${stats.totalPrizePool.toLocaleString()}`} icon={Coins} />
+            <HubMetricCard label={copy.stats.entries} value={stats.totalEntries} icon={Users} />
+            <HubMetricCard label={copy.stats.yours} value={stats.userEntries} icon={CheckCircle2} />
           </div>
 
           {/* Active Drops */}
-          <div className="mb-20">
+          <div className="reveal mb-20" style={{ transitionDelay: '120ms' }}>
             <div className="flex items-center gap-3 mb-10">
               <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
               <h2 className="text-2xl font-black uppercase tracking-wider">{copy.sections.active}</h2>
@@ -258,7 +231,7 @@ export default function DropsPage() {
           </div>
 
           {/* Upcoming Drops */}
-          <div>
+          <div className="reveal" style={{ transitionDelay: '180ms' }}>
             <div className="flex items-center gap-3 mb-10">
               <div className="h-2 w-2 rounded-full bg-blue-500" />
               <h2 className="text-2xl font-black uppercase tracking-wider text-[#777]">{copy.sections.upcoming}</h2>

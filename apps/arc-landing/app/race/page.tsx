@@ -378,7 +378,7 @@ export default function RaceHubPage() {
   }
 
   return (
-    <main className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white">
+    <main className="page-shell min-h-screen overflow-x-clip text-white">
       <nav className="fixed left-0 right-0 top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/85 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
           <Link href="/race" className="flex min-w-0 items-center gap-3 font-mono text-sm uppercase tracking-[0.18em] text-white">
@@ -409,7 +409,7 @@ export default function RaceHubPage() {
 
       <section className="section pt-32 sm:pt-36">
         <div className="mx-auto max-w-7xl">
-          <div className="reveal space-y-5">
+          <div className="reveal space-y-5" style={{ transitionDelay: '40ms' }}>
             <div className="flex flex-wrap items-center gap-2">
               <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">{copy.header.badge}</HubBadge>
               <HubBadge className="border-[#30d158]/30 bg-[#30d158]/10 text-[#a6f4bf]">{copy.header.leaderboard}</HubBadge>

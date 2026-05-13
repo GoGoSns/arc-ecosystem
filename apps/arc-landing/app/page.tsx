@@ -136,6 +136,8 @@ const wallets = [
   "0x3C33...752D",
 ];
 
+const revealDelay = (delayMs: number) => ({ transitionDelay: `${delayMs}ms` });
+
 function Brackets() {
   return (
     <>
@@ -242,7 +244,7 @@ export default function Page() {
   ];
 
   return (
-    <main className="min-h-screen overflow-hidden bg-[#0a0a0a] text-white">
+    <main className="page-shell min-h-screen overflow-x-clip text-white">
       <nav className="fixed left-0 right-0 top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/85 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <a href="#top" className="flex items-center gap-3 font-mono text-sm uppercase tracking-[0.18em] text-white">
@@ -314,7 +316,7 @@ export default function Page() {
         ) : null}
       </nav>
 
-      <section id="top" className="hero-grid relative flex min-h-screen items-center justify-center px-4 pt-16">
+      <section id="top" className="hero-grid relative overflow-hidden px-4 pt-16">
         <div className="hex-field" aria-hidden="true">
           <span>0xB87B6D1a56bB7942bd07b6B0e9540a63b3dA4365</span>
           <span>0x62f9bbff19385f6ffb287ff7451b2229</span>
@@ -322,44 +324,119 @@ export default function Page() {
           <span>0xD844A121e7d690Bd9B3d</span>
           <span>chainId:5042002</span>
         </div>
-        <div className="reveal relative z-10 mx-auto max-w-6xl text-center">
-          <p className="font-mono text-xs uppercase tracking-[0.35em] text-[#c9a84c]">{t.hero.tagline}</p>
-          <h1
-            className="glitch mt-8 text-[3.5rem] font-black uppercase leading-none text-white sm:text-[6rem] lg:text-[8.5rem]"
-            data-text={t.hero.title}
-          >
-            {heroFirst} <span className="text-[#c9a84c]">{heroRest}</span>
-          </h1>
-          <p className="mt-6 font-mono text-sm uppercase tracking-[0.28em] text-[#777] sm:text-base">
-            {t.hero.subtitle}
-          </p>
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-[#9a9a9a] sm:text-lg">
-            {t.hero.description}
-          </p>
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            {arcPayUrl ? (
-              <a
-                href={arcPayUrl}
-                target={isExternalUrl(arcPayUrl) ? "_blank" : undefined}
-                rel={isExternalUrl(arcPayUrl) ? "noopener noreferrer" : undefined}
-                className="primary-button"
-              >
-                {t.hero.ctaPrimary} <ArrowRight size={16} />
-              </a>
-            ) : (
-              <span aria-disabled="true" className="primary-button cursor-not-allowed opacity-50">
-                {t.hero.ctaPrimary} <ArrowRight size={16} />
+        <div className="mx-auto grid min-h-screen max-w-7xl items-center gap-10 py-20 lg:grid-cols-[minmax(0,1.08fr)_minmax(340px,0.92fr)] lg:py-28">
+          <div className="reveal relative z-10 max-w-3xl text-left" style={revealDelay(80)}>
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center rounded-full border border-[#c9a84c]/25 bg-[#c9a84c]/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-[#f4dc9f]">
+                Dark + arc gold
               </span>
-            )}
-            <a href="#apps" className="secondary-button">{t.hero.ctaSecondary}</a>
-            <button
-              type="button"
-              onClick={() => requestVoiceTour('tour')}
-              className="secondary-button"
-              aria-label={t.voiceTour.start}
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#2a2a2a] bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-[#bdbdbd]">
+                <span className="pulse-dot" />
+                Controlled motion
+              </span>
+            </div>
+            <p className="mt-6 font-mono text-xs uppercase tracking-[0.35em] text-[#c9a84c]">{t.hero.tagline}</p>
+            <h1
+              className="mt-8 max-w-4xl text-[clamp(3.4rem,8vw,8rem)] font-black uppercase leading-[0.88] tracking-[-0.05em] text-white"
+              data-text={t.hero.title}
             >
-              {t.voiceTour.start}
-            </button>
+              <span className="block">{heroFirst}</span>
+              <span className="block text-[#c9a84c]">{heroRest}</span>
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-[#c7c7c7] sm:text-xl">
+              {t.hero.subtitle}
+            </p>
+            <p className="mt-6 max-w-2xl text-base leading-7 text-[#9a9a9a] sm:text-lg">
+              {t.hero.description}
+            </p>
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+              {arcPayUrl ? (
+                <a
+                  href={arcPayUrl}
+                  target={isExternalUrl(arcPayUrl) ? "_blank" : undefined}
+                  rel={isExternalUrl(arcPayUrl) ? "noopener noreferrer" : undefined}
+                  className="primary-button"
+                >
+                  {t.hero.ctaPrimary} <ArrowRight size={16} />
+                </a>
+              ) : (
+                <span aria-disabled="true" className="primary-button cursor-not-allowed opacity-50">
+                  {t.hero.ctaPrimary} <ArrowRight size={16} />
+                </span>
+              )}
+              <a href="#apps" className="secondary-button">{t.hero.ctaSecondary}</a>
+              <button
+                type="button"
+                onClick={() => requestVoiceTour('tour')}
+                className="secondary-button"
+                aria-label={t.voiceTour.start}
+              >
+                {t.voiceTour.start}
+              </button>
+            </div>
+            <div className="mt-10 grid gap-3 sm:grid-cols-3">
+              {[
+                { label: t.home.cards.payLabel, value: t.apps.payDescription },
+                { label: t.home.cards.creatorLabel, value: t.apps.creatorDescription },
+                { label: t.home.cards.playLabel, value: t.apps.playDescription },
+              ].map((item) => (
+                <div key={item.label} className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-[#8a8a8a]">{item.label}</p>
+                  <p className="mt-2 text-sm leading-6 text-white">{item.value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="reveal relative z-10" style={revealDelay(180)}>
+            <div className="bracket-card relative overflow-hidden p-6 sm:p-8">
+              <Brackets />
+              <div className="flex items-center justify-between gap-3">
+                <p className="font-mono text-xs uppercase tracking-[0.28em] text-[#c9a84c]">// live system map</p>
+                <span className="inline-flex items-center gap-2 rounded-full border border-[#30d158]/20 bg-[#30d158]/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-[#a6f4bf]">
+                  <span className="green-dot" />
+                  Synced
+                </span>
+              </div>
+              <h2 className="mt-5 text-3xl font-black uppercase leading-tight sm:text-4xl">
+                Three apps. One network language.
+              </h2>
+              <p className="mt-3 text-sm leading-7 text-[#9a9a9a]">
+                Stablecoin payments, creator monetization, and play systems share the same visual grammar and
+                infrastructure story.
+              </p>
+              <div className="mt-6 space-y-3">
+                {appCards.map((card) => (
+                  <div
+                    key={card.title}
+                    className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4 transition-colors hover:border-[#c9a84c]/25"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-[#8a8a8a]">{card.label}</p>
+                        <h3 className="mt-1 text-lg font-black uppercase text-white">{card.title}</h3>
+                      </div>
+                      <span className="soon-badge">{card.features.length} routes</span>
+                    </div>
+                    <p className="mt-2 text-sm leading-6 text-[#9a9a9a]">{card.description}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-[#8a8a8a]">Chain</p>
+                  <p className="mt-2 text-sm font-semibold text-white">5042002</p>
+                </div>
+                <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-[#8a8a8a]">Gas</p>
+                  <p className="mt-2 text-sm font-semibold text-white">USDC native</p>
+                </div>
+                <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-[#8a8a8a]">Latency</p>
+                  <p className="mt-2 text-sm font-semibold text-white">&lt; 1s blocks</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -374,13 +451,13 @@ export default function Page() {
       </section>
 
       <section className="section">
-        <div className="reveal mx-auto max-w-7xl">
+        <div className="reveal mx-auto max-w-7xl" style={revealDelay(80)}>
           <VoiceTour sections={voiceTourSections} defaultLanguage={lang} />
         </div>
       </section>
 
       <section id="apps" className="section">
-        <div className="reveal mx-auto max-w-7xl">
+        <div className="reveal mx-auto max-w-7xl" style={revealDelay(140)}>
           <SectionTitle label={`// ${t.sections.pillarsTitle.toLowerCase()}`} title={t.sections.pillarsSubtitle} />
           <div className="mt-14 grid gap-6 lg:grid-cols-3">
             {appCards.map((card, idx) => (
