@@ -11,6 +11,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import AppSwitcher from "@/components/AppSwitcher";
 import VoiceTour from "@/components/VoiceTour";
 import { getArcAppUrl, isExternalUrl } from "@/lib/arcAppLinks";
@@ -173,6 +174,7 @@ export default function Page() {
   const [openFaq, setOpenFaq] = useState(0);
   const [lang, setLang] = useState<Lang>('en');
   const [sdkStep, setSdkStep] = useState(0);
+  const pathname = usePathname();
   const activeVoiceSectionId = useVoiceTourStore((state) => state.activeSectionId);
   const requestVoiceTour = useVoiceTourStore((state) => state.requestTour);
 
@@ -199,6 +201,32 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
+    if (!menuOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMenuOpen(false);
+      }
+    };
+    const handleResize = () => {
+      if (window.innerWidth >= 1280) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [menuOpen]);
+
+  useEffect(() => {
     if (typeof window === 'undefined' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       return;
     }
@@ -219,6 +247,57 @@ export default function Page() {
   const heroWords = t.hero.title.split(' ');
   const heroFirst = heroWords[0];
   const heroRest = heroWords.slice(1).join(' ');
+  const desktopNavLinks = [
+    { href: '/value', label: t.nav.value },
+    { href: '/roadmap', label: t.nav.roadmap },
+    { href: '/showcase', label: t.nav.showcase },
+    { href: '/jobs', label: t.nav.jobs },
+    { href: '/forum', label: t.nav.forum },
+    { href: '/node', label: t.nav.node },
+    { href: '/learn', label: t.nav.learn },
+  ];
+  const drawerNavGroups = [
+    {
+      title: 'Primary routes',
+      links: [
+        { href: '/value', label: t.nav.value },
+        { href: '/roadmap', label: t.nav.roadmap },
+        { href: '/showcase', label: t.nav.showcase },
+        { href: '/jobs', label: t.nav.jobs },
+        { href: '/forum', label: t.nav.forum },
+        { href: '/node', label: t.nav.node },
+        { href: '/learn', label: t.nav.learn },
+      ],
+    },
+    {
+      title: 'Sections',
+      links: [
+        { href: '#apps', label: t.nav.apps },
+        { href: '#architecture', label: t.nav.architecture },
+        { href: '#sdk', label: t.nav.sdk },
+        { href: '#resources', label: t.nav.docs },
+        { href: '#faq', label: t.nav.faq },
+      ],
+    },
+    {
+      title: 'More',
+      links: [
+        { href: '/quests', label: t.nav.quests },
+        { href: '/roulette', label: t.nav.roulette },
+        { href: '/game', label: t.nav.game },
+        { href: '/market', label: t.nav.market },
+        { href: '/events', label: t.nav.events },
+        { href: '/race', label: t.nav.race },
+        { href: '/drops', label: t.nav.drops },
+        { href: '/vault', label: t.nav.vault },
+        { href: '/signals', label: t.nav.signals },
+        { href: '/glossary', label: t.nav.glossary },
+        { href: '/stats', label: t.nav.stats },
+        { href: '/feedback', label: t.nav.feedback },
+      ],
+    },
+  ];
+  const isActiveRoute = (href: string) => href !== '/' && (pathname === href || pathname.startsWith(`${href}/`));
   const cardDesc = [
     { title: t.apps.payTitle, description: t.apps.payDescription },
     { title: t.apps.creatorTitle, description: t.apps.creatorDescription },
@@ -234,120 +313,146 @@ export default function Page() {
     t.home.cards.creatorCta,
     t.home.cards.playCta,
   ];
-  const primaryNavLinks = [
-    { href: '#top', label: t.nav.home },
-    { href: '/value', label: t.nav.value },
-    { href: '/quests', label: t.nav.quests },
-    { href: '/roadmap', label: t.nav.roadmap },
-    { href: '/showcase', label: t.nav.showcase },
-    { href: '/jobs', label: t.nav.jobs },
-    { href: '/roulette', label: t.nav.roulette },
-    { href: '/game', label: t.nav.game },
-    { href: '/market', label: t.nav.market },
-    { href: '/events', label: t.nav.events },
-    { href: '/race', label: t.nav.race },
-    { href: '/drops', label: t.nav.drops },
-    { href: '/vault', label: t.nav.vault },
-    { href: '/signals', label: t.nav.signals },
-    { href: '/learn', label: t.nav.learn },
-    { href: '/glossary', label: t.nav.glossary },
-    { href: '#faq', label: t.nav.faq },
-  ];
-  const utilityNavLinks = [
-    { href: '#apps', label: t.nav.apps },
-    { href: '#architecture', label: t.nav.architecture },
-    { href: '#sdk', label: t.nav.sdk },
-    { href: '#resources', label: t.nav.docs },
-    { href: '/stats', label: t.nav.stats },
-    { href: '/feedback', label: t.nav.feedback },
-    { href: '/forum', label: t.nav.forum },
-    { href: '/node', label: t.nav.node },
-  ];
-
   return (
     <main className="page-shell min-h-screen overflow-x-clip text-white">
-      <nav className="fixed left-0 right-0 top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/85 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-3">
+      <nav className="fixed left-0 right-0 top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/88 backdrop-blur-xl">
+        <div className="mx-auto grid h-16 max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 sm:px-6 lg:px-8">
+          <Link href="/" className="flex min-w-0 items-center gap-3">
             <Image
               src="/brand/arc-logo.svg"
               alt="Arc Ecosystem"
-              width={180}
+              width={170}
               height={36}
               priority
             />
           </Link>
           <div
-            className="hidden flex-1 items-center justify-center gap-4 overflow-x-auto whitespace-nowrap font-mono text-xs uppercase text-[#777] md:flex"
+            className="hidden min-w-0 items-center justify-center gap-2 xl:flex"
             aria-label="Primary navigation"
           >
-            {primaryNavLinks.map((item) => (
-              <a key={item.href} href={item.href} className="nav-link">
+            {desktopNavLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="site-nav-link"
+                data-active={isActiveRoute(item.href) ? 'true' : undefined}
+                aria-current={isActiveRoute(item.href) ? 'page' : undefined}
+              >
                 {item.label}
-              </a>
-            ))}
-            <span className="mx-2 h-4 w-px bg-[#2a2a2a]" aria-hidden="true" />
-            {utilityNavLinks.map((item) => (
-              <a key={item.href} href={item.href} className="nav-link">
-                {item.label}
-              </a>
+              </Link>
             ))}
           </div>
-          <div className="hidden md:flex items-center gap-3">
-            <LanguageToggle currentLang={lang} onChange={handleLangChange} />
-            <AppSwitcher />
-            <a href="#apps" className="bracket-button">{t.nav.launch}</a>
+          <div className="flex items-center justify-self-end gap-3">
+            <div className="hidden items-center gap-3 xl:flex">
+              <LanguageToggle currentLang={lang} onChange={handleLangChange} compact />
+              <AppSwitcher compact />
+              <a href="#apps" className="bracket-button">
+                {t.nav.launch}
+              </a>
+            </div>
+            <button
+              type="button"
+              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={menuOpen}
+              aria-controls="site-drawer"
+              aria-haspopup="dialog"
+              className="grid h-10 w-10 place-items-center border border-[#2a2a2a] text-[#c9a84c] transition-colors hover:border-[#c9a84c]/60 xl:hidden"
+              onClick={() => setMenuOpen((value) => !value)}
+            >
+              {menuOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
           </div>
-          <button
-            type="button"
-            aria-label="Open menu"
-            aria-expanded={menuOpen}
-            aria-controls="mobile-nav"
-            className="grid h-10 w-10 place-items-center border border-[#2a2a2a] text-[#c9a84c] transition-colors hover:border-[#c9a84c]/60 md:hidden"
-            onClick={() => setMenuOpen((value) => !value)}
-          >
-            {menuOpen ? <X size={18} /> : <Menu size={18} />}
-          </button>
         </div>
         {menuOpen ? (
-          <div id="mobile-nav" className="border-t border-[#2a2a2a] bg-[#0a0a0a] px-4 py-4 font-mono text-sm uppercase text-[#aaa] md:hidden">
-            <p className="pb-2 text-[10px] tracking-[0.3em] text-[#777]">{t.home.diagram.core}</p>
-            {primaryNavLinks.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="block border-b border-[#1f1f1f] py-3"
-                onClick={() => setMenuOpen(false)}
-              >
-                {item.label}
-              </a>
-            ))}
-            <p className="pb-2 pt-4 text-[10px] tracking-[0.3em] text-[#777]">{t.home.diagram.utility}</p>
-            {utilityNavLinks.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="block border-b border-[#1f1f1f] py-3"
-                onClick={() => setMenuOpen(false)}
-              >
-                {item.label}
-              </a>
-            ))}
-            <div className="pt-4">
-              <LanguageToggle currentLang={lang} onChange={handleLangChange} />
-            </div>
+          <div className="site-nav-drawer xl:hidden" aria-hidden={!menuOpen}>
+            <button
+              type="button"
+              aria-label="Close navigation drawer"
+              className="site-nav-drawer-backdrop"
+              onClick={() => setMenuOpen(false)}
+            />
+            <aside
+              id="site-drawer"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="site-drawer-title"
+              className="site-nav-drawer-panel ml-auto flex h-full w-[min(100vw,24rem)] flex-col"
+            >
+              <div className="flex items-center justify-between gap-3 border-b border-[#232323] px-5 py-4">
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                    Arc Ecosystem
+                  </p>
+                  <h2 id="site-drawer-title" className="mt-1 text-lg font-bold text-white">
+                    Navigation
+                  </h2>
+                </div>
+                <button
+                  type="button"
+                  aria-label="Close navigation drawer"
+                  className="grid h-10 w-10 place-items-center rounded-full border border-[#2a2a2a] text-[#c9a84c] transition-colors hover:border-[#c9a84c]/60"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto px-5 py-5">
+                <div className="space-y-4">
+                  <div className="space-y-3">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                      Controls
+                    </p>
+                    <LanguageToggle currentLang={lang} onChange={handleLangChange} compact />
+                    <AppSwitcher compact />
+                    <a
+                      href="#apps"
+                      className="bracket-button w-full justify-center"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {t.nav.launch}
+                    </a>
+                  </div>
+
+                  {drawerNavGroups.map((group) => (
+                    <div key={group.title} className="site-nav-drawer-section">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                        {group.title}
+                      </p>
+                      <div className="mt-3 space-y-2">
+                        {group.links.map((item) => {
+                          const active = isActiveRoute(item.href);
+                          const isAnchor = item.href.startsWith('#');
+                          const sharedProps = {
+                            className: 'site-nav-drawer-link',
+                            'data-active': active ? 'true' : undefined,
+                            'aria-current': active ? 'page' : undefined,
+                            onClick: () => setMenuOpen(false),
+                          } as const;
+
+                          return isAnchor ? (
+                            <a key={item.href} href={item.href} {...sharedProps}>
+                              <span>{item.label}</span>
+                              <ChevronRight size={14} />
+                            </a>
+                          ) : (
+                            <Link key={item.href} href={item.href} {...sharedProps}>
+                              <span>{item.label}</span>
+                              <ChevronRight size={14} />
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </aside>
           </div>
         ) : null}
       </nav>
 
       <section id="top" className="hero-grid relative overflow-hidden px-4 pt-16">
-        <div className="hex-field" aria-hidden="true">
-          <span>0xB87B6D1a56bB7942bd07b6B0e9540a63b3dA4365</span>
-          <span>0x62f9bbff19385f6ffb287ff7451b2229</span>
-          <span>0xCf87F73c93Ac2ed7b34Bc02f</span>
-          <span>0xD844A121e7d690Bd9B3d</span>
-          <span>chainId:5042002</span>
-        </div>
         <div className="mx-auto grid min-h-screen max-w-7xl items-center gap-10 py-20 lg:grid-cols-[minmax(0,1.08fr)_minmax(340px,0.92fr)] lg:py-28">
           <div className="reveal relative z-10 max-w-3xl text-left" style={revealDelay(80)}>
             <div className="flex flex-wrap items-center gap-3">
@@ -818,7 +923,7 @@ function CodeTerminal({ activeStep }: { activeStep: number }) {
             <div className={activeStep === 1 ? 'text-white' : 'text-[#d8d8d8]'}>
               <span className="text-[#c9a84c]">const</span> tx = <span className="text-[#c9a84c]">await</span> kit.send(&#123;
             </div>
-            <div className={activeStep === 1 ? 'text-white' : 'text-[#d8d8d8]'}>  to: <span className="text-white">'0xB87B6D1a56bB7942bd07b6B0e9540a63b3dA4365'</span>,</div>
+            <div className={activeStep === 1 ? 'text-white' : 'text-[#d8d8d8]'}>  to: <span className="text-white">'0xB87B...4365'</span>,</div>
             <div className={activeStep === 1 ? 'text-white' : 'text-[#d8d8d8]'}>  amount: <span className="text-white">'10'</span>,</div>
             <div className={activeStep === 1 ? 'text-white' : 'text-[#d8d8d8]'}>  token: <span className="text-white">'USDC'</span>,</div>
             <div className={activeStep === 1 ? 'text-white' : 'text-[#d8d8d8]'}>  chain: <span className="text-white">'Arc_Testnet'</span></div>
@@ -829,7 +934,7 @@ function CodeTerminal({ activeStep }: { activeStep: number }) {
               console.log(tx.hash)
             </div>
             <div className={activeStep === 2 ? 'text-white' : 'text-[#777]'}>
-              <span className="text-[#777]">// 0x62f9bbff19385f6ffb287ff7451b2229...</span>
+              <span className="text-[#777]">// tx hash preview</span>
             </div>
           </code>
         </pre>

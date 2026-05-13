@@ -12,6 +12,10 @@ type AppItem = {
   color: string;
 };
 
+type Props = {
+  compact?: boolean;
+};
+
 const APPS: AppItem[] = [
   { key: 'pay', name: 'Pay', icon: Wallet, href: getArcAppBaseUrl('pay'), color: '#60a5fa' },
   { key: 'creator', name: 'Creator', icon: Sparkles, href: getArcAppBaseUrl('creator'), color: '#f472b6' },
@@ -20,14 +24,16 @@ const APPS: AppItem[] = [
   { key: 'hub', name: 'Hub', icon: Home, href: '/', color: '#c9a84c' },
 ];
 
-export default function AppSwitcher() {
+export default function AppSwitcher({ compact = false }: Props) {
   const pathname = usePathname();
   const isHubActive = pathname === '/';
   const isMarketActive = pathname === '/market' || pathname.startsWith('/market/');
+  const nameClass = compact ? 'hidden xl:inline' : 'hidden sm:inline';
+  const sizeClass = compact ? 'px-2.5 py-2 text-[10px] tracking-[0.18em]' : 'px-3 py-2 text-xs';
 
   return (
     <nav
-      className="flex max-w-full items-center gap-1 overflow-x-auto rounded-2xl border p-1"
+      className="flex max-w-full items-center gap-1 overflow-hidden rounded-2xl border p-1"
       aria-label="Switch between Arc apps"
       style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(201,168,76,0.15)' }}
     >
@@ -35,7 +41,7 @@ export default function AppSwitcher() {
         const Icon = app.icon;
         const isActive = (app.key === 'hub' && isHubActive) || (app.key === 'market' && isMarketActive);
         const sharedClasses = [
-          'flex shrink-0 items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold transition-all',
+          `flex shrink-0 items-center gap-2 rounded-xl font-bold transition-all ${sizeClass}`,
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black',
         ].join(' ');
 
@@ -50,7 +56,7 @@ export default function AppSwitcher() {
               title={`Arc ${app.name} unavailable`}
             >
               <Icon size={14} style={{ color: app.color }} />
-              <span className="hidden sm:inline">{app.name}</span>
+              <span className={nameClass}>{app.name}</span>
             </span>
           );
         }
@@ -72,7 +78,7 @@ export default function AppSwitcher() {
             title={`Arc ${app.name}`}
           >
             <Icon size={14} style={{ color: isActive ? 'var(--accent)' : app.color }} />
-            <span className="hidden sm:inline">{app.name}</span>
+            <span className={nameClass}>{app.name}</span>
           </a>
         );
       })}
