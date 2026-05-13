@@ -10,7 +10,9 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import AppSwitcher from "@/components/AppSwitcher";
+import VoiceTour from "@/components/VoiceTour";
 import { getArcAppUrl, isExternalUrl } from "@/lib/arcAppLinks";
+import { useVoiceTourStore, type VoiceTourSectionId } from "@/lib/voiceTourStore";
 import { translations, type Lang } from "@/lib/translations";
 import LanguageToggle from "@/components/LanguageToggle";
 
@@ -21,6 +23,7 @@ type Feature = {
 };
 
 type AppCard = {
+  voiceId: VoiceTourSectionId;
   label: string;
   title: string;
   description: string;
@@ -35,10 +38,11 @@ const arcPlayUrl = getArcAppUrl('play');
 const docsHref = '/learn';
 const githubHref = 'https://github.com/GoGoSns/arc-ecosystem';
 
-const appCards = [
+const appCards: AppCard[] = [
   {
     label: "// 01 · payments",
     title: "ARC PAY",
+    voiceId: 'pay',
     description: "Send USDC instantly. No banks, no delays.",
     url: arcPayUrl,
     cta: "LAUNCH ARC PAY",
@@ -53,6 +57,7 @@ const appCards = [
   {
     label: "// 02 · monetization",
     title: "ARC CREATOR",
+    voiceId: 'creator',
     description: "Monetize your creativity with USDC.",
     url: arcCreatorUrl,
     cta: "LAUNCH ARC CREATOR",
@@ -66,6 +71,7 @@ const appCards = [
   {
     label: "// 03 · gaming + defi",
     title: "ARC PLAY",
+    voiceId: 'play',
     description: "Play, predict, profit on-chain.",
     url: arcPlayUrl,
     cta: "LAUNCH ARC PLAY",
@@ -77,7 +83,14 @@ const appCards = [
       { name: "Token Launchpad", href: getArcAppUrl('play', '/launchpad'), soon: true },
     ],
   },
-] satisfies AppCard[];
+] ;
+
+const voiceTourSections = [
+  { id: 'pay', href: arcPayUrl ?? undefined },
+  { id: 'creator', href: arcCreatorUrl ?? undefined },
+  { id: 'play', href: arcPlayUrl ?? undefined },
+  { id: 'gameHub', href: '/game' },
+] satisfies { id: VoiceTourSectionId; href?: string }[];
 
 const faqs = [
   [
@@ -149,6 +162,8 @@ export default function Page() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState(0);
   const [lang, setLang] = useState<Lang>('en');
+  const activeVoiceSectionId = useVoiceTourStore((state) => state.activeSectionId);
+  const requestVoiceTour = useVoiceTourStore((state) => state.requestTour);
 
   useEffect(() => {
     const elements = document.querySelectorAll<HTMLElement>(".reveal");
@@ -335,6 +350,14 @@ export default function Page() {
               </span>
             )}
             <a href="#apps" className="secondary-button">{t.hero.ctaSecondary}</a>
+            <button
+              type="button"
+              onClick={() => requestVoiceTour('tour')}
+              className="secondary-button"
+              aria-label={t.voiceTour.start}
+            >
+              {t.voiceTour.start}
+            </button>
           </div>
         </div>
       </section>
@@ -348,14 +371,37 @@ export default function Page() {
         </div>
       </section>
 
+      <section className="section">
+        <div className="reveal mx-auto max-w-7xl">
+          <VoiceTour sections={voiceTourSections} defaultLanguage={lang} />
+        </div>
+      </section>
+
       <section id="apps" className="section">
         <div className="reveal mx-auto max-w-7xl">
           <SectionTitle label={`// ${t.sections.pillarsTitle.toLowerCase()}`} title={t.sections.pillarsSubtitle} />
           <div className="mt-14 grid gap-6 lg:grid-cols-3">
             {appCards.map((card, idx) => (
-              <article key={card.title} className="bracket-card flex min-h-[560px] flex-col p-6 sm:p-8">
+              <article
+                key={card.title}
+                className={`bracket-card flex min-h-[560px] flex-col p-6 sm:p-8 transition-all duration-300 ${
+                  activeVoiceSectionId === card.voiceId
+                    ? 'ring-1 ring-[#c9a84c]/45 shadow-[0_24px_80px_rgba(201,168,76,0.12)]'
+                    : ''
+                }`}
+              >
                 <Brackets />
-                <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">{appCardLabels[idx]}</p>
+                <div className="mt-1 flex items-center justify-between gap-3">
+                  <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">{appCardLabels[idx]}</p>
+                  <button
+                    type="button"
+                    onClick={() => requestVoiceTour('section', card.voiceId)}
+                    aria-label={`${t.voiceTour.listen} ${card.title}`}
+                    className="inline-flex items-center gap-2 rounded-full border border-[#c9a84c]/25 bg-[#c9a84c]/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-[#f4dc9f] transition-colors hover:bg-[#c9a84c]/18 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+                  >
+                    {t.voiceTour.listen}
+                  </button>
+                </div>
                 <h3 className="mt-5 text-4xl font-black tracking-wide">{cardDesc[idx].title.toUpperCase()}</h3>
                 <p className="mt-4 min-h-14 text-[#8b8b8b]">{cardDesc[idx].description}</p>
                 <div className="mt-8 space-y-3">

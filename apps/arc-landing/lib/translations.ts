@@ -67,6 +67,40 @@ export const translations = {
       playTitle: 'Arc Play',
       playDescription: 'Gaming and Web3 fun - predictions, raffles, mini-games.',
     },
+    voiceTour: {
+      title: 'VOICE TOUR',
+      subtitle: 'A narrated tour through Arc Pay, Arc Creator, Arc Play, and Game Hub.',
+      start: 'START VOICE TOUR',
+      play: 'PLAY',
+      pause: 'PAUSE',
+      resume: 'RESUME',
+      stop: 'STOP',
+      listen: 'LISTEN',
+      language: 'VOICE',
+      speed: 'SPEED',
+      current: 'NOW SPEAKING',
+      unsupportedTitle: 'Voice tour unavailable',
+      unsupportedDescription: 'This browser does not support speech synthesis. The tour cards stay visible so you can follow the same flow manually.',
+      fallbackHint: 'Use the section cards below as a manual guide.',
+      sections: {
+        pay: {
+          label: 'Arc Pay',
+          summary: 'Premium USDC payments with fast sends, splits, and invoice-style flows.',
+        },
+        creator: {
+          label: 'Arc Creator',
+          summary: 'Creator monetization with tips, subscriptions, and future bounty surfaces.',
+        },
+        play: {
+          label: 'Arc Play',
+          summary: 'Gaming, prediction, and lucky reveal surfaces built around stablecoin fun.',
+        },
+        gameHub: {
+          label: 'Game Hub',
+          summary: 'Challenges, quiz pots, lucky cards, and history tracking in one demo loop.',
+        },
+      },
+    },
     home: {
       soon: 'soon',
       cards: {
@@ -306,6 +340,40 @@ export const translations = {
       creatorDescription: 'İçerik üreticileri için para kazanma - bahşiş, abonelik, görev ve hizmet.',
       playTitle: 'Arc Play',
       playDescription: 'Oyun ve Web3 eğlencesi - tahminler, çekilişler, mini oyunlar.',
+    },
+    voiceTour: {
+      title: 'SESLİ TUR',
+      subtitle: 'Arc Pay, Arc Creator, Arc Play ve Oyun Merkezi boyunca anlatımlı bir tur.',
+      start: 'SESLİ TURU BAŞLAT',
+      play: 'OYNAT',
+      pause: 'DURAKLAT',
+      resume: 'SÜRDÜR',
+      stop: 'DURDUR',
+      listen: 'DİNLE',
+      language: 'SES',
+      speed: 'HIZ',
+      current: 'ŞİMDİ OKUNUYOR',
+      unsupportedTitle: 'Sesli tur kullanılamıyor',
+      unsupportedDescription: 'Bu tarayıcı konuşma sentezini desteklemiyor. Aynı akışı manuel olarak takip etmek için kartlar görünür durumda kalır.',
+      fallbackHint: 'Aynı hikâyeyi elle izlemek için aşağıdaki bölüm kartlarını kullan.',
+      sections: {
+        pay: {
+          label: 'Arc Pay',
+          summary: 'Hızlı gönderim, bölüştürme ve fatura tarzı akışlarla premium USDC ödemeleri.',
+        },
+        creator: {
+          label: 'Arc Creator',
+          summary: 'Bahşişler, abonelikler ve gelecekteki ödül yüzeyleriyle üretici para kazanma.',
+        },
+        play: {
+          label: 'Arc Play',
+          summary: 'Stabilcoin eğlencesi etrafında tasarlanmış oyun, tahmin ve şans kartı yüzeyleri.',
+        },
+        gameHub: {
+          label: 'Oyun Merkezi',
+          summary: 'Görevler, bilgi havuzları, şans kartları ve geçmiş takibi tek bir demo döngüsünde.',
+        },
+      },
     },
     home: {
       soon: 'yakında',

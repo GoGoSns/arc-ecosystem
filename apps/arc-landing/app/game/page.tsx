@@ -5,6 +5,7 @@ import { ArrowRight, BadgeCheck, Coins, Clock3, Percent, Sparkles, Trophy, type 
 import { useEffect, useMemo, useState } from 'react';
 import { HubBadge, HubCard, HubMetricCard, HubBrackets, HubSkeletonCard } from '@/components/HubPrimitives';
 import GameProgressPanel from '@/components/GameProgressPanel';
+import VoiceTour from '@/components/VoiceTour';
 import {
   buildGameProgressSnapshot,
   formatGameAmount,
@@ -12,6 +13,11 @@ import {
   resolveChallengeStatus,
   useGameStore,
 } from '@/lib/gameStore';
+import type { VoiceTourSectionId } from '@/lib/voiceTourStore';
+
+const gameVoiceTourSections = [
+  { id: 'gameHub' },
+] satisfies { id: VoiceTourSectionId; href?: string }[];
 
 function useHydratedNow() {
   const [hydrated, setHydrated] = useState(false);
@@ -135,6 +141,10 @@ export default function GameHubHomePage() {
             <Link href="/game/lucky" className="secondary-button">
               Try Lucky
             </Link>
+          </div>
+
+          <div className="pt-2">
+            <VoiceTour sections={gameVoiceTourSections} compact />
           </div>
         </div>
 
