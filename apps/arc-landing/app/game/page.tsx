@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Coins, Clock3, Percent, Sparkles, Trophy, type LucideIcon } from 'lucide-react';
+import { ArrowRight, BadgeCheck, Coins, Clock3, Percent, Sparkles, Trophy, type LucideIcon } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { HubBadge, HubCard, HubMetricCard, HubBrackets, HubSkeletonCard } from '@/components/HubPrimitives';
 import {
@@ -138,7 +138,7 @@ export default function GameHubHomePage() {
           <HubMetricCard label="Win Rate" value={`${stats.winRate}%`} icon={Percent} />
         </div>
 
-        <div className="mt-6 grid gap-6 lg:grid-cols-3">
+        <div className="mt-6 grid gap-6 lg:grid-cols-4">
           <GameLinkCard
             href="/game/challenges"
             badge={`${stats.activeChallenges.length} live`}
@@ -146,6 +146,14 @@ export default function GameHubHomePage() {
             description="Push progress bars toward their target values, watch the countdowns, and claim rewards when a run is ready to settle."
             meta="Manage missions"
             icon={Trophy}
+          />
+          <GameLinkCard
+            href="/game/quiz-pot"
+            badge="Trivia"
+            title="Quiz Pot"
+            description="Join mock quiz rooms, answer one question at a time, and review prize splits with fully local gameplay."
+            meta="Play trivia"
+            icon={BadgeCheck}
           />
           <GameLinkCard
             href="/game/lucky"
