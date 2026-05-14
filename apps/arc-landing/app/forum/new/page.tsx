@@ -6,8 +6,8 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft, ArrowRight, Send, ShieldCheck, Sparkles } from 'lucide-react';
 import { useForumStore, type ForumCategory } from '@/lib/forumStore';
 import { useWallet } from '@/contexts/WalletContext';
+import BrandLogo from '@/components/BrandLogo';
 import { CATEGORY_CONFIG, shortenAddress } from '@/components/forum/ForumBrowse';
-import ForumBrandMark from '@/components/forum/ForumBrandMark';
 import SiteHeader from '@/components/SiteHeader';
 
 const POSTING_RULES = [
@@ -81,7 +81,7 @@ export default function NewThread() {
         <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-4xl items-center px-4 py-10 sm:px-6 lg:px-8">
           <div className="forum-panel relative mx-auto w-full max-w-xl overflow-hidden rounded-[1.75rem] p-6 text-center sm:p-8">
             <div className="mx-auto grid h-16 w-16 place-items-center rounded-full border border-[#c9a84c]/25 bg-[rgba(201,168,76,0.08)]">
-              <ForumBrandMark className="forum-logo-glow h-10 w-10" />
+              <BrandLogo href={null} variant="mark" decorative priority={false} className="forum-logo-glow h-10 w-10" />
             </div>
             <p className="forum-chip mx-auto mt-5 inline-flex">
               <ShieldCheck size={11} className="text-[#c9a84c]" />

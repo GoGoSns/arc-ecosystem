@@ -28,7 +28,7 @@ import {
   type Thread,
 } from '@/lib/forumStore';
 import { useWallet } from '@/contexts/WalletContext';
-import ForumBrandMark from './ForumBrandMark';
+import BrandLogo from '../BrandLogo';
 
 export const CATEGORY_CONFIG: Record<ForumCategory, { label: string; emoji: string; color: string; description: string }> = {
   general: { label: 'General', emoji: '◆', color: '#9ca3af', description: 'Open discussion and community signals.' },
@@ -160,7 +160,7 @@ export default function ForumBrowse({ filterCategory }: Props) {
       <nav className="sticky top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/88 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
           <Link href="/" className="forum-brand">
-            <ForumBrandMark className="forum-logo-glow h-10 w-10 shrink-0" />
+            <BrandLogo href={null} variant="mark" decorative className="forum-logo-glow h-10 w-10 shrink-0" />
             <div className="forum-brand-copy">
               <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#8a8a8a]">
                 Arc Ecosystem

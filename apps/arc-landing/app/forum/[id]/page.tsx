@@ -23,7 +23,6 @@ import {
 } from '@/lib/forumStore';
 import { useWallet } from '@/contexts/WalletContext';
 import { CATEGORY_CONFIG, shortenAddress, timeAgo } from '@/components/forum/ForumBrowse';
-import ForumBrandMark from '@/components/forum/ForumBrandMark';
 import SiteHeader from '@/components/SiteHeader';
 
 export default function ThreadPage({ params }: { params: Promise<{ id: string }> }) {

@@ -4,13 +4,50 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 type Props = {
-  href?: string;
+  href?: string | null;
   className?: string;
+  variant?: 'responsive' | 'full' | 'mark';
+  priority?: boolean;
+  decorative?: boolean;
 };
 
-export default function BrandLogo({ href = '/', className = '' }: Props) {
+function BrandLogoContent({
+  variant,
+  priority,
+}: {
+  variant: NonNullable<Props['variant']>;
+  priority: boolean;
+}) {
+  if (variant === 'mark') {
+    return (
+      <Image
+        src="/brand/arc-logo-mark.svg"
+        alt=""
+        aria-hidden="true"
+        width={36}
+        height={36}
+        className="h-9 w-9 shrink-0"
+        priority={priority}
+      />
+    );
+  }
+
+  if (variant === 'full') {
+    return (
+      <Image
+        src="/brand/arc-logo.svg"
+        alt=""
+        aria-hidden="true"
+        width={180}
+        height={36}
+        className="h-9 w-auto shrink-0"
+        priority={priority}
+      />
+    );
+  }
+
   return (
-    <Link href={href} className={`flex min-w-0 items-center gap-3 ${className}`} aria-label="Arc Ecosystem">
+    <>
       <Image
         src="/brand/arc-logo-mark.svg"
         alt=""
@@ -18,7 +55,7 @@ export default function BrandLogo({ href = '/', className = '' }: Props) {
         width={36}
         height={36}
         className="h-9 w-9 shrink-0 sm:hidden"
-        priority
+        priority={priority}
       />
       <Image
         src="/brand/arc-logo.svg"
@@ -27,9 +64,38 @@ export default function BrandLogo({ href = '/', className = '' }: Props) {
         width={180}
         height={36}
         className="hidden h-9 w-auto shrink-0 sm:block"
-        priority
+        priority={priority}
       />
-      <span className="sr-only">Arc Ecosystem</span>
+    </>
+  );
+}
+
+export default function BrandLogo({
+  href = '/',
+  className = '',
+  variant = 'responsive',
+  priority = true,
+  decorative = false,
+}: Props) {
+  const content = (
+    <>
+      <BrandLogoContent variant={variant} priority={priority} />
+      {decorative ? null : <span className="sr-only">Arc Ecosystem</span>}
+    </>
+  );
+  const rootClassName = `flex min-w-0 items-center ${variant === 'responsive' ? 'gap-3' : ''} ${className}`;
+
+  if (href === null) {
+    return (
+      <span className={rootClassName} aria-hidden={decorative ? 'true' : undefined}>
+        {content}
+      </span>
+    );
+  }
+
+  return (
+    <Link href={href} className={rootClassName} aria-label="Arc Ecosystem">
+      {content}
     </Link>
   );
 }
