@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import Link from 'next/link';
 import { notFound, useParams } from 'next/navigation';
-import {
+import { 
   ArrowLeft,
   ArrowRight,
   CalendarDays,
@@ -15,6 +15,7 @@ import {
   ShieldAlert,
   Users,
 } from 'lucide-react';
+import SiteHeader from '@/components/SiteHeader';
 import {
   HubBadge,
   HubCard,
@@ -294,27 +295,7 @@ export default function RaceDetailPage() {
 
   return (
     <main className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white">
-      <nav className="fixed left-0 right-0 top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/85 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          <Link href="/race" className="flex min-w-0 items-center gap-3 font-mono text-sm uppercase tracking-[0.18em] text-white">
-            <span className="relative grid h-8 w-8 shrink-0 place-items-center border border-[#c9a84c]/60">
-              <span className="h-3.5 w-3.5 rotate-45 border border-[#c9a84c]" />
-            </span>
-            <span className="truncate">Arc Race</span>
-          </Link>
-          <div className="hidden items-center gap-8 overflow-x-auto whitespace-nowrap font-mono text-xs uppercase text-[#777] md:flex" aria-label="Race navigation">
-            <Link href="/race" className="nav-link">
-              HUB
-            </Link>
-            <Link href="/race/history" className="nav-link">
-              HISTORY
-            </Link>
-          </div>
-          <Link href="/race/history" className="bracket-button">
-            ARCHIVE
-          </Link>
-        </div>
-      </nav>
+      <SiteHeader />
 
       <section className="section pt-32 sm:pt-36">
         <div className="mx-auto max-w-7xl">

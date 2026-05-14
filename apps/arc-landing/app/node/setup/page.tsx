@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowLeft, Copy, Check } from 'lucide-react';
 import { useNodeStore, type Region, REGION_LABELS } from '@/lib/nodeStore';
 import { useWallet } from '@/contexts/WalletContext';
+import SiteHeader from '@/components/SiteHeader';
 
 type OS = 'ubuntu' | 'macos' | 'docker';
 
@@ -90,15 +91,7 @@ export default function SetupGuide() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
-      <nav className="sticky top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4">
-          <Link href="/node" className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-[#777] hover:text-[#c9a84c] transition-colors">
-            <ArrowLeft size={14} /> Node Hub
-          </Link>
-          <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">// Setup Guide</span>
-          <span className="text-xs text-[#555]">Step {step + 1} / {STEPS.length}</span>
-        </div>
-      </nav>
+      <SiteHeader />
 
       <div className="mx-auto max-w-3xl px-4 py-10">
         {/* Progress bar */}

@@ -19,6 +19,7 @@ import {
 import Link from 'next/link';
 import AppSwitcher from '@/components/AppSwitcher';
 import LanguageToggle from '@/components/LanguageToggle';
+import SiteHeader from '@/components/SiteHeader';
 import { HubMetricCard } from '@/components/HubPrimitives';
 import { translations, type Lang } from '@/lib/translations';
 
@@ -114,34 +115,7 @@ export default function DropsPage() {
 
   return (
     <main className="page-shell min-h-screen overflow-x-clip text-white">
-      {/* Nav */}
-      <nav className="fixed left-0 right-0 top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/85 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-3 font-mono text-sm uppercase tracking-[0.18em] text-white">
-            <span className="relative grid h-8 w-8 place-items-center border border-[#c9a84c]/60">
-              <span className="h-3.5 w-3.5 rotate-45 border border-[#c9a84c]" />
-            </span>
-            Arc Ecosystem
-          </Link>
-          <div className="hidden items-center gap-8 font-mono text-xs uppercase text-[#777] md:flex">
-            <Link href="/drops" className="text-white">{t.nav.drops}</Link>
-            <Link href="/drops/archive" className="nav-link">{copy.hero.archiveCta}</Link>
-            <Link href="/quests" className="nav-link">{t.nav.quests}</Link>
-            <Link href="/roulette" className="nav-link">{t.nav.roulette}</Link>
-          </div>
-          <div className="flex items-center gap-3">
-            <LanguageToggle currentLang={lang} onChange={(l) => { setLang(l); localStorage.setItem('arc-lang', l); }} />
-            <AppSwitcher />
-            {isConnected ? (
-              <div className="bracket-button">
-                {address?.slice(0, 6)}...{address?.slice(-4)}
-              </div>
-            ) : (
-              <button onClick={connect} className="bracket-button">CONNECT WALLET</button>
-            )}
-          </div>
-        </div>
-      </nav>
+      <SiteHeader currentLang={lang} onLangChange={(l) => { setLang(l); localStorage.setItem('arc-lang', l); }} />
 
       <section className="relative px-4 pb-16 pt-32">
         <div className="mx-auto max-w-7xl">

@@ -12,6 +12,7 @@ import {
   type FeedbackStatus, type FeedbackCategory,
 } from '@/lib/feedbackStore';
 import { useWallet } from '@/contexts/WalletContext';
+import SiteHeader from '@/components/SiteHeader';
 
 const CATEGORY_CONFIG: Record<FeedbackCategory, { label: string; icon: React.ReactNode; color: string }> = {
   bug:     { label: 'Bug',     icon: <Bug size={12} />,           color: '#ef4444' },
@@ -123,20 +124,7 @@ export default function FeedbackDetail({ params }: { params: Promise<{ id: strin
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
-      {/* Nav */}
-      <nav className="sticky top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4">
-          <Link
-            href="/feedback"
-            className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-[#777] hover:text-[#c9a84c] transition-colors"
-          >
-            <ArrowLeft size={14} />
-            Feedback Hub
-          </Link>
-          <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">// Feedback</span>
-          <WalletConnect />
-        </div>
-      </nav>
+      <SiteHeader />
 
       <div className="mx-auto max-w-3xl px-4 py-10">
         {/* Hero */}

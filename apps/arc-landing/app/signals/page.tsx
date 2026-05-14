@@ -15,6 +15,7 @@ import {
   Zap,
 } from 'lucide-react';
 import AppSwitcher from '@/components/AppSwitcher';
+import SiteHeader from '@/components/SiteHeader';
 import { HubBrackets, HubEmptyState, HubMetricCard, hubInputClass, hubSelectClass, hubTextareaClass } from '@/components/HubPrimitives';
 import { useSignalsStore, type SignalBias, type SignalCategory, type SignalTimeframe } from '@/lib/signalsStore';
 
@@ -159,21 +160,7 @@ export default function SignalsPage() {
 
   return (
     <main className="min-h-screen bg-[#0a0a0a] text-white">
-      <nav className="sticky top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-3 font-mono text-sm uppercase tracking-[0.18em] text-white">
-            <span className="relative grid h-8 w-8 place-items-center border border-[#c9a84c]/60">
-              <span className="h-3.5 w-3.5 rotate-45 border border-[#c9a84c]" />
-            </span>
-            Arc Ecosystem
-          </Link>
-          <div className="hidden items-center gap-8 font-mono text-xs uppercase text-[#777] md:flex">
-            <span className="text-white">SIGNALS</span>
-            <span className="nav-link">PULSE FEED</span>
-          </div>
-          <AppSwitcher />
-        </div>
-      </nav>
+      <SiteHeader />
 
       <section className="relative overflow-hidden px-4 pt-24 sm:px-6 lg:px-8">
         <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-[#c9a84c]/10 via-[#c9a84c]/5 to-transparent blur-3xl" />

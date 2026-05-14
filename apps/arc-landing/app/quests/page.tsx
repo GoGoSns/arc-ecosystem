@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import AppSwitcher from '@/components/AppSwitcher';
+import SiteHeader from '@/components/SiteHeader';
 
 const CATEGORIES: { id: QuestCategory | 'all', label: string, icon: string }[] = [
   { id: 'all', label: 'All', icon: '🌀' },
@@ -76,34 +77,7 @@ export default function QuestsPage() {
 
   return (
     <main className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white">
-      {/* Navigation */}
-      <nav className="fixed left-0 right-0 top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/85 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-3 font-mono text-sm uppercase tracking-[0.18em] text-white">
-            <span className="relative grid h-8 w-8 place-items-center border border-[#c9a84c]/60">
-              <span className="h-3.5 w-3.5 rotate-45 border border-[#c9a84c]" />
-            </span>
-            Arc Ecosystem
-          </Link>
-          <div className="hidden items-center gap-8 font-mono text-xs uppercase text-[#777] md:flex">
-            <Link href="/quests" className="text-white">QUEST HUB</Link>
-            <Link href="/quests/leaderboard" className="nav-link">LEADERBOARD</Link>
-            {isConnected && <Link href="/quests/profile" className="nav-link">MY PROFILE</Link>}
-          </div>
-          <div className="flex items-center gap-3">
-            <AppSwitcher />
-            {isConnected ? (
-              <Link href="/quests/profile" className="bracket-button">
-                {address?.slice(0, 6)}...{address?.slice(-4)}
-              </Link>
-            ) : (
-              <button type="button" onClick={connect} aria-label="Connect wallet" className="bracket-button">
-                CONNECT WALLET
-              </button>
-            )}
-          </div>
-        </div>
-      </nav>
+      <SiteHeader />
 
       {/* Hero Section */}
       <section className="relative pt-32 pb-16 px-4">

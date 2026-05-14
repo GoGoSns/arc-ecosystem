@@ -15,6 +15,8 @@ import {
   Users,
 } from 'lucide-react';
 import AppSwitcher from '@/components/AppSwitcher';
+import BrandLogo from '@/components/BrandLogo';
+import SiteHeader from '@/components/SiteHeader';
 import {
   HubBadge,
   HubCard,
@@ -703,6 +705,7 @@ export default function EventsPage() {
 
   return (
     <section className="page-shell section pt-24 sm:pt-28">
+      <SiteHeader />
       <NoticeBanner notice={notice} onDismiss={() => setNotice(null)} />
 
       <div className="mx-auto max-w-7xl">
@@ -895,12 +898,7 @@ export default function EventsPage() {
 
       <nav className="mt-16 border-t border-[#2a2a2a] bg-black/40 px-4 py-6 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4">
-          <Link href="/" className="flex items-center gap-3 font-mono text-sm uppercase tracking-[0.18em] text-white">
-            <span className="relative grid h-8 w-8 place-items-center border border-[#c9a84c]/60">
-              <span className="h-3.5 w-3.5 rotate-45 border border-[#c9a84c]" />
-            </span>
-            Arc Ecosystem
-          </Link>
+          <BrandLogo href="/" />
           <div className="flex flex-wrap items-center gap-3 text-[10px] font-mono uppercase tracking-[0.18em] text-[#777]">
             <Link href="/game" className="nav-link">
               Game

@@ -2,32 +2,10 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Server, Activity, Shield, Bug, Globe, Award, Copy, Check, ExternalLink } from 'lucide-react';
+import { Server, Activity, Shield, Bug, Globe, Award, Copy, Check, ExternalLink } from 'lucide-react';
 import { useNodeStore, isNodeAdmin, shortenAddr, REGION_LABELS, type Region } from '@/lib/nodeStore';
 import { useWallet } from '@/contexts/WalletContext';
-
-function NavBar() {
-  const { address, isConnected, connect, disconnect } = useWallet();
-  return (
-    <nav className="sticky top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/90 backdrop-blur-xl">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-[#777] hover:text-[#c9a84c] transition-colors">
-          <ArrowLeft size={14} /> Arc Ecosystem
-        </Link>
-        <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">// Arc Node Hub</span>
-        {isConnected && address ? (
-          <button onClick={disconnect} className="px-3 py-1.5 rounded-lg text-xs font-mono border" style={{ borderColor: '#c9a84c', color: '#c9a84c', background: 'rgba(201,168,76,0.08)' }}>
-            {shortenAddr(address)}
-          </button>
-        ) : (
-          <button onClick={connect} className="px-3 py-1.5 rounded-lg text-xs font-bold" style={{ background: '#c9a84c', color: '#0a0a0a' }}>
-            Connect Wallet
-          </button>
-        )}
-      </div>
-    </nav>
-  );
-}
+import SiteHeader from '@/components/SiteHeader';
 
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
@@ -77,7 +55,7 @@ export default function NodeHub() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
-      <NavBar />
+      <SiteHeader />
 
       <div className="mx-auto max-w-6xl px-4 py-10">
         {/* Hero */}

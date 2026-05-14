@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import AppSwitcher from "@/components/AppSwitcher";
 import VoiceTour from "@/components/VoiceTour";
+import SiteHeader from "@/components/SiteHeader";
 import { getArcAppUrl, isExternalUrl } from "@/lib/arcAppLinks";
 import { useVoiceTourStore, type VoiceTourSectionId } from "@/lib/voiceTourStore";
 import { translations, type Lang } from "@/lib/translations";
@@ -315,142 +316,7 @@ export default function Page() {
   ];
   return (
     <main className="page-shell min-h-screen overflow-x-clip text-white">
-      <nav className="fixed left-0 right-0 top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/88 backdrop-blur-xl">
-        <div className="mx-auto grid h-16 max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex min-w-0 items-center gap-3">
-            <Image
-              src="/brand/arc-logo.svg"
-              alt="Arc Ecosystem"
-              width={170}
-              height={36}
-              priority
-            />
-          </Link>
-          <div
-            className="hidden min-w-0 items-center justify-center gap-2 xl:flex"
-            aria-label="Primary navigation"
-          >
-            {desktopNavLinks.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="site-nav-link"
-                data-active={isActiveRoute(item.href) ? 'true' : undefined}
-                aria-current={isActiveRoute(item.href) ? 'page' : undefined}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-          <div className="flex items-center justify-self-end gap-3">
-            <div className="hidden items-center gap-3 xl:flex">
-              <LanguageToggle currentLang={lang} onChange={handleLangChange} compact />
-              <AppSwitcher compact />
-              <a href="#apps" className="bracket-button">
-                {t.nav.launch}
-              </a>
-            </div>
-            <button
-              type="button"
-              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-              aria-expanded={menuOpen}
-              aria-controls="site-drawer"
-              aria-haspopup="dialog"
-              className="grid h-10 w-10 place-items-center border border-[#2a2a2a] text-[#c9a84c] transition-colors hover:border-[#c9a84c]/60 xl:hidden"
-              onClick={() => setMenuOpen((value) => !value)}
-            >
-              {menuOpen ? <X size={18} /> : <Menu size={18} />}
-            </button>
-          </div>
-        </div>
-        {menuOpen ? (
-          <div className="site-nav-drawer xl:hidden" aria-hidden={!menuOpen}>
-            <button
-              type="button"
-              aria-label="Close navigation drawer"
-              className="site-nav-drawer-backdrop"
-              onClick={() => setMenuOpen(false)}
-            />
-            <aside
-              id="site-drawer"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="site-drawer-title"
-              className="site-nav-drawer-panel ml-auto flex h-full w-[min(100vw,24rem)] flex-col"
-            >
-              <div className="flex items-center justify-between gap-3 border-b border-[#232323] px-5 py-4">
-                <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
-                    Arc Ecosystem
-                  </p>
-                  <h2 id="site-drawer-title" className="mt-1 text-lg font-bold text-white">
-                    Navigation
-                  </h2>
-                </div>
-                <button
-                  type="button"
-                  aria-label="Close navigation drawer"
-                  className="grid h-10 w-10 place-items-center rounded-full border border-[#2a2a2a] text-[#c9a84c] transition-colors hover:border-[#c9a84c]/60"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  <X size={18} />
-                </button>
-              </div>
-
-              <div className="flex-1 overflow-y-auto px-5 py-5">
-                <div className="space-y-4">
-                  <div className="space-y-3">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
-                      Controls
-                    </p>
-                    <LanguageToggle currentLang={lang} onChange={handleLangChange} compact />
-                    <AppSwitcher compact />
-                    <a
-                      href="#apps"
-                      className="bracket-button w-full justify-center"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      {t.nav.launch}
-                    </a>
-                  </div>
-
-                  {drawerNavGroups.map((group) => (
-                    <div key={group.title} className="site-nav-drawer-section">
-                      <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
-                        {group.title}
-                      </p>
-                      <div className="mt-3 space-y-2">
-                        {group.links.map((item) => {
-                          const active = isActiveRoute(item.href);
-                          const isAnchor = item.href.startsWith('#');
-                          const sharedProps = {
-                            className: 'site-nav-drawer-link',
-                            'data-active': active ? 'true' : undefined,
-                            'aria-current': active ? 'page' : undefined,
-                            onClick: () => setMenuOpen(false),
-                          } as const;
-
-                          return isAnchor ? (
-                            <a key={item.href} href={item.href} {...sharedProps}>
-                              <span>{item.label}</span>
-                              <ChevronRight size={14} />
-                            </a>
-                          ) : (
-                            <Link key={item.href} href={item.href} {...sharedProps}>
-                              <span>{item.label}</span>
-                              <ChevronRight size={14} />
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </aside>
-          </div>
-        ) : null}
-      </nav>
+      <SiteHeader currentLang={lang} onLangChange={handleLangChange} />
 
       <section id="top" className="hero-grid relative overflow-hidden px-4 pt-16">
         <div className="mx-auto grid min-h-screen max-w-7xl items-center gap-10 py-20 lg:grid-cols-[minmax(0,1.08fr)_minmax(340px,0.92fr)] lg:py-28">

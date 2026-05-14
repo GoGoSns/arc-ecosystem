@@ -24,6 +24,7 @@ import {
 import { useWallet } from '@/contexts/WalletContext';
 import { CATEGORY_CONFIG, shortenAddress, timeAgo } from '@/components/forum/ForumBrowse';
 import ForumBrandMark from '@/components/forum/ForumBrandMark';
+import SiteHeader from '@/components/SiteHeader';
 
 export default function ThreadPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -114,28 +115,7 @@ export default function ThreadPage({ params }: { params: Promise<{ id: string }>
 
   return (
     <div className="forum-shell min-h-screen text-white">
-      <nav className="sticky top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          <Link href="/forum" className="forum-brand">
-            <ForumBrandMark className="forum-logo-glow h-10 w-10 shrink-0" />
-            <div className="forum-brand-copy">
-              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#8a8a8a]">
-                Arc Ecosystem
-              </span>
-              <span className="font-mono text-xs uppercase tracking-[0.24em] text-[#f4f4f4]">
-                Arc Forum
-              </span>
-            </div>
-          </Link>
-          <span className="forum-chip hidden sm:inline-flex">Thread / Discussion</span>
-          <WalletChip
-            address={address}
-            isConnected={isConnected}
-            connect={connect}
-            disconnect={disconnect}
-          />
-        </div>
-      </nav>
+      <SiteHeader />
 
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
         <div

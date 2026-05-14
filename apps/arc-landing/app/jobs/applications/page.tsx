@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import AppSwitcher from '@/components/AppSwitcher';
+import SiteHeader from '@/components/SiteHeader';
 
 export default function MyApplicationsPage() {
   const { address, isConnected, connect } = useWallet();
@@ -25,6 +26,7 @@ export default function MyApplicationsPage() {
   if (!isConnected) {
     return (
       <main className="min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center justify-center p-4">
+        <SiteHeader />
         <div className="bracket-card p-12 max-w-md w-full text-center">
           <Brackets />
           <div className="h-20 w-20 bg-[#c9a84c]/10 rounded-full flex items-center justify-center mx-auto mb-8 border border-[#c9a84c]/20">
@@ -47,28 +49,7 @@ export default function MyApplicationsPage() {
 
   return (
     <main className="min-h-screen bg-[#0a0a0a] text-white">
-      {/* Navigation */}
-      <nav className="fixed left-0 right-0 top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/85 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-3 font-mono text-sm uppercase tracking-[0.18em] text-white">
-            <span className="relative grid h-8 w-8 place-items-center border border-[#c9a84c]/60">
-              <span className="h-3.5 w-3.5 rotate-45 border border-[#c9a84c]" />
-            </span>
-            Arc Ecosystem
-          </Link>
-          <div className="hidden items-center gap-8 font-mono text-xs uppercase text-[#777] md:flex">
-            <Link href="/jobs" className="nav-link">BROWSE JOBS</Link>
-            <Link href="/jobs/post" className="nav-link">POST A JOB</Link>
-            <Link href="/jobs/applications" className="text-white">MY APPLICATIONS</Link>
-          </div>
-          <div className="flex items-center gap-3">
-            <AppSwitcher />
-            <div className="bracket-button">
-              {address?.slice(0, 6)}...{address?.slice(-4)}
-            </div>
-          </div>
-        </div>
-      </nav>
+      <SiteHeader />
 
       <section className="pt-32 pb-24 px-4">
         <div className="mx-auto max-w-4xl">

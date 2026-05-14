@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowLeft, Shield } from 'lucide-react';
 import { useNodeStore, isNodeAdmin, shortenAddr, REGION_LABELS, type Region, type ValidatorStatus } from '@/lib/nodeStore';
 import { useWallet } from '@/contexts/WalletContext';
+import SiteHeader from '@/components/SiteHeader';
 
 const STATUS_COLOR: Record<ValidatorStatus, string> = {
   waitlist: '#9ca3af',
@@ -53,15 +54,7 @@ export default function ValidatorPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
-      <nav className="sticky top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
-          <Link href="/node" className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-[#777] hover:text-[#c9a84c] transition-colors">
-            <ArrowLeft size={14} /> Node Hub
-          </Link>
-          <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">// Validator Waitlist</span>
-          <div />
-        </div>
-      </nav>
+      <SiteHeader />
 
       <div className="mx-auto max-w-4xl px-4 py-10">
         <div className="flex items-center gap-3 mb-2">

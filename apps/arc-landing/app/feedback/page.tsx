@@ -11,6 +11,7 @@ import {
   type FeedbackCategory, type FeedbackStatus,
 } from '@/lib/feedbackStore';
 import { useWallet } from '@/contexts/WalletContext';
+import SiteHeader from '@/components/SiteHeader';
 
 const CATEGORY_CONFIG: Record<FeedbackCategory, { label: string; icon: React.ReactNode; color: string }> = {
   bug:     { label: 'Bug',     icon: <Bug size={11} />,           color: '#ef4444' },
@@ -96,20 +97,7 @@ export default function FeedbackBrowse() {
 
   return (
     <div className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white">
-      {/* Nav */}
-      <nav className="sticky top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
-          <Link
-            href="/"
-            className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-[#777] hover:text-[#c9a84c] transition-colors"
-          >
-            <ArrowLeft size={14} />
-            Arc Ecosystem
-          </Link>
-          <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">// Feedback Hub</span>
-          <WalletConnect />
-        </div>
-      </nav>
+      <SiteHeader />
 
       <div className="mx-auto max-w-4xl px-4 py-10">
         {/* Header */}

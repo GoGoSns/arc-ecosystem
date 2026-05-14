@@ -8,6 +8,7 @@ import { useForumStore, type ForumCategory } from '@/lib/forumStore';
 import { useWallet } from '@/contexts/WalletContext';
 import { CATEGORY_CONFIG, shortenAddress } from '@/components/forum/ForumBrowse';
 import ForumBrandMark from '@/components/forum/ForumBrandMark';
+import SiteHeader from '@/components/SiteHeader';
 
 const POSTING_RULES = [
   'Be precise. Strong threads lead with context, not noise.',
@@ -75,29 +76,7 @@ export default function NewThread() {
   if (!isConnected) {
     return (
       <div className="forum-shell min-h-screen text-white">
-        <nav className="sticky top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/90 backdrop-blur-xl">
-          <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-            <Link href="/forum" className="forum-brand">
-              <ForumBrandMark className="forum-logo-glow h-10 w-10 shrink-0" />
-              <div className="forum-brand-copy">
-                <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#8a8a8a]">
-                  Arc Ecosystem
-                </span>
-                <span className="font-mono text-xs uppercase tracking-[0.24em] text-[#f4f4f4]">
-                  Arc Forum
-                </span>
-              </div>
-            </Link>
-            <span className="forum-chip hidden sm:inline-flex">
-              <Sparkles size={11} className="text-[#c9a84c]" />
-              Create signal
-            </span>
-            <Link href="/forum" className="forum-button hidden sm:inline-flex">
-              <ArrowLeft size={14} />
-              Back to Forum
-            </Link>
-          </div>
-        </nav>
+        <SiteHeader />
 
         <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-4xl items-center px-4 py-10 sm:px-6 lg:px-8">
           <div className="forum-panel relative mx-auto w-full max-w-xl overflow-hidden rounded-[1.75rem] p-6 text-center sm:p-8">
@@ -132,34 +111,7 @@ export default function NewThread() {
 
   return (
     <div className="forum-shell min-h-screen text-white">
-      <nav className="sticky top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          <Link href="/forum" className="forum-brand">
-            <ForumBrandMark className="forum-logo-glow h-10 w-10 shrink-0" />
-            <div className="forum-brand-copy">
-              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#8a8a8a]">
-                Arc Ecosystem
-              </span>
-              <span className="font-mono text-xs uppercase tracking-[0.24em] text-[#f4f4f4]">
-                Arc Forum
-              </span>
-            </div>
-          </Link>
-          <span className="forum-chip hidden sm:inline-flex">
-            <Sparkles size={11} className="text-[#c9a84c]" />
-            Create signal
-          </span>
-          <button
-            type="button"
-            onClick={disconnect}
-            className="forum-wallet"
-            title={address ? 'Wallet connected' : 'Connect wallet'}
-          >
-            <span className="inline-block h-2 w-2 rounded-full bg-[#30d158] shadow-[0_0_12px_rgba(48,209,88,0.45)]" />
-            {address ? shortenAddress(address) : 'Connected'}
-          </button>
-        </div>
-      </nav>
+      <SiteHeader />
 
       <div className="mx-auto max-w-6xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
         <section className="forum-panel forum-hero mb-6 rounded-[1.75rem] p-5 sm:p-7 lg:p-8">

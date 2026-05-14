@@ -23,6 +23,7 @@ import {
 import { useRoadmapStore, RoadmapItem, RoadmapStatus, RoadmapQuarter, RoadmapCategory, ADMIN_ADDRESS } from '@/lib/roadmapStore';
 import { useWallet } from '@/contexts/WalletContext';
 import { HubEmptyState } from '@/components/HubPrimitives';
+import SiteHeader from '@/components/SiteHeader';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -188,22 +189,7 @@ export default function RoadmapPage() {
 
   return (
     <div className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white pb-20">
-      {/* Nav */}
-      <nav className="sticky top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
-          <Link href="/" className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-[#777] hover:text-[#c9a84c] transition-colors">
-            <ArrowLeft size={14} /> Arc Ecosystem
-          </Link>
-          <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">// Public Roadmap</span>
-          <div className="w-24 flex justify-end">
-            {!isConnected ? (
-              <button type="button" onClick={connect} aria-label="Connect wallet" className="text-[10px] font-bold text-[#c9a84c] border border-[#c9a84c]/30 px-3 py-1 rounded-full hover:bg-[#c9a84c]/10">CONNECT</button>
-            ) : (
-              <span className="text-[10px] text-[#555] font-mono">{address?.slice(0,6)}...{address?.slice(-4)}</span>
-            )}
-          </div>
-        </div>
-      </nav>
+      <SiteHeader />
 
       <div className="mx-auto max-w-6xl px-4 py-16">
         {/* Hero */}

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Bug, Sparkles, Lightbulb, MessageCircle, ArrowLeft, Send } from 'lucide-react';
 import { useFeedbackStore, type FeedbackCategory } from '@/lib/feedbackStore';
 import { useWallet } from '@/contexts/WalletContext';
+import SiteHeader from '@/components/SiteHeader';
 
 const CATEGORIES: {
   value: FeedbackCategory;
@@ -68,17 +69,7 @@ export default function NewFeedback() {
   if (!isConnected) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col">
-        <nav className="sticky top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/90 backdrop-blur-xl">
-          <div className="mx-auto flex h-14 max-w-4xl items-center px-4">
-            <Link
-              href="/feedback"
-              className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-[#777] hover:text-[#c9a84c] transition-colors"
-            >
-              <ArrowLeft size={14} />
-              Feedback Hub
-            </Link>
-          </div>
-        </nav>
+        <SiteHeader />
         <div className="flex-1 flex items-center justify-center px-4">
           <div className="text-center max-w-sm">
             <div className="text-5xl mb-6">🔒</div>
@@ -99,24 +90,7 @@ export default function NewFeedback() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
-      <nav className="sticky top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
-          <Link
-            href="/feedback"
-            className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-[#777] hover:text-[#c9a84c] transition-colors"
-          >
-            <ArrowLeft size={14} />
-            Feedback Hub
-          </Link>
-          <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">// New Feedback</span>
-          <span
-            className="px-3 py-1.5 rounded-lg text-xs font-mono border"
-            style={{ borderColor: '#c9a84c', color: '#c9a84c', background: 'rgba(201,168,76,0.08)' }}
-          >
-            {address ? shortenAddress(address) : ''}
-          </span>
-        </div>
-      </nav>
+      <SiteHeader />
 
       <div className="mx-auto max-w-2xl px-4 py-10">
         <h1 className="text-3xl font-black mb-2">Submit Feedback</h1>

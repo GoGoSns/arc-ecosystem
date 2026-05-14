@@ -11,6 +11,7 @@ import { buildDemoRpcStatus } from '@/lib/demoMetrics';
 import { useForumStore } from '@/lib/forumStore';
 import { useFeedbackStore } from '@/lib/feedbackStore';
 import { useNodeStore, shortenAddr } from '@/lib/nodeStore';
+import SiteHeader from '@/components/SiteHeader';
 
 // ─── Mock cross-app data (other apps live on different origins) ────────────────
 
@@ -254,22 +255,7 @@ export default function StatsPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
-      {/* Nav */}
-      <nav className="sticky top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
-          <Link href="/" className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-[#777] hover:text-[#c9a84c] transition-colors">
-            <ArrowLeft size={14} /> Arc Ecosystem
-          </Link>
-          <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">// Ecosystem Stats</span>
-          <button
-            onClick={() => { checkRpc(); setLastUpdated(Date.now()); }}
-            className="flex items-center gap-1.5 text-xs text-[#555] hover:text-[#c9a84c] transition-colors"
-          >
-            <RefreshCw size={12} className={rpcLoading ? 'animate-spin' : ''} />
-            {updatedLabel}
-          </button>
-        </div>
-      </nav>
+      <SiteHeader />
 
       <div className="mx-auto max-w-6xl px-4 py-10">
 
