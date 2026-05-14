@@ -172,10 +172,10 @@ export default function SiteHeader({
 
   return (
     <nav className={`fixed left-0 right-0 top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/88 backdrop-blur-xl ${className}`}>
-      <div className="mx-auto grid h-16 max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 sm:px-6 lg:px-8">
-        <BrandLogo />
+      <div className="mx-auto flex h-16 max-w-[1280px] items-center gap-6 px-4 sm:px-6 lg:px-8">
+        <BrandLogo href="/" decorative className="w-[160px] shrink-0 sm:w-[190px]" />
 
-        <div className="hidden min-w-0 items-center justify-center gap-2 lg:flex" aria-label="Primary navigation">
+        <div className="hidden min-w-0 flex-1 items-center justify-center gap-2 lg:flex" aria-label="Primary navigation">
           {PRIMARY_SITE_NAV.map((link) => renderLink(link))}
 
           <div ref={moreMenuRef} className="relative">
@@ -207,7 +207,7 @@ export default function SiteHeader({
           </div>
         </div>
 
-        <div className="flex items-center justify-self-end gap-2 sm:gap-3">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <div className="hidden items-center gap-3 lg:flex">
             <LanguageToggle currentLang={lang} onChange={setLang} compact />
             <AppSwitcher compact />
@@ -253,7 +253,6 @@ export default function SiteHeader({
           >
             <div className="flex items-center justify-between gap-3 border-b border-[#232323] px-5 py-4">
               <div className="min-w-0">
-                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Arc Ecosystem</p>
                 <h2 id="site-header-mobile-title" className="mt-1 text-lg font-bold text-white">
                   Navigation
                 </h2>
