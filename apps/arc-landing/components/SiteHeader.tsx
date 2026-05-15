@@ -174,7 +174,7 @@ export default function SiteHeader({
     <nav className={`fixed left-0 right-0 top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/88 backdrop-blur-xl ${className}`}>
       <div className="mx-auto flex h-16 max-w-7xl items-center px-4 sm:px-6 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:items-baseline lg:px-8">
         <div className="flex items-baseline justify-start lg:min-w-[230px]">
-          <BrandLogo href="/" decorative className="w-[160px] shrink-0 sm:w-[190px] lg:translate-y-[2px]" />
+          <BrandLogo href="/" decorative className="shrink-0 lg:translate-y-[2px]" />
         </div>
 
         <div className="hidden min-w-0 items-baseline justify-center gap-1.5 lg:flex xl:gap-2" aria-label="Primary navigation">
