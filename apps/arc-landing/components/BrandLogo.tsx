@@ -78,10 +78,7 @@ export default function BrandLogo({
   decorative = false,
 }: Props) {
   const content = (
-    <>
-      <BrandLogoContent variant={variant} priority={priority} />
-      {decorative ? null : <span className="sr-only">Arc Ecosystem</span>}
-    </>
+    <BrandLogoContent variant={variant} priority={priority} />
   );
   const rootClassName = `flex min-w-0 items-center ${variant === 'responsive' ? 'gap-3' : ''} ${className}`;
 

@@ -172,10 +172,12 @@ export default function SiteHeader({
 
   return (
     <nav className={`fixed left-0 right-0 top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/88 backdrop-blur-xl ${className}`}>
-      <div className="mx-auto flex h-16 max-w-[1280px] items-center gap-6 px-4 sm:px-6 lg:px-8">
-        <BrandLogo href="/" decorative className="w-[160px] shrink-0 sm:w-[190px]" />
+      <div className="mx-auto flex h-16 max-w-7xl items-center px-4 sm:px-6 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:items-baseline lg:px-8">
+        <div className="flex items-baseline justify-start lg:w-[260px]">
+          <BrandLogo href="/" decorative className="w-[160px] shrink-0 sm:w-[190px] lg:translate-y-[2px]" />
+        </div>
 
-        <div className="hidden min-w-0 flex-1 items-center justify-center gap-2 lg:flex" aria-label="Primary navigation">
+        <div className="hidden min-w-0 items-baseline justify-center gap-1.5 lg:flex xl:gap-2" aria-label="Primary navigation">
           {PRIMARY_SITE_NAV.map((link) => renderLink(link))}
 
           <div ref={moreMenuRef} className="relative">
@@ -207,8 +209,8 @@ export default function SiteHeader({
           </div>
         </div>
 
-        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-          <div className="hidden items-center gap-3 lg:flex">
+        <div className="flex items-center justify-end gap-2 sm:gap-3 lg:items-baseline">
+          <div className="hidden items-baseline gap-3 lg:flex">
             <LanguageToggle currentLang={lang} onChange={setLang} compact />
             <AppSwitcher compact />
             <Link href={launchHref} className="bracket-button shrink-0 px-3 py-2 text-[10px] sm:px-4 sm:py-3 sm:text-xs">
