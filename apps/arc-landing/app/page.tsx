@@ -141,9 +141,9 @@ const wallets = [
 ];
 
 const sdkSteps = [
-  { title: "CONNECT", body: "Reusable wagmi + Circle AppKit hooks" },
-  { title: "SEND", body: "USDC payments via kit.send()" },
-  { title: "CONFIRM", body: "Tx hash + ArcScan link" },
+  { title: "CONNECT", body: "Wallet context", benefits: ["fast", "typed", "reusable"] },
+  { title: "SEND", body: "Payment request", benefits: ["low-fee", "instant", "secure"] },
+  { title: "TRACK", body: "Confirmation", benefits: ["on-chain", "indexed", "verified"] },
 ];
 
 const revealDelay = (delayMs: number) => ({ transitionDelay: `${delayMs}ms` });
@@ -533,27 +533,46 @@ export default function Page() {
 
       <section id="architecture" className="section border-y border-[#141414] bg-white/[0.01]">
         <div className="reveal mx-auto max-w-7xl">
-          <SectionTitle label={`// ${t.sections.architectureTitle.toLowerCase()}`} title={t.sections.architectureSubtitle} />
+          <SectionTitle label={`// ${t.sections.architectureTitle.toLowerCase()}`} title="How Arc routes value across apps in real time." />
           <div className="architecture mt-14 grid gap-8 lg:grid-cols-[1fr_1.1fr_1fr]">
             <span className="architecture-flow architecture-flow-left" aria-hidden="true" />
             <span className="architecture-flow architecture-flow-right" aria-hidden="true" />
-            <DiagramColumn title={t.home.diagram.input} items={wallets} activeIndex={0} />
+            <DiagramColumn title="SOURCES" items={["Users", "Creators", "Teams", "Events"]} activeIndex={0} />
             <div className="bracket-card core-box p-8 text-center">
               <Brackets />
-              <p className="font-mono text-xs uppercase tracking-[0.28em] text-[#c9a84c]">{t.home.diagram.core}</p>
-              <h3 className="mt-4 text-4xl font-black">{t.home.diagram.arcNetwork}</h3>
+              <p className="font-mono text-xs uppercase tracking-[0.28em] text-[#c9a84c]">ARC RAIL</p>
+              <h3 className="mt-4 text-4xl font-black">Settlement Engine</h3>
               <div className="mt-8 space-y-3 font-mono text-sm text-[#aaa]">
-                <p>chainId 5042002</p>
-                <p>USDC native (decimals 18)</p>
-                <p>Block time &lt;1s</p>
-                <p className="text-white">Status: <span className="green-dot" /> LIVE</p>
+                <p>Routing Rules: Active</p>
+                <p>Reliability: 99.9%</p>
+                <p>Avg Conf: &lt;1s</p>
+                <p className="text-white">Status: <span className="green-dot" /> SYNCED</p>
               </div>
             </div>
-            <DiagramColumn title={t.home.diagram.output} items={["arc-pay", "arc-creator", "arc-play", "+ shared-ui", "+ arc-kit"]} activeIndex={2} plannedStart={3} />
+            <DiagramColumn title="DESTINATIONS" items={["Arc Pay", "Arc Creator", "Arc Play", "Market", "Rewards"]} activeIndex={2} />
           </div>
-          <p className="mt-10 text-center font-mono text-xs uppercase tracking-[0.24em] text-[#777]">
-            Apps &middot; 3 <span className="mx-3 text-[#333]">|</span> Features &middot; 13 <span className="mx-3 text-[#333]">|</span>{" "}
-            Block &middot; &lt;live&gt;
+          
+          <div className="mt-12 grid grid-cols-2 gap-4 border-t border-[#1a1a1a] pt-12 md:grid-cols-4">
+            {[
+              { step: "Initiate", desc: "User triggers USDC action" },
+              { step: "Route", desc: "Arc Rail validates paths" },
+              { step: "Confirm", desc: "Instant settlement on-chain" },
+              { step: "Record", desc: "Immutable event logging" },
+            ].map((item, idx) => (
+              <div key={item.step} className="text-center md:text-left">
+                <div className="flex items-center justify-center gap-3 md:justify-start">
+                  <span className="font-mono text-[10px] text-[#c9a84c]">0{idx + 1}</span>
+                  <h4 className="font-mono text-xs uppercase tracking-widest text-white">{item.step}</h4>
+                  {idx < 3 && <ArrowRight size={12} className="hidden text-[#333] md:block" />}
+                </div>
+                <p className="mt-2 text-[10px] uppercase tracking-wider text-[#555]">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-16 text-center font-mono text-xs uppercase tracking-[0.24em] text-[#777]">
+            Success Rate &middot; 99.9% <span className="mx-3 text-[#333]">|</span> Conf. Time &middot; &lt; 1s <span className="mx-3 text-[#333]">|</span>{" "}
+            Modules &middot; 13 Active
           </p>
         </div>
       </section>
@@ -565,18 +584,25 @@ export default function Page() {
             <div className="space-y-5">
               {sdkSteps.map((step, index) => (
                 <div key={step.title} className="step-row" data-active={sdkStep === index ? 'true' : undefined}>
-                  <span>[0{index + 1}]</span>
-                  <div>
-                    <h3>{step.title}</h3>
-                    <p>{step.body}</p>
+                  <span className="font-mono text-[10px] text-[#c9a84c]">[0{index + 1}]</span>
+                  <div className="flex-1">
+                    <h3 className="font-mono text-xs uppercase tracking-widest text-white">{step.title}</h3>
+                    <p className="mt-1 text-sm font-bold text-[#c9a84c]">{step.body}</p>
+                    <div className="mt-2 flex gap-3">
+                      {step.benefits.map((benefit) => (
+                        <span key={benefit} className="font-mono text-[9px] uppercase tracking-tighter text-[#555]">
+                          &middot; {benefit}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  <ArrowRight className="ml-auto text-[#c9a84c]" size={18} />
+                  <ArrowRight className="ml-auto text-[#333]" size={18} />
                 </div>
               ))}
               <div className="pt-6">
-                <p className="inline-flex border border-[#2a2a2a] px-3 py-1 font-mono text-xs uppercase text-[#777]">// arc-kit &middot; coming soon</p>
+                <p className="inline-flex border border-[#2a2a2a] px-3 py-1 font-mono text-xs uppercase text-[#777]">// arc-kit &middot; v0.1.0</p>
                 <p className="mt-5 max-w-xl leading-7 text-[#8b8b8b]">
-                  A TypeScript-first SDK for building on Arc Network. Submit cross-chain USDC transactions without exposing internal complexity.
+                  A TypeScript-first SDK for building on Arc Network. Submit USDC transactions with sub-cent fees.
                 </p>
               </div>
             </div>
@@ -760,50 +786,60 @@ function CodeTerminal({ activeStep }: { activeStep: number }) {
   const cursorTop = 0.6 + activeStep * 4.7;
 
   return (
-    <div className="code-terminal bracket-card overflow-hidden">
+    <div className="code-terminal bracket-card flex flex-col overflow-hidden">
       <Brackets />
-      <div className="flex items-center border-b border-[#2a2a2a] px-5 py-4 font-mono text-xs text-[#777]">
+      
+      {/* Utility Row */}
+      <div className="flex items-center justify-between border-b border-[#2a2a2a] bg-white/[0.02] px-5 py-3">
         <div className="flex gap-2">
-          <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
-          <span className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
-          <span className="h-3 w-3 rounded-full bg-[#28c840]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]/80" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]/80" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]/80" />
         </div>
-        <span className="flex-1 text-center text-[#aaa]">send.ts</span>
-        <span>step {activeStep + 1}/3</span>
+        <div className="flex gap-4 font-mono text-[9px] uppercase tracking-widest">
+          <button type="button" className="text-[#555] hover:text-[#c9a84c]">Copy Snippet</button>
+          <a href="/learn" className="text-[#555] hover:text-[#c9a84c]">Open Docs</a>
+        </div>
       </div>
-      <div className="relative">
+
+      <div className="relative flex-1">
         <span className="code-terminal-scanner z-0" aria-hidden="true" />
         <span className="code-terminal-cursor z-0" style={{ transform: `translateY(${cursorTop}rem)` }} aria-hidden="true" />
         <pre className="overflow-x-auto p-5 text-sm leading-7 text-[#d8d8d8] sm:p-8">
           <code className="relative z-10 grid gap-1">
-            <div className={activeStep === 0 ? 'text-white' : 'text-[#d8d8d8]'}>
-              <span className="text-[#c9a84c]">arc@sdk:~$</span> node send.ts
+            <div className={activeStep === 0 ? 'text-white' : 'text-[#555] transition-colors'}>
+              <span className="text-[#c9a84c]">arc@sdk:~$</span> pnpm add @arc-ecosystem/arc-kit
             </div>
-            <div className={activeStep === 0 ? 'text-white' : 'text-[#d8d8d8]'}>
+            <div className={`mt-4 ${activeStep === 0 ? 'text-white' : 'text-[#555] transition-colors'}`}>
               <span className="text-[#c9a84c]">import</span> {"{ kit }"} <span className="text-[#c9a84c]">from</span>{" "}
               <span className="text-white">'@arc-ecosystem/arc-kit'</span>
             </div>
-            <div className={activeStep === 1 ? 'text-white' : 'text-[#777]'}>
-              <span className="text-[#777]">// arc testnet, native USDC</span>
+            <div className={`mt-2 ${activeStep === 1 ? 'text-white' : 'text-[#555] transition-colors'}`}>
+              <span className="text-[#555]">// 1. Initiate settlement</span>
             </div>
-            <div className={activeStep === 1 ? 'text-white' : 'text-[#d8d8d8]'}>
+            <div className={activeStep === 1 ? 'text-white' : 'text-[#555] transition-colors'}>
               <span className="text-[#c9a84c]">const</span> tx = <span className="text-[#c9a84c]">await</span> kit.send(&#123;
             </div>
-            <div className={activeStep === 1 ? 'text-white' : 'text-[#d8d8d8]'}>  to: <span className="text-white">'0xB87B...4365'</span>,</div>
-            <div className={activeStep === 1 ? 'text-white' : 'text-[#d8d8d8]'}>  amount: <span className="text-white">'10'</span>,</div>
-            <div className={activeStep === 1 ? 'text-white' : 'text-[#d8d8d8]'}>  token: <span className="text-white">'USDC'</span>,</div>
-            <div className={activeStep === 1 ? 'text-white' : 'text-[#d8d8d8]'}>  chain: <span className="text-white">'Arc_Testnet'</span></div>
-            <div className={activeStep === 1 ? 'text-white' : 'text-[#d8d8d8]'}>
+            <div className={activeStep === 1 ? 'text-white' : 'text-[#555] transition-colors'}>  to: <span className="text-white">'0xB87B...4365'</span>,</div>
+            <div className={activeStep === 1 ? 'text-white' : 'text-[#555] transition-colors'}>  amount: <span className="text-white">'10.00'</span>,</div>
+            <div className={activeStep === 1 ? 'text-white' : 'text-[#555] transition-colors'}>  token: <span className="text-white">'USDC'</span></div>
+            <div className={activeStep === 1 ? 'text-white' : 'text-[#555] transition-colors'}>
               &#125;)
             </div>
-            <div className={activeStep === 2 ? 'text-white' : 'text-[#d8d8d8]'}>
-              console.log(tx.hash)
+            <div className={`mt-4 ${activeStep === 2 ? 'text-white' : 'text-[#555] transition-colors'}`}>
+              <span className="text-[#555]">// 2. Track on-chain</span>
             </div>
-            <div className={activeStep === 2 ? 'text-white' : 'text-[#777]'}>
-              <span className="text-[#777]">// tx hash preview</span>
+            <div className={activeStep === 2 ? 'text-white' : 'text-[#555] transition-colors'}>
+              console.log(<span className="text-[#c9a84c]">{`\`Confirmed: \${tx.hash}\``}</span>)
             </div>
           </code>
         </pre>
+      </div>
+
+      {/* Lower Info Band */}
+      <div className="flex items-center justify-between border-t border-[#2a2a2a] bg-white/[0.01] px-5 py-3 font-mono text-[9px] uppercase tracking-widest text-[#444]">
+        <span>Expected integration: &lt; 15 min</span>
+        <span className="text-[#c9a84c]/60">Type-safe helpers included</span>
       </div>
     </div>
   );
