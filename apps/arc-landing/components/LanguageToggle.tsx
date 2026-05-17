@@ -10,8 +10,8 @@ interface Props {
 
 export default function LanguageToggle({ currentLang, onChange, compact = false }: Props) {
   const buttonClass = compact
-    ? 'shrink-0 rounded-full px-2.5 py-1.5 text-[10px] font-bold tracking-[0.16em] transition-all'
-    : 'shrink-0 rounded-lg px-2.5 py-1 text-[10px] font-bold transition-all';
+    ? 'shrink-0 rounded-full px-2.5 py-1.5 text-[10px] font-bold tracking-[0.16em] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black'
+    : 'shrink-0 rounded-lg px-2.5 py-1 text-[10px] font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black';
 
   return (
     <div

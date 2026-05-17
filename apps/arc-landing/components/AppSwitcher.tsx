@@ -20,8 +20,8 @@ const APPS: AppItem[] = [
   { key: 'pay', name: 'Pay', icon: Wallet, href: getArcAppBaseUrl('pay'), color: '#60a5fa' },
   { key: 'creator', name: 'Creator', icon: Sparkles, href: getArcAppBaseUrl('creator'), color: '#f472b6' },
   { key: 'play', name: 'Play', icon: Gamepad2, href: getArcAppBaseUrl('play'), color: '#34d399' },
-  { key: 'market', name: 'Market', icon: ShoppingBag, href: '/market', color: '#c9a84c' },
-  { key: 'hub', name: 'Hub', icon: Home, href: '/', color: '#c9a84c' },
+  { key: 'market', name: 'Market', icon: ShoppingBag, href: getArcAppBaseUrl('market'), color: '#c9a84c' },
+  { key: 'hub', name: 'Hub', icon: Home, href: getArcAppBaseUrl('hub'), color: '#c9a84c' },
 ];
 
 export default function AppSwitcher({ compact = false }: Props) {
@@ -50,12 +50,12 @@ export default function AppSwitcher({ compact = false }: Props) {
             <span
               key={app.name}
               aria-disabled="true"
-              aria-label={`Arc ${app.name} unavailable`}
-              className={`${sharedClasses} cursor-not-allowed opacity-45`}
+              aria-label={`Arc ${app.name} - coming soon`}
+              className={`${sharedClasses} cursor-not-allowed opacity-40`}
               style={{ background: 'transparent', color: 'var(--fg)' }}
-              title={`Arc ${app.name} unavailable`}
+              title="coming soon"
             >
-              <Icon size={14} style={{ color: app.color }} />
+              <Icon size={14} style={{ color: app.color, opacity: 0.6 }} />
               <span className={nameClass}>{app.name}</span>
             </span>
           );

@@ -172,18 +172,20 @@ export default function SiteHeader({
 
   return (
     <nav className={`fixed left-0 right-0 top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/88 backdrop-blur-xl ${className}`}>
-      <div className="mx-auto flex h-16 max-w-7xl items-center px-4 sm:px-6 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:items-baseline lg:px-8">
-        <div className="flex items-baseline justify-start lg:min-w-[230px]">
-          <BrandLogo href="/" decorative className="shrink-0 lg:translate-y-[2px]" />
+      <div className="mx-auto flex h-16 max-w-[1920px] items-center px-4 sm:px-6 lg:grid lg:grid-cols-[240px_1fr_auto] lg:items-center lg:px-8 xl:grid-cols-[280px_1fr_auto]">
+        <div className="flex items-center justify-start">
+          <BrandLogo href="/" decorative className="shrink-0" />
         </div>
 
-        <div className="hidden min-w-0 items-baseline justify-center gap-1.5 lg:flex xl:gap-2" aria-label="Primary navigation">
-          {PRIMARY_SITE_NAV.map((link) => renderLink(link))}
+        <div className="hidden min-w-0 items-center justify-center gap-1.5 lg:flex xl:gap-2" aria-label="Primary navigation">
+          <div className="flex items-center gap-1 xl:gap-2">
+            {PRIMARY_SITE_NAV.slice(0, 5).map((link) => renderLink(link))}
+          </div>
 
-          <div ref={moreMenuRef} className="relative">
+          <div ref={moreMenuRef} className="relative ml-1">
             <button
               type="button"
-              aria-haspopup="menu"
+              aria-haspopup="true"
               aria-expanded={moreOpen}
               aria-controls="site-header-more-menu"
               data-active={moreOpen || desktopSecondaryActive ? 'true' : undefined}
@@ -198,22 +200,28 @@ export default function SiteHeader({
               <div
                 id="site-header-more-menu"
                 role="menu"
-                aria-label={t.nav.more}
-                className="absolute right-0 top-full z-50 mt-3 w-[min(24rem,calc(100vw-2rem))] rounded-3xl border border-[#2a2a2a]/95 bg-[#0a0a0a]/98 p-3 shadow-[0_24px_60px_rgba(0,0,0,0.45)]"
+                className="absolute left-1/2 top-full z-50 mt-3 w-[min(28rem,calc(100vw-2rem))] -translate-x-1/2 rounded-3xl border border-[#2a2a2a]/95 bg-[#0a0a0a]/98 p-4 shadow-[0_24px_60px_rgba(0,0,0,0.5)]"
               >
                 <div className="grid gap-2 sm:grid-cols-2">
-                  {MORE_SITE_NAV.map((link) => renderLink(link, true))}
+                  {MORE_SITE_NAV.map((link) => (
+                    <div key={link.href} role="none">
+                      {renderLink(link, true)}
+                    </div>
+                  ))}
                 </div>
               </div>
             ) : null}
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-2 sm:gap-3 lg:items-baseline">
-          <div className="hidden items-baseline gap-3 lg:flex">
+        <div className="flex items-center justify-end gap-2 sm:gap-3">
+          <div className="hidden items-center gap-2 lg:flex xl:gap-3">
             <LanguageToggle currentLang={lang} onChange={setLang} compact />
             <AppSwitcher compact />
-            <Link href={launchHref} className="bracket-button shrink-0 px-3 py-2 text-[10px] sm:px-4 sm:py-3 sm:text-xs">
+            <Link 
+              href={launchHref} 
+              className="bracket-button shrink-0 px-3 py-2 text-[10px] sm:px-4 sm:py-3 sm:text-xs focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+            >
               {t.nav.launch}
             </Link>
           </div>

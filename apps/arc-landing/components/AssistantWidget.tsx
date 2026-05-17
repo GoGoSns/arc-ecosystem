@@ -1,8 +1,12 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { MessageSquare, X, Send, Bot, User, Loader2, Mic, MicOff, Volume2, VolumeX } from 'lucide-react';
-import { buildAssistantReply, type AssistantMessage } from '@/lib/assistantDemo';
+import { MessageSquare, X, Send, Bot, Loader2, Mic, MicOff, Volume2, VolumeX } from 'lucide-react';
+
+interface AssistantMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
 
 declare global {
   interface Window {
@@ -213,18 +217,26 @@ export default function AssistantWidget() {
     setIsLoading(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 150));
-      const reply = buildAssistantReply(userMessage, nextHistory);
+      const response = await fetch('/api/assistant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMessage, history: messages }),
+      });
+
+      const data = await response.json();
+      if (data.error) throw new Error(data.error);
+
+      const reply = data.reply as string;
       setMessages((prev) => [...prev, { role: 'assistant', content: reply }]);
       if (ttsEnabled) {
         speakText(reply);
       }
     } catch (error) {
-      console.error('Error generating assistant reply:', error);
-      const errorMessage = 'Sorry, I encountered an error. Please try again.';
-      setMessages((prev) => [...prev, { role: 'assistant', content: errorMessage }]);
+      console.error('Error calling assistant:', error);
+      const errMsg = 'Could not connect to AI. Please try again.';
+      setMessages((prev) => [...prev, { role: 'assistant', content: errMsg }]);
       if (ttsEnabled) {
-        speakText(errorMessage);
+        speakText(errMsg);
       }
     } finally {
       setIsLoading(false);
