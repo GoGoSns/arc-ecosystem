@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import Link from 'next/link';
@@ -68,18 +68,18 @@ function StatCard({
   return (
     <div className="rounded-2xl p-6" style={{
       background: 'rgba(255,255,255,0.03)',
-      border: '1px solid rgba(201,168,76,0.15)',
-      boxShadow: '0 0 20px rgba(201,168,76,0.04)',
+      border: '1px solid rgba(212, 175, 55,0.15)',
+      boxShadow: '0 0 20px rgba(212, 175, 55,0.04)',
     }}>
       <div className="flex items-center gap-2 mb-3">
-        <Icon size={14} className="text-[#c9a84c]" />
-        <span className="text-[10px] text-[#555] uppercase tracking-widest">{label}</span>
+        <Icon size={14} className="text-[#d4af37]" />
+        <span className="text-[10px] text-[#555566] uppercase tracking-widest">{label}</span>
       </div>
-      <div className={`text-4xl font-black mb-1 flex items-center gap-2 ${gold ? 'text-[#c9a84c]' : green ? 'text-[#4ade80]' : 'text-white'}`}>
+      <div className={`text-4xl font-black mb-1 flex items-center gap-2 ${gold ? 'text-[#d4af37]' : green ? 'text-[#4ade80]' : 'text-white'}`}>
         {green && <span className="h-3 w-3 rounded-full bg-[#4ade80] animate-pulse shrink-0" />}
         {value}
       </div>
-      <div className="text-xs text-[#555]">{sub}</div>
+      <div className="text-xs text-[#555566]">{sub}</div>
     </div>
   );
 }
@@ -88,8 +88,8 @@ function MiniCard({ label, value, real = true }: { label: string; value: number 
   return (
     <div className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
       <div className="text-2xl font-black mb-1">{value}</div>
-      <div className="text-[10px] text-[#555] uppercase tracking-wider leading-tight">{label}</div>
-      {!real && <div className="text-[9px] text-[#333] mt-1">mock data</div>}
+      <div className="text-[10px] text-[#555566] uppercase tracking-wider leading-tight">{label}</div>
+      {!real && <div className="text-[9px] text-[#1a1a2e] mt-1">mock data</div>}
     </div>
   );
 }
@@ -111,7 +111,7 @@ function BarChart({ data, labels }: { data: number[]; labels: string[] }) {
         return (
           <g key={i}>
             <rect x={x} y={y} width={W} height={barH} rx={4}
-              fill={i === data.length - 1 ? '#c9a84c' : 'rgba(201,168,76,0.3)'} />
+              fill={i === data.length - 1 ? '#d4af37' : 'rgba(212, 175, 55,0.3)'} />
             <text x={x + W / 2} y={H + 14} textAnchor="middle" fontSize="9" fill="#555">{labels[i]}</text>
             <text x={x + W / 2} y={y - 4} textAnchor="middle" fontSize="9" fill="#777">{v}</text>
           </g>
@@ -254,25 +254,25 @@ export default function StatsPage() {
   const MEDALS = ['🥇', '🥈', '🥉'];
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-[#050508] text-white">
       <SiteHeader />
 
       <div className="mx-auto max-w-6xl px-4 py-10">
 
         {/* Hero */}
         <div className="mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-mono text-[#c9a84c] mb-4"
-            style={{ background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.2)' }}>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-mono text-[#d4af37] mb-4"
+            style={{ background: 'rgba(212, 175, 55,0.08)', border: '1px solid rgba(212, 175, 55,0.2)' }}>
             <Activity size={11} /> DEMO METRICS
           </div>
           <h1 className="text-4xl sm:text-5xl font-black mb-3">Arc Ecosystem Stats</h1>
-          <p className="text-[#777] text-lg">Local metrics across all 4 apps · Updated {updatedLabel}</p>
+          <p className="text-[#555566] text-lg">Local metrics across all 4 apps · Updated {updatedLabel}</p>
         </div>
 
         {/* ── Top 4 stat cards ── */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
           <StatCard icon={ArrowRightLeft} label="Total Transactions" value={fmt(MOCK.totalTx)} sub="All time" />
-          <StatCard icon={() => <span className="text-[#c9a84c] text-sm font-black">$</span>}
+          <StatCard icon={() => <span className="text-[#d4af37] text-sm font-black">$</span>}
             label="USDC Volume" value={`$${fmt(MOCK.totalVolume)}`} sub="On-chain" gold />
           <StatCard icon={Users} label="Active Wallets" value={MOCK.activeWallets} sub="Last 24h" />
           <StatCard icon={Activity} label="Network Status" value="DEMO" sub="Arc Testnet preview" green />
@@ -280,7 +280,7 @@ export default function StatsPage() {
 
         {/* ── Apps breakdown ── */}
         <section className="mb-10">
-          <h2 className="text-xs font-black uppercase tracking-widest text-[#c9a84c] mb-5 flex items-center gap-2">
+          <h2 className="text-xs font-black uppercase tracking-widest text-[#d4af37] mb-5 flex items-center gap-2">
             <Zap size={13} /> Apps Activity
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -292,19 +292,19 @@ export default function StatsPage() {
                   <span className="h-2 w-2 rounded-full bg-[#60a5fa]" />
                   <span className="text-xs font-bold uppercase tracking-wider text-[#60a5fa]">Arc Pay</span>
                 </div>
-                <p className="text-[10px] text-[#555]">mock data</p>
+                <p className="text-[10px] text-[#555566]">mock data</p>
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#777]">Payments</span>
+                  <span className="text-[#555566]">Payments</span>
                   <span className="font-black">{MOCK.payPayments}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#777]">Volume</span>
+                  <span className="text-[#555566]">Volume</span>
                   <span className="font-black text-[#60a5fa]">${fmt(MOCK.payVolume)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#777]">Features</span>
+                  <span className="text-[#555566]">Features</span>
                   <span className="font-black">5 live</span>
                 </div>
               </div>
@@ -326,25 +326,25 @@ export default function StatsPage() {
 
             {/* Arc Creator */}
             <div className="rounded-2xl p-5 flex flex-col gap-3"
-              style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(201,168,76,0.2)' }}>
+              style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(212, 175, 55,0.2)' }}>
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="h-2 w-2 rounded-full bg-[#c9a84c]" />
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#c9a84c]">Arc Creator</span>
+                  <span className="h-2 w-2 rounded-full bg-[#d4af37]" />
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#d4af37]">Arc Creator</span>
                 </div>
-                <p className="text-[10px] text-[#555]">mock data</p>
+                <p className="text-[10px] text-[#555566]">mock data</p>
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#777]">Tips</span>
+                  <span className="text-[#555566]">Tips</span>
                   <span className="font-black">{MOCK.creatorTips}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#777]">Subscriptions</span>
+                  <span className="text-[#555566]">Subscriptions</span>
                   <span className="font-black">{MOCK.creatorSubs}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#777]">Features</span>
+                  <span className="text-[#555566]">Features</span>
                   <span className="font-black">4 live</span>
                 </div>
               </div>
@@ -353,12 +353,12 @@ export default function StatsPage() {
                   href={creatorUrl}
                   target={isExternalUrl(creatorUrl) ? "_blank" : undefined}
                   rel={isExternalUrl(creatorUrl) ? "noopener noreferrer" : undefined}
-                  className="text-[11px] font-bold text-[#c9a84c] hover:underline mt-auto"
+                  className="text-[11px] font-bold text-[#d4af37] hover:underline mt-auto"
                 >
                   Open Arc Creator →
                 </a>
               ) : (
-                <span aria-disabled="true" className="text-[11px] font-bold text-[#c9a84c] mt-auto opacity-50">
+                <span aria-disabled="true" className="text-[11px] font-bold text-[#d4af37] mt-auto opacity-50">
                   Open Arc Creator →
                 </span>
               )}
@@ -372,19 +372,19 @@ export default function StatsPage() {
                   <span className="h-2 w-2 rounded-full bg-[#4ade80]" />
                   <span className="text-xs font-bold uppercase tracking-wider text-[#4ade80]">Arc Play</span>
                 </div>
-                <p className="text-[10px] text-[#555]">mock data</p>
+                <p className="text-[10px] text-[#555566]">mock data</p>
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#777]">Games Played</span>
+                  <span className="text-[#555566]">Games Played</span>
                   <span className="font-black">{MOCK.playGames}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#777]">Predictions</span>
+                  <span className="text-[#555566]">Predictions</span>
                   <span className="font-black">{MOCK.playPredictions}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#777]">Features</span>
+                  <span className="text-[#555566]">Features</span>
                   <span className="font-black">5 live</span>
                 </div>
               </div>
@@ -416,19 +416,19 @@ export default function StatsPage() {
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#777]">Forum Threads</span>
+                  <span className="text-[#555566]">Forum Threads</span>
                   <span className="font-black">{threads.length}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#777]">Feedback</span>
+                  <span className="text-[#555566]">Feedback</span>
                   <span className="font-black">{feedbacks.length}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#777]">Node Operators</span>
+                  <span className="text-[#555566]">Node Operators</span>
                   <span className="font-black">{operators.length}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#777]">Bug Reports</span>
+                  <span className="text-[#555566]">Bug Reports</span>
                   <span className="font-black">{bugs.length}</span>
                 </div>
               </div>
@@ -441,7 +441,7 @@ export default function StatsPage() {
 
         {/* ── Community metrics ── */}
         <section className="mb-10">
-          <h2 className="text-xs font-black uppercase tracking-widest text-[#c9a84c] mb-5 flex items-center gap-2">
+          <h2 className="text-xs font-black uppercase tracking-widest text-[#d4af37] mb-5 flex items-center gap-2">
             <Users size={13} /> Community
             <span className="text-[10px] text-[#4ade80] font-normal normal-case">live data</span>
           </h2>
@@ -457,7 +457,7 @@ export default function StatsPage() {
 
         {/* ── Network health + 7-day chart ── */}
         <section className="mb-10">
-          <h2 className="text-xs font-black uppercase tracking-widest text-[#c9a84c] mb-5 flex items-center gap-2">
+          <h2 className="text-xs font-black uppercase tracking-widest text-[#d4af37] mb-5 flex items-center gap-2">
             <Activity size={13} /> Network Health
           </h2>
           <div className="grid lg:grid-cols-2 gap-4">
@@ -466,7 +466,7 @@ export default function StatsPage() {
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-bold">RPC Status</h3>
                 <button onClick={() => { checkRpc(); setLastUpdated(Date.now()); }}
-                  className="text-xs text-[#555] hover:text-[#c9a84c] flex items-center gap-1 transition-colors">
+                  className="text-xs text-[#555566] hover:text-[#d4af37] flex items-center gap-1 transition-colors">
                   <RefreshCw size={11} className={rpcLoading ? 'animate-spin' : ''} /> refresh
                 </button>
               </div>
@@ -489,7 +489,7 @@ export default function StatsPage() {
                     },
                   ].map(({ label, value, color, dot }) => (
                     <div key={label} className="rounded-lg p-3" style={{ background: 'rgba(255,255,255,0.02)' }}>
-                      <div className="text-[10px] text-[#555] uppercase tracking-wider mb-1">{label}</div>
+                      <div className="text-[10px] text-[#555566] uppercase tracking-wider mb-1">{label}</div>
                       <div className="font-black flex items-center gap-1.5" style={{ color }}>
                         {dot && <span className="h-2 w-2 rounded-full shrink-0" style={{ background: color, boxShadow: `0 0 6px ${color}` }} />}
                         {value}
@@ -498,23 +498,23 @@ export default function StatsPage() {
                   ))}
                 </div>
               ) : (
-                <div className="text-sm text-[#555]">
+                <div className="text-sm text-[#555566]">
                   {rpcLoading ? 'Checking RPC...' : 'Click refresh to check'}
                 </div>
               )}
 
               {/* RPC provider list */}
-              <div className="mt-4 pt-4 border-t border-[#1a1a1a]">
+              <div className="mt-4 pt-4 border-t border-[#1a1a2e]">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] text-[#555] uppercase tracking-wider">Providers</span>
-                  <Link href="/node/rpc" className="text-[10px] text-[#c9a84c] hover:underline">Add RPC →</Link>
+                  <span className="text-[10px] text-[#555566] uppercase tracking-wider">Providers</span>
+                  <Link href="/node/rpc" className="text-[10px] text-[#d4af37] hover:underline">Add RPC →</Link>
                 </div>
                 <div className="space-y-1.5">
                   {rpcProviders.map((r) => (
                     <div key={r.id} className="flex items-center gap-2 text-xs">
                       <span className="h-1.5 w-1.5 rounded-full bg-[#facc15] shrink-0" />
-                      <span className="text-[#aaa] font-bold">{r.name}</span>
-                      {r.isOfficial && <span className="text-[#c9a84c] text-[9px]">★</span>}
+                      <span className="text-[#8a8a9a] font-bold">{r.name}</span>
+                      {r.isOfficial && <span className="text-[#d4af37] text-[9px]">★</span>}
                       <span className="text-[#444] font-mono text-[10px] ml-auto truncate max-w-[120px]">{r.url}</span>
                     </div>
                   ))}
@@ -527,7 +527,7 @@ export default function StatsPage() {
               <h3 className="text-sm font-bold mb-1">Daily Activity</h3>
               <p className="text-[10px] text-[#444] mb-5">Transactions — last 7 days (mock)</p>
               <BarChart data={MOCK.MOCK_DAILY} labels={DAY_LABELS} />
-              <div className="flex justify-between mt-4 text-xs text-[#555]">
+              <div className="flex justify-between mt-4 text-xs text-[#555566]">
                 <span>Total: {MOCK.MOCK_DAILY.reduce((a, b) => a + b, 0)} tx</span>
                 <span>Avg: {Math.round(MOCK.MOCK_DAILY.reduce((a, b) => a + b, 0) / MOCK.MOCK_DAILY.length)}/day</span>
               </div>
@@ -540,12 +540,12 @@ export default function StatsPage() {
 
           {/* Recent activity */}
           <section>
-            <h2 className="text-xs font-black uppercase tracking-widest text-[#c9a84c] mb-4 flex items-center gap-2">
+            <h2 className="text-xs font-black uppercase tracking-widest text-[#d4af37] mb-4 flex items-center gap-2">
               <TrendingUp size={13} /> Recent Activity
             </h2>
             <div className="rounded-2xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)' }}>
               {activityFeed.length === 0 ? (
-                <div className="p-6 text-center text-sm text-[#555]">No activity yet.</div>
+                <div className="p-6 text-center text-sm text-[#555566]">No activity yet.</div>
               ) : (
                 <div>
                   {activityFeed.map((item, i) => (
@@ -566,13 +566,13 @@ export default function StatsPage() {
 
           {/* Contributor leaderboard */}
           <section>
-            <h2 className="text-xs font-black uppercase tracking-widest text-[#c9a84c] mb-4 flex items-center gap-2">
+            <h2 className="text-xs font-black uppercase tracking-widest text-[#d4af37] mb-4 flex items-center gap-2">
               <Award size={13} /> Top Contributors
             </h2>
             <div className="rounded-2xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)' }}>
               {leaderboard.length === 0 ? (
                 <div className="p-8 text-center">
-                  <p className="text-[#555] text-sm mb-2">No contributions yet.</p>
+                  <p className="text-[#555566] text-sm mb-2">No contributions yet.</p>
                   <p className="text-[#444] text-xs">Post a thread, report a bug, or run a node to appear here.</p>
                 </div>
               ) : (
@@ -585,11 +585,11 @@ export default function StatsPage() {
                     <div key={addr}
                       className="grid grid-cols-[36px_1fr_56px] items-center px-4 py-3 text-sm transition-colors hover:bg-[rgba(255,255,255,0.02)]"
                       style={{ borderBottom: i < leaderboard.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}>
-                      <span className="font-black text-xs" style={{ color: i < 3 ? '#c9a84c' : '#444' }}>
+                      <span className="font-black text-xs" style={{ color: i < 3 ? '#d4af37' : '#444' }}>
                         {i < 3 ? MEDALS[i] : `#${i + 1}`}
                       </span>
                       <div>
-                        <div className="font-mono text-xs text-[#aaa]">{shortenAddr(addr)}</div>
+                        <div className="font-mono text-xs text-[#8a8a9a]">{shortenAddr(addr)}</div>
                         <div className="text-[9px] text-[#444] mt-0.5">
                           {[
                             data.threads    > 0 && `${data.threads} thread${data.threads > 1 ? 's' : ''}`,
@@ -601,7 +601,7 @@ export default function StatsPage() {
                           ].filter(Boolean).join(' · ')}
                         </div>
                       </div>
-                      <div className="text-right font-black text-[#c9a84c]">{data.score}</div>
+                      <div className="text-right font-black text-[#d4af37]">{data.score}</div>
                     </div>
                   ))}
                 </>
@@ -611,7 +611,7 @@ export default function StatsPage() {
             {/* Score legend */}
             <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[10px] text-[#444]">
               {[['Node', '20pts'], ['Bug report', '10pts'], ['Thread', '5pts'], ['Validator app', '5pts'], ['Feedback', '3pts'], ['Comment', '1pt']].map(([k, v]) => (
-                <span key={k}><span className="text-[#333]">{k}</span> = <span className="text-[#c9a84c]">{v}</span></span>
+                <span key={k}><span className="text-[#1a1a2e]">{k}</span> = <span className="text-[#d4af37]">{v}</span></span>
               ))}
             </div>
           </section>

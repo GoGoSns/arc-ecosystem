@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { ArrowRight, BadgeCheck, CircleDashed, Clock3, TimerReset, Trophy } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -40,7 +40,7 @@ function statusTone(status: ReturnType<typeof resolveChallengeStatus>) {
     case 'expired':
       return 'border-[#f59e0b]/30 bg-[#f59e0b]/10 text-[#fde68a]';
     default:
-      return 'border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]';
+      return 'border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]';
   }
 }
 
@@ -104,13 +104,13 @@ export default function GameChallengesPage() {
       <div className="mx-auto max-w-7xl">
         <div className="reveal space-y-5">
           <div className="flex flex-wrap items-center gap-2">
-            <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">Challenges</HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">Countdown + progress</HubBadge>
+            <HubBadge className="border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]">Challenges</HubBadge>
+            <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">Countdown + progress</HubBadge>
           </div>
           <h1 className="max-w-4xl text-4xl font-black uppercase leading-tight sm:text-5xl lg:text-6xl">
             Challenge board
           </h1>
-          <p className="max-w-3xl text-base leading-7 text-[#9a9a9a] sm:text-lg">
+          <p className="max-w-3xl text-base leading-7 text-[#8a8a9a] sm:text-lg">
             Mock challenge cards with progress bars, deadline countdowns, and claim actions. Update progress
             locally, then claim a reward when the target is reached.
           </p>
@@ -140,20 +140,20 @@ export default function GameChallengesPage() {
                           {resolvedStatus.toUpperCase()}
                         </HubBadge>
                         <HubBadge>{challenge.game}</HubBadge>
-                        <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-white">
+                        <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-white">
                           {formatGameAmount(challenge.rewardUsd)} USDC
                         </HubBadge>
                       </div>
                       <div className="space-y-2">
                         <h2 className="text-2xl font-black uppercase sm:text-3xl">{challenge.title}</h2>
-                        <p className="max-w-3xl text-sm leading-7 text-[#9a9a9a]">
+                        <p className="max-w-3xl text-sm leading-7 text-[#8a8a9a]">
                           Reach {challenge.targetValue} {formatTargetType(challenge.targetType)} to unlock the reward.
                         </p>
                       </div>
                     </div>
 
-                    <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3 text-right">
-                      <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">
+                    <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3 text-right">
+                      <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">
                         {resolvedStatus === 'open' ? 'Ends in' : 'Closed'}
                       </p>
                       <p className="mt-1 text-sm font-semibold text-white">
@@ -164,7 +164,7 @@ export default function GameChallengesPage() {
 
                   <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
                     <div>
-                      <div className="flex items-center justify-between gap-3 text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">
+                      <div className="flex items-center justify-between gap-3 text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">
                         <span>Progress</span>
                         <span>
                           {challenge.progress}/{challenge.targetValue} {formatTargetType(challenge.targetType)}
@@ -172,7 +172,7 @@ export default function GameChallengesPage() {
                       </div>
                       <div className="mt-3 h-3 overflow-hidden rounded-full bg-black/40">
                         <div
-                          className="h-full rounded-full bg-[linear-gradient(90deg,#c9a84c,#f0d79e)] transition-[width] duration-300"
+                          className="h-full rounded-full bg-[linear-gradient(90deg,#d4af37,#f0d79e)] transition-[width] duration-300"
                           style={{ width: `${ratio}%` }}
                           role="progressbar"
                           aria-label={`${challenge.title} progress`}
@@ -182,13 +182,13 @@ export default function GameChallengesPage() {
                         />
                       </div>
                       <div className="mt-4 flex flex-wrap gap-2">
-                        <span className="inline-flex rounded-full border border-[#2a2a2a] bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#aaa]">
+                        <span className="inline-flex rounded-full border border-[#1a1a2e] bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#8a8a9a]">
                           Target {formatTargetType(challenge.targetType)}
                         </span>
-                        <span className="inline-flex rounded-full border border-[#2a2a2a] bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#aaa]">
+                        <span className="inline-flex rounded-full border border-[#1a1a2e] bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#8a8a9a]">
                           Reward {formatGameAmount(challenge.rewardUsd)} USDC
                         </span>
-                        <span className="inline-flex rounded-full border border-[#2a2a2a] bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#aaa]">
+                        <span className="inline-flex rounded-full border border-[#1a1a2e] bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#8a8a9a]">
                           Deadline {resolvedStatus === 'open' ? countdown : formatGameTimestamp(challenge.deadlineAt)}
                         </span>
                       </div>
@@ -214,7 +214,7 @@ export default function GameChallengesPage() {
                           Claim Reward
                         </button>
                       ) : (
-                        <div className="rounded-2xl border border-[#2a2a2a] bg-black/20 px-4 py-3 text-center text-sm text-[#777]">
+                        <div className="rounded-2xl border border-[#1a1a2e] bg-black/20 px-4 py-3 text-center text-sm text-[#555566]">
                           {resolvedStatus === 'open' ? 'Reward unlocks when the target is met.' : 'Claiming is closed for this challenge.'}
                         </div>
                       )}

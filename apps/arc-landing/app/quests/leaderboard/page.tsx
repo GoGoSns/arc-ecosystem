@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useWallet } from '@/contexts/WalletContext';
 import { useQuestStore } from '@/lib/questStore';
@@ -47,23 +47,23 @@ export default function LeaderboardPage() {
   players.sort((a, b) => b.xp - a.xp);
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white pt-24 pb-20 px-4">
+    <main className="min-h-screen bg-[#050508] text-white pt-24 pb-20 px-4">
       <div className="mx-auto max-w-5xl">
         <div className="mb-12">
-          <Link href="/quests" className="flex items-center gap-2 text-[#777] hover:text-[#c9a84c] transition-colors font-mono text-xs uppercase mb-6">
+          <Link href="/quests" className="flex items-center gap-2 text-[#555566] hover:text-[#d4af37] transition-colors font-mono text-xs uppercase mb-6">
             <ArrowLeft size={14} /> Back to Hub
           </Link>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-              <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">Global Ranking</p>
+              <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#d4af37]">Global Ranking</p>
               <h1 className="text-4xl font-black mt-2 flex items-center gap-4">
-                LEADERBOARD <Trophy className="text-[#c9a84c]" size={32} />
+                LEADERBOARD <Trophy className="text-[#d4af37]" size={32} />
               </h1>
             </div>
-            <div className="flex bg-[#111] p-1 rounded-lg border border-[#2a2a2a]">
+            <div className="flex bg-[#0d0d12] p-1 rounded-lg border border-[#1a1a2e]">
               <button className="px-6 py-2 rounded-md text-xs font-mono uppercase bg-[#222] text-white">All Time</button>
-              <button className="px-6 py-2 rounded-md text-xs font-mono uppercase text-[#555] hover:text-[#777]">Monthly</button>
-              <button className="px-6 py-2 rounded-md text-xs font-mono uppercase text-[#555] hover:text-[#777]">Weekly</button>
+              <button className="px-6 py-2 rounded-md text-xs font-mono uppercase text-[#555566] hover:text-[#555566]">Monthly</button>
+              <button className="px-6 py-2 rounded-md text-xs font-mono uppercase text-[#555566] hover:text-[#555566]">Weekly</button>
             </div>
           </div>
         </div>
@@ -71,21 +71,21 @@ export default function LeaderboardPage() {
         {/* Top 3 Podium Cards */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           {players.slice(0, 3).map((player, index) => (
-            <div key={player.address} className={`bracket-card p-8 text-center relative overflow-hidden ${index === 0 ? 'bg-[#c9a84c]/10 border-[#c9a84c]/30' : 'bg-white/[0.02]'}`}>
+            <div key={player.address} className={`bracket-card p-8 text-center relative overflow-hidden ${index === 0 ? 'bg-[#d4af37]/10 border-[#d4af37]/30' : 'bg-white/[0.02]'}`}>
               <Brackets />
               <div className="text-4xl mb-4">
                 {index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'}
               </div>
-              <p className="font-mono text-xs text-[#777] mb-1">RANK {index + 1}</p>
+              <p className="font-mono text-xs text-[#555566] mb-1">RANK {index + 1}</p>
               <p className="text-xl font-black mb-4">{player.address}</p>
               <div className="flex justify-center gap-8 border-t border-white/5 pt-6">
                 <div>
-                  <p className="text-xs text-[#555] font-mono uppercase">Level</p>
+                  <p className="text-xs text-[#555566] font-mono uppercase">Level</p>
                   <p className="text-xl font-black">{player.level}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-[#555] font-mono uppercase">XP</p>
-                  <p className="text-xl font-black text-[#c9a84c]">{player.xp.toLocaleString()}</p>
+                  <p className="text-xs text-[#555566] font-mono uppercase">XP</p>
+                  <p className="text-xl font-black text-[#d4af37]">{player.xp.toLocaleString()}</p>
                 </div>
               </div>
             </div>
@@ -98,38 +98,38 @@ export default function LeaderboardPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-[#2a2a2a] bg-white/[0.02]">
-                  <th className="px-6 py-4 font-mono text-[10px] uppercase text-[#777]">Rank</th>
-                  <th className="px-6 py-4 font-mono text-[10px] uppercase text-[#777]">Address</th>
-                  <th className="px-6 py-4 font-mono text-[10px] uppercase text-[#777]">Level</th>
-                  <th className="px-6 py-4 font-mono text-[10px] uppercase text-[#777]">Total XP</th>
-                  <th className="px-6 py-4 font-mono text-[10px] uppercase text-[#777]">Quests</th>
-                  <th className="px-6 py-4 font-mono text-[10px] uppercase text-[#777]">Badges</th>
+                <tr className="border-b border-[#1a1a2e] bg-white/[0.02]">
+                  <th className="px-6 py-4 font-mono text-[10px] uppercase text-[#555566]">Rank</th>
+                  <th className="px-6 py-4 font-mono text-[10px] uppercase text-[#555566]">Address</th>
+                  <th className="px-6 py-4 font-mono text-[10px] uppercase text-[#555566]">Level</th>
+                  <th className="px-6 py-4 font-mono text-[10px] uppercase text-[#555566]">Total XP</th>
+                  <th className="px-6 py-4 font-mono text-[10px] uppercase text-[#555566]">Quests</th>
+                  <th className="px-6 py-4 font-mono text-[10px] uppercase text-[#555566]">Badges</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#1a1a1a]">
                 {players.map((player, index) => {
                   const isUser = isConnected && player.address.toLowerCase().includes(address?.slice(-4).toLowerCase() || '');
                   return (
-                    <tr key={player.address} className={`transition-colors hover:bg-white/[0.02] ${isUser ? 'bg-[#c9a84c]/5' : ''}`}>
+                    <tr key={player.address} className={`transition-colors hover:bg-white/[0.02] ${isUser ? 'bg-[#d4af37]/5' : ''}`}>
                       <td className="px-6 py-4">
-                        <span className={`font-mono font-bold ${index < 3 ? 'text-[#c9a84c]' : 'text-[#555]'}`}>
+                        <span className={`font-mono font-bold ${index < 3 ? 'text-[#d4af37]' : 'text-[#555566]'}`}>
                           #{index + 1}
                         </span>
                       </td>
                       <td className="px-6 py-4 font-black">
                         {player.address}
-                        {isUser && <span className="ml-2 text-[10px] bg-[#c9a84c] text-black px-1.5 py-0.5 rounded uppercase font-mono">You</span>}
+                        {isUser && <span className="ml-2 text-[10px] bg-[#d4af37] text-black px-1.5 py-0.5 rounded uppercase font-mono">You</span>}
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
-                          <span className="h-6 w-6 rounded border border-[#2a2a2a] flex items-center justify-center text-[10px] font-mono">
+                          <span className="h-6 w-6 rounded border border-[#1a1a2e] flex items-center justify-center text-[10px] font-mono">
                             {player.level}
                           </span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 font-mono text-[#c9a84c] font-bold">{player.xp.toLocaleString()}</td>
-                      <td className="px-6 py-4 text-[#777]">{player.quests}</td>
+                      <td className="px-6 py-4 font-mono text-[#d4af37] font-bold">{player.xp.toLocaleString()}</td>
+                      <td className="px-6 py-4 text-[#555566]">{player.quests}</td>
                       <td className="px-6 py-4">
                          <div className="flex gap-1">
                           {Array.from({ length: player.badges }).map((_, i) => (
@@ -145,18 +145,18 @@ export default function LeaderboardPage() {
           </div>
         </div>
 
-        <div className="mt-8 flex items-center justify-between p-6 bracket-card bg-[#111]">
+        <div className="mt-8 flex items-center justify-between p-6 bracket-card bg-[#0d0d12]">
           <Brackets />
           <div className="flex items-center gap-4">
-            <div className="h-10 w-10 rounded-full bg-[#c9a84c]/10 flex items-center justify-center border border-[#c9a84c]/20">
-              <Users size={18} className="text-[#c9a84c]" />
+            <div className="h-10 w-10 rounded-full bg-[#d4af37]/10 flex items-center justify-center border border-[#d4af37]/20">
+              <Users size={18} className="text-[#d4af37]" />
             </div>
             <div>
               <p className="text-sm font-black uppercase">Community Active</p>
-              <p className="text-[10px] font-mono text-[#555]">Join 1,240 players building on Arc</p>
+              <p className="text-[10px] font-mono text-[#555566]">Join 1,240 players building on Arc</p>
             </div>
           </div>
-          <Link href="/forum" className="text-xs font-mono uppercase text-[#c9a84c] hover:underline">
+          <Link href="/forum" className="text-xs font-mono uppercase text-[#d4af37] hover:underline">
             Visit Community Forum &rarr;
           </Link>
         </div>

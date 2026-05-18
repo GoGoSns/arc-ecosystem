@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
@@ -157,12 +157,12 @@ export default function ForumBrowse({ filterCategory }: Props) {
 
   return (
     <div className="forum-shell min-h-screen text-white">
-      <nav className="sticky top-0 z-50 border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/88 backdrop-blur-xl">
+      <nav className="sticky top-0 z-50 border-b border-[#1a1a2e]/80 bg-[#050508]/88 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
           <Link href="/" className="forum-brand">
             <BrandLogo href={null} decorative className="forum-logo-glow h-10 w-10 shrink-0" />
             <div className="forum-brand-copy">
-              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#8a8a8a]">
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#8a8a9a]">
                 Arc Ecosystem
               </span>
               <span className="font-mono text-xs uppercase tracking-[0.24em] text-[#f4f4f4]">
@@ -173,11 +173,11 @@ export default function ForumBrowse({ filterCategory }: Props) {
 
           <div className="hidden items-center gap-2 md:flex">
             <span className="forum-chip">
-              <Compass size={11} className="text-[#c9a84c]" />
+              <Compass size={11} className="text-[#d4af37]" />
               Community hub
             </span>
             <span className="forum-chip">
-              <Activity size={11} className="text-[#c9a84c]" />
+              <Activity size={11} className="text-[#d4af37]" />
               Live signals
             </span>
           </div>
@@ -247,7 +247,7 @@ export default function ForumBrowse({ filterCategory }: Props) {
                   <h2 className="mt-2 text-lg font-bold text-white">Discussion lanes</h2>
                 </div>
                 <span className="forum-chip">
-                  <Sparkles size={11} className="text-[#c9a84c]" />
+                  <Sparkles size={11} className="text-[#d4af37]" />
                   Live
                 </span>
               </div>
@@ -299,10 +299,10 @@ export default function ForumBrowse({ filterCategory }: Props) {
                 })}
               </div>
 
-              <div className="mt-4 border-t border-[#2a2a2a]/80 pt-4">
+              <div className="mt-4 border-t border-[#1a1a2e]/80 pt-4">
                 <Link href="/feedback" className="forum-button w-full justify-between">
                   <span className="inline-flex items-center gap-2">
-                    <Compass size={12} className="text-[#c9a84c]" />
+                    <Compass size={12} className="text-[#d4af37]" />
                     Feedback Hub
                   </span>
                   <ArrowRight size={14} />
@@ -330,7 +330,7 @@ export default function ForumBrowse({ filterCategory }: Props) {
                 </div>
 
                 <div className="forum-search-wrap flex-1 xl:max-w-md">
-                  <Search size={15} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#666]" />
+                  <Search size={15} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#555566]" />
                   <input
                     type="text"
                     placeholder="Search signals..."
@@ -368,7 +368,7 @@ export default function ForumBrowse({ filterCategory }: Props) {
                   <p className="forum-panel-title">Community Signals</p>
                   <h2 className="mt-2 text-lg font-bold text-white">Market pulse</h2>
                 </div>
-                <TrendingUp size={17} className="text-[#c9a84c]" />
+                <TrendingUp size={17} className="text-[#d4af37]" />
               </div>
 
               <div className="forum-signal-list mt-4">
@@ -391,7 +391,7 @@ export default function ForumBrowse({ filterCategory }: Props) {
                   <p className="forum-panel-title">Featured Areas</p>
                   <h2 className="mt-2 text-lg font-bold text-white">Where to post</h2>
                 </div>
-                <Users2 size={17} className="text-[#c9a84c]" />
+                <Users2 size={17} className="text-[#d4af37]" />
               </div>
 
               <div className="mt-4 space-y-2">
@@ -408,7 +408,7 @@ export default function ForumBrowse({ filterCategory }: Props) {
                         <span className="forum-category-note">{lane.description}</span>
                       </span>
                     </span>
-                    <ArrowRight size={14} className="text-[#8a8a8a]" />
+                    <ArrowRight size={14} className="text-[#8a8a9a]" />
                   </Link>
                 ))}
               </div>
@@ -505,24 +505,24 @@ function ThreadRow({
         <button
           type="button"
           onClick={() => address && onVote(thread.id, address, 'up')}
-          className="forum-vote-button focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+          className="forum-vote-button focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
           style={{
-            color: hasUp ? '#c9a84c' : '#777',
-            background: hasUp ? 'rgba(201,168,76,0.1)' : 'rgba(255,255,255,0.02)',
-            borderColor: hasUp ? 'rgba(201,168,76,0.28)' : 'rgba(255,255,255,0.07)',
+            color: hasUp ? '#d4af37' : '#777',
+            background: hasUp ? 'rgba(212, 175, 55,0.1)' : 'rgba(255,255,255,0.02)',
+            borderColor: hasUp ? 'rgba(212, 175, 55,0.28)' : 'rgba(255,255,255,0.07)',
           }}
           aria-label={address ? 'Upvote thread' : 'Connect wallet to vote'}
           title={address ? 'Upvote' : 'Connect wallet to vote'}
         >
           <ArrowUp size={13} />
         </button>
-        <span className="forum-vote-score" style={{ color: score > 0 ? '#c9a84c' : score < 0 ? '#ef4444' : '#666' }}>
+        <span className="forum-vote-score" style={{ color: score > 0 ? '#d4af37' : score < 0 ? '#ef4444' : '#666' }}>
           {score}
         </span>
         <button
           type="button"
           onClick={() => address && onVote(thread.id, address, 'down')}
-          className="forum-vote-button focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+          className="forum-vote-button focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
           style={{
             color: hasDown ? '#ef4444' : '#777',
             background: hasDown ? 'rgba(239,68,68,0.1)' : 'rgba(255,255,255,0.02)',
@@ -601,7 +601,7 @@ function WalletConnect() {
       <button
         type="button"
         onClick={disconnect}
-        className="forum-wallet focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+        className="forum-wallet focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
       >
         <span className="inline-block h-2 w-2 rounded-full bg-[#30d158] shadow-[0_0_12px_rgba(48,209,88,0.45)]" />
         {shortenAddress(address)}
@@ -613,7 +613,7 @@ function WalletConnect() {
     <button
       type="button"
       onClick={connect}
-      className="forum-button forum-button--gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+      className="forum-button forum-button--gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
     >
       Connect Wallet
     </button>

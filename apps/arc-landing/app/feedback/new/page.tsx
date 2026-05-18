@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -68,17 +68,17 @@ export default function NewFeedback() {
 
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col">
+      <div className="min-h-screen bg-[#050508] text-white flex flex-col">
         <SiteHeader />
         <div className="flex-1 flex items-center justify-center px-4">
           <div className="text-center max-w-sm">
             <div className="text-5xl mb-6">🔒</div>
             <h2 className="text-2xl font-black mb-2">Connect Your Wallet</h2>
-            <p className="text-[#777] mb-8 text-sm">You need a wallet connection to submit feedback.</p>
+            <p className="text-[#555566] mb-8 text-sm">You need a wallet connection to submit feedback.</p>
             <button
               onClick={connect}
               className="px-6 py-3 rounded-xl font-bold text-sm"
-              style={{ background: '#c9a84c', color: '#0a0a0a' }}
+              style={{ background: '#d4af37', color: '#0a0a0a' }}
             >
               Connect Wallet
             </button>
@@ -89,16 +89,16 @@ export default function NewFeedback() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-[#050508] text-white">
       <SiteHeader />
 
       <div className="mx-auto max-w-2xl px-4 py-10">
         <h1 className="text-3xl font-black mb-2">Submit Feedback</h1>
-        <p className="text-[#777] text-sm mb-10">Share your thoughts to help improve Arc Ecosystem.</p>
+        <p className="text-[#555566] text-sm mb-10">Share your thoughts to help improve Arc Ecosystem.</p>
 
         {/* Category */}
         <div className="mb-8">
-          <label className="block text-xs font-bold uppercase tracking-widest text-[#aaa] mb-3">Category</label>
+          <label className="block text-xs font-bold uppercase tracking-widest text-[#8a8a9a] mb-3">Category</label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {CATEGORIES.map((cat) => {
               const active = category === cat.value;
@@ -124,7 +124,7 @@ export default function NewFeedback() {
 
         {/* Title */}
         <div className="mb-5">
-          <label className="block text-xs font-bold uppercase tracking-widest text-[#aaa] mb-2">
+          <label className="block text-xs font-bold uppercase tracking-widest text-[#8a8a9a] mb-2">
             Title <span className="text-[#ef4444]">*</span>
           </label>
           <input
@@ -141,13 +141,13 @@ export default function NewFeedback() {
           />
           <div className="flex justify-between mt-1.5">
             <span className="text-xs text-[#ef4444]">{errors.title ?? ''}</span>
-            <span className="text-xs text-[#555]">{title.length}/100</span>
+            <span className="text-xs text-[#555566]">{title.length}/100</span>
           </div>
         </div>
 
         {/* Description */}
         <div className="mb-5">
-          <label className="block text-xs font-bold uppercase tracking-widest text-[#aaa] mb-2">
+          <label className="block text-xs font-bold uppercase tracking-widest text-[#8a8a9a] mb-2">
             Description <span className="text-[#ef4444]">*</span>
           </label>
           <textarea
@@ -163,14 +163,14 @@ export default function NewFeedback() {
           />
           <div className="flex justify-between mt-1.5">
             <span className="text-xs text-[#ef4444]">{errors.description ?? ''}</span>
-            <span className="text-xs text-[#555]">{description.length} chars</span>
+            <span className="text-xs text-[#555566]">{description.length} chars</span>
           </div>
         </div>
 
         {/* Author Name */}
         <div className="mb-10">
-          <label className="block text-xs font-bold uppercase tracking-widest text-[#aaa] mb-2">
-            Display Name <span className="text-[#555] font-normal normal-case">(optional)</span>
+          <label className="block text-xs font-bold uppercase tracking-widest text-[#8a8a9a] mb-2">
+            Display Name <span className="text-[#555566] font-normal normal-case">(optional)</span>
           </label>
           <input
             type="text"
@@ -190,7 +190,7 @@ export default function NewFeedback() {
           onClick={handleSubmit}
           disabled={submitting}
           className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all hover:scale-[1.01] disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{ background: '#c9a84c', color: '#0a0a0a' }}
+          style={{ background: '#d4af37', color: '#0a0a0a' }}
         >
           <Send size={16} />
           {submitting ? 'Submitting...' : 'Submit Feedback'}

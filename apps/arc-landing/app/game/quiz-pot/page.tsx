@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { ArrowRight, Clock3, Coins, Plus, Sparkles, Users } from 'lucide-react';
@@ -15,6 +15,9 @@ import {
   type QuizPotDistribution,
 } from '@/lib/quizPotStore';
 import { buildGameProgressSnapshot, useGameStore } from '@/lib/gameStore';
+import { ShareButtons } from '@/components/ShareButtons';
+
+import { GameToast } from '@/components/GameToast';
 
 function useHydratedNow() {
   const [hydrated, setHydrated] = useState(false);
@@ -41,7 +44,7 @@ function statusTone(status: ReturnType<typeof resolveQuizPotStatus>) {
     case 'ended':
       return 'border-[#777]/30 bg-white/[0.02] text-[#d8d8d8]';
     default:
-      return 'border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]';
+      return 'border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]';
   }
 }
 
@@ -78,56 +81,56 @@ function QuizPotCard({ pot, now }: { pot: QuizPot; now: number }) {
   const ctaLabel = status === 'ended' ? 'Review Pot' : 'Join Pot';
 
   return (
-    <HubCard as="article" className="p-6 sm:p-8">
+    <HubCard as="article" className="p-6 sm:p-8 hover:border-[#d4af37]/30 transition-all group">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0 space-y-3">
           <div className="flex flex-wrap items-center gap-2">
             <HubBadge className={statusTone(status)}>{status.toUpperCase()}</HubBadge>
             <HubBadge>{formatDistributionLabel(pot.distribution)}</HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-white">{pot.hostName}</HubBadge>
+            <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-white">{pot.hostName}</HubBadge>
           </div>
           <div className="space-y-2">
-            <h2 className="text-2xl font-black uppercase sm:text-3xl">{pot.title}</h2>
-            <p className="max-w-3xl text-sm leading-7 text-[#9a9a9a]">
-              Challenge a live room, join a queued table, or review the final standings. Each pot is fully local and safe to play in a browser demo.
+            <h2 className="text-2xl font-black uppercase sm:text-3xl group-hover:text-[#d4af37] transition-colors">{pot.title}</h2>
+            <p className="max-w-3xl text-sm leading-7 text-[#8a8a9a]">
+              Challenge a live room, join a queued table, or review the final standings. Each pot is fully local and safe to play.
             </p>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3 text-right">
-          <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">{countdown.label}</p>
+        <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3 text-right">
+          <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">{countdown.label}</p>
           <p className="mt-1 text-sm font-semibold text-white">{countdown.value}</p>
         </div>
       </div>
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
-          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Questions</div>
+      <div className="mt-6 grid gap-3 grid-cols-2 xl:grid-cols-4">
+        <div className="rounded-2xl border border-[#1a1a2e] bg-white/[0.02] px-4 py-3">
+          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Questions</div>
           <div className="mt-2 text-sm font-semibold text-white">{pot.questionCount}</div>
         </div>
-        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
-          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Duration</div>
+        <div className="rounded-2xl border border-[#1a1a2e] bg-white/[0.02] px-4 py-3">
+          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Duration</div>
           <div className="mt-2 text-sm font-semibold text-white">{pot.durationHours}h</div>
         </div>
-        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
-          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Participants</div>
+        <div className="rounded-2xl border border-[#1a1a2e] bg-white/[0.02] px-4 py-3">
+          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Participants</div>
           <div className="mt-2 text-sm font-semibold text-white">{pot.participants.length}</div>
         </div>
-        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
-          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Pot</div>
-          <div className="mt-2 text-sm font-semibold text-[#c9a84c]">{formatQuizAmount(pot.potUsd)}</div>
+        <div className="rounded-2xl border border-[#1a1a2e] bg-white/[0.02] px-4 py-3">
+          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Pot</div>
+          <div className="mt-2 text-sm font-semibold text-[#d4af37]">{formatQuizAmount(pot.potUsd)}</div>
         </div>
       </div>
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="text-sm leading-7 text-[#777]">
+        <div className="text-sm leading-7 text-[#555566]">
           {status === 'ended'
             ? `Finalized on ${formatQuizDate(pot.endsAt)}.`
             : status === 'live'
               ? 'Answers are being accepted right now.'
               : 'Players can join now and wait for the room to go live.'}
         </div>
-        <Link href={`/game/quiz-pot/${pot.id}`} className="bracket-button justify-center sm:min-w-40">
+        <Link href={`/game/quiz-pot/${pot.id}`} className="primary-button justify-center sm:min-w-40 pulse-gold">
           {ctaLabel}
           <ArrowRight size={14} />
         </Link>
@@ -139,12 +142,28 @@ function QuizPotCard({ pot, now }: { pot: QuizPot; now: number }) {
 export default function QuizPotHubPage() {
   const { pots, createQuizPot } = useQuizPotStore();
   const { hydrated, now } = useHydratedNow();
-  const gameStore = useGameStore((state) => ({
-    challenges: state.challenges,
-    luckyPacks: state.luckyPacks,
-    history: state.history,
-  }));
-  const gameProgress = useMemo(() => buildGameProgressSnapshot(gameStore, now), [gameStore, now]);
+  
+  const [toast, setToast] = useState<{ isVisible: boolean; type: 'win' | 'loss' | 'info'; title: string; message: string; amount?: string }>({
+    isVisible: false,
+    type: 'info',
+    title: '',
+    message: '',
+  });
+
+  const showToast = (type: 'win' | 'loss' | 'info', title: string, message: string, amount?: string) => {
+    setToast({ isVisible: true, type, title, message, amount });
+  };
+
+  const closeToast = () => setToast(prev => ({ ...prev, isVisible: false }));
+
+  const challenges = useGameStore((state) => state.challenges);
+  const luckyPacks = useGameStore((state) => state.luckyPacks);
+  const history = useGameStore((state) => state.history);
+  const gameProgress = useMemo(
+    () => buildGameProgressSnapshot({ challenges, luckyPacks, history }, now),
+    [challenges, luckyPacks, history, now],
+  );
+  
   const [formTitle, setFormTitle] = useState('Weekend Trivia Night');
   const [formPot, setFormPot] = useState('500');
   const [formQuestionCount, setFormQuestionCount] = useState('5');
@@ -178,7 +197,7 @@ export default function QuizPotHubPage() {
 
     const title = formTitle.trim();
     if (!title) {
-      setStatusMessage('Enter a title before creating a pot.');
+      showToast('info', 'Missing Title', 'Enter a title before creating a pot.');
       return;
     }
 
@@ -190,7 +209,8 @@ export default function QuizPotHubPage() {
       distribution: formDistribution,
     });
 
-    setStatusMessage(`${created.title} was added to the quiz hub.`);
+    showToast('win', 'Quiz Pot Created!', `${created.title} was successfully added to the hub.`, String(created.potUsd));
+    setStatusMessage('Pot created successfully!');
     setFormTitle('Weekend Trivia Night');
     setFormPot('500');
     setFormQuestionCount('5');
@@ -220,17 +240,29 @@ export default function QuizPotHubPage() {
   return (
     <section className="section pt-24 sm:pt-28">
       <div className="mx-auto max-w-7xl">
+        <GameToast
+          isVisible={toast.isVisible}
+          type={toast.type}
+          title={toast.title}
+          message={toast.message}
+          amount={toast.amount}
+          onClose={closeToast}
+        />
+
         <div className="reveal space-y-5">
           <div className="flex flex-wrap items-center gap-2">
-            <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">Phase 2</HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">Mock gameplay</HubBadge>
+            <HubBadge className="border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]">Quiz Pot</HubBadge>
+            <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">Mock gameplay</HubBadge>
           </div>
           <h1 className="max-w-5xl text-4xl font-black uppercase leading-tight sm:text-5xl lg:text-7xl">
             Quiz Pot Hub
           </h1>
-          <p className="max-w-3xl text-base leading-7 text-[#9a9a9a] sm:text-lg">
-            Live trivia rooms, local countdowns, and a browser-persisted leaderboard. Create a new pot, join a room, and play through the questions without any backend or wallet dependency.
+          <p className="max-w-3xl text-base leading-7 text-[#8a8a9a] sm:text-lg">
+            Live trivia rooms, local countdowns, and a browser-persisted leaderboard. Create a new pot, join a room, and play through the questions.
           </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <ShareButtons title="Quiz Pot Hub" />
+          </div>
         </div>
 
         <div className="mt-10 grid gap-4 md:grid-cols-3">
@@ -244,11 +276,19 @@ export default function QuizPotHubPage() {
             {sortedPots.length > 0 ? (
               sortedPots.map((pot) => <QuizPotCard key={pot.id} pot={pot} now={now} />)
             ) : (
-              <HubEmptyState
-                icon={Sparkles}
-                title="No quiz pots yet"
-                description="The local store is empty. Use the create form to add the first mock quiz pot and start the hub."
-              />
+              <HubCard className="p-12 text-center border-dashed border-2 border-[#1a1a2e] bg-transparent">
+                <div className="w-20 h-20 mx-auto mb-6 bg-[#0d0d12] rounded-3xl flex items-center justify-center border border-[#1a1a2e]">
+                  <Sparkles size={32} className="text-[#555566]" />
+                </div>
+                <h3 className="text-2xl font-black uppercase mb-2">No quiz pots yet</h3>
+                <p className="text-[#8a8a9a] mb-8 max-w-sm mx-auto">The local store is empty. Create your first mock quiz pot to get started.</p>
+                <button 
+                  onClick={() => document.querySelector('form')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="primary-button mx-auto"
+                >
+                  Create Quiz Pot
+                </button>
+              </HubCard>
             )}
           </div>
 
@@ -261,10 +301,10 @@ export default function QuizPotHubPage() {
             <HubCard as="aside" className="p-6 sm:p-8">
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Create pot</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Create pot</p>
                   <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">Mock form</h2>
                 </div>
-                <span className="inline-flex rounded-full border border-[#2a2a2a] bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#aaa]">
+                <span className="inline-flex rounded-full border border-[#1a1a2e] bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#8a8a9a]">
                   {pots.length} total
                 </span>
               </div>
@@ -348,7 +388,7 @@ export default function QuizPotHubPage() {
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-[#2a2a2a] bg-black/25 px-4 py-3 text-sm leading-7 text-[#9a9a9a]">
+                <div className="rounded-2xl border border-[#1a1a2e] bg-black/25 px-4 py-3 text-sm leading-7 text-[#8a8a9a]">
                   New pots start as open rooms with Arc Game Desk as the host. The countdown begins one hour from creation and uses only local mock data.
                 </div>
 

@@ -12,6 +12,8 @@ declare global {
   }
 }
 
+const MOCK_ADDRESS_KEY = 'arclanding:mock-wallet-address';
+
 interface WalletContextValue {
   address: string | undefined;
   isConnected: boolean;
@@ -31,11 +33,17 @@ export function WalletProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const checkConnection = async () => {
-      if (!window.ethereum) return;
-      try {
-        const accounts = (await window.ethereum.request({ method: 'eth_accounts' })) as string[];
-        if (accounts.length > 0) setAddress(accounts[0]);
-      } catch {}
+      if (window.ethereum) {
+        try {
+          const accounts = (await window.ethereum.request({ method: 'eth_accounts' })) as string[];
+          if (accounts.length > 0) {
+            setAddress(accounts[0]);
+            return;
+          }
+        } catch {}
+      }
+      const saved = localStorage.getItem(MOCK_ADDRESS_KEY);
+      if (saved) setAddress(saved);
     };
     checkConnection();
 
@@ -51,17 +59,28 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const connect = async () => {
-    if (!window.ethereum) {
-      alert('Please install MetaMask or another Web3 wallet.');
-      return;
+    if (window.ethereum) {
+      try {
+        const accounts = (await window.ethereum.request({ method: 'eth_requestAccounts' })) as string[];
+        setAddress(accounts[0]);
+        return;
+      } catch {}
     }
-    try {
-      const accounts = (await window.ethereum.request({ method: 'eth_requestAccounts' })) as string[];
-      setAddress(accounts[0]);
-    } catch {}
+    let mockAddr = localStorage.getItem(MOCK_ADDRESS_KEY);
+    if (!mockAddr) {
+      const bytes = Array.from({ length: 20 }, () =>
+        Math.floor(Math.random() * 256).toString(16).padStart(2, '0'),
+      );
+      mockAddr = '0x' + bytes.join('');
+      localStorage.setItem(MOCK_ADDRESS_KEY, mockAddr);
+    }
+    setAddress(mockAddr);
   };
 
-  const disconnect = () => setAddress(undefined);
+  const disconnect = () => {
+    localStorage.removeItem(MOCK_ADDRESS_KEY);
+    setAddress(undefined);
+  };
 
   return (
     <WalletContext.Provider value={{ address, isConnected: !!address, connect, disconnect }}>

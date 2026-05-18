@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
@@ -66,7 +66,7 @@ function OrderCard({
     <HubCard as="article" className="p-5 sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0">
-          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">{order.id}</p>
+          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">{order.id}</p>
           <h3 className="mt-2 text-xl font-black uppercase leading-tight text-white">{listingTitle}</h3>
         </div>
         <StatusBadge status={order.status} />
@@ -78,14 +78,14 @@ function OrderCard({
           ['Created', formatMarketDateTime(order.createdAt)],
           ['Listing ID', order.listingId],
         ].map(([label, value]) => (
-          <div key={label} className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-            <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">{label}</div>
+          <div key={label} className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+            <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">{label}</div>
             <div className="mt-2 text-sm font-semibold text-white">{value}</div>
           </div>
         ))}
       </div>
       <div className="mt-5 flex items-center justify-between gap-3">
-        <p className="text-xs leading-6 text-[#777]">Order history stays local and updates instantly with the store.</p>
+        <p className="text-xs leading-6 text-[#555566]">Order history stays local and updates instantly with the store.</p>
         <Link href={`/market/${order.listingId}`} className="bracket-button shrink-0">
           View Listing <ArrowRight size={15} />
         </Link>
@@ -176,18 +176,18 @@ export default function MarketOrdersPage() {
       <div className="mx-auto max-w-7xl">
         <div className="reveal space-y-6">
           <div className="flex flex-wrap items-center gap-2">
-            <Link href="/market" className="inline-flex items-center gap-2 rounded-full border border-[#2a2a2a] bg-white/[0.02] px-4 py-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#bdbdbd] transition-colors hover:border-[#c9a84c]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60">
+            <Link href="/market" className="inline-flex items-center gap-2 rounded-full border border-[#1a1a2e] bg-white/[0.02] px-4 py-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#bdbdbd] transition-colors hover:border-[#d4af37]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60">
               <ArrowLeft size={14} />
               Back to Market
             </Link>
-            <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">Orders</HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">Local history</HubBadge>
+            <HubBadge className="border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]">Orders</HubBadge>
+            <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">Local history</HubBadge>
           </div>
 
           <h1 className="max-w-5xl text-4xl font-black uppercase leading-tight sm:text-5xl lg:text-7xl">
             Arc Market Orders
           </h1>
-          <p className="max-w-3xl text-base leading-7 text-[#9a9a9a] sm:text-lg">
+          <p className="max-w-3xl text-base leading-7 text-[#8a8a9a] sm:text-lg">
             A mock order history for paid, pending, and cancelled checkouts. Filter by status or search across
             buyers and listings while staying inside the browser store.
           </p>
@@ -203,10 +203,10 @@ export default function MarketOrdersPage() {
         <HubCard as="section" className="mt-6 p-6 sm:p-8">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Filters</p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Filters</p>
               <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">Search the order archive</h2>
             </div>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">
+            <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">
               <Filter size={10} className="mr-1 inline-block" aria-hidden="true" />
               {filteredOrders.length} results
             </HubBadge>
@@ -218,7 +218,7 @@ export default function MarketOrdersPage() {
                 Search orders
               </label>
               <div className="relative">
-                <Search size={16} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#777]" aria-hidden="true" />
+                <Search size={16} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#555566]" aria-hidden="true" />
                 <input
                   id="market-order-search"
                   type="search"
@@ -248,11 +248,11 @@ export default function MarketOrdersPage() {
           </div>
 
           <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-            <HubBadge className="border-[#c9a84c]/25 bg-[#c9a84c]/10 text-[#f4dc9f]">Arc Pay checkout history</HubBadge>
+            <HubBadge className="border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f5d060]">Arc Pay checkout history</HubBadge>
             <button
               type="button"
               onClick={clearFilters}
-              className="rounded-full border border-[#2a2a2a] bg-white/[0.02] px-4 py-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#bdbdbd] transition-colors hover:border-[#c9a84c]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+              className="rounded-full border border-[#1a1a2e] bg-white/[0.02] px-4 py-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#bdbdbd] transition-colors hover:border-[#d4af37]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
             >
               Clear filters
             </button>
@@ -278,7 +278,7 @@ export default function MarketOrdersPage() {
           <div className="mt-6 space-y-6">
             <div className="hidden lg:block">
               <HubCard className="overflow-hidden p-0">
-                <div className="grid grid-cols-[1.1fr_1fr_0.8fr_0.8fr_0.7fr_0.8fr] border-b border-[#2a2a2a] px-5 py-4 text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">
+                <div className="grid grid-cols-[1.1fr_1fr_0.8fr_0.8fr_0.7fr_0.8fr] border-b border-[#1a1a2e] px-5 py-4 text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">
                   <span>Order</span>
                   <span>Listing</span>
                   <span>Buyer</span>
@@ -293,16 +293,16 @@ export default function MarketOrdersPage() {
                       className="grid grid-cols-[1.1fr_1fr_0.8fr_0.8fr_0.7fr_0.8fr] items-center gap-4 px-5 py-4 text-sm"
                     >
                       <div>
-                        <div className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#777]">{order.id}</div>
+                        <div className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#555566]">{order.id}</div>
                         <div className="mt-2 text-sm font-semibold text-white">{order.buyerName}</div>
                       </div>
-                      <Link href={`/market/${order.listingId}`} className="text-sm font-semibold text-[#f4dc9f] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60">
+                      <Link href={`/market/${order.listingId}`} className="text-sm font-semibold text-[#f5d060] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60">
                         {listingTitleById.get(order.listingId) ?? order.listingId}
                       </Link>
                       <span className="text-[#d8d8d8]">{order.buyerName}</span>
                       <span className="text-white">{formatMarketPrice(order.amountUsd)}</span>
                       <StatusBadge status={order.status} />
-                      <span className="text-[#9a9a9a]">{formatMarketDateTime(order.createdAt)}</span>
+                      <span className="text-[#8a8a9a]">{formatMarketDateTime(order.createdAt)}</span>
                     </div>
                   ))}
                 </div>

@@ -1,6 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" role="img" aria-labelledby="title">
-  <title>Arc Ecosystem</title>
-  <rect x="0.5" y="0.5" width="31" height="31" rx="8" fill="#0a0a0a" stroke="#2a2a2a" />
-  <path d="M16 5.5L26.5 16L16 26.5L5.5 16L16 5.5Z" stroke="#c9a84c" stroke-width="2" stroke-linejoin="round" />
-  <path d="M16 11.5L21.5 16L16 20.5L10.5 16L16 11.5Z" fill="#c9a84c" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <path d="M64 12L104 56L64 112L24 56L64 12Z" stroke="#d4af37" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
+  <circle cx="24" cy="56" r="4.5" fill="#d4af37"/>
+  <circle cx="104" cy="56" r="4.5" fill="#d4af37"/>
+  <path d="M64 30L84 82H72L64 61L56 82H44L64 30Z" fill="#d4af37"/>
+  <path d="M64 50L74 74H67L64 66L61 74H54L64 50Z" fill="#050508"/>
+  <path d="M64 76L71 83L64 90L57 83L64 76Z" fill="#d4af37"/>
+  <path d="M20 82C38 68 90 68 108 82" stroke="#d4af37" stroke-width="1.6" stroke-linecap="round"/>
 </svg>

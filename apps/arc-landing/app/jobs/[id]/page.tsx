@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useMemo } from 'react';
 import { useWallet } from '@/contexts/WalletContext';
@@ -70,10 +70,10 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
   if (!job) {
     notFound();
     return (
-      <main className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center">
+      <main className="min-h-screen bg-[#050508] text-white flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold">Job Not Found</h2>
-          <Link href="/jobs" className="mt-4 text-[#c9a84c] hover:underline block">Return to Job Board</Link>
+          <Link href="/jobs" className="mt-4 text-[#d4af37] hover:underline block">Return to Job Board</Link>
         </div>
       </main>
     );
@@ -82,12 +82,12 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
   const daysAgo = Math.floor((Date.now() - job.createdAt) / (1000 * 60 * 60 * 24));
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
+    <main className="min-h-screen bg-[#050508] text-white">
       <SiteHeader />
 
       <section className="pt-32 pb-24 px-4">
         <div className="mx-auto max-w-6xl">
-          <Link href="/jobs" className="flex items-center gap-2 text-[#777] hover:text-[#c9a84c] transition-colors mb-8 font-mono text-xs uppercase tracking-widest">
+          <Link href="/jobs" className="flex items-center gap-2 text-[#555566] hover:text-[#d4af37] transition-colors mb-8 font-mono text-xs uppercase tracking-widest">
             <ArrowLeft size={14} /> Back to Browse
           </Link>
 
@@ -97,9 +97,9 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
               <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
                 <div>
                   <h1 className="text-4xl font-black uppercase sm:text-5xl lg:text-6xl">{job.title}</h1>
-                  <div className="mt-6 flex flex-wrap items-center gap-6 text-[#777]">
+                  <div className="mt-6 flex flex-wrap items-center gap-6 text-[#555566]">
                     <div className="flex items-center gap-2 text-white font-bold">
-                      <div className="h-8 w-8 rounded-lg bg-[#c9a84c]/10 border border-[#c9a84c]/20 flex items-center justify-center text-[#c9a84c] font-black">
+                      <div className="h-8 w-8 rounded-lg bg-[#d4af37]/10 border border-[#d4af37]/20 flex items-center justify-center text-[#d4af37] font-black">
                         {job.company[0]}
                       </div>
                       {job.company}
@@ -116,17 +116,17 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-3xl font-black text-[#c9a84c]">${job.salaryMin / 1000}k - ${job.salaryMax / 1000}k</p>
-                  <p className="mt-1 font-mono text-xs uppercase text-[#555]">Paid in USDC</p>
+                  <p className="text-3xl font-black text-[#d4af37]">${job.salaryMin / 1000}k - ${job.salaryMax / 1000}k</p>
+                  <p className="mt-1 font-mono text-xs uppercase text-[#555566]">Paid in USDC</p>
                 </div>
               </div>
 
               <div className="bracket-card p-8 bg-white/[0.01]">
                 <Brackets />
                 <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
-                  <FileText size={20} className="text-[#c9a84c]" /> Job Description
+                  <FileText size={20} className="text-[#d4af37]" /> Job Description
                 </h3>
-                <div className="prose prose-invert max-w-none text-[#9a9a9a] leading-relaxed">
+                <div className="prose prose-invert max-w-none text-[#8a8a9a] leading-relaxed">
                   {job.description.split('\n').map((para, i) => (
                     <p key={i} className="mb-4">{para}</p>
                   ))}
@@ -136,12 +136,12 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="bracket-card p-8 bg-white/[0.01]">
                   <Brackets />
-                  <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-[#c9a84c]">
+                  <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-[#d4af37]">
                     Tech Stack
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {job.techStack.map(tech => (
-                      <span key={tech} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs font-mono text-[#aaa]">
+                      <span key={tech} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs font-mono text-[#8a8a9a]">
                         {tech}
                       </span>
                     ))}
@@ -149,12 +149,12 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
                 </div>
                 <div className="bracket-card p-8 bg-white/[0.01]">
                   <Brackets />
-                  <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-[#c9a84c]">
+                  <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-[#d4af37]">
                     Benefits
                   </h3>
                   <ul className="space-y-2">
                     {job.benefits.map((benefit, i) => (
-                      <li key={i} className="flex items-center gap-2 text-sm text-[#9a9a9a]">
+                      <li key={i} className="flex items-center gap-2 text-sm text-[#8a8a9a]">
                         <CheckCircle2 size={14} className="text-green-500/50" /> {benefit}
                       </li>
                     ))}
@@ -165,10 +165,10 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
 
             {/* Sidebar / Apply Form */}
             <div className="space-y-6">
-              <div className="bracket-card p-8 bg-[#c9a84c]/5 border-[#c9a84c]/20">
+              <div className="bracket-card p-8 bg-[#d4af37]/5 border-[#d4af37]/20">
                 <Brackets />
                 <h3 className="text-2xl font-black uppercase mb-2">Apply Now</h3>
-                <p className="text-sm text-[#777] mb-8">
+                <p className="text-sm text-[#555566] mb-8">
                   Submit your application. Your wallet address will be used as your unique identifier.
                 </p>
 
@@ -178,7 +178,7 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
                       <CheckCircle2 className="text-green-500" size={32} />
                     </div>
                     <h4 className="text-xl font-bold">Application Sent!</h4>
-                    <p className="mt-2 text-sm text-[#777]">
+                    <p className="mt-2 text-sm text-[#555566]">
                       The employer will review your application and contact you via email.
                     </p>
                     <Link href="/jobs" className="primary-button mt-8 w-full justify-center">
@@ -187,11 +187,11 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
                   </div>
                 ) : hasApplied ? (
                   <div className="text-center py-8">
-                    <div className="h-16 w-16 bg-[#c9a84c]/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-[#c9a84c]/20">
-                      <CheckCircle2 className="text-[#c9a84c]" size={32} />
+                    <div className="h-16 w-16 bg-[#d4af37]/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-[#d4af37]/20">
+                      <CheckCircle2 className="text-[#d4af37]" size={32} />
                     </div>
                     <h4 className="text-xl font-bold">Already Applied</h4>
-                    <p className="mt-2 text-sm text-[#777]">
+                    <p className="mt-2 text-sm text-[#555566]">
                       You have already submitted an application for this position.
                     </p>
                     <Link href="/jobs/applications" className="secondary-button mt-8 w-full justify-center">
@@ -203,14 +203,14 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
                     <button onClick={connect} className="primary-button w-full justify-center mb-4">
                       CONNECT WALLET TO APPLY
                     </button>
-                    <p className="text-xs text-[#555] font-mono uppercase tracking-widest">
+                    <p className="text-xs text-[#555566] font-mono uppercase tracking-widest">
                       Wallet connection required
                     </p>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-mono uppercase text-[#c9a84c] tracking-[0.2em]">Full Name</label>
+                      <label className="text-[10px] font-mono uppercase text-[#d4af37] tracking-[0.2em]">Full Name</label>
                       <input 
                         type="text"
                         placeholder="Your Name"
@@ -220,7 +220,7 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-mono uppercase text-[#c9a84c] tracking-[0.2em]">Email Address *</label>
+                      <label className="text-[10px] font-mono uppercase text-[#d4af37] tracking-[0.2em]">Email Address *</label>
                       <div className="relative">
                         <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-[#444]" size={16} />
                         <input 
@@ -234,7 +234,7 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-mono uppercase text-[#c9a84c] tracking-[0.2em]">Portfolio URL</label>
+                      <label className="text-[10px] font-mono uppercase text-[#d4af37] tracking-[0.2em]">Portfolio URL</label>
                       <div className="relative">
                         <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-[#444]" size={16} />
                         <input 
@@ -248,7 +248,7 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
                     </div>
                     <div className="space-y-2">
                       <div className="flex justify-between items-end">
-                        <label className="text-[10px] font-mono uppercase text-[#c9a84c] tracking-[0.2em]">Cover Letter *</label>
+                        <label className="text-[10px] font-mono uppercase text-[#d4af37] tracking-[0.2em]">Cover Letter *</label>
                         <span className={`text-[10px] font-mono ${formData.coverLetter.length < 100 ? 'text-red-500' : 'text-green-500'}`}>
                           {formData.coverLetter.length}/100 min
                         </span>
@@ -276,7 +276,7 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
 
               <div className="bracket-card p-6 bg-white/[0.02] border-white/5">
                 <Brackets />
-                <div className="flex items-center justify-between text-[#777]">
+                <div className="flex items-center justify-between text-[#555566]">
                   <span className="text-xs font-mono uppercase tracking-widest">Active Applications</span>
                   <span className="text-xl font-black text-white">{job.applicationCount}</span>
                 </div>
@@ -284,7 +284,7 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
 
               <div className="flex items-start gap-3 p-4 bg-blue-500/5 border border-blue-500/10 rounded-xl">
                 <AlertCircle className="text-blue-500 flex-shrink-0" size={18} />
-                <p className="text-[10px] leading-relaxed text-[#777]">
+                <p className="text-[10px] leading-relaxed text-[#555566]">
                   Applications on Arc Job Board are directly sent to the employer. Make sure your contact info is correct.
                 </p>
               </div>
@@ -306,7 +306,7 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
         }
         .form-input:focus {
           outline: none;
-          border-color: #c9a84c;
+          border-color: #d4af37;
         }
       `}</style>
     </main>

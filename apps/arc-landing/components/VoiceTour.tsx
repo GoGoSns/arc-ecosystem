@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { useCallback, useEffect, useRef } from 'react';
@@ -78,7 +78,7 @@ function VoiceActionButton({
       disabled={disabled}
       aria-label={ariaLabel}
       data-active={active ? 'true' : undefined}
-      className="panel-button w-full justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:cursor-not-allowed disabled:opacity-45"
+      className="panel-button w-full justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:cursor-not-allowed disabled:opacity-45"
     >
       <Icon size={14} aria-hidden="true" />
       <span>{label}</span>
@@ -360,19 +360,19 @@ export default function VoiceTour({
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">{copy.title}</HubBadge>
-              <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">{copy.unsupportedTitle}</HubBadge>
+              <HubBadge className="border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]">{copy.title}</HubBadge>
+              <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">{copy.unsupportedTitle}</HubBadge>
             </div>
             <h2 className="mt-3 text-2xl font-black uppercase sm:text-3xl">{copy.title}</h2>
-            <p className="mt-2 max-w-3xl text-sm leading-7 text-[#9a9a9a]">{copy.subtitle}</p>
+            <p className="mt-2 max-w-3xl text-sm leading-7 text-[#8a8a9a]">{copy.subtitle}</p>
           </div>
-          <Volume2 size={22} className="text-[#c9a84c]" aria-hidden="true" />
+          <Volume2 size={22} className="text-[#d4af37]" aria-hidden="true" />
         </div>
 
-        <div className="mt-5 rounded-2xl border border-[#2a2a2a] bg-black/35 px-4 py-4 text-sm leading-7 text-[#cfcfcf]">
+        <div className="mt-5 rounded-2xl border border-[#1a1a2e] bg-black/35 px-4 py-4 text-sm leading-7 text-[#cfcfcf]">
           <p className="font-semibold text-white">{copy.unsupportedTitle}</p>
-          <p className="mt-1 text-[#9a9a9a]">{copy.unsupportedDescription}</p>
-          <p className="mt-2 text-[#8a8a8a]">{copy.fallbackHint}</p>
+          <p className="mt-1 text-[#8a8a9a]">{copy.unsupportedDescription}</p>
+          <p className="mt-2 text-[#8a8a9a]">{copy.fallbackHint}</p>
         </div>
 
         <div className={`mt-4 grid gap-3 ${compact ? 'grid-cols-1' : 'sm:grid-cols-2 xl:grid-cols-4'}`.trim()}>
@@ -381,24 +381,24 @@ export default function VoiceTour({
             return (
               <div
                 key={section.id}
-                className="rounded-2xl border border-dashed border-[#2a2a2a] bg-black/30 px-4 py-4 text-left"
+                className="rounded-2xl border border-dashed border-[#1a1a2e] bg-black/30 px-4 py-4 text-left"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">{copy.current}</p>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">{copy.current}</p>
                     <h3 className="mt-1 text-base font-black uppercase text-white">{sectionCopy.label}</h3>
                   </div>
                   {section.href ? (
                     <Link
                       href={section.href}
-                      className="inline-flex items-center gap-1 rounded-full border border-[#2a2a2a] bg-white/[0.02] px-3 py-1 text-[10px] font-mono uppercase tracking-[0.2em] text-[#bdbdbd] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+                      className="inline-flex items-center gap-1 rounded-full border border-[#1a1a2e] bg-white/[0.02] px-3 py-1 text-[10px] font-mono uppercase tracking-[0.2em] text-[#bdbdbd] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
                     >
                       <span>open</span>
                       <ArrowRight size={12} />
                     </Link>
                   ) : null}
                 </div>
-                <p className="mt-2 text-sm leading-6 text-[#9a9a9a]">{sectionCopy.summary}</p>
+                <p className="mt-2 text-sm leading-6 text-[#8a8a9a]">{sectionCopy.summary}</p>
               </div>
             );
           })}
@@ -412,21 +412,21 @@ export default function VoiceTour({
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">{copy.title}</HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">{statusLabel}</HubBadge>
+            <HubBadge className="border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]">{copy.title}</HubBadge>
+            <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">{statusLabel}</HubBadge>
           </div>
           <h2 className={`mt-3 font-black uppercase ${compact ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl'}`.trim()}>
             {copy.title}
           </h2>
-          <p className="mt-2 max-w-3xl text-sm leading-7 text-[#9a9a9a]">{copy.subtitle}</p>
+          <p className="mt-2 max-w-3xl text-sm leading-7 text-[#8a8a9a]">{copy.subtitle}</p>
         </div>
 
         <div className="flex flex-col items-end gap-2 text-right">
-          <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.26em] text-[#777]">
-            <Sparkles size={12} className="text-[#c9a84c]" aria-hidden="true" />
+          <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.26em] text-[#555566]">
+            <Sparkles size={12} className="text-[#d4af37]" aria-hidden="true" />
             {copy.current}
           </div>
-          <div className="max-w-[16rem] text-right text-lg font-black text-[#f4dc9f] sm:text-2xl">
+          <div className="max-w-[16rem] text-right text-lg font-black text-[#f5d060] sm:text-2xl">
             {activeSectionCopy?.label ?? copy.start}
           </div>
         </div>
@@ -449,7 +449,7 @@ export default function VoiceTour({
               <span key={index} className={`voice-tour-eq-bar ${isPlaying ? 'is-playing' : ''}`} />
             ))}
           </div>
-          <p className="text-xs leading-6 text-[#8a8a8a]">
+          <p className="text-xs leading-6 text-[#8a8a9a]">
             {activeSectionCopy?.summary ?? copy.fallbackHint}
           </p>
         </div>
@@ -487,9 +487,9 @@ export default function VoiceTour({
       </div>
 
       <div className="mt-4 grid gap-3 lg:grid-cols-[1fr_0.7fr_0.7fr]">
-        <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
-          <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.26em] text-[#777]">
-            <Languages size={12} className="text-[#c9a84c]" aria-hidden="true" />
+        <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-4">
+          <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.26em] text-[#555566]">
+            <Languages size={12} className="text-[#d4af37]" aria-hidden="true" />
             <label htmlFor="voice-tour-language">{copy.language}</label>
           </div>
           <select
@@ -504,9 +504,9 @@ export default function VoiceTour({
           </select>
         </div>
 
-        <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
-          <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.26em] text-[#777]">
-            <Gauge size={12} className="text-[#c9a84c]" aria-hidden="true" />
+        <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-4">
+          <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.26em] text-[#555566]">
+            <Gauge size={12} className="text-[#d4af37]" aria-hidden="true" />
             <label htmlFor="voice-tour-speed">{copy.speed}</label>
           </div>
           <select
@@ -524,12 +524,12 @@ export default function VoiceTour({
           </select>
         </div>
 
-        <div className="rounded-2xl border border-[#2a2a2a] bg-[linear-gradient(135deg,rgba(201,168,76,0.14),rgba(48,209,88,0.08)),rgba(0,0,0,0.32)] px-4 py-4">
-          <div className="text-[10px] font-mono uppercase tracking-[0.26em] text-[#777]">{copy.current}</div>
+        <div className="rounded-2xl border border-[#1a1a2e] bg-[linear-gradient(135deg,rgba(212, 175, 55,0.14),rgba(48,209,88,0.08)),rgba(0,0,0,0.32)] px-4 py-4">
+          <div className="text-[10px] font-mono uppercase tracking-[0.26em] text-[#555566]">{copy.current}</div>
           <div className="mt-2 text-sm font-semibold text-white">
             {activeSectionCopy?.summary ?? copy.fallbackHint}
           </div>
-          <div className="mt-2 text-xs leading-6 text-[#9a9a9a]">
+          <div className="mt-2 text-xs leading-6 text-[#8a8a9a]">
             {status === 'playing'
               ? `${copy.play} · ${activeSectionIndex + 1 > 0 ? `${activeSectionIndex + 1}/${sections.length}` : sections.length} sections`
               : status === 'paused'
@@ -543,7 +543,7 @@ export default function VoiceTour({
         <div
           role="status"
           aria-live="polite"
-          className="mt-4 rounded-2xl border border-[#c9a84c]/25 bg-[#c9a84c]/10 px-4 py-3 text-sm leading-7 text-[#f7e8b7]"
+          className="mt-4 rounded-2xl border border-[#d4af37]/25 bg-[#d4af37]/10 px-4 py-3 text-sm leading-7 text-[#f7e8b7]"
         >
           {error}
         </div>
@@ -560,13 +560,13 @@ export default function VoiceTour({
               data-active={isActive ? 'true' : undefined}
               className={`voice-tour-card rounded-2xl border p-4 text-left transition-all ${
                 isActive
-                  ? 'border-[#c9a84c]/55 bg-[linear-gradient(135deg,rgba(201,168,76,0.18),rgba(48,209,88,0.08)),rgba(255,255,255,0.03)] shadow-[0_20px_50px_rgba(0,0,0,0.35)]'
-                  : 'border-[#2a2a2a] bg-black/30'
+                  ? 'border-[#d4af37]/55 bg-[linear-gradient(135deg,rgba(212, 175, 55,0.18),rgba(48,209,88,0.08)),rgba(255,255,255,0.03)] shadow-[0_20px_50px_rgba(0,0,0,0.35)]'
+                  : 'border-[#1a1a2e] bg-black/30'
               }`}
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                     {String(index + 1).padStart(2, '0')}
                   </p>
                   <h3 className="mt-1 text-lg font-black uppercase text-white">{sectionCopy.label}</h3>
@@ -576,7 +576,7 @@ export default function VoiceTour({
                   <Link
                     href={section.href}
                     aria-label={`${copy.start} ${sectionCopy.label}`}
-                    className="inline-flex items-center gap-1 rounded-full border border-[#2a2a2a] bg-white/[0.02] px-3 py-1 text-[10px] font-mono uppercase tracking-[0.2em] text-[#bdbdbd] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+                    className="inline-flex items-center gap-1 rounded-full border border-[#1a1a2e] bg-white/[0.02] px-3 py-1 text-[10px] font-mono uppercase tracking-[0.2em] text-[#bdbdbd] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
                   >
                     <span>open</span>
                     <ArrowRight size={12} />
@@ -584,13 +584,13 @@ export default function VoiceTour({
                 ) : null}
               </div>
 
-              <p className="mt-2 text-sm leading-6 text-[#9a9a9a]">{sectionCopy.summary}</p>
+              <p className="mt-2 text-sm leading-6 text-[#8a8a9a]">{sectionCopy.summary}</p>
 
               <button
                 type="button"
                 onClick={() => requestTour('section', section.id)}
                 aria-label={`${copy.listen} ${sectionCopy.label}`}
-                className="mt-4 inline-flex items-center gap-2 rounded-full border border-[#c9a84c]/25 bg-[#c9a84c]/10 px-3 py-1.5 text-[10px] font-mono uppercase tracking-[0.18em] text-[#f4dc9f] transition-colors hover:bg-[#c9a84c]/18 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+                className="mt-4 inline-flex items-center gap-2 rounded-full border border-[#d4af37]/25 bg-[#d4af37]/10 px-3 py-1.5 text-[10px] font-mono uppercase tracking-[0.18em] text-[#f5d060] transition-colors hover:bg-[#d4af37]/18 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
               >
                 <Volume2 size={12} aria-hidden="true" />
                 {copy.listen}

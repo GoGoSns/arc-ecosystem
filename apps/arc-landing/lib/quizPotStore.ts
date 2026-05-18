@@ -16,6 +16,7 @@ export interface QuizQuestion {
   prompt: string;
   options: [string, string, string, string];
   correctIndex: number;
+  explanation: string;
 }
 
 export interface QuizPot {
@@ -105,54 +106,64 @@ const HOST_NAME = 'Arc Game Desk';
 
 const QUIZ_QUESTION_BANK: Array<Omit<QuizQuestion, 'id'>> = [
   {
-    prompt: 'Which pot status means answers are currently accepted?',
-    options: ['open', 'live', 'ended', 'paused'],
+    prompt: 'What chain ID does Arc Testnet use?',
+    options: ['1', '5042002', '137', '42161'],
     correctIndex: 1,
+    explanation: 'Arc Testnet uses chain ID 5042002 for its network.',
   },
   {
-    prompt: 'What prize split is used for a top 3 payout?',
-    options: ['70 / 20 / 10', '50 / 30 / 20', '40 / 40 / 20', '100 / 0 / 0'],
+    prompt: 'What does USDC stand for?',
+    options: ['US Dollar Coin', 'United States Digital Currency', 'USD Coin', 'Universal Stable Coin'],
+    correctIndex: 2,
+    explanation: 'USDC stands for USD Coin, a fully-collateralized US dollar stablecoin.',
+  },
+  {
+    prompt: 'What is a smart contract?',
+    options: ['Legal document', 'Self-executing blockchain code', 'Wallet type', 'Mining algorithm'],
     correctIndex: 1,
+    explanation: 'A smart contract is self-executing code on a blockchain that automatically enforces agreement terms.',
   },
   {
-    prompt: 'How many options are shown for each question?',
-    options: ['2', '3', '4', '5'],
-    correctIndex: 2,
+    prompt: 'What does DeFi mean?',
+    options: ['Decentralized Finance', 'Digital Finance', 'Defined Finance', 'Distributed Finance'],
+    correctIndex: 0,
+    explanation: 'DeFi stands for Decentralized Finance — financial services running on public blockchains.',
   },
   {
-    prompt: 'Which action records a selected answer?',
-    options: ['Join', 'Submit', 'Claim', 'Skip'],
+    prompt: 'What is gas in blockchain?',
+    options: ['Fuel for cars', 'Transaction fee', 'Token name', 'Wallet address'],
     correctIndex: 1,
+    explanation: 'Gas is the fee paid to validators to execute a transaction or smart contract on the blockchain.',
   },
   {
-    prompt: 'What should a created pot always include?',
-    options: ['title', 'wallet seed', 'gas price', 'private key'],
-    correctIndex: 0,
-  },
-  {
-    prompt: 'Which hub metric is part of the quiz pot overview?',
-    options: ['live pots', 'RPC latency', 'validator uptime', 'bridge fees'],
-    correctIndex: 0,
-  },
-  {
-    prompt: 'Which status means the round has finished?',
-    options: ['open', 'live', 'ended', 'queued'],
+    prompt: 'What is the Arc Testnet native currency?',
+    options: ['ETH', 'ARC', 'USDC', 'BTC'],
     correctIndex: 2,
+    explanation: 'Arc Testnet uses USDC (18 decimals) as its native gas and payment token.',
   },
   {
-    prompt: 'How many winners does winner-takes-all pay?',
-    options: ['1', '2', '3', 'all'],
-    correctIndex: 0,
+    prompt: 'What does a blockchain wallet store?',
+    options: ['Coins', 'Private keys', 'Smart contracts', 'Transaction history'],
+    correctIndex: 1,
+    explanation: 'A crypto wallet stores private keys that prove ownership of on-chain assets.',
   },
   {
-    prompt: 'What does the countdown show before a pot starts?',
-    options: ['score', 'host name', 'minutes until start', 'entry count'],
-    correctIndex: 2,
+    prompt: 'What is an NFT?',
+    options: ['New Financial Token', 'Non-Fungible Token', 'Network Fee Token', 'Node Funding Tool'],
+    correctIndex: 1,
+    explanation: 'NFT stands for Non-Fungible Token — a unique digital asset on a blockchain.',
   },
   {
-    prompt: 'Which field is required to join a pot?',
-    options: ['name', 'contract address', 'email', 'private key'],
-    correctIndex: 0,
+    prompt: 'What does "on-chain" mean?',
+    options: ['Stored in the cloud', 'Data recorded on a blockchain', 'Off-network data', 'Encrypted email'],
+    correctIndex: 1,
+    explanation: '"On-chain" means data or transactions are permanently recorded on the blockchain.',
+  },
+  {
+    prompt: 'What is a validator in Proof of Stake?',
+    options: ['A miner using GPUs', 'A node that confirms transactions', 'A wallet provider', 'An oracle service'],
+    correctIndex: 1,
+    explanation: 'Validators in PoS networks stake tokens and confirm transaction blocks to earn rewards.',
   },
 ];
 
@@ -212,6 +223,7 @@ function buildQuizQuestions(potId: string, count: number): QuizQuestion[] {
       prompt: template.prompt,
       options: [...template.options] as [string, string, string, string],
       correctIndex: template.correctIndex,
+      explanation: template.explanation,
     };
   });
 }
@@ -513,8 +525,9 @@ function normalizeQuizQuestions(questions: unknown): QuizQuestion[] {
       const prompt = typeof candidate.prompt === 'string' ? candidate.prompt.trim() : '';
       const options = Array.isArray(candidate.options) ? candidate.options : [];
       const correctIndex = typeof candidate.correctIndex === 'number' ? candidate.correctIndex : -1;
+      const explanation = typeof candidate.explanation === 'string' && candidate.explanation.trim() ? candidate.explanation.trim() : '';
 
-      if (!id || !prompt || options.length !== 4 || !options.every((option) => typeof option === 'string' && option.trim()) || correctIndex < 0 || correctIndex > 3) {
+      if (!id || !prompt || options.length !== 4 || !options.every((option) => typeof option === 'string' && option.trim()) || correctIndex < 0 || correctIndex > 3 || !explanation) {
         return null;
       }
 
@@ -523,6 +536,7 @@ function normalizeQuizQuestions(questions: unknown): QuizQuestion[] {
         prompt,
         options: options.map((option) => option.trim()) as [string, string, string, string],
         correctIndex,
+        explanation,
       };
     })
     .filter((question): question is QuizQuestion => question !== null);

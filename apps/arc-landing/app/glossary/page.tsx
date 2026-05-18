@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
@@ -59,7 +59,7 @@ const CATEGORY_LABELS: Record<GlossaryCategory, string> = {
 };
 
 const CATEGORY_BADGE_CLASSES: Record<GlossaryCategory, string> = {
-  blockchain: 'border-[#c9a84c]/25 bg-[#c9a84c]/10 text-[#f2d58b]',
+  blockchain: 'border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f2d58b]',
   defi: 'border-[#60a5fa]/25 bg-[#60a5fa]/10 text-[#bfdbfe]',
   security: 'border-[#f87171]/25 bg-[#f87171]/10 text-[#fecaca]',
   wallet: 'border-[#34d399]/25 bg-[#34d399]/10 text-[#bbf7d0]',
@@ -69,7 +69,7 @@ const CATEGORY_BADGE_CLASSES: Record<GlossaryCategory, string> = {
 
 const DIFFICULTY_BADGE_CLASSES: Record<GlossaryTerm['difficulty'], string> = {
   beginner: 'border-[#30d158]/25 bg-[#30d158]/10 text-[#bbf7c8]',
-  intermediate: 'border-[#c9a84c]/25 bg-[#c9a84c]/10 text-[#f5dd94]',
+  intermediate: 'border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f5dd94]',
   advanced: 'border-[#f87171]/25 bg-[#f87171]/10 text-[#fecaca]',
 };
 
@@ -136,19 +136,19 @@ export default function GlossaryPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
+    <main className="min-h-screen bg-[#050508] text-white">
       <SiteHeader />
 
       <section className="relative overflow-hidden px-4 pt-24 sm:px-6 lg:px-8">
-        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-[#c9a84c]/10 via-[#c9a84c]/5 to-transparent blur-3xl" />
+        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-[#d4af37]/10 via-[#d4af37]/5 to-transparent blur-3xl" />
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
             <div className="relative">
-              <p className="font-mono text-xs uppercase tracking-[0.35em] text-[#c9a84c]">// glossary</p>
+              <p className="font-mono text-xs uppercase tracking-[0.35em] text-[#d4af37]">// glossary</p>
               <h1 className="mt-5 text-5xl font-black uppercase leading-none sm:text-7xl lg:text-8xl">
-                ARC <span className="text-[#c9a84c]">GLOSSARY</span>
+                ARC <span className="text-[#d4af37]">GLOSSARY</span>
               </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-[#9a9a9a]">
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-[#8a8a9a]">
                 A living reference for the Web3, wallet, governance, and stablecoin terms used across Arc landing pages and the wider ecosystem.
               </p>
 
@@ -178,11 +178,11 @@ export default function GlossaryPage() {
             <HubCard as="section" className="p-6 sm:p-8">
               <div className="grid gap-5 lg:grid-cols-[1fr_auto_auto] lg:items-end">
                 <div className="relative">
-                  <label htmlFor="glossary-search" className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                  <label htmlFor="glossary-search" className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                     Search
                   </label>
                   <div className="relative mt-2">
-                    <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#555]" size={16} />
+                    <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#555566]" size={16} />
                     <input
                       id="glossary-search"
                       aria-label="Search glossary terms"
@@ -195,7 +195,7 @@ export default function GlossaryPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="glossary-category" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                  <label htmlFor="glossary-category" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                     Category
                   </label>
                   <select
@@ -214,7 +214,7 @@ export default function GlossaryPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="glossary-difficulty" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                  <label htmlFor="glossary-difficulty" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                     Difficulty
                   </label>
                   <select
@@ -237,9 +237,9 @@ export default function GlossaryPage() {
             <HubCard as="section" className="p-6 sm:p-8">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#c9a84c]">// a-z index</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#d4af37]">// a-z index</p>
                   <h2 className="mt-4 text-3xl font-black uppercase leading-tight">Quick index</h2>
-                  <p className="mt-3 text-sm leading-7 text-[#9a9a9a]">
+                  <p className="mt-3 text-sm leading-7 text-[#8a8a9a]">
                     Jump by first letter or scan the counts to see where the glossary is densest.
                   </p>
                 </div>
@@ -259,8 +259,8 @@ export default function GlossaryPage() {
                   onClick={() => setActiveLetter('all')}
                   className={`rounded-full border px-3 py-2 font-mono text-[10px] uppercase tracking-[0.2em] transition-colors ${
                     activeLetter === 'all'
-                      ? 'border-[#c9a84c] bg-[#c9a84c] text-black'
-                      : 'border-[#2a2a2a] text-[#777] hover:border-[#c9a84c]/50 hover:text-[#c9a84c]'
+                      ? 'border-[#d4af37] bg-[#d4af37] text-black'
+                      : 'border-[#1a1a2e] text-[#555566] hover:border-[#d4af37]/50 hover:text-[#d4af37]'
                   }`}
                 >
                   ALL
@@ -277,8 +277,8 @@ export default function GlossaryPage() {
                       onClick={() => setActiveLetter(letter)}
                       className={`rounded-full border px-3 py-2 font-mono text-[10px] uppercase tracking-[0.2em] transition-colors ${
                         active
-                          ? 'border-[#c9a84c] bg-[#c9a84c] text-black'
-                          : 'border-[#2a2a2a] text-[#777] hover:border-[#c9a84c]/50 hover:text-[#c9a84c]'
+                          ? 'border-[#d4af37] bg-[#d4af37] text-black'
+                          : 'border-[#1a1a2e] text-[#555566] hover:border-[#d4af37]/50 hover:text-[#d4af37]'
                       } ${count === 0 && !active ? 'opacity-40' : ''}`}
                     >
                       {letter} <span className="ml-1 text-[9px]">{count}</span>
@@ -289,12 +289,12 @@ export default function GlossaryPage() {
             </HubCard>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-[10px] uppercase tracking-[0.24em] text-[#777]">
+          <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-[10px] uppercase tracking-[0.24em] text-[#555566]">
             <p>
-              Showing <span className="text-[#c9a84c]">{filteredTerms.length}</span> of {GLOSSARY_TERMS.length} terms
+              Showing <span className="text-[#d4af37]">{filteredTerms.length}</span> of {GLOSSARY_TERMS.length} terms
             </p>
             <div className="flex flex-wrap gap-2">
-              {search ? <HubBadge className="border-[#c9a84c]/25 bg-[#c9a84c]/10 text-[#f2d58b]">SEARCH</HubBadge> : null}
+              {search ? <HubBadge className="border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f2d58b]">SEARCH</HubBadge> : null}
               {category !== 'all' ? <HubBadge>{CATEGORY_LABELS[category]}</HubBadge> : null}
               {difficulty !== 'all' ? <HubBadge>{difficulty.toUpperCase()}</HubBadge> : null}
               {activeLetter !== 'all' ? <HubBadge>{activeLetter}</HubBadge> : null}
@@ -307,7 +307,7 @@ export default function GlossaryPage() {
                 <HubCard as="article" className="flex h-full flex-col p-6">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#c9a84c]">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#d4af37]">
                         {CATEGORY_LABELS[term.category]}
                       </p>
                       <h3 className="mt-3 text-2xl font-black leading-tight">{term.term}</h3>
@@ -317,11 +317,11 @@ export default function GlossaryPage() {
                     </HubBadge>
                   </div>
 
-                  <p className="mt-4 text-sm leading-7 text-[#9a9a9a]">{term.shortDefinition}</p>
+                  <p className="mt-4 text-sm leading-7 text-[#8a8a9a]">{term.shortDefinition}</p>
 
-                  <div className="mt-6 flex items-center justify-between border-t border-[#2a2a2a] pt-4 font-mono text-[10px] uppercase tracking-[0.22em] text-[#777]">
+                  <div className="mt-6 flex items-center justify-between border-t border-[#1a1a2e] pt-4 font-mono text-[10px] uppercase tracking-[0.22em] text-[#555566]">
                     <span>{term.related.length} related</span>
-                    <span className="inline-flex items-center gap-1 text-[#c9a84c] transition-transform group-hover:translate-x-0.5">
+                    <span className="inline-flex items-center gap-1 text-[#d4af37] transition-transform group-hover:translate-x-0.5">
                       OPEN <ArrowRight size={14} />
                     </span>
                   </div>

@@ -1,8 +1,8 @@
-import { HubCard, HubSkeletonCard } from '@/components/HubPrimitives';
+﻿import { HubCard, HubSkeletonCard } from '@/components/HubPrimitives';
 
 export default function RaceLoadingPage() {
   return (
-    <main className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white">
+    <main className="min-h-screen overflow-x-clip bg-[#050508] text-white">
       <section className="section pt-32 sm:pt-36">
         <div className="mx-auto max-w-7xl">
           <div className="space-y-4">

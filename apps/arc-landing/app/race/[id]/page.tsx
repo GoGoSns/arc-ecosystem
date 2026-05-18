@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import Link from 'next/link';
@@ -99,7 +99,7 @@ function RaceCountdown({
   if (status === 'ended') {
     return (
       <div className="text-center">
-        <p className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">Finalised</p>
+        <p className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#555566]">Finalised</p>
         <p className="mt-2 text-2xl font-black text-white">Ended on {formatRaceDate(targetDate)}</p>
       </div>
     );
@@ -110,10 +110,10 @@ function RaceCountdown({
   if (remaining === 0) {
     return (
       <div className="text-center" aria-live="polite">
-        <p className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">
+        <p className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#555566]">
           {status === 'active' ? 'Closing now' : 'Opening now'}
         </p>
-        <p className="mt-2 text-2xl font-black text-[#c9a84c]">
+        <p className="mt-2 text-2xl font-black text-[#d4af37]">
           {status === 'active' ? 'Race is wrapping up' : 'Race is starting'}
         </p>
       </div>
@@ -123,9 +123,9 @@ function RaceCountdown({
   return (
     <div className="grid grid-cols-4 gap-2 sm:gap-3" aria-live="polite">
       {formatCountdownParts(remaining).map((part) => (
-        <div key={part.label} className="rounded-2xl border border-[#2a2a2a] bg-black/40 px-2 py-3 text-center">
+        <div key={part.label} className="rounded-2xl border border-[#1a1a2e] bg-black/40 px-2 py-3 text-center">
           <div className="text-xl font-black text-white sm:text-2xl">{part.value}</div>
-          <div className="mt-1 text-[9px] font-mono uppercase tracking-[0.24em] text-[#777]">{part.label}</div>
+          <div className="mt-1 text-[9px] font-mono uppercase tracking-[0.24em] text-[#555566]">{part.label}</div>
         </div>
       ))}
     </div>
@@ -142,7 +142,7 @@ function FeedbackBanner({ notice }: { notice: { tone: NoticeTone; message: strin
       ? 'border-red-500/20 bg-red-500/10 text-red-100'
       : notice.tone === 'success'
         ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-100'
-        : 'border-[#c9a84c]/20 bg-[#c9a84c]/10 text-[#f5e1aa]';
+        : 'border-[#d4af37]/20 bg-[#d4af37]/10 text-[#f5e1aa]';
 
   return (
     <div className={`rounded-2xl border px-4 py-3 text-sm leading-6 ${toneClass}`} role={notice.tone === 'error' ? 'alert' : 'status'} aria-live="polite">
@@ -157,7 +157,7 @@ function RankBadge({ rank }: { rank: number }) {
   return (
     <span
       className={`inline-flex min-w-16 items-center justify-center gap-1 rounded-full border px-3 py-1 text-[10px] font-mono uppercase tracking-[0.24em] ${
-        isPodium ? 'border-[#c9a84c]/40 bg-[#c9a84c]/10 text-[#f3dfaa]' : 'border-[#2a2a2a] bg-white/[0.02] text-white'
+        isPodium ? 'border-[#d4af37]/40 bg-[#d4af37]/10 text-[#f3dfaa]' : 'border-[#1a1a2e] bg-white/[0.02] text-white'
       }`}
       aria-label={`${getRaceOrdinal(rank)} place`}
     >
@@ -294,12 +294,12 @@ export default function RaceDetailPage() {
   };
 
   return (
-    <main className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white">
+    <main className="min-h-screen overflow-x-clip bg-[#050508] text-white">
       <SiteHeader />
 
       <section className="section pt-32 sm:pt-36">
         <div className="mx-auto max-w-7xl">
-          <Link href="/race" className="mb-8 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[#777] transition-colors hover:text-[#c9a84c]">
+          <Link href="/race" className="mb-8 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[#555566] transition-colors hover:text-[#d4af37]">
             <ArrowLeft size={14} aria-hidden="true" />
             Back to Hub
           </Link>
@@ -317,26 +317,26 @@ export default function RaceDetailPage() {
                 </div>
 
                 <div className="mt-5 space-y-3">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#777]">Race detail</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#555566]">Race detail</p>
                   <h1 className="text-4xl font-black uppercase leading-tight sm:text-5xl lg:text-6xl">{race.title}</h1>
-                  <p className="max-w-3xl text-base leading-7 text-[#9a9a9a] sm:text-lg">{race.description}</p>
+                  <p className="max-w-3xl text-base leading-7 text-[#8a8a9a] sm:text-lg">{race.description}</p>
                 </div>
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                  <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
-                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Prize pool</div>
-                    <div className="mt-2 text-xl font-black text-[#c9a84c]">{formatRacePrize(race.prizePool)}</div>
+                  <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-4">
+                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Prize pool</div>
+                    <div className="mt-2 text-xl font-black text-[#d4af37]">{formatRacePrize(race.prizePool)}</div>
                   </div>
-                  <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
-                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Start</div>
+                  <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-4">
+                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Start</div>
                     <div className="mt-2 text-sm font-semibold text-white">{formatRaceDate(race.startDate)}</div>
                   </div>
-                  <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
-                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">End</div>
+                  <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-4">
+                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">End</div>
                     <div className="mt-2 text-sm font-semibold text-white">{formatRaceDate(race.endDate)}</div>
                   </div>
-                  <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
-                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Leader</div>
+                  <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-4">
+                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Leader</div>
                     <div className="mt-2 text-sm font-semibold text-white">
                       {leaderboard[0] ? leaderboard[0].name ?? formatRaceAddress(leaderboard[0].address) : 'No entries yet'}
                     </div>
@@ -345,11 +345,11 @@ export default function RaceDetailPage() {
               </HubCard>
 
               <HubCard as="section" className="p-0 overflow-hidden">
-                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#2a2a2a] px-6 py-5">
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#1a1a2e] px-6 py-5">
                   <div className="flex items-center gap-3">
-                    <Medal className="text-[#c9a84c]" size={18} aria-hidden="true" />
+                    <Medal className="text-[#d4af37]" size={18} aria-hidden="true" />
                     <div>
-                      <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#777]">Leaderboard</p>
+                      <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#555566]">Leaderboard</p>
                       <h2 className="mt-1 text-xl font-black uppercase">Stable rankings</h2>
                     </div>
                   </div>
@@ -359,7 +359,7 @@ export default function RaceDetailPage() {
                 <div className="overflow-x-auto">
                   <table className="min-w-[760px] w-full border-collapse text-left">
                     <thead>
-                      <tr className="border-b border-[#2a2a2a] text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">
+                      <tr className="border-b border-[#1a1a2e] text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">
                         <th scope="col" className="px-6 py-4">
                           Rank
                         </th>
@@ -415,7 +415,7 @@ export default function RaceDetailPage() {
                               key={participant.address}
                               aria-current={isCurrentUser ? 'true' : undefined}
                               className={`transition-colors ${
-                                isCurrentUser ? 'bg-[#c9a84c]/10 ring-1 ring-inset ring-[#c9a84c]/20' : 'hover:bg-white/[0.02]'
+                                isCurrentUser ? 'bg-[#d4af37]/10 ring-1 ring-inset ring-[#d4af37]/20' : 'hover:bg-white/[0.02]'
                               }`}
                             >
                               <td className="px-6 py-4">
@@ -427,28 +427,28 @@ export default function RaceDetailPage() {
                                     <span className={`text-sm font-semibold ${isCurrentUser ? 'text-[#f3dfaa]' : 'text-white'}`}>
                                       {participant.name ?? formatRaceAddress(participant.address)}
                                     </span>
-                                    {isCurrentUser ? <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f3dfaa]">YOU</HubBadge> : null}
+                                    {isCurrentUser ? <HubBadge className="border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f3dfaa]">YOU</HubBadge> : null}
                                   </div>
-                                  <div className="mt-1 truncate text-[10px] font-mono uppercase tracking-[0.18em] text-[#777]">
+                                  <div className="mt-1 truncate text-[10px] font-mono uppercase tracking-[0.18em] text-[#555566]">
                                     {participant.address}
                                   </div>
                                 </div>
                               </td>
                               <td className="px-6 py-4">
                                 <div className="font-mono text-sm font-black text-white">{participant.score.toLocaleString()}</div>
-                                <div className="mt-1 text-[10px] uppercase tracking-[0.24em] text-[#777]">current score</div>
+                                <div className="mt-1 text-[10px] uppercase tracking-[0.24em] text-[#555566]">current score</div>
                               </td>
-                              <td className="px-6 py-4 text-sm text-[#9a9a9a]">{formatRaceDate(participant.joinedAt)}</td>
+                              <td className="px-6 py-4 text-sm text-[#8a8a9a]">{formatRaceDate(participant.joinedAt)}</td>
                             </tr>
                           );
                         })
                       ) : (
                         <tr>
                           <td colSpan={4} className="px-6 py-12">
-                            <div className="rounded-3xl border border-dashed border-[#2a2a2a] bg-black/20 px-5 py-10 text-center">
-                              <Users className="mx-auto text-[#333]" size={40} aria-hidden="true" />
+                            <div className="rounded-3xl border border-dashed border-[#1a1a2e] bg-black/20 px-5 py-10 text-center">
+                              <Users className="mx-auto text-[#1a1a2e]" size={40} aria-hidden="true" />
                               <p className="mt-4 text-sm font-semibold text-white">No participants yet</p>
-                              <p className="mt-2 text-sm text-[#9a9a9a]">The leaderboard will populate as competitors join this race.</p>
+                              <p className="mt-2 text-sm text-[#8a8a9a]">The leaderboard will populate as competitors join this race.</p>
                             </div>
                           </td>
                         </tr>
@@ -460,11 +460,11 @@ export default function RaceDetailPage() {
 
               <div className="grid gap-6 md:grid-cols-2">
                 <HubCard as="section" className="p-6">
-                  <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[#777]">
-                    <Info size={14} className="text-[#c9a84c]" aria-hidden="true" />
+                  <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[#555566]">
+                    <Info size={14} className="text-[#d4af37]" aria-hidden="true" />
                     Race rules
                   </div>
-                  <div className="mt-4 space-y-3 text-sm leading-7 text-[#9a9a9a]">
+                  <div className="mt-4 space-y-3 text-sm leading-7 text-[#8a8a9a]">
                     <p>Participants must join while the race is active to appear in the live leaderboard.</p>
                     <p>Scores are stored locally and sorted deterministically by score, then join time, then address.</p>
                     <p>Top five finishers receive prize allocations from the published payout pool.</p>
@@ -473,15 +473,15 @@ export default function RaceDetailPage() {
                 </HubCard>
 
                 <HubCard as="section" className="p-6">
-                  <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[#777]">
-                    <Coins size={14} className="text-[#c9a84c]" aria-hidden="true" />
+                  <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[#555566]">
+                    <Coins size={14} className="text-[#d4af37]" aria-hidden="true" />
                     Prize breakdown
                   </div>
                   <div className="mt-4 space-y-3">
                     {race.prizes.map((prize, index) => (
-                      <div key={`${race.id}-prize-${index}`} className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm">
-                        <span className="text-[#9a9a9a]">{getRaceOrdinal(index + 1)} place</span>
-                        <span className="font-black text-[#c9a84c]">{formatRacePrize(prize)}</span>
+                      <div key={`${race.id}-prize-${index}`} className="flex items-center justify-between rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3 text-sm">
+                        <span className="text-[#8a8a9a]">{getRaceOrdinal(index + 1)} place</span>
+                        <span className="font-black text-[#d4af37]">{formatRacePrize(prize)}</span>
                       </div>
                     ))}
                   </div>
@@ -491,12 +491,12 @@ export default function RaceDetailPage() {
 
             <div className="space-y-6">
               <HubCard as="aside" className="p-6">
-                <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[#777]">
-                  <CalendarDays size={14} className="text-[#c9a84c]" aria-hidden="true" />
+                <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[#555566]">
+                  <CalendarDays size={14} className="text-[#d4af37]" aria-hidden="true" />
                   Countdown
                 </div>
-                <div className="mt-4 rounded-3xl border border-[#2a2a2a] bg-white/[0.015] p-5">
-                  <p className="text-center text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">
+                <div className="mt-4 rounded-3xl border border-[#1a1a2e] bg-white/[0.015] p-5">
+                  <p className="text-center text-[10px] font-mono uppercase tracking-[0.28em] text-[#555566]">
                     {race.status === 'active' ? 'Ends In' : race.status === 'upcoming' ? 'Starts In' : 'Finalised'}
                   </p>
                   <div className="mt-4">
@@ -504,12 +504,12 @@ export default function RaceDetailPage() {
                   </div>
                 </div>
                 <div className="mt-4 grid grid-cols-2 gap-3">
-                  <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Status</div>
+                  <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Status</div>
                     <div className="mt-2 text-sm font-semibold text-white">{RACE_STATUS_LABELS[race.status]}</div>
                   </div>
-                  <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Category</div>
+                  <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Category</div>
                     <div className="mt-2 text-sm font-semibold text-white">{RACE_CATEGORY_LABELS[race.category]}</div>
                   </div>
                 </div>
@@ -518,7 +518,7 @@ export default function RaceDetailPage() {
               <HubCard as="aside" className="p-6">
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#777]">Demo address</p>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#555566]">Demo address</p>
                     <h2 className="mt-2 text-2xl font-black uppercase">Join and score</h2>
                   </div>
                   <HubBadge>{demoAddress ? formatRaceAddress(demoAddress) : 'Not set'}</HubBadge>
@@ -557,7 +557,7 @@ export default function RaceDetailPage() {
 
                   {race.status === 'active' && !isJoined ? (
                     <form className="space-y-4" onSubmit={handleJoin}>
-                      <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4 text-sm text-[#9a9a9a]">
+                      <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-4 text-sm text-[#8a8a9a]">
                         Join the race with your local demo address. The entry is saved only in your browser.
                       </div>
                       <button type="submit" className="primary-button w-full justify-center">
@@ -567,10 +567,10 @@ export default function RaceDetailPage() {
                     </form>
                   ) : race.status === 'active' && isJoined ? (
                     <form className="space-y-4" onSubmit={handleScoreUpdate}>
-                      <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
-                        <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Current score</div>
-                        <div className="mt-2 text-3xl font-black text-[#c9a84c]">{currentParticipant?.score.toLocaleString() ?? '0'}</div>
-                        <p className="mt-2 text-sm text-[#9a9a9a]">
+                      <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-4">
+                        <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Current score</div>
+                        <div className="mt-2 text-3xl font-black text-[#d4af37]">{currentParticipant?.score.toLocaleString() ?? '0'}</div>
+                        <p className="mt-2 text-sm text-[#8a8a9a]">
                           This address is already in the leaderboard. Update the score below to reflect a new local result.
                         </p>
                       </div>
@@ -594,15 +594,15 @@ export default function RaceDetailPage() {
                       </button>
                     </form>
                   ) : race.status === 'active' ? (
-                    <div className="rounded-2xl border border-dashed border-[#2a2a2a] bg-black/20 px-4 py-4 text-sm text-[#9a9a9a]">
+                    <div className="rounded-2xl border border-dashed border-[#1a1a2e] bg-black/20 px-4 py-4 text-sm text-[#8a8a9a]">
                       Enter a demo address above to join the active race and unlock the score update form.
                     </div>
                   ) : race.status === 'ended' && isJoined ? (
-                    <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4 text-sm text-[#9a9a9a]">
+                    <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-4 text-sm text-[#8a8a9a]">
                       This race has ended. Your archived result remains visible in the leaderboard and winner feed.
                     </div>
                   ) : (
-                    <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4 text-sm text-[#9a9a9a]">
+                    <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-4 text-sm text-[#8a8a9a]">
                       This race is not open for participation yet. Watch the countdown for the live join window.
                     </div>
                   )}

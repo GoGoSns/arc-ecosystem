@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { ArrowLeft, Award } from 'lucide-react';
@@ -28,50 +28,50 @@ export default function LeaderboardPage() {
   operators.forEach((o) => { regionCounts[o.region] = (regionCounts[o.region] ?? 0) + 1; });
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-[#050508] text-white">
       <SiteHeader />
 
       <div className="mx-auto max-w-4xl px-4 py-10">
         <div className="flex items-center gap-3 mb-2">
-          <Award size={20} className="text-[#c9a84c]" />
+          <Award size={20} className="text-[#d4af37]" />
           <h1 className="text-3xl font-black">Operator Leaderboard</h1>
         </div>
-        <p className="text-[#777] text-sm mb-8">Ranked by uptime. Ties broken by earliest registration.</p>
+        <p className="text-[#555566] text-sm mb-8">Ranked by uptime. Ties broken by earliest registration.</p>
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-3 mb-8">
-          <div className="rounded-xl p-4 text-center" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(201,168,76,0.12)' }}>
+          <div className="rounded-xl p-4 text-center" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(212, 175, 55,0.12)' }}>
             <div className="text-2xl font-black">{totalOps}</div>
-            <div className="text-[10px] text-[#555] uppercase tracking-wider mt-1">Total Operators</div>
+            <div className="text-[10px] text-[#555566] uppercase tracking-wider mt-1">Total Operators</div>
           </div>
-          <div className="rounded-xl p-4 text-center" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(201,168,76,0.12)' }}>
+          <div className="rounded-xl p-4 text-center" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(212, 175, 55,0.12)' }}>
             <div className="text-2xl font-black text-[#4ade80]">{avgUptime}%</div>
-            <div className="text-[10px] text-[#555] uppercase tracking-wider mt-1">Avg Uptime</div>
+            <div className="text-[10px] text-[#555566] uppercase tracking-wider mt-1">Avg Uptime</div>
           </div>
-          <div className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(201,168,76,0.12)' }}>
-            <div className="text-[10px] text-[#555] uppercase tracking-wider mb-2">By Region</div>
+          <div className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(212, 175, 55,0.12)' }}>
+            <div className="text-[10px] text-[#555566] uppercase tracking-wider mb-2">By Region</div>
             {(Object.keys(regionCounts) as Region[]).map((r) => (
               <div key={r} className="flex justify-between text-xs">
-                <span className="text-[#aaa]">{r}</span>
+                <span className="text-[#8a8a9a]">{r}</span>
                 <span className="text-white font-bold">{regionCounts[r]}</span>
               </div>
             ))}
-            {Object.keys(regionCounts).length === 0 && <span className="text-xs text-[#555]">—</span>}
+            {Object.keys(regionCounts).length === 0 && <span className="text-xs text-[#555566]">—</span>}
           </div>
         </div>
 
         {sorted.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-5xl mb-4">🏆</div>
-            <p className="text-[#555] text-lg mb-4">No operators registered yet. Be the first!</p>
-            <Link href="/node/setup" className="px-5 py-2.5 rounded-xl text-sm font-bold" style={{ background: '#c9a84c', color: '#0a0a0a' }}>
+            <p className="text-[#555566] text-lg mb-4">No operators registered yet. Be the first!</p>
+            <Link href="/node/setup" className="px-5 py-2.5 rounded-xl text-sm font-bold" style={{ background: '#d4af37', color: '#0a0a0a' }}>
               Run a Node
             </Link>
           </div>
         ) : (
           <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.07)' }}>
             {/* Header */}
-            <div className="grid grid-cols-[40px_1fr_80px_80px_70px_80px] text-[10px] text-[#555] uppercase tracking-wider px-4 py-3"
+            <div className="grid grid-cols-[40px_1fr_80px_80px_70px_80px] text-[10px] text-[#555566] uppercase tracking-wider px-4 py-3"
               style={{ background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
               <span>#</span>
               <span>Operator</span>
@@ -88,26 +88,26 @@ export default function LeaderboardPage() {
                   className="grid grid-cols-[40px_1fr_80px_80px_70px_80px] items-center px-4 py-3 text-sm transition-colors hover:bg-[rgba(255,255,255,0.02)]"
                   style={{
                     borderBottom: '1px solid rgba(255,255,255,0.04)',
-                    background: isMe ? 'rgba(201,168,76,0.05)' : 'transparent',
-                    boxShadow: isMe ? 'inset 0 0 0 1px rgba(201,168,76,0.2)' : 'none',
+                    background: isMe ? 'rgba(212, 175, 55,0.05)' : 'transparent',
+                    boxShadow: isMe ? 'inset 0 0 0 1px rgba(212, 175, 55,0.2)' : 'none',
                   }}>
-                  <span className="font-mono font-black" style={{ color: isTop3 ? '#c9a84c' : '#555' }}>
+                  <span className="font-mono font-black" style={{ color: isTop3 ? '#d4af37' : '#555' }}>
                     {isTop3 ? MEDALS[i] : `#${i + 1}`}
                   </span>
                   <div>
-                    <span className="font-bold" style={{ color: isMe ? '#c9a84c' : '#e8e8e8' }}>
+                    <span className="font-bold" style={{ color: isMe ? '#d4af37' : '#e8e8e8' }}>
                       {op.name || shortenAddr(op.address)}
                     </span>
-                    {isMe && <span className="ml-1.5 text-[10px] text-[#c9a84c]">(you)</span>}
+                    {isMe && <span className="ml-1.5 text-[10px] text-[#d4af37]">(you)</span>}
                   </div>
-                  <span className="text-xs text-[#777]">{op.region}</span>
+                  <span className="text-xs text-[#555566]">{op.region}</span>
                   <span className="hidden sm:block text-xs capitalize" style={{
                     color: op.status === 'verified' ? '#4ade80' : op.status === 'inactive' ? '#ef4444' : '#facc15',
                   }}>{op.status}</span>
                   <span className="text-xs font-bold" style={{ color: (op.uptimePercent ?? 0) >= 99 ? '#4ade80' : (op.uptimePercent ?? 0) >= 95 ? '#facc15' : '#aaa' }}>
                     {op.uptimePercent !== undefined ? `${op.uptimePercent}%` : '—'}
                   </span>
-                  <span className="hidden sm:block text-xs text-[#555]">
+                  <span className="hidden sm:block text-xs text-[#555566]">
                     {new Date(op.registeredAt).toLocaleDateString()}
                   </span>
                 </div>

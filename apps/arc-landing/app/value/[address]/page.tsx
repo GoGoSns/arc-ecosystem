@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { use, useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -15,7 +15,7 @@ import { useNodeStore } from '@/lib/nodeStore';
 const TIER_MAP = {
   bronze: { label: 'Bronze', color: '#cd7f32', icon: '🥉' },
   silver: { label: 'Silver', color: '#c0c0c0', icon: '🥈' },
-  gold: { label: 'Gold', color: '#c9a84c', icon: '🥇' },
+  gold: { label: 'Gold', color: '#d4af37', icon: '🥇' },
   platinum: { label: 'Platinum', color: '#e5e4e2', icon: '💠' },
   diamond: { label: 'Diamond', color: '#b9f2ff', icon: '💎' },
 };
@@ -104,20 +104,20 @@ export default function PublicProfilePage({ params }: { params: Promise<{ addres
   return (
     <div className="min-h-screen bg-black text-white">
       <div className="max-w-5xl mx-auto px-6 pt-32 pb-20">
-        <Link href="/value" className="inline-flex items-center gap-2 text-[#555] hover:text-[#c9a84c] mb-12 group">
+        <Link href="/value" className="inline-flex items-center gap-2 text-[#555566] hover:text-[#d4af37] mb-12 group">
           <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
           <span className="font-mono text-xs tracking-widest">BACK TO VALUE HUB</span>
         </Link>
 
         {/* Header */}
         <div className="flex flex-col md:flex-row items-center gap-8 mb-16">
-          <div className="w-32 h-32 rounded-3xl bg-gradient-to-br from-[#c9a84c] to-[#b9f2ff] p-1 shrink-0">
+          <div className="w-32 h-32 rounded-3xl bg-gradient-to-br from-[#d4af37] to-[#b9f2ff] p-1 shrink-0">
              <div className="w-full h-full rounded-[22px] bg-black flex items-center justify-center text-white/20">
                 <User size={64} />
              </div>
           </div>
           <div className="flex-1 text-center md:text-left">
-             <div className="font-mono text-xs text-[#555] mb-2 flex items-center justify-center md:justify-start gap-2">
+             <div className="font-mono text-xs text-[#555566] mb-2 flex items-center justify-center md:justify-start gap-2">
                 <span className="truncate max-w-[200px] sm:max-w-none">{addressParam}</span>
                 <button className="hover:text-white"><Copy size={14} /></button>
              </div>
@@ -132,10 +132,10 @@ export default function PublicProfilePage({ params }: { params: Promise<{ addres
              </div>
           </div>
           <div className="flex gap-3">
-             <button className="p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-[#c9a84c]/30 hover:bg-[#c9a84c]/5 transition-all">
-                <Share2 size={20} className="text-[#c9a84c]" />
+             <button className="p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-[#d4af37]/30 hover:bg-[#d4af37]/5 transition-all">
+                <Share2 size={20} className="text-[#d4af37]" />
              </button>
-             <button className="px-6 py-4 rounded-2xl bg-[#c9a84c] text-black font-black hover:bg-[#d4b96a] transition-all flex items-center gap-2">
+             <button className="px-6 py-4 rounded-2xl bg-[#d4af37] text-black font-black hover:bg-[#d4b96a] transition-all flex items-center gap-2">
                 <Twitter size={18} />
                 SHARE
              </button>
@@ -153,7 +153,7 @@ export default function PublicProfilePage({ params }: { params: Promise<{ addres
              <div key={i} className="rounded-3xl p-6 bg-white/[0.02] border border-white/[0.05] relative overflow-hidden group">
                 <stat.icon size={16} className="mb-4" style={{ color: stat.color }} />
                 <div className="text-2xl font-black mb-1">{stat.value}</div>
-                <div className="text-[10px] text-[#555] uppercase tracking-widest font-bold">{stat.label}</div>
+                <div className="text-[10px] text-[#555566] uppercase tracking-widest font-bold">{stat.label}</div>
                 <div className="absolute top-0 right-0 w-16 h-16 blur-2xl opacity-0 group-hover:opacity-10 transition-opacity rounded-full" style={{ background: stat.color }} />
              </div>
            ))}
@@ -162,18 +162,18 @@ export default function PublicProfilePage({ params }: { params: Promise<{ addres
         {/* Achievements */}
         <div className="rounded-3xl p-10 bg-white/[0.02] border border-white/[0.05]">
            <h2 className="text-2xl font-black mb-10 flex items-center gap-3 uppercase tracking-tight">
-              <Trophy size={24} className="text-[#c9a84c]" />
+              <Trophy size={24} className="text-[#d4af37]" />
               Achievements
            </h2>
            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {ACHIEVEMENTS_DEF.map(ach => {
                 const unlocked = data.unlockedIds.includes(ach.id);
                 return (
-                  <div key={ach.id} className={`p-6 rounded-3xl border transition-all ${unlocked ? 'bg-black/40 border-[#c9a84c]/20' : 'bg-black/20 border-white/5 opacity-40 grayscale'}`}>
+                  <div key={ach.id} className={`p-6 rounded-3xl border transition-all ${unlocked ? 'bg-black/40 border-[#d4af37]/20' : 'bg-black/20 border-white/5 opacity-40 grayscale'}`}>
                      <div className="text-3xl mb-4">{ach.icon}</div>
-                     <div className={`font-black mb-1 ${unlocked ? 'text-white' : 'text-[#555]'}`}>{ach.name}</div>
-                     <p className="text-xs text-[#555]">{ach.desc}</p>
-                     {!unlocked && <div className="mt-4 text-[9px] font-bold text-[#333] tracking-widest uppercase flex items-center gap-1"><ShieldCheck size={10} /> Locked</div>}
+                     <div className={`font-black mb-1 ${unlocked ? 'text-white' : 'text-[#555566]'}`}>{ach.name}</div>
+                     <p className="text-xs text-[#555566]">{ach.desc}</p>
+                     {!unlocked && <div className="mt-4 text-[9px] font-bold text-[#1a1a2e] tracking-widest uppercase flex items-center gap-1"><ShieldCheck size={10} /> Locked</div>}
                   </div>
                 );
               })}
@@ -182,7 +182,7 @@ export default function PublicProfilePage({ params }: { params: Promise<{ addres
 
         {/* Footer Actions */}
         <div className="mt-16 text-center">
-           <button className="text-[#555] hover:text-white transition-colors text-xs font-mono uppercase tracking-[0.2em] flex items-center gap-2 mx-auto">
+           <button className="text-[#555566] hover:text-white transition-colors text-xs font-mono uppercase tracking-[0.2em] flex items-center gap-2 mx-auto">
               Embed this profile on your website <ExternalLink size={12} />
            </button>
         </div>

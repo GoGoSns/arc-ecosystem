@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
@@ -140,19 +140,19 @@ export default function LearnPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
+    <main className="min-h-screen bg-[#050508] text-white">
       <SiteHeader />
 
       <section className="relative overflow-hidden px-4 pt-24 sm:px-6 lg:px-8">
-        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-[#c9a84c]/10 via-[#c9a84c]/5 to-transparent blur-3xl" />
+        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-[#d4af37]/10 via-[#d4af37]/5 to-transparent blur-3xl" />
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
             <div className="relative">
-              <p className="font-mono text-xs uppercase tracking-[0.35em] text-[#c9a84c]">// learn</p>
+              <p className="font-mono text-xs uppercase tracking-[0.35em] text-[#d4af37]">// learn</p>
               <h1 className="mt-5 text-5xl font-black uppercase leading-none sm:text-7xl lg:text-8xl">
-                ARC <span className="text-[#c9a84c]">LEARN</span>
+                ARC <span className="text-[#d4af37]">LEARN</span>
               </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-[#9a9a9a]">
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-[#8a8a9a]">
                 Follow a structured path through the ecosystem, earn XP, and keep track of what you have completed or bookmarked.
               </p>
 
@@ -184,9 +184,9 @@ export default function LearnPage() {
                 <HubBrackets />
                 <div className="grid gap-5 lg:grid-cols-[1fr_auto_auto] lg:items-end">
                   <div className="relative">
-                    <label className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Search</label>
+                    <label className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Search</label>
                     <div className="relative mt-2">
-                      <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#555]" size={16} />
+                      <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#555566]" size={16} />
                       <input
                         aria-label="Search lessons"
                         value={search}
@@ -198,7 +198,7 @@ export default function LearnPage() {
                   </div>
 
                   <div>
-                    <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                    <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                       Category
                     </label>
                     <select
@@ -216,7 +216,7 @@ export default function LearnPage() {
                   </div>
 
                   <div>
-                    <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                    <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                       Level
                     </label>
                     <select
@@ -243,8 +243,8 @@ export default function LearnPage() {
                     onClick={() => setSortBy(option.id)}
                     className={`rounded-full border px-4 py-2 font-mono text-[10px] uppercase tracking-[0.22em] transition-colors ${
                       sortBy === option.id
-                        ? 'border-[#c9a84c] bg-[#c9a84c] text-black'
-                        : 'border-[#2a2a2a] text-[#777] hover:border-[#c9a84c]/50 hover:text-[#c9a84c]'
+                        ? 'border-[#d4af37] bg-[#d4af37] text-black'
+                        : 'border-[#1a1a2e] text-[#555566] hover:border-[#d4af37]/50 hover:text-[#d4af37]'
                     }`}
                   >
                     {option.label}
@@ -257,8 +257,8 @@ export default function LearnPage() {
                     onClick={() => setStatus(option.id)}
                     className={`rounded-full border px-4 py-2 font-mono text-[10px] uppercase tracking-[0.22em] transition-colors ${
                       status === option.id
-                        ? 'border-[#c9a84c] bg-[#c9a84c] text-black'
-                        : 'border-[#2a2a2a] text-[#777] hover:border-[#c9a84c]/50 hover:text-[#c9a84c]'
+                        ? 'border-[#d4af37] bg-[#d4af37] text-black'
+                        : 'border-[#1a1a2e] text-[#555566] hover:border-[#d4af37]/50 hover:text-[#d4af37]'
                     }`}
                   >
                     {option.label}
@@ -271,7 +271,7 @@ export default function LearnPage() {
                   const completed = progress?.completedLessons.includes(lesson.id) ?? false;
                   const bookmarked = progress?.bookmarkedLessons.includes(lesson.id) ?? false;
                   const levelColor =
-                    lesson.level === 'intro' ? '#4ade80' : lesson.level === 'intermediate' ? '#c9a84c' : '#a78bfa';
+                    lesson.level === 'intro' ? '#4ade80' : lesson.level === 'intermediate' ? '#d4af37' : '#a78bfa';
                   const resourceInternal = lesson.resourceUrl?.startsWith('/');
 
                   return (
@@ -284,11 +284,11 @@ export default function LearnPage() {
                       <HubBrackets />
                       <div className="flex items-start justify-between gap-4">
                         <div>
-                          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#c9a84c]">
+                          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#d4af37]">
                             {CATEGORY_LABELS[lesson.category]}
                           </p>
                           <h3 className="mt-3 text-2xl font-black leading-tight">{lesson.title}</h3>
-                          <p className="mt-2 text-sm text-[#777]">{lesson.duration} · {lesson.xp} XP</p>
+                          <p className="mt-2 text-sm text-[#555566]">{lesson.duration} · {lesson.xp} XP</p>
                         </div>
                         <span
                           className="rounded-full border px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em]"
@@ -298,15 +298,15 @@ export default function LearnPage() {
                         </span>
                       </div>
 
-                      <p className="mt-5 text-sm leading-7 text-[#9a9a9a]">{lesson.description}</p>
+                      <p className="mt-5 text-sm leading-7 text-[#8a8a9a]">{lesson.description}</p>
 
                       <ol className="mt-5 space-y-2">
                         {lesson.steps.map((step, index) => (
                           <li
                             key={step}
-                            className="flex items-start gap-3 rounded-2xl border border-[#2a2a2a] bg-black/25 px-4 py-3 text-sm text-[#cfcfcf]"
+                            className="flex items-start gap-3 rounded-2xl border border-[#1a1a2e] bg-black/25 px-4 py-3 text-sm text-[#cfcfcf]"
                           >
-                            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-[#777]">
+                            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-[#555566]">
                               0{index + 1}
                             </span>
                             <span className="leading-6">{step}</span>
@@ -315,7 +315,7 @@ export default function LearnPage() {
                       </ol>
 
                       <div className="mt-6 flex items-center justify-between gap-3">
-                        <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#777]">
+                        <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#555566]">
                           <span>{completed ? 'Completed' : 'Available'}</span>
                           <span>{bookmarked ? 'Saved' : 'Unsaved'}</span>
                         </div>
@@ -330,20 +330,20 @@ export default function LearnPage() {
                               <button
                                 type="button"
                                 onClick={() => toggleBookmark(viewer, lesson.id)}
-                                className="rounded-full border border-[#2a2a2a] p-2 text-[#ddd] transition-colors hover:border-[#c9a84c]/60 hover:text-[#c9a84c]"
+                                className="rounded-full border border-[#1a1a2e] p-2 text-[#ddd] transition-colors hover:border-[#d4af37]/60 hover:text-[#d4af37]"
                                 aria-label={bookmarked ? 'Remove bookmark' : 'Bookmark lesson'}
                               >
                                 {bookmarked ? <BookmarkCheck size={14} /> : <Bookmark size={14} />}
                               </button>
                               {completed ? (
-                                <span className="rounded-full border border-[#2a2a2a] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-[#c9a84c]">
+                                <span className="rounded-full border border-[#1a1a2e] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-[#d4af37]">
                                   COMPLETED
                                 </span>
                               ) : (
                                 <button
                                   type="button"
                                   onClick={() => completeLesson(viewer, lesson.id)}
-                                  className="rounded-full border border-[#c9a84c] bg-[#c9a84c] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-black transition-colors hover:opacity-90"
+                                  className="rounded-full border border-[#d4af37] bg-[#d4af37] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-black transition-colors hover:opacity-90"
                                 >
                                   COMPLETE
                                 </button>
@@ -391,45 +391,45 @@ export default function LearnPage() {
             <aside className="space-y-6">
               <div className="bracket-card rounded-3xl p-6 sm:p-8">
                 <HubBrackets />
-                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#c9a84c]">// progress</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#d4af37]">// progress</p>
                 <h2 className="mt-4 text-3xl font-black uppercase leading-tight">Your learning path</h2>
                 {isConnected && progress ? (
                   <div className="mt-6 space-y-5">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#777]">Wallet</p>
+                        <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#555566]">Wallet</p>
                         <p className="mt-1 text-lg font-black">{address?.slice(0, 6)}...{address?.slice(-4)}</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#777]">Progress</p>
-                        <p className="mt-1 text-2xl font-black text-[#c9a84c]">{progressPercent}%</p>
+                        <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#555566]">Progress</p>
+                        <p className="mt-1 text-2xl font-black text-[#d4af37]">{progressPercent}%</p>
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.24em] text-[#777]">
+                      <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.24em] text-[#555566]">
                         <span>{progress.completedLessons.length} completed</span>
                         <span>{progress.bookmarkedLessons.length} bookmarks</span>
                       </div>
                       <div className="h-2 overflow-hidden rounded-full bg-white/5">
-                        <div className="h-full rounded-full bg-[#c9a84c]" style={{ width: `${progressPercent}%` }} />
+                        <div className="h-full rounded-full bg-[#d4af37]" style={{ width: `${progressPercent}%` }} />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
-                      <div className="rounded-2xl border border-[#2a2a2a] bg-black/25 p-4">
-                        <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#777]">XP</p>
+                      <div className="rounded-2xl border border-[#1a1a2e] bg-black/25 p-4">
+                        <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#555566]">XP</p>
                         <p className="mt-2 text-lg font-black">{progress.totalXp}</p>
                       </div>
-                      <div className="rounded-2xl border border-[#2a2a2a] bg-black/25 p-4">
-                        <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#777]">Lessons</p>
+                      <div className="rounded-2xl border border-[#1a1a2e] bg-black/25 p-4">
+                        <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#555566]">Lessons</p>
                         <p className="mt-2 text-lg font-black">{progress.completedLessons.length}</p>
                       </div>
                     </div>
                   </div>
                 ) : (
                   <div className="mt-6 space-y-4">
-                    <p className="text-sm leading-7 text-[#9a9a9a]">
+                    <p className="text-sm leading-7 text-[#8a8a9a]">
                       Connect a wallet to save completed lessons, bookmarks, and XP across sessions.
                     </p>
                     <button onClick={connect} className="primary-button w-full">
@@ -441,7 +441,7 @@ export default function LearnPage() {
 
               <div className="bracket-card rounded-3xl p-6 sm:p-8">
                 <HubBrackets />
-                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#c9a84c]">// next up</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#d4af37]">// next up</p>
                 <h2 className="mt-4 text-3xl font-black uppercase leading-tight">Recommended lesson</h2>
                 {nextLesson ? (
                   <div className="mt-6 space-y-4">
@@ -451,8 +451,8 @@ export default function LearnPage() {
                       <span className="soon-badge">{nextLesson.xp} XP</span>
                     </div>
                     <h3 className="text-2xl font-black">{nextLesson.title}</h3>
-                    <p className="text-sm leading-7 text-[#9a9a9a]">{nextLesson.description}</p>
-                    <div className="flex items-center justify-between border-t border-[#2a2a2a] pt-4 font-mono text-[10px] uppercase tracking-[0.24em] text-[#777]">
+                    <p className="text-sm leading-7 text-[#8a8a9a]">{nextLesson.description}</p>
+                    <div className="flex items-center justify-between border-t border-[#1a1a2e] pt-4 font-mono text-[10px] uppercase tracking-[0.24em] text-[#555566]">
                       <span>{nextLesson.duration}</span>
                       <span>{nextLesson.steps.length} steps</span>
                     </div>
@@ -473,8 +473,8 @@ export default function LearnPage() {
 
               <div className="bracket-card rounded-3xl p-6 sm:p-8">
                 <HubBrackets />
-                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#c9a84c]">// path notes</p>
-                <div className="mt-4 space-y-3 text-sm leading-7 text-[#9a9a9a]">
+                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#d4af37]">// path notes</p>
+                <div className="mt-4 space-y-3 text-sm leading-7 text-[#8a8a9a]">
                   <p>Use the lesson cards to move between the ecosystem surfaces you already know.</p>
                   <p>Bookmark anything you want to revisit later. Completed lessons stay saved per wallet.</p>
                   <p>Pair Learn with Quests for XP and progress tracking across the Arc hub.</p>

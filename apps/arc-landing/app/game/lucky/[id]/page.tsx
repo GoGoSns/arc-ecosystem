@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -32,6 +32,10 @@ import {
   useGameStore,
   type LuckyPack,
 } from '@/lib/gameStore';
+import { useWallet } from '@/contexts/WalletContext';
+import { ShareButtons } from '@/components/ShareButtons';
+import { GameToast } from '@/components/GameToast';
+import { payFromAdmin, USE_REAL_TRANSFERS, explorerUrl } from '@/lib/usdcTransfer';
 import LuckyPackNotFound from './not-found';
 
 function useHydratedNow() {
@@ -62,16 +66,16 @@ function statusTone(status: ReturnType<typeof resolveLuckyPackStatus>) {
       return 'border-[#f59e0b]/30 bg-[#f59e0b]/10 text-[#fde68a]';
     case 'pending':
     default:
-      return 'border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]';
+      return 'border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]';
   }
 }
 
 function rarityTone(rarity: ReturnType<typeof getLuckyPackRarity>) {
   switch (rarity) {
     case 'legendary':
-      return 'border-[#a855f7]/35 bg-[linear-gradient(135deg,rgba(168,85,247,0.18),rgba(201,168,76,0.08)_55%,rgba(255,255,255,0.02))] shadow-[0_24px_70px_rgba(168,85,247,0.12)]';
+      return 'border-[#a855f7]/35 bg-[linear-gradient(135deg,rgba(168,85,247,0.18),rgba(212, 175, 55,0.08)_55%,rgba(255,255,255,0.02))] shadow-[0_24px_70px_rgba(168,85,247,0.12)]';
     case 'gold':
-      return 'border-[#c9a84c]/35 bg-[linear-gradient(135deg,rgba(201,168,76,0.16),rgba(255,255,255,0.02)_55%,rgba(201,168,76,0.08))] shadow-[0_24px_70px_rgba(201,168,76,0.12)]';
+      return 'border-[#d4af37]/35 bg-[linear-gradient(135deg,rgba(212, 175, 55,0.16),rgba(255,255,255,0.02)_55%,rgba(212, 175, 55,0.08))] shadow-[0_24px_70px_rgba(212, 175, 55,0.12)]';
     case 'bronze':
     default:
       return 'border-[#8b5e34]/35 bg-[linear-gradient(135deg,rgba(139,94,52,0.16),rgba(255,255,255,0.02)_55%,rgba(139,94,52,0.08))] shadow-[0_24px_70px_rgba(139,94,52,0.12)]';
@@ -136,17 +140,17 @@ function TimelineRow({ pack }: { pack: LuckyPack }) {
           <div key={event.id} className="grid gap-3 px-5 py-4 md:grid-cols-[160px_110px_minmax(0,1fr)] md:items-center">
             <div className="min-w-0">
               <div className="text-sm font-semibold text-white">{formatGameTimestamp(event.createdAt)}</div>
-              <div className="mt-1 text-xs text-[#777]">Recorded locally</div>
+              <div className="mt-1 text-xs text-[#555566]">Recorded locally</div>
             </div>
             <div className="min-w-0">
-              <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">{event.kind}</HubBadge>
+              <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">{event.kind}</HubBadge>
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2 text-sm font-semibold text-white">
-                <Icon size={14} className="text-[#c9a84c]" aria-hidden="true" />
+                <Icon size={14} className="text-[#d4af37]" aria-hidden="true" />
                 {event.title}
               </div>
-              <div className="mt-1 text-sm leading-7 text-[#9a9a9a]">{event.note}</div>
+              <div className="mt-1 text-sm leading-7 text-[#8a8a9a]">{event.note}</div>
             </div>
           </div>
         );
@@ -162,29 +166,29 @@ function ProbabilityPanel({ pack }: { pack: LuckyPack }) {
     <HubCard as="section" className="p-6 sm:p-8">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Probability</p>
+          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Probability</p>
           <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">Disclosure panel</h2>
         </div>
-        <Sparkles size={18} className="text-[#c9a84c]" aria-hidden="true" />
+        <Sparkles size={18} className="text-[#d4af37]" aria-hidden="true" />
       </div>
       <div className="mt-6 space-y-3">
         {rows.map((tier, index) => (
-          <div key={`${pack.id}-${tier.amount}-${tier.weight}`} className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
+          <div key={`${pack.id}-${tier.amount}-${tier.weight}`} className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
             <div className="flex items-center justify-between gap-3">
               <div className="text-sm font-semibold text-white">Tier {index + 1}</div>
               <div className="text-sm font-semibold text-[#f0d79e]">{formatGameAmount(tier.amount)} USDC</div>
             </div>
             <div className="mt-2 grid gap-2 sm:grid-cols-3">
-              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Weight {tier.weight}%</div>
-              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Chance {tier.chance}%</div>
-              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Weight {tier.weight}%</div>
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Chance {tier.chance}%</div>
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">
                 Weighted against {totalWeight || 0}
               </div>
             </div>
           </div>
         ))}
       </div>
-      <p className="mt-4 text-sm leading-7 text-[#9a9a9a]">
+      <p className="mt-4 text-sm leading-7 text-[#8a8a9a]">
         The weighted reveal uses the configured tier weights only. No contract execution or wallet dependency is involved.
       </p>
     </HubCard>
@@ -205,24 +209,24 @@ function RelatedPackCard({ pack }: { pack: LuckyPack }) {
               <StatusIcon size={12} className="mr-1" aria-hidden="true" />
               {getLuckyPackRevealLabel(pack)}
             </HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">
+            <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">
               {rarity === 'legendary' ? 'Legendary' : rarity === 'gold' ? 'Gold' : 'Bronze'}
             </HubBadge>
           </div>
           <h3 className="text-xl font-black uppercase text-white">{pack.title}</h3>
-          <p className="text-sm leading-6 text-[#777]">
+          <p className="text-sm leading-6 text-[#555566]">
             {pack.senderName} to {pack.receiverName}
           </p>
         </div>
         <div className="text-right">
           <div className="text-lg font-black text-[#f0d79e]">{formatGameAmount(pack.openedAmount ?? pack.baseAmount)}</div>
-          <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">
+          <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">
             {resolveLuckyPackStatus(pack) === 'pending' ? 'Pending' : 'Revealed'}
           </div>
         </div>
       </div>
       <div className="mt-4 flex items-center justify-between gap-3">
-        <div className="text-sm text-[#9a9a9a]">
+        <div className="text-sm text-[#8a8a9a]">
           {pack.tiers.length} tiers · {formatGameTimestamp(pack.createdAt)}
         </div>
         <Link href={`/game/lucky/${pack.id}`} className="bracket-button">
@@ -238,25 +242,32 @@ export default function LuckyDetailPage() {
   const params = useParams<{ id?: string | string[] }>();
   const packId = Array.isArray(params?.id) ? params.id[0] : params?.id;
   const { luckyPacks, openLuckyPack, claimLuckyPack } = useGameStore();
+  const addBalance = useGameStore((state) => state.addBalance);
+  const { address, isConnected } = useWallet();
   const { hydrated, now } = useHydratedNow();
-  const [toast, setToast] = useState<{ tone: 'success' | 'error'; message: string } | null>(null);
-  const [flash, setFlash] = useState(false);
+  
+  const [toast, setToast] = useState<{ isVisible: boolean; type: 'win' | 'loss' | 'info'; title: string; message: string; amount?: string }>({
+    isVisible: false,
+    type: 'info',
+    title: '',
+    message: '',
+  });
 
-  useEffect(() => {
-    if (!toast) {
-      return;
-    }
+  const showToast = (type: 'win' | 'loss' | 'info', title: string, message: string, amount?: string) => {
+    setToast({ isVisible: true, type, title, message, amount });
+  };
 
-    const timer = window.setTimeout(() => setToast(null), 4000);
-    return () => window.clearTimeout(timer);
-  }, [toast]);
+  const closeToast = () => setToast(prev => ({ ...prev, isVisible: false }));
 
-  const gameStore = useGameStore((state) => ({
-    challenges: state.challenges,
-    luckyPacks: state.luckyPacks,
-    history: state.history,
-  }));
-  const progress = useMemo(() => buildGameProgressSnapshot(gameStore, now), [gameStore, now]);
+  const [isFlipping, setIsFlipping] = useState(false);
+  const [txPending, setTxPending] = useState(false);
+
+  const challenges = useGameStore((state) => state.challenges);
+  const history = useGameStore((state) => state.history);
+  const progress = useMemo(
+    () => buildGameProgressSnapshot({ challenges, luckyPacks, history }, now),
+    [challenges, luckyPacks, history, now],
+  );
 
   const pack = useMemo(() => luckyPacks.find((item) => item.id === packId) ?? null, [luckyPacks, packId]);
 
@@ -278,24 +289,6 @@ export default function LuckyDetailPage() {
       })
       .slice(0, 3);
   }, [luckyPacks, pack, now]);
-
-  useEffect(() => {
-    setFlash(false);
-    if (!pack) {
-      return;
-    }
-
-    const frame = window.requestAnimationFrame(() => {
-      setFlash(true);
-    });
-
-    const timer = window.setTimeout(() => setFlash(false), 1200);
-
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.clearTimeout(timer);
-    };
-  }, [pack?.openedAt, pack?.claimedAt, pack?.id]);
 
   if (!hydrated) {
     return (
@@ -324,45 +317,72 @@ export default function LuckyDetailPage() {
   const canClaim = status === 'opened';
 
   const handleOpen = () => {
-    const reveal = openLuckyPack(pack.id);
-    if (reveal) {
-      setToast({
-        tone: 'success',
-        message: `${formatGameAmount(reveal.amount)} revealed locally with a ${reveal.rarity} tier.`,
-      });
-    } else {
-      setToast({ tone: 'error', message: 'This card can no longer be opened.' });
+    if (!isConnected || !address) {
+      showToast('info', 'Connect Wallet', 'Connect your wallet to open this pack.');
+      return;
     }
+    
+    setIsFlipping(true);
+    
+    setTimeout(() => {
+      const reveal = openLuckyPack(pack.id);
+      if (reveal) {
+        addBalance(address, reveal.amount);
+        const isHighTier = reveal.amount >= 90;
+        showToast(
+          isHighTier ? 'win' : 'info', 
+          isHighTier ? 'BIG WIN!' : 'Revealed', 
+          `${formatGameAmount(reveal.amount)} USDC revealed and added to your wallet!`,
+          String(reveal.amount)
+        );
+      }
+      setIsFlipping(false);
+    }, 1500);
   };
 
-  const handleClaim = () => {
-    if (claimLuckyPack(pack.id)) {
-      setToast({ tone: 'success', message: 'Lucky reward claimed locally.' });
+  const handleClaim = async () => {
+    if (!isConnected || !address) {
+      showToast('info', 'Connect Wallet', 'Connect your wallet to claim this reward.');
+      return;
+    }
+    const openedAmount = pack.openedAmount ?? 0;
+    setTxPending(true);
+    let txHash: string | undefined;
+    if (USE_REAL_TRANSFERS) {
+      const tx = await payFromAdmin(address, openedAmount);
+      setTxPending(false);
+      if (!tx.success) {
+        showToast('loss', 'Transaction Failed', tx.error ?? 'Transaction failed. Please try again.');
+        return;
+      }
+      txHash = tx.txHash;
     } else {
-      setToast({ tone: 'error', message: 'Lucky reward is not claimable yet.' });
+      setTxPending(false);
+    }
+    if (claimLuckyPack(pack.id)) {
+      if (!USE_REAL_TRANSFERS && openedAmount) addBalance(address, openedAmount);
+      const msg = txHash
+        ? `Winnings transferred! View tx: ${explorerUrl(txHash)}`
+        : 'Your winnings have been added to your balance.';
+      showToast('win', 'Reward Claimed!', msg, String(openedAmount));
     }
   };
 
   return (
     <section className="section pt-24 sm:pt-28">
       <div className="mx-auto max-w-7xl">
-        {toast ? (
-          <div
-            role="status"
-            aria-live="polite"
-            className={`fixed right-4 top-24 z-50 max-w-sm rounded-2xl border px-4 py-3 text-sm shadow-[0_20px_60px_rgba(0,0,0,0.4)] ${
-              toast.tone === 'success'
-                ? 'border-[#30d158]/30 bg-[#30d158]/10 text-[#d2f8de]'
-                : 'border-[#f87171]/30 bg-[#f87171]/10 text-[#fee2e2]'
-            }`}
-          >
-            {toast.message}
-          </div>
-        ) : null}
+        <GameToast
+          isVisible={toast.isVisible}
+          type={toast.type}
+          title={toast.title}
+          message={toast.message}
+          amount={toast.amount}
+          onClose={closeToast}
+        />
 
         <div className="reveal space-y-6">
           <div className="flex flex-wrap items-center gap-2">
-            <Link href="/game/lucky" className="inline-flex items-center gap-2 rounded-full border border-[#2a2a2a] bg-white/[0.02] px-4 py-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#bdbdbd] transition-colors hover:border-[#c9a84c]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60">
+            <Link href="/game/lucky" className="inline-flex items-center gap-2 rounded-full border border-[#1a1a2e] bg-white/[0.02] px-4 py-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#bdbdbd] transition-colors hover:border-[#d4af37]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60">
               <ArrowLeft size={14} />
               Back to Lucky
             </Link>
@@ -370,25 +390,46 @@ export default function LuckyDetailPage() {
               <StatusIcon size={12} className="mr-1" aria-hidden="true" />
               {status.toUpperCase()}
             </HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">
+            <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">
               {rarity === 'legendary' ? 'Legendary' : rarity === 'gold' ? 'Gold' : 'Bronze'}
             </HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-white">Base {formatGameAmount(pack.baseAmount)} USDC</HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">Weighted reveal + claim flow</HubBadge>
+            <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-white">Base {formatGameAmount(pack.baseAmount)} USDC</HubBadge>
           </div>
 
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="min-w-0">
-              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">{pack.senderName} to {pack.receiverName}</p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">{pack.senderName} to {pack.receiverName}</p>
               <h1 className="mt-2 max-w-4xl text-4xl font-black uppercase leading-tight sm:text-5xl lg:text-7xl">{pack.title}</h1>
-              <p className="mt-4 max-w-3xl text-base leading-7 text-[#9a9a9a] sm:text-lg">
+              <p className="mt-4 max-w-3xl text-base leading-7 text-[#8a8a9a] sm:text-lg">
                 Open the card to reveal the weighted amount, review the probability disclosure, and claim the reward once
                 the pack has been opened.
               </p>
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <button 
+                  onClick={() => {
+                    navigator.clipboard.writeText(window.location.href);
+                    showToast('info', 'Copied!', 'Link copied to clipboard.');
+                  }}
+                  className="flex items-center gap-2 border border-[#1a1a2e] rounded-xl px-4 py-2 text-sm hover:border-[#d4af37]/50 transition-colors"
+                >
+                  <ArrowRight size={14} className="rotate-45" />
+                  Copy Link
+                </button>
+                <button 
+                  onClick={() => {
+                    const url = `https://twitter.com/intent/tweet?text=I'm opening a ${pack.title} on Arc!&url=${encodeURIComponent(window.location.href)}`;
+                    window.open(url, '_blank');
+                  }}
+                  className="flex items-center gap-2 border border-[#1a1a2e] rounded-xl px-4 py-2 text-sm hover:border-[#d4af37]/50 transition-colors"
+                >
+                  <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                  Share on X
+                </button>
+              </div>
             </div>
 
-            <div className="rounded-3xl border border-[#2a2a2a] bg-black/30 px-5 py-4 text-right">
-              <div className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">{countdown.label}</div>
+            <div className="rounded-3xl border border-[#1a1a2e] bg-black/30 px-5 py-4 text-right">
+              <div className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#555566]">{countdown.label}</div>
               <div className="mt-2 text-2xl font-black text-white">{countdown.value}</div>
             </div>
           </div>
@@ -396,106 +437,81 @@ export default function LuckyDetailPage() {
 
         <div className="mt-10 grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_360px]">
           <div className="space-y-6">
-            <HubCard as="section" className={`p-6 sm:p-8 ${rarityTone(rarity)} ${flash ? 'ring-1 ring-[#c9a84c]/25' : ''}`}>
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Reveal card</p>
-                  <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">Strong result state</h2>
-                </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <HubBadge className={statusTone(status)}>
-                    {status === 'pending' ? 'Pending' : status === 'opened' ? 'Opened' : status === 'claimed' ? 'Claimed' : 'Expired'}
-                  </HubBadge>
-                  <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">
-                    {pack.tiers.length} weighted tiers
-                  </HubBadge>
-                </div>
-              </div>
-
-              <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_220px]">
-                <div className="space-y-4">
-                  <div className="rounded-3xl border border-[#2a2a2a] bg-black/30 p-6 text-center">
-                    <div className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">Result</div>
-                    <div className={`mt-4 text-4xl font-black sm:text-5xl ${status === 'pending' ? 'text-white' : 'text-[#f0d79e]'}`}>
-                      {formatGameAmount(revealAmount)} USDC
+            <HubCard as="section" className={`p-6 sm:p-8 min-h-[400px] ${rarityTone(rarity)}`}>
+              <div className={`card-flip h-full`}>
+                <div className={`card-flip-inner h-full ${isFlipping || status !== 'pending' ? 'flipped' : ''}`}>
+                  {/* Front: Mystery */}
+                  <div className="card-front flex flex-col items-center justify-center p-8 text-center">
+                    <div className="w-32 h-32 bg-[#d4af37]/10 rounded-full flex items-center justify-center mb-8 border-2 border-[#d4af37]/30 pulse-gold">
+                      <Gem size={48} className="text-[#d4af37]" />
                     </div>
-                    <div className="mt-2 flex flex-wrap items-center justify-center gap-2">
-                      <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">
-                        {status === 'pending' ? 'Waiting to open' : `Tier ${pack.openedTierIndex !== undefined ? pack.openedTierIndex + 1 : 1}`}
-                      </HubBadge>
-                      <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">
-                        {status === 'pending' ? 'Unrevealed' : `${rarity === 'legendary' ? 'Legendary' : rarity === 'gold' ? 'Gold' : 'Bronze'} rarity`}
-                      </HubBadge>
-                    </div>
-                  </div>
-
-                  <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                    <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
-                      <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Countdown</div>
-                      <div className="mt-2 text-sm font-semibold text-white">{countdown.value}</div>
-                    </div>
-                    <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
-                      <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Created</div>
-                      <div className="mt-2 text-sm font-semibold text-white">{formatGameTimestamp(pack.createdAt)}</div>
-                    </div>
-                    <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
-                      <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Opened</div>
-                      <div className="mt-2 text-sm font-semibold text-white">{pack.openedAt ? formatGameTimestamp(pack.openedAt) : 'Not yet'}</div>
-                    </div>
-                    <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
-                      <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Claimed</div>
-                      <div className="mt-2 text-sm font-semibold text-white">{pack.claimedAt ? formatGameTimestamp(pack.claimedAt) : 'Not yet'}</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="rounded-3xl border border-[#2a2a2a] bg-black/30 p-6 text-center">
-                    <Gem size={32} className="mx-auto text-[#c9a84c]" aria-hidden="true" />
-                    <div className="mt-4 text-xs font-mono uppercase tracking-[0.28em] text-[#777]">Rarity</div>
-                    <div className="mt-2 text-2xl font-black uppercase text-white">
-                      {rarity === 'legendary' ? 'Legendary' : rarity === 'gold' ? 'Gold' : 'Bronze'}
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    {canOpen ? (
-                      <button type="button" className="primary-button flex-1 justify-center" onClick={handleOpen}>
-                        Open Card
-                      </button>
-                    ) : null}
-                    {canClaim ? (
-                      <button type="button" className="primary-button flex-1 justify-center" onClick={handleClaim}>
-                        Claim Reward
-                      </button>
-                    ) : null}
-                    {!canOpen && !canClaim ? (
-                      <div className="rounded-2xl border border-[#2a2a2a] bg-black/20 px-4 py-3 text-center text-sm text-[#777]">
-                        {status === 'claimed' ? 'Reward already claimed.' : status === 'expired' ? 'This pack expired.' : 'Open the card to reveal the amount.'}
-                      </div>
-                    ) : null}
-                  </div>
-
-                  <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-4">
-                    <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.26em] text-[#777]">
-                      <ShieldCheck size={12} className="text-[#c9a84c]" aria-hidden="true" />
-                      Demo only
-                    </div>
-                    <p className="mt-2 text-sm leading-7 text-[#9a9a9a]">
-                      All results, claim states, and history entries remain local to the browser store for this feature pack.
+                    <h2 className="text-3xl font-black uppercase mb-4">Mystery Pack</h2>
+                    <p className="text-[#8a8a9a] max-w-xs mb-8">
+                      {isFlipping ? 'Revealing your prize...' : 'Click the button below to reveal your prize from the weighted tiers.'}
                     </p>
+                    {canOpen && (
+                      <button 
+                        onClick={handleOpen}
+                        disabled={isFlipping}
+                        className="primary-button pulse-gold h-16 px-12 rounded-2xl text-xl"
+                      >
+                        {isFlipping ? 'REVEALING...' : 'OPEN PACK'}
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Back: Reveal */}
+                  <div className="card-back flex flex-col">
+                    <div className="flex flex-wrap items-start justify-between gap-4">
+                      <div>
+                        <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Reveal result</p>
+                        <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">{pack.title} Result</h2>
+                      </div>
+                      <HubBadge className={statusTone(status)}>
+                        {status.toUpperCase()}
+                      </HubBadge>
+                    </div>
+
+                    <div className="mt-8 flex flex-col items-center justify-center flex-1">
+                      <div className="animate-win text-center">
+                        <p className="text-[10px] font-mono uppercase tracking-[0.4em] text-[#8a8a9a] mb-4">You have revealed</p>
+                        <div className="text-6xl sm:text-8xl font-black text-[#d4af37] mb-4 tracking-tighter">
+                          {formatGameAmount(revealAmount)} <span className="text-2xl text-[#8a8a9a]">USDC</span>
+                        </div>
+                        <HubBadge className="border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e] py-1.5 px-4 text-sm">
+                          {rarity.toUpperCase()} REVEAL
+                        </HubBadge>
+                      </div>
+
+                      <div className="mt-12 w-full max-w-sm">
+                        {canClaim ? (
+                          <button onClick={handleClaim} disabled={txPending} className="primary-button w-full justify-center h-14 text-lg pulse-gold disabled:opacity-60">
+                            {txPending ? 'Confirming…' : 'Claim Reward'}
+                            <ArrowRight size={18} />
+                          </button>
+                        ) : status === 'claimed' ? (
+                          <div className="bg-[#30d158]/10 border border-[#30d158]/30 text-[#a6f4bf] rounded-2xl py-4 text-center font-bold">
+                            ✓ REWARD CLAIMED
+                          </div>
+                        ) : (
+                          <div className="bg-white/5 border border-[#1a1a2e] text-[#555566] rounded-2xl py-4 text-center">
+                            {status === 'expired' ? 'PACK EXPIRED' : 'AWAITING CLAIM'}
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </HubCard>
 
             <HubCard as="section" className="overflow-hidden p-0">
-              <div className="flex items-center justify-between gap-4 border-b border-[#2a2a2a] px-5 py-5">
+              <div className="flex items-center justify-between gap-4 border-b border-[#1a1a2e] px-5 py-5">
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Timeline</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Timeline</p>
                   <h2 className="mt-2 text-2xl font-black uppercase">Pack events</h2>
                 </div>
-                <Clock3 size={20} className="text-[#c9a84c]" aria-hidden="true" />
+                <Clock3 size={20} className="text-[#d4af37]" aria-hidden="true" />
               </div>
               <TimelineRow pack={pack} />
             </HubCard>
@@ -505,10 +521,10 @@ export default function LuckyDetailPage() {
             <HubCard as="section" className="p-6 sm:p-8">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Pack details</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Pack details</p>
                   <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">Metadata</h2>
                 </div>
-                <Coins size={18} className="text-[#c9a84c]" aria-hidden="true" />
+                <Coins size={18} className="text-[#d4af37]" aria-hidden="true" />
               </div>
               <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                 {[
@@ -517,8 +533,8 @@ export default function LuckyDetailPage() {
                   ['Status', getLuckyPackRevealLabel(pack)],
                   ['Expires', formatGameTimestamp(pack.expiresAt)],
                 ].map(([label, value]) => (
-                  <div key={label} className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">{label}</div>
+                  <div key={label} className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">{label}</div>
                     <div className="mt-2 text-sm font-semibold text-white">{value}</div>
                   </div>
                 ))}
@@ -543,10 +559,10 @@ export default function LuckyDetailPage() {
             <HubCard as="aside" className="p-6 sm:p-8">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Overview</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Overview</p>
                   <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">Lucky snapshot</h2>
                 </div>
-                <Flame size={18} className="text-[#c9a84c]" aria-hidden="true" />
+                <Flame size={18} className="text-[#d4af37]" aria-hidden="true" />
               </div>
               <div className="mt-6 space-y-3">
                 {[
@@ -555,8 +571,8 @@ export default function LuckyDetailPage() {
                   ['Status', getLuckyPackRevealLabel(pack)],
                   ['Rarity', rarity === 'legendary' ? 'Legendary' : rarity === 'gold' ? 'Gold' : 'Bronze'],
                 ].map(([label, value]) => (
-                  <div key={label} className="flex items-center justify-between gap-4 rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-                    <span className="text-sm text-[#777]">{label}</span>
+                  <div key={label} className="flex items-center justify-between gap-4 rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+                    <span className="text-sm text-[#555566]">{label}</span>
                     <span className="text-sm font-semibold text-white">{value}</span>
                   </div>
                 ))}
@@ -566,10 +582,10 @@ export default function LuckyDetailPage() {
             <HubCard as="section" className="p-6 sm:p-8">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Draw rules</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Draw rules</p>
                   <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">Open and claim</h2>
                 </div>
-                <Sparkles size={18} className="text-[#c9a84c]" aria-hidden="true" />
+                <Sparkles size={18} className="text-[#d4af37]" aria-hidden="true" />
               </div>
               <div className="mt-6 flex flex-col gap-3">
                 {canOpen ? (
@@ -579,18 +595,18 @@ export default function LuckyDetailPage() {
                   </button>
                 ) : null}
                 {canClaim ? (
-                  <button type="button" onClick={handleClaim} className="primary-button w-full justify-center">
-                    Claim Reward
+                  <button type="button" onClick={handleClaim} disabled={txPending} className="primary-button w-full justify-center disabled:opacity-60">
+                    {txPending ? 'Confirming…' : 'Claim Reward'}
                     <ArrowRight size={15} />
                   </button>
                 ) : null}
                 {!canOpen && !canClaim ? (
-                  <div className="rounded-2xl border border-[#2a2a2a] bg-black/20 px-4 py-3 text-center text-sm text-[#777]">
+                  <div className="rounded-2xl border border-[#1a1a2e] bg-black/20 px-4 py-3 text-center text-sm text-[#555566]">
                     {status === 'claimed' ? 'Reward already claimed.' : status === 'expired' ? 'This pack expired.' : 'Open the pack first to reveal the prize.'}
                   </div>
                 ) : null}
               </div>
-              <div className="mt-3 rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm text-[#9a9a9a]">
+              <div className="mt-3 rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3 text-sm text-[#8a8a9a]">
                 The reveal uses the weighted tiers defined when the pack was created. The open result is kept in local state so the demo stays responsive.
               </div>
             </HubCard>

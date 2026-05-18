@@ -1,4 +1,4 @@
-import type { WalletScoreData } from '@/lib/valueStore';
+﻿import type { WalletScoreData } from '@/lib/valueStore';
 
 export interface DemoPortfolioData {
   totalUsdc: number;
@@ -58,7 +58,7 @@ export function buildDemoPortfolio(address: string): DemoPortfolioData {
   const nftCount = 1 + (seed % 3);
 
   const tokens = [
-    { symbol: 'USDC', balance: baseBalance, value: baseBalance, color: '#c9a84c' },
+    { symbol: 'USDC', balance: baseBalance, value: baseBalance, color: '#d4af37' },
     { symbol: 'ARC', balance: arcBalance, value: arcBalance * 2.5, color: '#e5e4e2' },
     { symbol: 'WETH', balance: wethBalance, value: wethBalance * 2_400, color: '#b9f2ff' },
   ];
@@ -85,7 +85,7 @@ export function buildDemoPortfolio(address: string): DemoPortfolioData {
   return {
     totalUsdc,
     tokens: [
-      { symbol: 'USDC (Native)', balance: baseBalance, value: baseBalance, color: '#c9a84c' },
+      { symbol: 'USDC (Native)', balance: baseBalance, value: baseBalance, color: '#d4af37' },
       ...tokens,
     ],
     nfts,

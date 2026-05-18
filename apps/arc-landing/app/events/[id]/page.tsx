@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { notFound, useParams } from 'next/navigation';
@@ -39,9 +39,9 @@ type NoticeTone = 'success' | 'error' | 'info';
 
 const EVENT_TYPE_ACCENTS: Record<CalendarEvent['type'], { gradient: string; badge: string; monogram: string }> = {
   ama: {
-    gradient: 'from-[#c9a84c]/80 via-[#c9a84c]/20 to-transparent',
-    badge: 'border-[#c9a84c]/25 bg-[#c9a84c]/10 text-[#f4dc9f]',
-    monogram: 'border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f4dc9f]',
+    gradient: 'from-[#d4af37]/80 via-[#d4af37]/20 to-transparent',
+    badge: 'border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f5d060]',
+    monogram: 'border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f5d060]',
   },
   hackathon: {
     gradient: 'from-emerald-400/80 via-emerald-400/20 to-transparent',
@@ -63,7 +63,7 @@ const EVENT_TYPE_ACCENTS: Record<CalendarEvent['type'], { gradient: string; badg
 const EVENT_STATUS_STYLES: Record<ReturnType<typeof resolveEventStatus>, string> = {
   upcoming: 'border-amber-500/25 bg-amber-500/10 text-amber-100',
   ongoing: 'border-emerald-500/25 bg-emerald-500/10 text-emerald-100',
-  past: 'border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]',
+  past: 'border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]',
 };
 
 function useHydratedNow() {
@@ -117,7 +117,7 @@ function NoticeBanner({
       ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-100'
       : notice.tone === 'error'
         ? 'border-red-500/20 bg-red-500/10 text-red-100'
-        : 'border-[#c9a84c]/20 bg-[#c9a84c]/10 text-[#f4dc9f]';
+        : 'border-[#d4af37]/20 bg-[#d4af37]/10 text-[#f5d060]';
 
   return (
     <div
@@ -135,7 +135,7 @@ function NoticeBanner({
           type="button"
           onClick={onDismiss}
           aria-label="Dismiss notice"
-          className="rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-current focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+          className="rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-current focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
         >
           Close
         </button>
@@ -165,18 +165,18 @@ function RelatedEventCard({ event, now }: { event: CalendarEvent; now: number })
             {getEventMonogram(event.type)}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">{event.organizer}</p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">{event.organizer}</p>
             <h3 className="mt-2 text-xl font-black uppercase leading-tight text-white">{event.title}</h3>
-            <p className="mt-3 text-sm leading-7 text-[#9a9a9a]">{event.description}</p>
+            <p className="mt-3 text-sm leading-7 text-[#8a8a9a]">{event.description}</p>
           </div>
         </div>
-        <div className="mt-4 flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.18em] text-[#777]">
-          <span className="rounded-full border border-[#2a2a2a] px-3 py-1">{formatEventTiming(event, now)}</span>
-          <span className="rounded-full border border-[#2a2a2a] px-3 py-1">{event.locationType === 'online' ? 'Online' : 'Offline'}</span>
-          <span className="rounded-full border border-[#2a2a2a] px-3 py-1">{event.rsvpCount.toLocaleString('en-US')} RSVPs</span>
+        <div className="mt-4 flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.18em] text-[#555566]">
+          <span className="rounded-full border border-[#1a1a2e] px-3 py-1">{formatEventTiming(event, now)}</span>
+          <span className="rounded-full border border-[#1a1a2e] px-3 py-1">{event.locationType === 'online' ? 'Online' : 'Offline'}</span>
+          <span className="rounded-full border border-[#1a1a2e] px-3 py-1">{event.rsvpCount.toLocaleString('en-US')} RSVPs</span>
         </div>
         <div className="mt-5 flex items-center justify-between gap-3">
-          <div className="text-xs leading-6 text-[#777]">
+          <div className="text-xs leading-6 text-[#555566]">
             {formatEventDateRange(event.startsAt, event.endsAt, event.timezone)}
           </div>
           <Link href={`/events/${event.id}`} className="bracket-button shrink-0">
@@ -198,14 +198,14 @@ function SpeakerCard({ name }: { name: string }) {
     .toUpperCase();
 
   return (
-    <div className="rounded-3xl border border-[#2a2a2a] bg-black/30 p-4">
+    <div className="rounded-3xl border border-[#1a1a2e] bg-black/30 p-4">
       <div className="flex items-center gap-3">
-        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-[#c9a84c]/20 bg-[#c9a84c]/10 font-mono text-sm font-bold uppercase tracking-[0.22em] text-[#f4dc9f]">
+        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-[#d4af37]/20 bg-[#d4af37]/10 font-mono text-sm font-bold uppercase tracking-[0.22em] text-[#f5d060]">
           {initials}
         </div>
         <div className="min-w-0">
           <div className="text-sm font-semibold text-white">{name}</div>
-          <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.22em] text-[#777]">Speaker</div>
+          <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.22em] text-[#555566]">Speaker</div>
         </div>
       </div>
     </div>
@@ -327,14 +327,14 @@ export default function EventDetailPage() {
           <div className="flex flex-wrap items-center gap-2">
             <Link
               href="/events"
-              className="inline-flex items-center gap-2 rounded-full border border-[#2a2a2a] bg-white/[0.02] px-4 py-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#bdbdbd] transition-colors hover:border-[#c9a84c]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+              className="inline-flex items-center gap-2 rounded-full border border-[#1a1a2e] bg-white/[0.02] px-4 py-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#bdbdbd] transition-colors hover:border-[#d4af37]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
             >
               <ArrowRight size={14} className="rotate-180" />
               Back to Events
             </Link>
             <HubBadge className={accents.badge}>Event detail</HubBadge>
             <HubBadge className={EVENT_STATUS_STYLES[status]}>{getEventStatusLabel(status)}</HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">
+            <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">
               {event.locationType === 'online' ? 'Online' : 'Offline'}
             </HubBadge>
           </div>
@@ -351,12 +351,12 @@ export default function EventDetailPage() {
                     <div className="flex flex-wrap items-center gap-2">
                       <HubBadge className={accents.badge}>{getEventTypeLabel(event.type)}</HubBadge>
                       <HubBadge className={EVENT_STATUS_STYLES[status]}>{getEventStatusLabel(status)}</HubBadge>
-                      <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#cfcfcf]">{event.organizer}</HubBadge>
+                      <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#cfcfcf]">{event.organizer}</HubBadge>
                     </div>
                     <h1 className="mt-4 max-w-4xl text-4xl font-black uppercase leading-[0.92] sm:text-5xl lg:text-7xl">
                       {event.title}
                     </h1>
-                    <p className="mt-4 max-w-3xl text-base leading-7 text-[#9a9a9a] sm:text-lg">
+                    <p className="mt-4 max-w-3xl text-base leading-7 text-[#8a8a9a] sm:text-lg">
                       {event.description}
                     </p>
                   </div>
@@ -364,23 +364,23 @@ export default function EventDetailPage() {
 
                 <div className="mt-6 flex flex-wrap gap-2">
                   {event.tags.map((tag) => (
-                    <HubBadge key={tag} className="border-[#2a2a2a] bg-white/[0.02] text-[#d8d8d8]">
+                    <HubBadge key={tag} className="border-[#1a1a2e] bg-white/[0.02] text-[#d8d8d8]">
                       {tag}
                     </HubBadge>
                   ))}
                 </div>
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                  <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">When</div>
+                  <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">When</div>
                     <div className="mt-2 text-sm font-semibold text-white">{formatEventDateRange(event.startsAt, event.endsAt, event.timezone)}</div>
                   </div>
-                  <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Location</div>
+                  <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Location</div>
                     <div className="mt-2 text-sm font-semibold text-white">{event.location}</div>
                   </div>
-                  <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">RSVPs</div>
+                  <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">RSVPs</div>
                     <div className="mt-2 text-sm font-semibold text-white">{event.rsvpCount.toLocaleString('en-US')}</div>
                   </div>
                 </div>
@@ -391,12 +391,12 @@ export default function EventDetailPage() {
               <HubCard as="aside" className="p-6 sm:p-8">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">RSVP state</p>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">RSVP state</p>
                     <h2 className="mt-2 text-2xl font-black uppercase text-white">{formatEventTiming(event, now)}</h2>
                   </div>
-                  <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-3 py-2 text-right">
-                    <div className="text-xl font-black text-[#f4dc9f]">{event.rsvpCount.toLocaleString('en-US')}</div>
-                    <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-[#777]">RSVPs</div>
+                  <div className="rounded-2xl border border-[#1a1a2e] bg-white/[0.02] px-3 py-2 text-right">
+                    <div className="text-xl font-black text-[#f5d060]">{event.rsvpCount.toLocaleString('en-US')}</div>
+                    <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-[#555566]">RSVPs</div>
                   </div>
                 </div>
 
@@ -405,22 +405,22 @@ export default function EventDetailPage() {
                     type="button"
                     onClick={handleRsvp}
                     disabled={status === 'past' || isRsvped}
-                    className={`inline-flex items-center justify-center gap-2 rounded-full border px-4 py-3 text-[10px] font-mono uppercase tracking-[0.2em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 ${
+                    className={`inline-flex items-center justify-center gap-2 rounded-full border px-4 py-3 text-[10px] font-mono uppercase tracking-[0.2em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60 ${
                       status === 'past'
-                        ? 'cursor-not-allowed border-[#2a2a2a] bg-white/[0.01] text-[#555]'
+                        ? 'cursor-not-allowed border-[#1a1a2e] bg-white/[0.01] text-[#555566]'
                         : isRsvped
                           ? 'border-emerald-500/25 bg-emerald-500/10 text-emerald-100'
-                          : 'border-[#c9a84c]/25 bg-[#c9a84c]/10 text-[#f4dc9f] hover:border-[#c9a84c]/40 hover:bg-[#c9a84c]/15'
+                          : 'border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f5d060] hover:border-[#d4af37]/40 hover:bg-[#d4af37]/15'
                     }`}
                   >
                     {status === 'past' ? 'RSVP closed' : isRsvped ? 'RSVP saved' : 'RSVP now'}
                   </button>
-                  <div className="grid gap-2 text-[10px] uppercase tracking-[0.18em] text-[#777]">
+                  <div className="grid gap-2 text-[10px] uppercase tracking-[0.18em] text-[#555566]">
                     <a
                       href={links.google}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] px-4 py-3 transition-colors hover:border-[#c9a84c]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+                      className="flex items-center justify-between rounded-2xl border border-[#1a1a2e] px-4 py-3 transition-colors hover:border-[#d4af37]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
                     >
                       <span className="inline-flex items-center gap-2">
                         <CalendarDays size={12} aria-hidden="true" />
@@ -431,7 +431,7 @@ export default function EventDetailPage() {
                     <a
                       href={links.ics}
                       download={`${event.id}.ics`}
-                      className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] px-4 py-3 transition-colors hover:border-[#c9a84c]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+                      className="flex items-center justify-between rounded-2xl border border-[#1a1a2e] px-4 py-3 transition-colors hover:border-[#d4af37]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
                     >
                       <span className="inline-flex items-center gap-2">
                         <CalendarDays size={12} aria-hidden="true" />
@@ -442,12 +442,12 @@ export default function EventDetailPage() {
                   </div>
                 </div>
 
-                <div className="mt-6 rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
-                  <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.26em] text-[#777]">
-                    <ShieldCheck size={12} className="text-[#c9a84c]" aria-hidden="true" />
+                <div className="mt-6 rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-4">
+                  <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.26em] text-[#555566]">
+                    <ShieldCheck size={12} className="text-[#d4af37]" aria-hidden="true" />
                     Protected checkout (demo)
                   </div>
-                  <p className="mt-2 text-sm leading-7 text-[#9a9a9a]">
+                  <p className="mt-2 text-sm leading-7 text-[#8a8a9a]">
                     RSVP state stays local to the browser. This detail page never calls a backend, wallet, or contract.
                   </p>
                 </div>
@@ -456,10 +456,10 @@ export default function EventDetailPage() {
               <HubCard as="aside" className="p-6 sm:p-8">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Event facts</p>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Event facts</p>
                     <h2 className="mt-2 text-2xl font-black uppercase text-white">Details at a glance</h2>
                   </div>
-                  <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">
+                  <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">
                     <MapPin size={10} className="mr-1 inline-block" aria-hidden="true" />
                     {getEventLocationLabel(event.locationType)}
                   </HubBadge>
@@ -473,8 +473,8 @@ export default function EventDetailPage() {
                     ['Organizer', event.organizer],
                     ['Created', formatEventDate(event.createdAt, event.timezone)],
                   ].map(([label, value]) => (
-                    <div key={label} className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-                      <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">{label}</div>
+                    <div key={label} className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+                      <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">{label}</div>
                       <div className="mt-2 text-sm font-semibold text-white">{value}</div>
                     </div>
                   ))}
@@ -487,10 +487,10 @@ export default function EventDetailPage() {
             <HubCard as="section" className="p-6 sm:p-8">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Agenda</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Agenda</p>
                   <h2 className="mt-2 text-2xl font-black uppercase text-white">Timeline block</h2>
                 </div>
-                <HubBadge className="border-[#c9a84c]/25 bg-[#c9a84c]/10 text-[#f4dc9f]">
+                <HubBadge className="border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f5d060]">
                   <Timer size={10} className="mr-1 inline-block" aria-hidden="true" />
                   {agenda.length} steps
                 </HubBadge>
@@ -499,19 +499,19 @@ export default function EventDetailPage() {
               <div className="mt-6 space-y-4">
                 {agenda.map((item, index) => (
                   <div key={`${item.time}-${index}`} className="relative pl-8">
-                    <span className="absolute left-1.5 top-3 h-3 w-3 rounded-full bg-[#c9a84c]" aria-hidden="true" />
+                    <span className="absolute left-1.5 top-3 h-3 w-3 rounded-full bg-[#d4af37]" aria-hidden="true" />
                     {index !== agenda.length - 1 ? (
                       <span className="absolute bottom-0 left-[0.56rem] top-8 w-px bg-[#2a2a2a]" aria-hidden="true" />
                     ) : null}
-                    <div className="rounded-2xl border border-[#2a2a2a] bg-black/25 px-4 py-4">
+                    <div className="rounded-2xl border border-[#1a1a2e] bg-black/25 px-4 py-4">
                       <div className="flex flex-wrap items-center justify-between gap-3">
-                        <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">{item.time}</div>
-                        <div className="rounded-full border border-[#2a2a2a] px-3 py-1 text-[10px] font-mono uppercase tracking-[0.18em] text-[#aaa]">
+                        <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">{item.time}</div>
+                        <div className="rounded-full border border-[#1a1a2e] px-3 py-1 text-[10px] font-mono uppercase tracking-[0.18em] text-[#8a8a9a]">
                           Step {index + 1}
                         </div>
                       </div>
                       <h3 className="mt-3 text-lg font-black uppercase text-white">{item.title}</h3>
-                      <p className="mt-2 text-sm leading-7 text-[#9a9a9a]">{item.note}</p>
+                      <p className="mt-2 text-sm leading-7 text-[#8a8a9a]">{item.note}</p>
                     </div>
                   </div>
                 ))}
@@ -521,10 +521,10 @@ export default function EventDetailPage() {
             <HubCard as="section" className="p-6 sm:p-8">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Speakers</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Speakers</p>
                   <h2 className="mt-2 text-2xl font-black uppercase text-white">Guest list</h2>
                 </div>
-                <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">
+                <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">
                   <Users size={10} className="mr-1 inline-block" aria-hidden="true" />
                   {event.speakers.length}
                 </HubBadge>
@@ -536,12 +536,12 @@ export default function EventDetailPage() {
                 ))}
               </div>
 
-              <div className="mt-6 rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
-                <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.26em] text-[#777]">
-                  <Sparkles size={12} className="text-[#c9a84c]" aria-hidden="true" />
+              <div className="mt-6 rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-4">
+                <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.26em] text-[#555566]">
+                  <Sparkles size={12} className="text-[#d4af37]" aria-hidden="true" />
                   RSVP state
                 </div>
-                <p className="mt-2 text-sm leading-7 text-[#9a9a9a]">
+                <p className="mt-2 text-sm leading-7 text-[#8a8a9a]">
                   {isRsvped
                     ? 'Your RSVP is saved in this browser. Refreshing the page keeps the state intact.'
                     : status === 'past'
@@ -555,7 +555,7 @@ export default function EventDetailPage() {
           <HubCard as="section" className="p-6 sm:p-8">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Related</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Related</p>
                 <h2 className="mt-2 text-2xl font-black uppercase text-white">Related events</h2>
               </div>
               <Link href="/events" className="bracket-button shrink-0">
@@ -587,10 +587,10 @@ export default function EventDetailPage() {
         </div>
       </div>
 
-      <nav className="mt-16 border-t border-[#2a2a2a] bg-black/40 px-4 py-6 sm:px-6 lg:px-8">
+      <nav className="mt-16 border-t border-[#1a1a2e] bg-black/40 px-4 py-6 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4">
           <BrandLogo href="/" />
-          <div className="flex flex-wrap items-center gap-3 text-[10px] font-mono uppercase tracking-[0.18em] text-[#777]">
+          <div className="flex flex-wrap items-center gap-3 text-[10px] font-mono uppercase tracking-[0.18em] text-[#555566]">
             <Link href="/events" className="text-white">
               Events
             </Link>

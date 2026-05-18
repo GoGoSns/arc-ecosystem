@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
@@ -73,12 +73,12 @@ function ListingCard({
           loading="lazy"
         />
         <div className="absolute left-4 top-4 flex flex-wrap gap-2">
-          <HubBadge className="border-[#c9a84c]/25 bg-[#c9a84c]/15 text-[#f4dc9f]">Arc Pay Ready</HubBadge>
+          <HubBadge className="border-[#d4af37]/25 bg-[#d4af37]/15 text-[#f5d060]">Arc Pay Ready</HubBadge>
           <HubBadge
             className={`${
               isSold
                 ? 'border-red-500/25 bg-red-500/10 text-red-200'
-                : 'border-[#2a2a2a] bg-black/45 text-[#e8e8e8]'
+                : 'border-[#1a1a2e] bg-black/45 text-[#e8e8e8]'
             }`}
           >
             {getMarketListingStatusLabel(listing.status)}
@@ -89,11 +89,11 @@ function ListingCard({
       <div className="flex min-w-0 flex-col gap-5 p-5 sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0">
-            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">{listing.category}</p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">{listing.category}</p>
             <h2 className="mt-2 text-2xl font-black uppercase leading-tight text-white sm:text-3xl">{listing.title}</h2>
           </div>
           <div className="text-right">
-            <div className="text-3xl font-black text-[#f4dc9f] sm:text-4xl">{formatMarketPrice(listing.priceUsd)}</div>
+            <div className="text-3xl font-black text-[#f5d060] sm:text-4xl">{formatMarketPrice(listing.priceUsd)}</div>
             <p className="mt-1 text-[10px] font-mono uppercase tracking-[0.22em] text-[#8b8b8b]">
               <MapPin size={10} className="mr-1 inline-block" aria-hidden="true" />
               {listing.city} &middot; {listing.condition}
@@ -101,19 +101,19 @@ function ListingCard({
           </div>
         </div>
 
-        <p className="max-w-3xl text-sm leading-7 text-[#9a9a9a]">{listing.description}</p>
+        <p className="max-w-3xl text-sm leading-7 text-[#8a8a9a]">{listing.description}</p>
 
         <div className="flex flex-wrap items-center gap-2">
-          <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#cfcfcf]">{listing.sellerName}</HubBadge>
-          <HubBadge className="border-[#c9a84c]/25 bg-[#c9a84c]/10 text-[#f4dc9f]">
+          <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#cfcfcf]">{listing.sellerName}</HubBadge>
+          <HubBadge className="border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f5d060]">
             <Star size={10} className="mr-1 inline-block fill-current" aria-hidden="true" />
             {listing.sellerRating.toFixed(1)}/5
           </HubBadge>
-          <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">{formatMarketDate(listing.createdAt)}</HubBadge>
+          <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">{formatMarketDate(listing.createdAt)}</HubBadge>
         </div>
 
         <div className="mt-auto flex flex-wrap items-center justify-between gap-3">
-          <p className="text-xs leading-6 text-[#777]">
+          <p className="text-xs leading-6 text-[#555566]">
             Strong checkout path for Arc Pay. Demo listings stay local and update instantly in your browser.
           </p>
           <Link href={`/market/${listing.id}`} className="bracket-button shrink-0">
@@ -223,14 +223,14 @@ export default function MarketPage() {
       <div className="mx-auto max-w-7xl">
         <div className="reveal space-y-6" style={{ transitionDelay: '40ms' }}>
           <div className="flex flex-wrap items-center gap-2">
-            <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">// market v1</HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">Demo store only</HubBadge>
+            <HubBadge className="border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]">// market v1</HubBadge>
+            <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">Demo store only</HubBadge>
           </div>
 
           <h1 className="max-w-5xl text-4xl font-black uppercase leading-tight sm:text-5xl lg:text-7xl">
             Arc Market
           </h1>
-          <p className="max-w-3xl text-base leading-7 text-[#9a9a9a] sm:text-lg">
+          <p className="max-w-3xl text-base leading-7 text-[#8a8a9a] sm:text-lg">
             A premium local marketplace for demo listings, Arc Pay-ready checkout, and fast order tracking.
             Search across categories, filter by city and price, and keep everything inside the browser store.
           </p>
@@ -257,17 +257,17 @@ export default function MarketPage() {
           <HubCard as="section" className="p-6 sm:p-8">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Search & filters</p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Search & filters</p>
               <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">Find a listing fast</h2>
             </div>
-            <div className="flex items-center gap-2 rounded-full border border-[#2a2a2a] bg-black/30 p-1">
+            <div className="flex items-center gap-2 rounded-full border border-[#1a1a2e] bg-black/30 p-1">
               <button
                 type="button"
                 onClick={() => setViewMode('grid')}
                 aria-pressed={viewMode === 'grid'}
                 aria-label="Grid view"
-                className={`rounded-full px-3 py-2 text-[10px] font-mono uppercase tracking-[0.18em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 ${
-                  viewMode === 'grid' ? 'bg-[#c9a84c]/15 text-[#f4dc9f]' : 'text-[#888] hover:text-white'
+                className={`rounded-full px-3 py-2 text-[10px] font-mono uppercase tracking-[0.18em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60 ${
+                  viewMode === 'grid' ? 'bg-[#d4af37]/15 text-[#f5d060]' : 'text-[#8a8a9a] hover:text-white'
                 }`}
               >
                 <LayoutGrid size={12} className="mr-1 inline-block" aria-hidden="true" />
@@ -278,8 +278,8 @@ export default function MarketPage() {
                 onClick={() => setViewMode('list')}
                 aria-pressed={viewMode === 'list'}
                 aria-label="List view"
-                className={`rounded-full px-3 py-2 text-[10px] font-mono uppercase tracking-[0.18em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 ${
-                  viewMode === 'list' ? 'bg-[#c9a84c]/15 text-[#f4dc9f]' : 'text-[#888] hover:text-white'
+                className={`rounded-full px-3 py-2 text-[10px] font-mono uppercase tracking-[0.18em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60 ${
+                  viewMode === 'list' ? 'bg-[#d4af37]/15 text-[#f5d060]' : 'text-[#8a8a9a] hover:text-white'
                 }`}
               >
                 <List size={12} className="mr-1 inline-block" aria-hidden="true" />
@@ -290,11 +290,11 @@ export default function MarketPage() {
 
           <div className="mt-6 grid gap-4 lg:grid-cols-2 xl:grid-cols-5">
             <div className="xl:col-span-2">
-              <label htmlFor="market-search" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+              <label htmlFor="market-search" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                 Search
               </label>
               <div className="relative">
-                <Search size={16} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#777]" aria-hidden="true" />
+                <Search size={16} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#555566]" aria-hidden="true" />
                 <input
                   id="market-search"
                   type="search"
@@ -308,7 +308,7 @@ export default function MarketPage() {
             </div>
 
             <div>
-              <label htmlFor="market-category" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+              <label htmlFor="market-category" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                 Category
               </label>
               <select
@@ -328,7 +328,7 @@ export default function MarketPage() {
             </div>
 
             <div>
-              <label htmlFor="market-city" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+              <label htmlFor="market-city" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                 City
               </label>
               <input
@@ -343,7 +343,7 @@ export default function MarketPage() {
             </div>
 
             <div>
-              <label htmlFor="market-min-price" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+              <label htmlFor="market-min-price" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                 Min price
               </label>
               <input
@@ -359,7 +359,7 @@ export default function MarketPage() {
             </div>
 
             <div>
-              <label htmlFor="market-max-price" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+              <label htmlFor="market-max-price" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                 Max price
               </label>
               <input
@@ -377,16 +377,16 @@ export default function MarketPage() {
 
           <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2">
-              <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">
+              <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">
                 <SlidersHorizontal size={10} className="mr-1 inline-block" aria-hidden="true" />
                 {filteredListings.length} results
               </HubBadge>
-              <HubBadge className="border-[#c9a84c]/25 bg-[#c9a84c]/10 text-[#f4dc9f]">Arc Pay Ready checkout</HubBadge>
+              <HubBadge className="border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f5d060]">Arc Pay Ready checkout</HubBadge>
             </div>
             <button
               type="button"
               onClick={clearFilters}
-              className="rounded-full border border-[#2a2a2a] bg-white/[0.02] px-4 py-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#bdbdbd] transition-colors hover:border-[#c9a84c]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+              className="rounded-full border border-[#1a1a2e] bg-white/[0.02] px-4 py-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#bdbdbd] transition-colors hover:border-[#d4af37]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
             >
               Clear filters
             </button>

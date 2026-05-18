@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
@@ -121,19 +121,19 @@ export default function ShowcasePage() {
   };
 
   return (
-    <main className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white">
+    <main className="min-h-screen overflow-x-clip bg-[#050508] text-white">
       <SiteHeader />
 
       <section className="relative overflow-hidden px-4 pt-24 sm:px-6 lg:px-8">
-        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-[#c9a84c]/10 via-[#c9a84c]/5 to-transparent blur-3xl" />
+        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-[#d4af37]/10 via-[#d4af37]/5 to-transparent blur-3xl" />
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
             <div className="relative">
-              <p className="font-mono text-xs uppercase tracking-[0.35em] text-[#c9a84c]">// showcase</p>
+              <p className="font-mono text-xs uppercase tracking-[0.35em] text-[#d4af37]">// showcase</p>
               <h1 className="mt-5 text-5xl font-black uppercase leading-none sm:text-7xl lg:text-8xl">
-                COMMUNITY <span className="text-[#c9a84c]">SHOWCASE</span>
+                COMMUNITY <span className="text-[#d4af37]">SHOWCASE</span>
               </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-[#9a9a9a]">
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-[#8a8a9a]">
                 Curate the best product moments, launch visuals, and community highlights from across the Arc ecosystem.
               </p>
 
@@ -165,9 +165,9 @@ export default function ShowcasePage() {
                 <HubBrackets />
                 <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-[1fr_auto_auto] xl:items-end">
                   <div className="relative">
-                    <label className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Search</label>
+                    <label className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Search</label>
                     <div className="relative mt-2">
-                      <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#555]" size={16} />
+                      <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#555566]" size={16} />
                       <input
                         aria-label="Search showcase items"
                         value={search}
@@ -179,7 +179,7 @@ export default function ShowcasePage() {
                   </div>
 
                   <div>
-                    <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                    <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                       Category
                     </label>
                     <select
@@ -197,7 +197,7 @@ export default function ShowcasePage() {
                   </div>
 
                   <div>
-                    <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                    <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                       Sort
                     </label>
                     <select
@@ -223,27 +223,27 @@ export default function ShowcasePage() {
                   return (
                     <article
                       key={item.id}
-                      className={`bracket-card flex min-h-[280px] flex-col rounded-3xl p-6 transition-colors ${item.featured ? 'border-[#c9a84c]/35' : ''}`}
+                      className={`bracket-card flex min-h-[280px] flex-col rounded-3xl p-6 transition-colors ${item.featured ? 'border-[#d4af37]/35' : ''}`}
                     >
                       <HubBrackets />
                       <div className="flex items-start justify-between gap-4">
                         <div>
-                          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#c9a84c]">
+                          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#d4af37]">
                             {CATEGORY_LABELS[item.category]}
                           </p>
                           <h3 className="mt-3 text-2xl font-black leading-tight">{item.title}</h3>
-                          <p className="mt-2 text-sm text-[#777]">By {item.creator}</p>
+                          <p className="mt-2 text-sm text-[#555566]">By {item.creator}</p>
                         </div>
-                        {item.featured ? <Star className="shrink-0 text-[#c9a84c]" size={18} /> : null}
+                        {item.featured ? <Star className="shrink-0 text-[#d4af37]" size={18} /> : null}
                       </div>
 
-                      <p className="mt-5 text-sm leading-7 text-[#9a9a9a]">{item.description}</p>
+                      <p className="mt-5 text-sm leading-7 text-[#8a8a9a]">{item.description}</p>
 
                       <div className="mt-5 flex flex-wrap gap-2">
                         {item.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="rounded-full border border-[#2a2a2a] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#aaa]"
+                            className="rounded-full border border-[#1a1a2e] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#8a8a9a]"
                           >
                             {tag}
                           </span>
@@ -254,9 +254,9 @@ export default function ShowcasePage() {
                         <button
                           type="button"
                           onClick={() => toggleLike(item.id, viewerId)}
-                          className="inline-flex items-center gap-2 rounded-full border border-[#2a2a2a] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-[#ddd] transition-colors hover:border-[#c9a84c]/60 hover:text-[#c9a84c]"
+                          className="inline-flex items-center gap-2 rounded-full border border-[#1a1a2e] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-[#ddd] transition-colors hover:border-[#d4af37]/60 hover:text-[#d4af37]"
                         >
-                          <Heart size={14} className={item.likes.includes(viewerId) ? 'fill-current text-[#c9a84c]' : ''} />
+                          <Heart size={14} className={item.likes.includes(viewerId) ? 'fill-current text-[#d4af37]' : ''} />
                           {item.likes.length}
                         </button>
 
@@ -293,18 +293,18 @@ export default function ShowcasePage() {
             <aside className="space-y-6">
               <div className="bracket-card rounded-3xl p-6 sm:p-8">
                 <HubBrackets />
-                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#c9a84c]">// spotlight</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#d4af37]">// spotlight</p>
                 <h2 className="mt-4 text-3xl font-black uppercase leading-tight">Current highlight</h2>
                 {spotlight ? (
                   <div className="mt-6 space-y-4">
                     <div className="flex items-center justify-between gap-3">
-                      <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#777]">
+                      <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#555566]">
                         {CATEGORY_LABELS[spotlight.category]}
                       </span>
                       {spotlight.featured ? <span className="soon-badge">featured</span> : null}
                     </div>
                     <h3 className="text-2xl font-black">{spotlight.title}</h3>
-                    <p className="text-sm leading-7 text-[#9a9a9a]">{spotlight.description}</p>
+                    <p className="text-sm leading-7 text-[#8a8a9a]">{spotlight.description}</p>
                     <div className="flex flex-wrap gap-2">
                       {spotlight.tags.slice(0, 3).map((tag) => (
                         <span key={tag} className="soon-badge">
@@ -312,7 +312,7 @@ export default function ShowcasePage() {
                         </span>
                       ))}
                     </div>
-                    <div className="flex items-center justify-between border-t border-[#2a2a2a] pt-4 font-mono text-[10px] uppercase tracking-[0.24em] text-[#777]">
+                    <div className="flex items-center justify-between border-t border-[#1a1a2e] pt-4 font-mono text-[10px] uppercase tracking-[0.24em] text-[#555566]">
                       <span>{spotlight.likes.length} likes</span>
                       <span>By {spotlight.creator}</span>
                     </div>
@@ -333,7 +333,7 @@ export default function ShowcasePage() {
 
               <div className="bracket-card rounded-3xl p-6 sm:p-8">
                 <HubBrackets />
-                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#c9a84c]">// submit</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#d4af37]">// submit</p>
                 <h2 className="mt-4 text-3xl font-black uppercase leading-tight">Add a showcase</h2>
                 <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
                   <input

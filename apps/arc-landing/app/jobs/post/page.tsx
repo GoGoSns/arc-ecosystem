@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { useWallet } from '@/contexts/WalletContext';
@@ -79,20 +79,20 @@ export default function PostJobPage() {
 
   if (!isConnected) {
     return (
-      <main className="min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center justify-center p-4">
+      <main className="min-h-screen bg-[#050508] text-white flex flex-col items-center justify-center p-4">
         <div className="bracket-card p-12 max-w-md w-full text-center">
           <Brackets />
-          <div className="h-20 w-20 bg-[#c9a84c]/10 rounded-full flex items-center justify-center mx-auto mb-8 border border-[#c9a84c]/20">
-            <Wallet className="text-[#c9a84c]" size={32} />
+          <div className="h-20 w-20 bg-[#d4af37]/10 rounded-full flex items-center justify-center mx-auto mb-8 border border-[#d4af37]/20">
+            <Wallet className="text-[#d4af37]" size={32} />
           </div>
           <h2 className="text-3xl font-black uppercase">Wallet Required</h2>
-          <p className="mt-4 text-[#777] leading-relaxed">
+          <p className="mt-4 text-[#555566] leading-relaxed">
             You must connect your wallet to post a new job listing on the Arc Job Board.
           </p>
           <button onClick={connect} className="primary-button w-full mt-10 justify-center">
             CONNECT WALLET
           </button>
-          <Link href="/jobs" className="block mt-6 text-sm text-[#555] hover:text-[#c9a84c] transition-colors">
+          <Link href="/jobs" className="block mt-6 text-sm text-[#555566] hover:text-[#d4af37] transition-colors">
             Back to Job Board
           </Link>
         </div>
@@ -101,19 +101,19 @@ export default function PostJobPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
+    <main className="min-h-screen bg-[#050508] text-white">
       <SiteHeader />
 
       <section className="pt-32 pb-24 px-4">
         <div className="mx-auto max-w-3xl">
-          <Link href="/jobs" className="flex items-center gap-2 text-[#777] hover:text-[#c9a84c] transition-colors mb-8 font-mono text-xs uppercase tracking-widest">
+          <Link href="/jobs" className="flex items-center gap-2 text-[#555566] hover:text-[#d4af37] transition-colors mb-8 font-mono text-xs uppercase tracking-widest">
             <ArrowLeft size={14} /> Back to Browse
           </Link>
 
           <h1 className="text-4xl font-black uppercase sm:text-5xl">
-            POST A <span className="text-[#c9a84c]">NEW JOB</span>
+            POST A <span className="text-[#d4af37]">NEW JOB</span>
           </h1>
-          <p className="mt-4 text-[#777]">
+          <p className="mt-4 text-[#555566]">
             Hire the best talent in Web3. Listings are paid and settled in USDC.
           </p>
 
@@ -122,12 +122,12 @@ export default function PostJobPage() {
             <div className="bracket-card p-8 bg-white/[0.01]">
               <Brackets />
               <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
-                <Building2 size={20} className="text-[#c9a84c]" /> Basic Information
+                <Building2 size={20} className="text-[#d4af37]" /> Basic Information
               </h3>
               
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
-                  <label className="text-xs font-mono uppercase text-[#555] tracking-wider">Job Title</label>
+                  <label className="text-xs font-mono uppercase text-[#555566] tracking-wider">Job Title</label>
                   <input 
                     required
                     type="text" 
@@ -138,7 +138,7 @@ export default function PostJobPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-mono uppercase text-[#555] tracking-wider">Company Name</label>
+                  <label className="text-xs font-mono uppercase text-[#555566] tracking-wider">Company Name</label>
                   <input 
                     required
                     type="text" 
@@ -149,7 +149,7 @@ export default function PostJobPage() {
                   />
                 </div>
                 <div className="md:col-span-2 space-y-2">
-                  <label className="text-xs font-mono uppercase text-[#555] tracking-wider">Job Description</label>
+                  <label className="text-xs font-mono uppercase text-[#555566] tracking-wider">Job Description</label>
                   <textarea 
                     required
                     rows={6}
@@ -166,12 +166,12 @@ export default function PostJobPage() {
             <div className="bracket-card p-8 bg-white/[0.01]">
               <Brackets />
               <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
-                <Globe size={20} className="text-[#c9a84c]" /> Classification & Logistics
+                <Globe size={20} className="text-[#d4af37]" /> Classification & Logistics
               </h3>
               
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
-                  <label className="text-xs font-mono uppercase text-[#555] tracking-wider">Category</label>
+                  <label className="text-xs font-mono uppercase text-[#555566] tracking-wider">Category</label>
                   <select 
                     className="form-input"
                     value={formData.category}
@@ -186,7 +186,7 @@ export default function PostJobPage() {
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-mono uppercase text-[#555] tracking-wider">Job Type</label>
+                  <label className="text-xs font-mono uppercase text-[#555566] tracking-wider">Job Type</label>
                   <select 
                     className="form-input"
                     value={formData.type}
@@ -199,7 +199,7 @@ export default function PostJobPage() {
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-mono uppercase text-[#555] tracking-wider">Experience Level</label>
+                  <label className="text-xs font-mono uppercase text-[#555566] tracking-wider">Experience Level</label>
                   <select 
                     className="form-input"
                     value={formData.experienceLevel}
@@ -212,7 +212,7 @@ export default function PostJobPage() {
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-mono uppercase text-[#555] tracking-wider">Remote Policy</label>
+                  <label className="text-xs font-mono uppercase text-[#555566] tracking-wider">Remote Policy</label>
                   <select 
                     className="form-input"
                     value={formData.remotePolicy}
@@ -225,7 +225,7 @@ export default function PostJobPage() {
                 </div>
                 {formData.remotePolicy !== 'remote' && (
                   <div className="md:col-span-2 space-y-2">
-                    <label className="text-xs font-mono uppercase text-[#555] tracking-wider">Location</label>
+                    <label className="text-xs font-mono uppercase text-[#555566] tracking-wider">Location</label>
                     <input 
                       required
                       type="text" 
@@ -243,12 +243,12 @@ export default function PostJobPage() {
             <div className="bracket-card p-8 bg-white/[0.01]">
               <Brackets />
               <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
-                <DollarSign size={20} className="text-[#c9a84c]" /> Compensation & Details
+                <DollarSign size={20} className="text-[#d4af37]" /> Compensation & Details
               </h3>
               
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
-                  <label className="text-xs font-mono uppercase text-[#555] tracking-wider">Min Salary (USDC)</label>
+                  <label className="text-xs font-mono uppercase text-[#555566] tracking-wider">Min Salary (USDC)</label>
                   <input 
                     required
                     type="number" 
@@ -258,7 +258,7 @@ export default function PostJobPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-mono uppercase text-[#555] tracking-wider">Max Salary (USDC)</label>
+                  <label className="text-xs font-mono uppercase text-[#555566] tracking-wider">Max Salary (USDC)</label>
                   <input 
                     required
                     type="number" 
@@ -268,7 +268,7 @@ export default function PostJobPage() {
                   />
                 </div>
                 <div className="md:col-span-2 space-y-2">
-                  <label className="text-xs font-mono uppercase text-[#555] tracking-wider">Tech Stack (comma separated)</label>
+                  <label className="text-xs font-mono uppercase text-[#555566] tracking-wider">Tech Stack (comma separated)</label>
                   <input 
                     type="text" 
                     placeholder="e.g. Solidity, Rust, React, Next.js"
@@ -278,7 +278,7 @@ export default function PostJobPage() {
                   />
                 </div>
                 <div className="md:col-span-2 space-y-2">
-                  <label className="text-xs font-mono uppercase text-[#555] tracking-wider">Benefits (one per line)</label>
+                  <label className="text-xs font-mono uppercase text-[#555566] tracking-wider">Benefits (one per line)</label>
                   <textarea 
                     rows={4}
                     placeholder="e.g. Unlimited PTO&#10;Health Insurance&#10;Remote stipend"
@@ -288,7 +288,7 @@ export default function PostJobPage() {
                   />
                 </div>
                 <div className="md:col-span-2 space-y-2">
-                  <label className="text-xs font-mono uppercase text-[#555] tracking-wider">Poster Name (Optional)</label>
+                  <label className="text-xs font-mono uppercase text-[#555566] tracking-wider">Poster Name (Optional)</label>
                   <input 
                     type="text" 
                     placeholder="Your name or handle"
@@ -326,7 +326,7 @@ export default function PostJobPage() {
         }
         .form-input:focus {
           outline: none;
-          border-color: #c9a84c;
+          border-color: #d4af37;
         }
         select.form-input {
           appearance: none;

@@ -93,6 +93,7 @@ export interface GameStore {
   challenges: Challenge[];
   luckyPacks: LuckyPack[];
   history: GameHistoryItem[];
+  mockBalance: Record<string, number>;
   createChallenge: (input: CreateChallengeInput) => Challenge;
   acceptChallenge: (challengeId: string, receiverName?: string) => boolean;
   updateChallengeProgress: (challengeId: string, amount?: number) => void;
@@ -102,6 +103,9 @@ export interface GameStore {
   createLuckyPack: (input: CreateLuckyPackInput) => LuckyPack;
   openLuckyPack: (packId: string) => LuckyReveal | null;
   claimLuckyPack: (packId: string) => boolean;
+  topUp: (address: string) => void;
+  deductBalance: (address: string, amount: number) => boolean;
+  addBalance: (address: string, amount: number) => void;
 }
 
 export interface CreateChallengeInput {
@@ -781,6 +785,14 @@ function normalizePersistedGameState(state: unknown): PersistedGameState {
     history: Array.isArray(candidate.history)
       ? candidate.history.map((item) => normalizeHistoryItem(item)).filter((item): item is GameHistoryItem => item !== null)
       : INITIAL_HISTORY,
+    mockBalance:
+      candidate.mockBalance && typeof candidate.mockBalance === 'object' && !Array.isArray(candidate.mockBalance)
+        ? Object.fromEntries(
+            Object.entries(candidate.mockBalance as Record<string, unknown>)
+              .filter(([, v]) => typeof v === 'number' && Number.isFinite(v))
+              .map(([k, v]) => [k.trim().toLowerCase(), Math.max(0, v as number)]),
+          )
+        : {},
   };
 }
 
@@ -1136,6 +1148,7 @@ interface PersistedGameState {
   challenges: Challenge[];
   luckyPacks: LuckyPack[];
   history: GameHistoryItem[];
+  mockBalance: Record<string, number>;
 }
 
 interface GameState extends GameStore {}
@@ -1146,6 +1159,37 @@ export const useGameStore = create<GameState>()(
       challenges: INITIAL_CHALLENGES,
       luckyPacks: INITIAL_LUCKY_PACKS,
       history: INITIAL_HISTORY,
+      mockBalance: {},
+      topUp: (address) => {
+        const key = address.trim().toLowerCase();
+        set((state) => ({
+          mockBalance: {
+            ...state.mockBalance,
+            [key]: (state.mockBalance[key] ?? 0) + 10,
+          },
+        }));
+      },
+      deductBalance: (address, amount) => {
+        const key = address.trim().toLowerCase();
+        const current = get().mockBalance[key] ?? 0;
+        if (current < amount) return false;
+        set((state) => ({
+          mockBalance: {
+            ...state.mockBalance,
+            [key]: (state.mockBalance[key] ?? 0) - amount,
+          },
+        }));
+        return true;
+      },
+      addBalance: (address, amount) => {
+        const key = address.trim().toLowerCase();
+        set((state) => ({
+          mockBalance: {
+            ...state.mockBalance,
+            [key]: (state.mockBalance[key] ?? 0) + amount,
+          },
+        }));
+      },
       createChallenge: (input) => {
         const now = Date.now();
         const id = makeId('challenge');
@@ -1605,6 +1649,7 @@ export const useGameStore = create<GameState>()(
         challenges: state.challenges,
         luckyPacks: state.luckyPacks,
         history: state.history,
+        mockBalance: state.mockBalance,
       }),
       migrate: (persistedState) => normalizePersistedGameState(persistedState),
       merge: (persistedState, currentState) => ({

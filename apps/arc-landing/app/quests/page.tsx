@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useMemo } from 'react';
 import { useWallet } from '@/contexts/WalletContext';
@@ -76,7 +76,7 @@ export default function QuestsPage() {
   }, [activeCategory, activeDifficulty, activeStatus, progress]);
 
   return (
-    <main className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white">
+    <main className="min-h-screen overflow-x-clip bg-[#050508] text-white">
       <SiteHeader />
 
       {/* Hero Section */}
@@ -84,11 +84,11 @@ export default function QuestsPage() {
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-12 lg:grid-cols-[1fr_400px]">
             <div>
-              <p className="font-mono text-xs uppercase tracking-[0.35em] text-[#c9a84c]">// gamification</p>
+              <p className="font-mono text-xs uppercase tracking-[0.35em] text-[#d4af37]">// gamification</p>
               <h1 className="mt-6 text-5xl font-black uppercase sm:text-7xl lg:text-8xl">
-                QUEST <span className="text-[#c9a84c]">HUB</span>
+                QUEST <span className="text-[#d4af37]">HUB</span>
               </h1>
-              <p className="mt-6 max-w-2xl text-lg text-[#9a9a9a]">
+              <p className="mt-6 max-w-2xl text-lg text-[#8a8a9a]">
                 Complete ecosystem tasks, earn XP, level up your profile, and unlock exclusive badges. 
                 Your journey through the Arc Ecosystem starts here.
               </p>
@@ -103,7 +103,7 @@ export default function QuestsPage() {
                   ].map((stat) => (
                     <div key={stat.label} className="bracket-card px-6 py-4">
                       <Brackets />
-                      <p className="font-mono text-[10px] uppercase tracking-wider text-[#777]">{stat.label}</p>
+                      <p className="font-mono text-[10px] uppercase tracking-wider text-[#555566]">{stat.label}</p>
                       <p className="mt-1 text-2xl font-black">{stat.value}</p>
                     </div>
                   ))}
@@ -112,40 +112,40 @@ export default function QuestsPage() {
             </div>
 
             {isConnected && progress && (
-              <div className="bracket-card p-8 bg-[#c9a84c]/5 border-[#c9a84c]/20">
+              <div className="bracket-card p-8 bg-[#d4af37]/5 border-[#d4af37]/20">
                 <Brackets />
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-mono text-xs uppercase text-[#c9a84c]">Level</p>
+                    <p className="font-mono text-xs uppercase text-[#d4af37]">Level</p>
                     <p className="text-6xl font-black">{progress.level}</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-mono text-xs uppercase text-[#777]">Total XP</p>
-                    <p className="text-3xl font-black text-[#c9a84c]">{progress.totalXp}</p>
+                    <p className="font-mono text-xs uppercase text-[#555566]">Total XP</p>
+                    <p className="text-3xl font-black text-[#d4af37]">{progress.totalXp}</p>
                   </div>
                 </div>
 
                 <div className="mt-8">
-                  <div className="flex justify-between text-xs font-mono uppercase text-[#777] mb-2">
+                  <div className="flex justify-between text-xs font-mono uppercase text-[#555566] mb-2">
                     <span>Progress to Level {progress.level + 1}</span>
                     <span>{progress.totalXp} / {getXpForLevel(progress.level + 1)} XP</span>
                   </div>
-                  <div className="h-2 w-full bg-[#1a1a1a] rounded-full overflow-hidden border border-white/5">
+                  <div className="h-2 w-full bg-[#0d0d12] rounded-full overflow-hidden border border-white/5">
                     <div 
-                      className="h-full bg-gradient-to-r from-[#c9a84c] to-[#f0d78c] transition-all duration-1000"
+                      className="h-full bg-gradient-to-r from-[#d4af37] to-[#f0d78c] transition-all duration-1000"
                       style={{ width: `${getProgressPercent(progress.totalXp)}%` }}
                     />
                   </div>
                 </div>
 
                 <div className="mt-8 grid grid-cols-2 gap-4">
-                  <div className="text-center p-4 border border-[#2a2a2a] rounded-lg">
+                  <div className="text-center p-4 border border-[#1a1a2e] rounded-lg">
                     <p className="text-2xl font-black">{progress.completedQuests.length}</p>
-                    <p className="text-[10px] font-mono uppercase text-[#777]">Quests</p>
+                    <p className="text-[10px] font-mono uppercase text-[#555566]">Quests</p>
                   </div>
-                  <div className="text-center p-4 border border-[#2a2a2a] rounded-lg">
+                  <div className="text-center p-4 border border-[#1a1a2e] rounded-lg">
                     <p className="text-2xl font-black">{progress.earnedBadges.length}</p>
-                    <p className="text-[10px] font-mono uppercase text-[#777]">Badges</p>
+                    <p className="text-[10px] font-mono uppercase text-[#555566]">Badges</p>
                   </div>
                 </div>
 
@@ -159,7 +159,7 @@ export default function QuestsPage() {
       </section>
 
       {/* Filters */}
-      <section className="sticky top-16 z-40 border-y border-[#2a2a2a] bg-[#0a0a0a]/90 backdrop-blur-md">
+      <section className="sticky top-16 z-40 border-y border-[#1a1a2e] bg-[#050508]/90 backdrop-blur-md">
         <div className="mx-auto grid max-w-7xl gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_auto]">
           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2">
             {CATEGORIES.map((cat) => (
@@ -170,8 +170,8 @@ export default function QuestsPage() {
                 aria-pressed={activeCategory === cat.id}
                 className={`flex min-h-11 items-center gap-2 rounded-full border px-4 py-2 transition-all whitespace-nowrap text-sm ${
                   activeCategory === cat.id 
-                    ? 'bg-[#c9a84c] border-[#c9a84c] text-black font-bold' 
-                    : 'border-[#2a2a2a] text-[#777] hover:border-[#c9a84c]/50'
+                    ? 'bg-[#d4af37] border-[#d4af37] text-black font-bold' 
+                    : 'border-[#1a1a2e] text-[#555566] hover:border-[#d4af37]/50'
                 }`}
               >
                 <span>{cat.icon}</span>
@@ -185,7 +185,7 @@ export default function QuestsPage() {
               aria-label="Filter quests by difficulty"
               value={activeDifficulty} 
               onChange={(e) => setActiveDifficulty(e.target.value as any)}
-              className="min-h-11 bg-transparent border border-[#2a2a2a] text-[#777] text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#c9a84c]"
+              className="min-h-11 bg-transparent border border-[#1a1a2e] text-[#555566] text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#d4af37]"
             >
               <option value="all">All Difficulties</option>
               {DIFFICULTIES.map(d => (
@@ -193,7 +193,7 @@ export default function QuestsPage() {
               ))}
             </select>
 
-            <div className="flex bg-[#111] p-1 rounded-lg border border-[#2a2a2a]">
+            <div className="flex bg-[#0d0d12] p-1 rounded-lg border border-[#1a1a2e]">
               {(['all', 'available', 'completed'] as const).map((s) => (
                 <button
                   type="button"
@@ -201,7 +201,7 @@ export default function QuestsPage() {
                   onClick={() => setActiveStatus(s)}
                   aria-pressed={activeStatus === s}
                   className={`min-h-11 px-4 py-2 rounded-md text-xs font-mono uppercase transition-all ${
-                    activeStatus === s ? 'bg-[#222] text-white shadow-lg' : 'text-[#555] hover:text-[#777]'
+                    activeStatus === s ? 'bg-[#222] text-white shadow-lg' : 'text-[#555566] hover:text-[#555566]'
                   }`}
                 >
                   {s}
@@ -228,12 +228,12 @@ export default function QuestsPage() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-24 border border-dashed border-[#2a2a2a] rounded-2xl">
-              <div className="grid h-20 w-20 place-items-center bg-[#111] rounded-full mx-auto border border-[#2a2a2a]">
-                <LayoutGrid className="text-[#333]" size={32} />
+            <div className="text-center py-24 border border-dashed border-[#1a1a2e] rounded-2xl">
+              <div className="grid h-20 w-20 place-items-center bg-[#0d0d12] rounded-full mx-auto border border-[#1a1a2e]">
+                <LayoutGrid className="text-[#1a1a2e]" size={32} />
               </div>
               <h3 className="mt-6 text-xl font-bold">No quests found</h3>
-              <p className="mt-2 text-[#777]">Try adjusting your filters or category.</p>
+              <p className="mt-2 text-[#555566]">Try adjusting your filters or category.</p>
               <button 
                 onClick={() => {setActiveCategory('all'); setActiveDifficulty('all'); setActiveStatus('all');}}
                 className="secondary-button mt-6"
@@ -262,7 +262,7 @@ function QuestCard({
   const cat = CATEGORIES.find(c => c.id === quest.category);
   
   return (
-    <article className={`bracket-card flex flex-col rounded-3xl p-6 transition-all group sm:p-7 ${isCompleted ? 'opacity-70 grayscale-[0.5]' : 'hover:border-[#c9a84c]/40'}`}>
+    <article className={`bracket-card flex flex-col rounded-3xl p-6 transition-all group sm:p-7 ${isCompleted ? 'opacity-70 grayscale-[0.5]' : 'hover:border-[#d4af37]/40'}`}>
       <Brackets />
       
       <div className="flex items-start justify-between mb-4">
@@ -273,14 +273,14 @@ function QuestCard({
           {quest.badgeId && (
             <span className="text-lg" title="Unlocks a badge">🏅</span>
           )}
-          <span className="bg-[#c9a84c]/20 text-[#c9a84c] px-2 py-1 rounded text-[10px] font-black border border-[#c9a84c]/30">
+          <span className="bg-[#d4af37]/20 text-[#d4af37] px-2 py-1 rounded text-[10px] font-black border border-[#d4af37]/30">
             +{quest.xpReward} XP
           </span>
         </div>
       </div>
 
-      <h3 className="text-xl font-black group-hover:text-[#c9a84c] transition-colors">{quest.title}</h3>
-      <p className="mt-2 text-[#777] text-sm leading-relaxed flex-1">
+      <h3 className="text-xl font-black group-hover:text-[#d4af37] transition-colors">{quest.title}</h3>
+      <p className="mt-2 text-[#555566] text-sm leading-relaxed flex-1">
         {quest.description}
       </p>
 
@@ -288,8 +288,8 @@ function QuestCard({
         <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/5">
           <span className="text-xl">{cat?.icon}</span>
           <div className="min-w-0">
-            <p className="text-[10px] font-mono uppercase text-[#555]">Requirement</p>
-            <p className="text-xs text-[#aaa] truncate">{quest.requirement}</p>
+            <p className="text-[10px] font-mono uppercase text-[#555566]">Requirement</p>
+            <p className="text-xs text-[#8a8a9a] truncate">{quest.requirement}</p>
           </div>
         </div>
 

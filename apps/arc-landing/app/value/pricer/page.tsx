@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -70,33 +70,33 @@ export default function ServicePricerPage() {
   return (
     <div className="min-h-screen overflow-x-clip bg-black text-white">
       <div className="max-w-4xl mx-auto px-6 pt-32 pb-20">
-        <Link href="/value" className="inline-flex items-center gap-2 text-[#555] hover:text-[#c9a84c] mb-12 group">
+        <Link href="/value" className="inline-flex items-center gap-2 text-[#555566] hover:text-[#d4af37] mb-12 group">
           <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
           <span className="font-mono text-xs tracking-widest">BACK TO VALUE HUB</span>
         </Link>
 
         <div className="mb-12 text-center md:text-left">
           <h1 className="text-5xl font-black mb-4">SERVICE PRICER</h1>
-          <p className="text-[#888] text-lg">What's your freelance work worth in USDC?</p>
+          <p className="text-[#8a8a9a] text-lg">What's your freelance work worth in USDC?</p>
         </div>
 
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
           {/* Form Side */}
           <div className="space-y-8">
             <div className="space-y-4">
-                <label className="text-xs font-mono text-[#555] uppercase tracking-widest">1. Service Type</label>
+                <label className="text-xs font-mono text-[#555566] uppercase tracking-widest">1. Service Type</label>
                 <select 
                   value={service}
                   onChange={(e) => setService(e.target.value)}
                   aria-label="Service type"
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-[#c9a84c]/50 appearance-none"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-[#d4af37]/50 appearance-none"
                 >
                 {SERVICE_TYPES.map(s => <option key={s.id} value={s.id} className="bg-zinc-900">{s.label}</option>)}
               </select>
             </div>
 
             <div className="space-y-4">
-              <label className="text-xs font-mono text-[#555] uppercase tracking-widest">2. Experience Level</label>
+              <label className="text-xs font-mono text-[#555566] uppercase tracking-widest">2. Experience Level</label>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {EXPERIENCE_LEVELS.map(exp => (
                   <button
@@ -104,7 +104,7 @@ export default function ServicePricerPage() {
                     key={exp.id}
                     onClick={() => setExperience(exp.id)}
                     aria-pressed={experience === exp.id}
-                    className={`min-h-12 rounded-2xl border p-4 text-sm font-bold transition-all ${experience === exp.id ? 'bg-[#c9a84c] border-[#c9a84c] text-black' : 'bg-white/5 border-white/5 text-[#555] hover:border-white/20'}`}
+                    className={`min-h-12 rounded-2xl border p-4 text-sm font-bold transition-all ${experience === exp.id ? 'bg-[#d4af37] border-[#d4af37] text-black' : 'bg-white/5 border-white/5 text-[#555566] hover:border-white/20'}`}
                   >
                     {exp.label}
                   </button>
@@ -115,33 +115,33 @@ export default function ServicePricerPage() {
             <div className="space-y-6">
               <div className="space-y-4">
                 <div className="flex justify-between">
-                  <label className="text-xs font-mono text-[#555] uppercase tracking-widest">3. Project Size</label>
-                  <span className="text-xs text-[#c9a84c] font-mono">{hours} HOURS</span>
+                  <label className="text-xs font-mono text-[#555566] uppercase tracking-widest">3. Project Size</label>
+                  <span className="text-xs text-[#d4af37] font-mono">{hours} HOURS</span>
                 </div>
                 <input 
                   type="range" min="1" max="200" value={hours} 
                   onChange={(e) => setHours(parseInt(e.target.value))}
                   aria-label="Project size in hours"
-                  className="w-full accent-[#c9a84c]"
+                  className="w-full accent-[#d4af37]"
                 />
               </div>
 
               <div className="space-y-4">
                 <div className="flex justify-between">
-                  <label className="text-xs font-mono text-[#555] uppercase tracking-widest">Complexity</label>
-                  <span className="text-xs text-[#c9a84c] font-mono">{complexity}/10</span>
+                  <label className="text-xs font-mono text-[#555566] uppercase tracking-widest">Complexity</label>
+                  <span className="text-xs text-[#d4af37] font-mono">{complexity}/10</span>
                 </div>
                 <input 
                   type="range" min="1" max="10" value={complexity} 
                   onChange={(e) => setComplexity(parseInt(e.target.value))}
                   aria-label="Project complexity"
-                  className="w-full accent-[#c9a84c]"
+                  className="w-full accent-[#d4af37]"
                 />
               </div>
             </div>
 
             <div className="space-y-4">
-              <label className="text-xs font-mono text-[#555] uppercase tracking-widest">4. Adjustments</label>
+              <label className="text-xs font-mono text-[#555566] uppercase tracking-widest">4. Adjustments</label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
                   { id: 'rush', label: 'Rush Delivery (+50%)' },
@@ -152,11 +152,11 @@ export default function ServicePricerPage() {
                   <label key={adj.id} className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/5 cursor-pointer hover:border-white/20 transition-all">
                     <input 
                       type="checkbox" 
-                      className="w-5 h-5 rounded accent-[#c9a84c]" 
+                      className="w-5 h-5 rounded accent-[#d4af37]" 
                       checked={adjustments[adj.id as keyof typeof adjustments]}
                       onChange={(e) => setAdjustments({...adjustments, [adj.id]: e.target.checked})}
                     />
-                    <span className="text-xs font-bold text-[#888]">{adj.label}</span>
+                    <span className="text-xs font-bold text-[#8a8a9a]">{adj.label}</span>
                   </label>
                 ))}
               </div>
@@ -165,7 +165,7 @@ export default function ServicePricerPage() {
             <button
               type="button"
               onClick={calculatePrice}
-              className="w-full bg-[#c9a84c] hover:bg-[#d4b96a] text-black font-black py-6 rounded-3xl transition-all flex items-center justify-center gap-3 text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+              className="w-full bg-[#d4af37] hover:bg-[#d4b96a] text-black font-black py-6 rounded-3xl transition-all flex items-center justify-center gap-3 text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
               <Calculator size={24} />
               CALCULATE SUGGESTED PRICE
@@ -176,23 +176,23 @@ export default function ServicePricerPage() {
           <div className="relative">
             {result ? (
               <div className="sticky top-32 max-h-[calc(100vh-8rem)] space-y-8 overflow-y-auto pr-1 animate-in fade-in slide-in-from-right-4 duration-700">
-                <div className="rounded-3xl p-10 bg-white/[0.02] border border-[#c9a84c]/30 text-center relative overflow-hidden">
-                  <div className="text-xs font-mono text-[#555] mb-6 uppercase tracking-[0.3em]">Suggested Price</div>
-                  <div className="text-7xl font-black mb-4 text-[#c9a84c]">
+                <div className="rounded-3xl p-10 bg-white/[0.02] border border-[#d4af37]/30 text-center relative overflow-hidden">
+                  <div className="text-xs font-mono text-[#555566] mb-6 uppercase tracking-[0.3em]">Suggested Price</div>
+                  <div className="text-7xl font-black mb-4 text-[#d4af37]">
                     ${result.total.toLocaleString()} <span className="text-2xl text-white/40">USDC</span>
                   </div>
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#c9a84c]/10 text-[#c9a84c] text-xs font-bold mb-8">
-                    <Star size={14} fill="#c9a84c" />
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#d4af37]/10 text-[#d4af37] text-xs font-bold mb-8">
+                    <Star size={14} fill="#d4af37" />
                     PROFESSIONAL RATE
                   </div>
                   
                   <div className="grid grid-cols-1 gap-4 border-t border-white/5 pt-8 sm:grid-cols-2">
                     <div>
-                      <div className="text-[10px] text-[#555] uppercase mb-1">Hourly Rate</div>
+                      <div className="text-[10px] text-[#555566] uppercase mb-1">Hourly Rate</div>
                       <div className="font-bold text-lg">${result.hourly}/hr</div>
                     </div>
                     <div>
-                      <div className="text-[10px] text-[#555] uppercase mb-1">Market Range</div>
+                      <div className="text-[10px] text-[#555566] uppercase mb-1">Market Range</div>
                       <div className="font-bold text-lg text-white/60">${result.min} - ${result.max}</div>
                     </div>
                   </div>
@@ -204,8 +204,8 @@ export default function ServicePricerPage() {
                 </div>
 
                 <div className="rounded-3xl p-8 bg-zinc-900/50 border border-white/5">
-                   <h4 className="text-sm font-black mb-4 uppercase tracking-widest text-[#555]">PRO TIP</h4>
-                   <p className="text-sm text-[#888] leading-relaxed">
+                   <h4 className="text-sm font-black mb-4 uppercase tracking-widest text-[#555566]">PRO TIP</h4>
+                   <p className="text-sm text-[#8a8a9a] leading-relaxed">
                      Based on market data, freelancers with similar profiles charge between 
                      <span className="text-white font-bold mx-1">${result.min} - ${result.max} USDC</span> 
                      for this type of project. Consider your current pipeline when finalizing the quote.
@@ -218,7 +218,7 @@ export default function ServicePricerPage() {
                       href={marketplaceUrl}
                       target={isExternalUrl(marketplaceUrl) ? "_blank" : undefined}
                       rel={isExternalUrl(marketplaceUrl) ? "noopener noreferrer" : undefined}
-                      className="flex min-h-14 items-center justify-center gap-3 rounded-2xl bg-white p-5 font-black text-black transition-all hover:bg-[#c9a84c]"
+                      className="flex min-h-14 items-center justify-center gap-3 rounded-2xl bg-white p-5 font-black text-black transition-all hover:bg-[#d4af37]"
                     >
                       <Rocket size={20} />
                       CREATE SERVICE ON MARKETPLACE
@@ -236,14 +236,14 @@ export default function ServicePricerPage() {
                   <button 
                     onClick={() => setResult(null)}
                     type="button"
-                    className="text-xs font-mono text-[#555] hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                    className="text-xs font-mono text-[#555566] hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                   >
                     RESET CALCULATOR
                   </button>
                 </div>
               </div>
             ) : (
-              <div className="h-full flex flex-col items-center justify-center text-center p-12 rounded-3xl border-2 border-dashed border-white/5 text-[#333]">
+              <div className="h-full flex flex-col items-center justify-center text-center p-12 rounded-3xl border-2 border-dashed border-white/5 text-[#1a1a2e]">
                 <Layers size={64} className="mb-6 opacity-20" />
                 <p className="font-mono text-sm uppercase tracking-widest">Result will appear here</p>
               </div>

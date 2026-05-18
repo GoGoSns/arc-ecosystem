@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { usePathname } from 'next/navigation';
 import { Gamepad2, Home, ShoppingBag, Sparkles, Wallet } from 'lucide-react';
@@ -20,8 +20,8 @@ const APPS: AppItem[] = [
   { key: 'pay', name: 'Pay', icon: Wallet, href: getArcAppBaseUrl('pay'), color: '#60a5fa' },
   { key: 'creator', name: 'Creator', icon: Sparkles, href: getArcAppBaseUrl('creator'), color: '#f472b6' },
   { key: 'play', name: 'Play', icon: Gamepad2, href: getArcAppBaseUrl('play'), color: '#34d399' },
-  { key: 'market', name: 'Market', icon: ShoppingBag, href: getArcAppBaseUrl('market'), color: '#c9a84c' },
-  { key: 'hub', name: 'Hub', icon: Home, href: getArcAppBaseUrl('hub'), color: '#c9a84c' },
+  { key: 'market', name: 'Market', icon: ShoppingBag, href: getArcAppBaseUrl('market'), color: '#d4af37' },
+  { key: 'hub', name: 'Hub', icon: Home, href: getArcAppBaseUrl('hub'), color: '#d4af37' },
 ];
 
 export default function AppSwitcher({ compact = false }: Props) {
@@ -35,14 +35,14 @@ export default function AppSwitcher({ compact = false }: Props) {
     <nav
       className="flex max-w-full items-center gap-1 overflow-hidden rounded-2xl border p-1"
       aria-label="Switch between Arc apps"
-      style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(201,168,76,0.15)' }}
+      style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(212, 175, 55,0.15)' }}
     >
       {APPS.map((app) => {
         const Icon = app.icon;
         const isActive = (app.key === 'hub' && isHubActive) || (app.key === 'market' && isMarketActive);
         const sharedClasses = [
           `flex shrink-0 items-center gap-2 rounded-xl font-bold transition-all ${sizeClass}`,
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37] focus-visible:ring-offset-2 focus-visible:ring-offset-black',
         ].join(' ');
 
         if (!app.href) {
@@ -69,7 +69,7 @@ export default function AppSwitcher({ compact = false }: Props) {
             aria-label={`Open Arc ${app.name}`}
             className={sharedClasses}
             style={{
-              background: isActive ? 'rgba(201,168,76,0.15)' : 'transparent',
+              background: isActive ? 'rgba(212, 175, 55,0.15)' : 'transparent',
               color: isActive ? 'var(--accent)' : 'var(--fg)',
               opacity: isActive ? 1 : 0.78,
             }}

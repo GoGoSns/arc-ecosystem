@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss";
+﻿import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
@@ -8,12 +8,20 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        accent: "#c9a84c",
-        "accent-dim": "rgba(201,168,76,0.2)",
-        subtle: "#2a2a2a",
-        muted: "#555555",
+        accent: "#d4af37",
+        "accent-dim": "rgba(212,175,55,0.2)",
+        "accent-glow": "rgba(212,175,55,0.15)",
+        "bg-primary": "#050508",
+        "bg-card": "#0d0d12",
+        "bg-card-hover": "#12121a",
+        border: "#1a1a2e",
+        "border-hover": "#2a2a4e",
+        subtle: "#1a1a2e",
+        muted: "#555566",
+        "text-secondary": "#8a8a9a",
       },
       fontFamily: {
+        sans: ["var(--font-space)", "Space Grotesk", "Inter", "system-ui", "sans-serif"],
         mono: [
           "var(--font-mono)",
           "JetBrains Mono",
@@ -21,7 +29,6 @@ const config: Config = {
           "Consolas",
           "monospace",
         ],
-        sans: ["var(--font-sans)", "Inter", "system-ui", "sans-serif"],
       },
     },
   },

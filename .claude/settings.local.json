@@ -40,7 +40,11 @@
       "Bash(node -e \"const l = require\\('C:/Users/User/Documents/projects/arc-ecosystem/node_modules/.pnpm/lucide-react@0.383.0_react@19.2.4/node_modules/lucide-react/dist/cjs/lucide-react.js'\\); const keys = Object.keys\\(l\\).filter\\(k => /^[A-Z]/.test\\(k\\) && !k.endsWith\\('Icon'\\) && !k.startsWith\\('Lucide'\\)\\); console.log\\(keys.filter\\(k => /message|warning|square/i.test\\(k\\)\\).join\\('\\\\n'\\)\\)\")",
       "Bash(node -e \"const l = require\\('C:/Users/User/Documents/projects/arc-ecosystem/node_modules/.pnpm/lucide-react@0.383.0_react@19.2.4/node_modules/lucide-react/dist/cjs/lucide-react.js'\\); const keys = Object.keys\\(l\\).filter\\(k => /^[A-Z]/.test\\(k\\) && !k.endsWith\\('Icon'\\) && !k.startsWith\\('Lucide'\\)\\); const want = ['Bug','Sparkles','Lightbulb','ChevronUp','Send','Check','Filter','Search','ArrowUp','MessageSquare','Clock','User','Trash2','Shield']; want.forEach\\(k => console.log\\(k + ': ' + \\(keys.includes\\(k\\) ? 'YES' : 'NO'\\)\\)\\)\")",
       "Bash(node -e \"const l = require\\('C:/Users/User/Documents/projects/arc-ecosystem/node_modules/.pnpm/lucide-react@1.11.0_react@19.2.4/node_modules/lucide-react/dist/cjs/lucide-react.js'\\); console.log\\('MessageSquareWarning: ' + \\(Object.keys\\(l\\).includes\\('MessageSquareWarning'\\) ? 'YES' : 'NO'\\)\\)\")",
-      "Bash(node -e \"const l = require\\('C:/Users/User/Documents/projects/arc-ecosystem/node_modules/.pnpm/lucide-react@0.383.0_react@19.2.4/node_modules/lucide-react/dist/cjs/lucide-react.js'\\); const want = ['Pin','Lock','Eye','ArrowUp','ArrowDown','Plus','ArrowLeft']; want.forEach\\(k => console.log\\(k + ': ' + \\(Object.keys\\(l\\).includes\\(k\\) ? 'YES' : 'NO'\\)\\)\\)\")"
+      "Bash(node -e \"const l = require\\('C:/Users/User/Documents/projects/arc-ecosystem/node_modules/.pnpm/lucide-react@0.383.0_react@19.2.4/node_modules/lucide-react/dist/cjs/lucide-react.js'\\); const want = ['Pin','Lock','Eye','ArrowUp','ArrowDown','Plus','ArrowLeft']; want.forEach\\(k => console.log\\(k + ': ' + \\(Object.keys\\(l\\).includes\\(k\\) ? 'YES' : 'NO'\\)\\)\\)\")",
+      "Bash(pnpm dev *)",
+      "Bash(pnpm add *)",
+      "PowerShell(pnpm build --filter @arc-ecosystem/arc-landing 2>&1)",
+      "PowerShell(pnpm --filter @arc-ecosystem/arc-landing build 2>&1)"
     ],
     "additionalDirectories": [
       "c:\\Users\\User\\Documents\\projects\\arc-ecosystem\\apps\\arc-play\\app\\raffle"

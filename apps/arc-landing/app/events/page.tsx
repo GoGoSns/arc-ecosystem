@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
@@ -50,9 +50,9 @@ type NoticeTone = 'success' | 'error' | 'info';
 
 const EVENT_TYPE_ACCENTS: Record<CalendarEvent['type'], { gradient: string; badge: string; monogram: string }> = {
   ama: {
-    gradient: 'from-[#c9a84c]/80 via-[#c9a84c]/20 to-transparent',
-    badge: 'border-[#c9a84c]/25 bg-[#c9a84c]/10 text-[#f4dc9f]',
-    monogram: 'border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f4dc9f]',
+    gradient: 'from-[#d4af37]/80 via-[#d4af37]/20 to-transparent',
+    badge: 'border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f5d060]',
+    monogram: 'border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f5d060]',
   },
   hackathon: {
     gradient: 'from-emerald-400/80 via-emerald-400/20 to-transparent',
@@ -74,7 +74,7 @@ const EVENT_TYPE_ACCENTS: Record<CalendarEvent['type'], { gradient: string; badg
 const EVENT_STATUS_STYLES: Record<ReturnType<typeof resolveEventStatus>, string> = {
   upcoming: 'border-amber-500/25 bg-amber-500/10 text-amber-100',
   ongoing: 'border-emerald-500/25 bg-emerald-500/10 text-emerald-100',
-  past: 'border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]',
+  past: 'border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]',
 };
 
 function useHydratedNow() {
@@ -166,7 +166,7 @@ function NoticeBanner({
       ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-100'
       : notice.tone === 'error'
         ? 'border-red-500/20 bg-red-500/10 text-red-100'
-        : 'border-[#c9a84c]/20 bg-[#c9a84c]/10 text-[#f4dc9f]';
+        : 'border-[#d4af37]/20 bg-[#d4af37]/10 text-[#f5d060]';
 
   return (
     <div
@@ -184,7 +184,7 @@ function NoticeBanner({
           type="button"
           onClick={onDismiss}
           aria-label="Dismiss notice"
-          className="rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-current focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+          className="rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-current focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
         >
           Close
         </button>
@@ -219,7 +219,7 @@ function EventCard({
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
             <HubBadge className={accents.badge}>{getEventTypeLabel(event.type)}</HubBadge>
-            <HubBadge className={event.locationType === 'online' ? 'border-sky-500/25 bg-sky-500/10 text-sky-100' : 'border-[#2a2a2a] bg-white/[0.02] text-[#cfcfcf]'}>
+            <HubBadge className={event.locationType === 'online' ? 'border-sky-500/25 bg-sky-500/10 text-sky-100' : 'border-[#1a1a2e] bg-white/[0.02] text-[#cfcfcf]'}>
               {getEventLocationLabel(event.locationType)}
             </HubBadge>
           </div>
@@ -232,19 +232,19 @@ function EventCard({
               {getEventMonogram(event.type)}
             </div>
             <div className="min-w-0">
-              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">{event.organizer}</p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">{event.organizer}</p>
               <h2 className="mt-2 text-2xl font-black uppercase leading-tight text-white sm:text-3xl">{event.title}</h2>
-              <p className="mt-3 max-w-3xl text-sm leading-7 text-[#9a9a9a]">{event.description}</p>
+              <p className="mt-3 max-w-3xl text-sm leading-7 text-[#8a8a9a]">{event.description}</p>
             </div>
           </div>
 
           <div className="grid gap-3">
-            <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Schedule</div>
+            <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Schedule</div>
               <div className="mt-2 text-sm font-semibold text-white">{formatEventDateRange(event.startsAt, event.endsAt, event.timezone)}</div>
             </div>
-            <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Location</div>
+            <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Location</div>
               <div className="mt-2 text-sm font-semibold text-white">{event.location}</div>
             </div>
           </div>
@@ -252,18 +252,18 @@ function EventCard({
 
         <div className="mt-5 flex flex-wrap gap-2">
           {event.tags.map((tag) => (
-            <HubBadge key={tag} className="border-[#2a2a2a] bg-white/[0.02] text-[#d8d8d8]">
+            <HubBadge key={tag} className="border-[#1a1a2e] bg-white/[0.02] text-[#d8d8d8]">
               {tag}
             </HubBadge>
           ))}
         </div>
 
-        <div className="mt-5 grid gap-3 rounded-2xl border border-[#2a2a2a] bg-black/25 p-4 sm:grid-cols-2 xl:grid-cols-[1fr_auto_auto] xl:items-center">
-          <div className="text-sm leading-7 text-[#9a9a9a]">
+        <div className="mt-5 grid gap-3 rounded-2xl border border-[#1a1a2e] bg-black/25 p-4 sm:grid-cols-2 xl:grid-cols-[1fr_auto_auto] xl:items-center">
+          <div className="text-sm leading-7 text-[#8a8a9a]">
             {formatEventTiming(event, now)} - {event.speakers.join(' / ')}
           </div>
-          <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">
-            <Clock3 size={12} className="text-[#c9a84c]" aria-hidden="true" />
+          <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">
+            <Clock3 size={12} className="text-[#d4af37]" aria-hidden="true" />
             {event.rsvpCount.toLocaleString('en-US')} RSVPs
           </div>
           <div className="flex flex-wrap gap-2">
@@ -271,12 +271,12 @@ function EventCard({
               type="button"
               onClick={() => onRsvp(event)}
               disabled={status === 'past' || isRsvped}
-              className={`inline-flex items-center justify-center gap-2 rounded-full border px-4 py-2 text-[10px] font-mono uppercase tracking-[0.18em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 ${
+              className={`inline-flex items-center justify-center gap-2 rounded-full border px-4 py-2 text-[10px] font-mono uppercase tracking-[0.18em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60 ${
                 status === 'past'
-                  ? 'cursor-not-allowed border-[#2a2a2a] bg-white/[0.01] text-[#555]'
+                  ? 'cursor-not-allowed border-[#1a1a2e] bg-white/[0.01] text-[#555566]'
                   : isRsvped
                     ? 'border-emerald-500/25 bg-emerald-500/10 text-emerald-100'
-                    : 'border-[#c9a84c]/25 bg-[#c9a84c]/10 text-[#f4dc9f] hover:border-[#c9a84c]/40 hover:bg-[#c9a84c]/15'
+                    : 'border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f5d060] hover:border-[#d4af37]/40 hover:bg-[#d4af37]/15'
               }`}
             >
               {status === 'past' ? 'RSVP closed' : isRsvped ? 'RSVP saved' : 'RSVP'}
@@ -288,13 +288,13 @@ function EventCard({
           </div>
         </div>
 
-        <div className="mt-3 flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-[0.18em] text-[#777]">
-          <span className="rounded-full border border-[#2a2a2a] px-3 py-1">{event.locationType === 'online' ? 'Online session' : 'Offline session'}</span>
+        <div className="mt-3 flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-[0.18em] text-[#555566]">
+          <span className="rounded-full border border-[#1a1a2e] px-3 py-1">{event.locationType === 'online' ? 'Online session' : 'Offline session'}</span>
           <a
             href={links.google}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 rounded-full border border-[#2a2a2a] px-3 py-1 transition-colors hover:border-[#c9a84c]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+            className="inline-flex items-center gap-1 rounded-full border border-[#1a1a2e] px-3 py-1 transition-colors hover:border-[#d4af37]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
           >
             Google Calendar
             <ExternalLink size={10} aria-hidden="true" />
@@ -302,7 +302,7 @@ function EventCard({
           <a
             href={links.ics}
             download={`${event.id}.ics`}
-            className="inline-flex items-center gap-1 rounded-full border border-[#2a2a2a] px-3 py-1 transition-colors hover:border-[#c9a84c]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+            className="inline-flex items-center gap-1 rounded-full border border-[#1a1a2e] px-3 py-1 transition-colors hover:border-[#d4af37]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
           >
             ICS
           </a>
@@ -335,66 +335,66 @@ function FeaturedEventCard({
           <div className="flex flex-wrap items-center gap-2">
             <HubBadge className={accents.badge}>Featured event</HubBadge>
             <HubBadge className={EVENT_STATUS_STYLES[status]}>{getEventStatusLabel(status)}</HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#cfcfcf]">Protected mock RSVP</HubBadge>
+            <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#cfcfcf]">Protected mock RSVP</HubBadge>
           </div>
           <div className="mt-5 flex gap-4">
             <div className={`grid h-20 w-20 shrink-0 place-items-center rounded-3xl border ${accents.monogram} font-mono text-base font-bold uppercase tracking-[0.26em]`}>
               {getEventMonogram(event.type)}
             </div>
             <div className="min-w-0">
-              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">{event.organizer}</p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">{event.organizer}</p>
               <h2 className="mt-2 text-3xl font-black uppercase leading-tight text-white sm:text-4xl">{event.title}</h2>
-              <p className="mt-3 max-w-3xl text-sm leading-7 text-[#9a9a9a] sm:text-base">{event.description}</p>
+              <p className="mt-3 max-w-3xl text-sm leading-7 text-[#8a8a9a] sm:text-base">{event.description}</p>
             </div>
           </div>
 
           <div className="mt-6 flex flex-wrap gap-2">
             {event.tags.map((tag) => (
-              <HubBadge key={tag} className="border-[#2a2a2a] bg-white/[0.02] text-[#d8d8d8]">
+              <HubBadge key={tag} className="border-[#1a1a2e] bg-white/[0.02] text-[#d8d8d8]">
                 {tag}
               </HubBadge>
             ))}
           </div>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">When</div>
+            <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">When</div>
               <div className="mt-2 text-sm font-semibold text-white">{formatEventDateRange(event.startsAt, event.endsAt, event.timezone)}</div>
             </div>
-            <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Where</div>
+            <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Where</div>
               <div className="mt-2 text-sm font-semibold text-white">{event.location}</div>
             </div>
-            <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Who</div>
+            <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Who</div>
               <div className="mt-2 text-sm font-semibold text-white">{event.speakers.join(' / ')}</div>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-[#2a2a2a] bg-black/35 p-6 sm:p-8 lg:border-l lg:border-t-0">
+        <div className="border-t border-[#1a1a2e] bg-black/35 p-6 sm:p-8 lg:border-l lg:border-t-0">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Countdown</p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Countdown</p>
               <h3 className="mt-2 text-2xl font-black uppercase text-white">{formatEventTiming(event, now)}</h3>
             </div>
-            <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-3 py-2 text-right">
-              <div className="text-xl font-black text-[#f4dc9f]">{event.rsvpCount.toLocaleString('en-US')}</div>
-              <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-[#777]">RSVPs</div>
+            <div className="rounded-2xl border border-[#1a1a2e] bg-white/[0.02] px-3 py-2 text-right">
+              <div className="text-xl font-black text-[#f5d060]">{event.rsvpCount.toLocaleString('en-US')}</div>
+              <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-[#555566]">RSVPs</div>
             </div>
           </div>
 
           <div className="mt-6 grid gap-3">
-            <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Type</div>
+            <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Type</div>
               <div className="mt-2 text-sm font-semibold text-white">{getEventTypeLabel(event.type)}</div>
             </div>
-            <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Mode</div>
+            <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Mode</div>
               <div className="mt-2 text-sm font-semibold text-white">{getEventLocationLabel(event.locationType)}</div>
             </div>
-            <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Timezone</div>
+            <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Timezone</div>
               <div className="mt-2 text-sm font-semibold text-white">{event.timezone}</div>
             </div>
           </div>
@@ -404,12 +404,12 @@ function FeaturedEventCard({
               type="button"
               onClick={() => onRsvp(event)}
               disabled={status === 'past' || isRsvped}
-              className={`inline-flex items-center justify-center gap-2 rounded-full border px-4 py-3 text-[10px] font-mono uppercase tracking-[0.2em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 ${
+              className={`inline-flex items-center justify-center gap-2 rounded-full border px-4 py-3 text-[10px] font-mono uppercase tracking-[0.2em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60 ${
                 status === 'past'
-                  ? 'cursor-not-allowed border-[#2a2a2a] bg-white/[0.01] text-[#555]'
+                  ? 'cursor-not-allowed border-[#1a1a2e] bg-white/[0.01] text-[#555566]'
                   : isRsvped
                     ? 'border-emerald-500/25 bg-emerald-500/10 text-emerald-100'
-                    : 'border-[#c9a84c]/25 bg-[#c9a84c]/10 text-[#f4dc9f] hover:border-[#c9a84c]/40 hover:bg-[#c9a84c]/15'
+                    : 'border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f5d060] hover:border-[#d4af37]/40 hover:bg-[#d4af37]/15'
               }`}
             >
               {status === 'past' ? 'RSVP closed' : isRsvped ? 'RSVP saved' : 'RSVP now'}
@@ -419,12 +419,12 @@ function FeaturedEventCard({
             </Link>
           </div>
 
-          <div className="mt-4 space-y-2 text-[10px] uppercase tracking-[0.18em] text-[#777]">
+          <div className="mt-4 space-y-2 text-[10px] uppercase tracking-[0.18em] text-[#555566]">
             <a
               href={links.google}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] px-4 py-3 transition-colors hover:border-[#c9a84c]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+              className="flex items-center justify-between rounded-2xl border border-[#1a1a2e] px-4 py-3 transition-colors hover:border-[#d4af37]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
             >
               <span className="inline-flex items-center gap-2">
                 <CalendarDays size={12} aria-hidden="true" />
@@ -435,7 +435,7 @@ function FeaturedEventCard({
             <a
               href={links.ics}
               download={`${event.id}.ics`}
-              className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] px-4 py-3 transition-colors hover:border-[#c9a84c]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+              className="flex items-center justify-between rounded-2xl border border-[#1a1a2e] px-4 py-3 transition-colors hover:border-[#d4af37]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
             >
               <span className="inline-flex items-center gap-2">
                 <CalendarDays size={12} aria-hidden="true" />
@@ -479,23 +479,23 @@ function CalendarView({
 
   return (
     <HubCard as="section" className="overflow-hidden p-0">
-      <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[#2a2a2a] p-6 sm:p-7">
+      <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[#1a1a2e] p-6 sm:p-7">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Calendar view</p>
+          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Calendar view</p>
           <h3 className="mt-2 text-2xl font-black uppercase text-white">{monthLabel}</h3>
-          <p className="mt-2 text-sm leading-7 text-[#9a9a9a]">
+          <p className="mt-2 text-sm leading-7 text-[#8a8a9a]">
             A month board for the current mock filter set. Long events are shown on each day they occupy.
           </p>
         </div>
-        <HubBadge className="border-[#c9a84c]/25 bg-[#c9a84c]/10 text-[#f4dc9f]">
+        <HubBadge className="border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f5d060]">
           <CalendarDays size={10} className="mr-1 inline-block" aria-hidden="true" />
           {eventCount} events
         </HubBadge>
       </div>
 
-      <div className="grid grid-cols-7 border-b border-[#2a2a2a] bg-black/25 text-center font-mono text-[10px] uppercase tracking-[0.2em] text-[#777]">
+      <div className="grid grid-cols-7 border-b border-[#1a1a2e] bg-black/25 text-center font-mono text-[10px] uppercase tracking-[0.2em] text-[#555566]">
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-          <div key={day} className="border-r border-[#2a2a2a] px-2 py-3 last:border-r-0">
+          <div key={day} className="border-r border-[#1a1a2e] px-2 py-3 last:border-r-0">
             {day}
           </div>
         ))}
@@ -510,12 +510,12 @@ function CalendarView({
           return (
             <div
               key={key}
-              className={`min-h-[132px] border-r border-b border-[#2a2a2a] p-3 last:border-r-0 ${sameMonth ? 'bg-black/15' : 'bg-black/5 text-[#555]'}`}
+              className={`min-h-[132px] border-r border-b border-[#1a1a2e] p-3 last:border-r-0 ${sameMonth ? 'bg-black/15' : 'bg-black/5 text-[#555566]'}`}
             >
               <div className="flex items-start justify-between gap-2">
-                <div className={`text-sm font-black ${sameMonth ? 'text-white' : 'text-[#555]'}`}>{day.getUTCDate()}</div>
+                <div className={`text-sm font-black ${sameMonth ? 'text-white' : 'text-[#555566]'}`}>{day.getUTCDate()}</div>
                 {bucket.length > 0 ? (
-                  <span className="rounded-full border border-[#2a2a2a] px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-[#aaa]">
+                  <span className="rounded-full border border-[#1a1a2e] px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-[#8a8a9a]">
                     {bucket.length}
                   </span>
                 ) : null}
@@ -539,12 +539,12 @@ function CalendarView({
                     <Link
                       key={`${event.id}-${key}`}
                       href={`/events/${event.id}`}
-                      className={`block rounded-2xl border px-3 py-2 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 ${
+                      className={`block rounded-2xl border px-3 py-2 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60 ${
                         status === 'ongoing'
                           ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-50'
                           : status === 'past'
-                            ? 'border-[#2a2a2a] bg-white/[0.02] text-[#8f8f8f]'
-                            : 'border-[#2a2a2a] bg-black/25 text-white hover:border-[#c9a84c]/25'
+                            ? 'border-[#1a1a2e] bg-white/[0.02] text-[#8f8f8f]'
+                            : 'border-[#1a1a2e] bg-black/25 text-white hover:border-[#d4af37]/25'
                       }`}
                     >
                       <div className="flex items-center gap-2">
@@ -563,7 +563,7 @@ function CalendarView({
                   );
                 })}
                 {bucket.length > 2 ? (
-                  <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-3 py-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#aaa]">
+                  <div className="rounded-2xl border border-[#1a1a2e] bg-white/[0.02] px-3 py-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#8a8a9a]">
                     +{bucket.length - 2} more
                   </div>
                 ) : null}
@@ -711,18 +711,18 @@ export default function EventsPage() {
       <div className="mx-auto max-w-7xl">
         <div className="reveal space-y-6" style={{ transitionDelay: '40ms' }}>
           <div className="flex flex-wrap items-center gap-2">
-            <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">// event calendar</HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">Mock RSVP state</HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">{metrics.total} events seeded</HubBadge>
+            <HubBadge className="border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]">// event calendar</HubBadge>
+            <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">Mock RSVP state</HubBadge>
+            <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">{metrics.total} events seeded</HubBadge>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
             <div className="space-y-5">
-              <p className="font-mono text-xs uppercase tracking-[0.32em] text-[#777]">Arc calendar</p>
+              <p className="font-mono text-xs uppercase tracking-[0.32em] text-[#555566]">Arc calendar</p>
               <h1 className="max-w-5xl text-4xl font-black uppercase leading-[0.92] sm:text-5xl lg:text-7xl">
                 Arc Events
               </h1>
-              <p className="max-w-3xl text-base leading-7 text-[#9a9a9a] sm:text-lg">
+              <p className="max-w-3xl text-base leading-7 text-[#8a8a9a] sm:text-lg">
                 Browse Arc AMAs, hackathons, workshops, and community meetups. Everything here is powered by local
                 mock state, with RSVP counts, calendar links, and a mobile-safe calendar board.
               </p>
@@ -758,10 +758,10 @@ export default function EventsPage() {
             <HubCard as="div" className="p-6 sm:p-8">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Browse & filters</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Browse & filters</p>
                 <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">Find an event quickly</h2>
               </div>
-              <HubBadge className="border-[#c9a84c]/25 bg-[#c9a84c]/10 text-[#f4dc9f]">
+              <HubBadge className="border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f5d060]">
                 {filteredEvents.length} results
               </HubBadge>
             </div>
@@ -823,15 +823,15 @@ export default function EventsPage() {
               </div>
 
               <div className="flex items-end gap-2 xl:justify-end">
-                <div className="inline-flex rounded-full border border-[#2a2a2a] bg-black/30 p-1" role="tablist" aria-label="Event view mode">
+                <div className="inline-flex rounded-full border border-[#1a1a2e] bg-black/30 p-1" role="tablist" aria-label="Event view mode">
                   <button
                     type="button"
                     role="tab"
                     aria-selected={viewMode === 'list'}
                     aria-label="List view"
                     onClick={() => setViewMode('list')}
-                    className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-[10px] font-mono uppercase tracking-[0.18em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 ${
-                      viewMode === 'list' ? 'bg-[#c9a84c]/10 text-[#f4dc9f]' : 'text-[#8b8b8b] hover:text-white'
+                    className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-[10px] font-mono uppercase tracking-[0.18em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60 ${
+                      viewMode === 'list' ? 'bg-[#d4af37]/10 text-[#f5d060]' : 'text-[#8b8b8b] hover:text-white'
                     }`}
                   >
                     <List size={12} aria-hidden="true" />
@@ -843,8 +843,8 @@ export default function EventsPage() {
                     aria-selected={viewMode === 'calendar'}
                     aria-label="Calendar view"
                     onClick={() => setViewMode('calendar')}
-                    className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-[10px] font-mono uppercase tracking-[0.18em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 ${
-                      viewMode === 'calendar' ? 'bg-[#c9a84c]/10 text-[#f4dc9f]' : 'text-[#8b8b8b] hover:text-white'
+                    className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-[10px] font-mono uppercase tracking-[0.18em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60 ${
+                      viewMode === 'calendar' ? 'bg-[#d4af37]/10 text-[#f5d060]' : 'text-[#8b8b8b] hover:text-white'
                     }`}
                   >
                     <LayoutGrid size={12} aria-hidden="true" />
@@ -854,7 +854,7 @@ export default function EventsPage() {
                 <button
                   type="button"
                   onClick={clearFilters}
-                  className="rounded-full border border-[#2a2a2a] bg-white/[0.02] px-4 py-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#bdbdbd] transition-colors hover:border-[#c9a84c]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+                  className="rounded-full border border-[#1a1a2e] bg-white/[0.02] px-4 py-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#bdbdbd] transition-colors hover:border-[#d4af37]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
                 >
                   Clear filters
                 </button>
@@ -896,10 +896,10 @@ export default function EventsPage() {
         </div>
       </div>
 
-      <nav className="mt-16 border-t border-[#2a2a2a] bg-black/40 px-4 py-6 sm:px-6 lg:px-8">
+      <nav className="mt-16 border-t border-[#1a1a2e] bg-black/40 px-4 py-6 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4">
           <BrandLogo href="/" />
-          <div className="flex flex-wrap items-center gap-3 text-[10px] font-mono uppercase tracking-[0.18em] text-[#777]">
+          <div className="flex flex-wrap items-center gap-3 text-[10px] font-mono uppercase tracking-[0.18em] text-[#555566]">
             <Link href="/game" className="nav-link">
               Game
             </Link>

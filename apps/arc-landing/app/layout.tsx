@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import AssistantWidget from "@/components/AssistantWidget";
 import { WalletProvider } from "@/contexts/WalletContext";
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Arc Ecosystem - Three Apps, One USDC Economy",
@@ -20,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className={`${spaceGrotesk.variable} font-sans`}>
         <WalletProvider>
           {children}
           <AssistantWidget />

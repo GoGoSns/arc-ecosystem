@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { AlertTriangle, BadgeCheck, Check, Clock3, Coins, Copy, Link2, Sparkles, Trophy, Users } from 'lucide-react';
+import { AlertTriangle, BadgeCheck, Check, Clock3, Coins, Copy, Link2, Sparkles, Trophy, Users, ArrowRight } from 'lucide-react';
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { useParams } from 'next/navigation';
 import GameProgressPanel from '@/components/GameProgressPanel';
@@ -20,9 +20,14 @@ import {
   type QuizSubmissionResult,
 } from '@/lib/quizPotStore';
 import { buildGameProgressSnapshot, useGameStore } from '@/lib/gameStore';
+import { ShareButtons } from '@/components/ShareButtons';
+import { GameToast } from '@/components/GameToast';
+import { payToAdmin, payFromAdmin, USE_REAL_TRANSFERS, explorerUrl } from '@/lib/usdcTransfer';
 
 const QUIZ_NAME_KEY = 'arclanding:quiz-pot-name';
 const QUIZ_ADDRESS_KEY = 'arclanding:quiz-pot-address';
+const EMPTY_ANSWERS: Record<string, number> = {};
+const QUESTION_TIMER = 15;
 
 function useHydratedNow() {
   const [hydrated, setHydrated] = useState(false);
@@ -101,38 +106,6 @@ function useStoredQuizIdentity() {
   return { ready, name, setName, address } as const;
 }
 
-type InviteToastState = {
-  tone: 'success' | 'error';
-  message: string;
-};
-
-async function copyTextToClipboard(text: string): Promise<boolean> {
-  try {
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(text);
-      return true;
-    }
-  } catch {
-    // Fall through to the legacy path below.
-  }
-
-  try {
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.setAttribute('readonly', 'true');
-    textarea.style.position = 'fixed';
-    textarea.style.left = '-9999px';
-    textarea.style.opacity = '0';
-    document.body.appendChild(textarea);
-    textarea.select();
-    const success = document.execCommand('copy');
-    document.body.removeChild(textarea);
-    return success;
-  } catch {
-    return false;
-  }
-}
-
 function statusTone(status: ReturnType<typeof resolveQuizPotStatus>) {
   switch (status) {
     case 'live':
@@ -140,7 +113,7 @@ function statusTone(status: ReturnType<typeof resolveQuizPotStatus>) {
     case 'ended':
       return 'border-[#777]/30 bg-white/[0.02] text-[#d8d8d8]';
     default:
-      return 'border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]';
+      return 'border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]';
   }
 }
 
@@ -179,8 +152,8 @@ function CountdownTile({
 
   if (status === 'ended') {
     return (
-      <div className="rounded-3xl border border-[#2a2a2a] bg-black/30 p-5">
-        <div className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">{countdown.label}</div>
+      <div className="rounded-3xl border border-[#1a1a2e] bg-black/30 p-5">
+        <div className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#555566]">{countdown.label}</div>
         <div className="mt-3 text-2xl font-black text-white">{countdown.value}</div>
       </div>
     );
@@ -189,145 +162,18 @@ function CountdownTile({
   const parts = formatQuizCountdownParts(status === 'live' ? pot.endsAt - now : pot.startsAt - now);
 
   return (
-    <div className="rounded-3xl border border-[#2a2a2a] bg-black/30 p-5">
-      <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">
-        <Clock3 size={14} className="text-[#c9a84c]" aria-hidden="true" />
+    <div className="rounded-3xl border border-[#1a1a2e] bg-black/30 p-5">
+      <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.28em] text-[#555566]">
+        <Clock3 size={14} className="text-[#d4af37]" aria-hidden="true" />
         {countdown.label}
       </div>
       <div className="mt-4 grid grid-cols-4 gap-2">
         {parts.map((part) => (
-          <div key={part.label} className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-2 py-3 text-center">
+          <div key={part.label} className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-2 py-3 text-center">
             <div className="text-lg font-black text-white">{part.value}</div>
-            <div className="mt-1 text-[9px] font-mono uppercase tracking-[0.22em] text-[#777]">{part.label}</div>
+            <div className="mt-1 text-[9px] font-mono uppercase tracking-[0.22em] text-[#555566]">{part.label}</div>
           </div>
         ))}
-      </div>
-    </div>
-  );
-}
-
-function SubmissionReveal({
-  result,
-  currentScore,
-  answeredCount,
-  totalQuestions,
-  currentQuestionTitle,
-  rankEstimate,
-  payoutEligible,
-  projectedPayout,
-  payoutShare,
-  payoutLabel,
-}: {
-  result: QuizSubmissionResult | null;
-  currentScore: number;
-  answeredCount: number;
-  totalQuestions: number;
-  currentQuestionTitle?: string;
-  rankEstimate: number | null;
-  payoutEligible: boolean;
-  projectedPayout: number;
-  payoutShare: number;
-  payoutLabel: string;
-}) {
-  const [pulse, setPulse] = useState(false);
-  const resultKey = result?.ok ? result.questionId : undefined;
-
-  useEffect(() => {
-    if (!result?.ok) {
-      setPulse(false);
-      return;
-    }
-
-    setPulse(false);
-    const frame = window.requestAnimationFrame(() => {
-      setPulse(true);
-    });
-
-    return () => window.cancelAnimationFrame(frame);
-  }, [result?.ok, resultKey]);
-
-  if (!result) {
-    return (
-      <div className="rounded-3xl border border-dashed border-[#2a2a2a] bg-white/[0.015] p-5 text-sm leading-7 text-[#9a9a9a]">
-        Submit an answer to reveal your score and move to the next question.
-      </div>
-    );
-  }
-
-  if (!result.ok) {
-    return (
-      <div className="rounded-3xl border border-red-500/25 bg-red-500/10 p-5 text-sm leading-7 text-red-100">
-        {result.message}
-      </div>
-    );
-  }
-
-  return (
-    <div
-      className={`relative overflow-hidden rounded-3xl border p-5 transition-all duration-500 ${
-        pulse
-          ? 'border-[#c9a84c]/35 bg-[linear-gradient(135deg,rgba(201,168,76,0.14),rgba(48,209,88,0.05)_50%,rgba(255,255,255,0.02))] shadow-[0_0_0_1px_rgba(201,168,76,0.08),0_22px_70px_rgba(0,0,0,0.45)]'
-          : 'border-[#2a2a2a] bg-black/30'
-      }`}
-    >
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c9a84c]/50 to-transparent" />
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">
-          <BadgeCheck size={14} className={result.correct ? 'text-[#30d158]' : 'text-[#c9a84c]'} aria-hidden="true" />
-          Score reveal
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-white">
-            {rankEstimate ? `Rank #${String(rankEstimate).padStart(2, '0')}` : 'Rank pending'}
-          </HubBadge>
-          <HubBadge className={payoutEligible ? 'border-[#30d158]/30 bg-[#30d158]/10 text-[#a6f4bf]' : 'border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]'}>
-            {payoutEligible ? 'Payout eligible' : 'Outside payout zone'}
-          </HubBadge>
-        </div>
-      </div>
-
-      <div className="mt-4 text-sm text-white">{result.correct ? 'Correct answer locked in.' : 'Answer locked in.'}</div>
-      <div className="mt-4 grid gap-3 sm:grid-cols-3">
-        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
-          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Current score</div>
-          <div className="mt-2 text-lg font-black text-[#c9a84c]">{currentScore}</div>
-        </div>
-        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
-          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Answered</div>
-          <div className="mt-2 text-lg font-black text-white">
-            {answeredCount}/{totalQuestions}
-          </div>
-        </div>
-        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
-          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Question</div>
-          <div className="mt-2 truncate text-lg font-black text-white">{currentQuestionTitle ?? 'Completed'}</div>
-        </div>
-      </div>
-
-      <div className="mt-4 grid gap-3 sm:grid-cols-3">
-        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
-          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Payout mode</div>
-          <div className="mt-2 text-sm font-semibold text-white">{payoutLabel}</div>
-        </div>
-        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
-          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Projected payout</div>
-          <div className="mt-2 text-lg font-black text-[#f0d79e]">{formatQuizAmount(projectedPayout)}</div>
-        </div>
-        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
-          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Share</div>
-          <div className="mt-2 text-lg font-black text-white">{payoutShare}%</div>
-        </div>
-      </div>
-
-      <div className="mt-4 grid gap-3 sm:grid-cols-2">
-        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
-          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Your answer</div>
-          <div className="mt-2 text-sm font-semibold text-white">Option {String.fromCharCode(65 + result.answerIndex)}</div>
-        </div>
-        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
-          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Correct answer</div>
-          <div className="mt-2 text-sm font-semibold text-white">Option {String.fromCharCode(65 + result.correctIndex)}</div>
-        </div>
       </div>
     </div>
   );
@@ -348,10 +194,10 @@ function LeaderboardCard({
     <HubCard as="section" className="p-6 sm:p-8">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#777]">Leaderboard</p>
+          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#555566]">Leaderboard</p>
           <h2 className="mt-2 text-2xl font-black uppercase">Top scores</h2>
         </div>
-        <Trophy className="text-[#c9a84c]" size={22} aria-hidden="true" />
+        <Trophy className="text-[#d4af37]" size={22} aria-hidden="true" />
       </div>
 
       <div className="mt-5 space-y-3">
@@ -362,10 +208,10 @@ function LeaderboardCard({
               <div
                 key={participant.address}
                 className={`grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border px-4 py-3 ${
-                  isSelf ? 'border-[#c9a84c]/40 bg-[#c9a84c]/10' : 'border-[#2a2a2a] bg-black/30'
+                  isSelf ? 'border-[#d4af37]/40 bg-[#d4af37]/10' : 'border-[#1a1a2e] bg-black/30'
                 }`}
               >
-                <span className="inline-flex min-w-12 items-center justify-center rounded-full border border-[#2a2a2a] bg-white/[0.02] px-3 py-1 text-[10px] font-mono uppercase tracking-[0.24em] text-white">
+                <span className="inline-flex min-w-12 items-center justify-center rounded-full border border-[#1a1a2e] bg-white/[0.02] px-3 py-1 text-[10px] font-mono uppercase tracking-[0.24em] text-white">
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 <div className="min-w-0">
@@ -373,13 +219,10 @@ function LeaderboardCard({
                     {participant.name}
                     {isSelf ? ' (you)' : ''}
                   </div>
-                  <div className="truncate text-[10px] font-mono uppercase tracking-[0.16em] text-[#777]">
-                    {formatQuizAddressLabel(participant.address)}
-                  </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm font-black text-[#c9a84c]">{participant.score}</div>
-                  <div className="text-[10px] font-mono uppercase tracking-[0.18em] text-[#777]">Pts</div>
+                  <div className="text-sm font-black text-[#d4af37]">{participant.score}</div>
+                  <div className="text-[10px] font-mono uppercase tracking-[0.18em] text-[#555566]">Pts</div>
                 </div>
               </div>
             );
@@ -391,12 +234,6 @@ function LeaderboardCard({
             description="Join the pot and answer a few questions to populate the leaderboard."
           />
         )}
-      </div>
-
-      <div className="mt-5 rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3 text-sm text-[#9a9a9a]">
-        {activeParticipantIndex >= 0
-          ? `Your current rank is #${String(activeParticipantIndex + 1).padStart(2, '0')}.`
-          : 'Join the pot to appear on the leaderboard.'}
       </div>
     </HubCard>
   );
@@ -414,14 +251,14 @@ function PrizePanel({ pot, now }: { pot: QuizPot; now: number }) {
     <HubCard as="section" className="p-6 sm:p-8">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#777]">Prize panel</p>
+          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#555566]">Prize panel</p>
           <h2 className="mt-2 text-2xl font-black uppercase">Payouts</h2>
         </div>
-        <Coins className="text-[#c9a84c]" size={22} aria-hidden="true" />
+        <Coins className="text-[#d4af37]" size={22} aria-hidden="true" />
       </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
-        <HubBadge className={resolvedStatus === 'ended' ? 'border-[#777]/30 bg-white/[0.02] text-[#d8d8d8]' : 'border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]'}>
+        <HubBadge className={resolvedStatus === 'ended' ? 'border-[#777]/30 bg-white/[0.02] text-[#d8d8d8]' : 'border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]'}>
           {resolvedStatus === 'ended' ? 'Final payouts' : 'Projected payouts'}
         </HubBadge>
         <HubBadge>{isSplit ? '50 / 30 / 20 split' : 'Winner takes all'}</HubBadge>
@@ -431,54 +268,26 @@ function PrizePanel({ pot, now }: { pot: QuizPot; now: number }) {
         {breakdown.length > 0 ? (
           isSplit ? (
             splitBreakdown.map((entry) => (
-              <div key={`${entry.place}-${entry.participant.address}`} className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
+              <div key={`${entry.place}-${entry.participant.address}`} className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-4">
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
-                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">
+                    <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">
                       {entry.place === 1 ? '1st place' : `${entry.place} place`}
                     </div>
                     <div className="mt-2 truncate text-sm font-semibold text-white">{entry.participant.name}</div>
-                    <div className="mt-1 truncate text-[10px] font-mono uppercase tracking-[0.16em] text-[#777]">
-                      {formatQuizAddressLabel(entry.participant.address)}
-                    </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-black text-[#c9a84c]">{formatQuizAmount(entry.amountUsd)}</div>
-                    <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-[#777]">{entry.share}%</div>
+                    <div className="text-sm font-black text-[#d4af37]">{formatQuizAmount(entry.amountUsd)}</div>
+                    <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-[#555566]">{entry.share}%</div>
                   </div>
-                </div>
-                <div className="mt-3 h-2 overflow-hidden rounded-full bg-black/40">
-                  <div
-                    className="h-full rounded-full bg-[linear-gradient(90deg,#c9a84c_0%,#f0d79e_100%)]"
-                    style={{ width: `${entry.share}%` }}
-                  />
                 </div>
               </div>
             ))
           ) : (
-            <div className="rounded-3xl border border-[#c9a84c]/25 bg-[linear-gradient(135deg,rgba(201,168,76,0.16),rgba(255,255,255,0.02))] p-5">
-              <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.28em] text-[#f0d79e]">
-                <Trophy size={14} aria-hidden="true" />
-                Winner takes all
-              </div>
-              <div className="mt-4 flex items-start justify-between gap-4">
-                <div className="min-w-0">
-                  <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Current leader</div>
-                  <div className="mt-2 truncate text-lg font-semibold text-white">{winner?.participant.name ?? 'No winner yet'}</div>
-                  <div className="mt-1 truncate text-[10px] font-mono uppercase tracking-[0.16em] text-[#777]">
-                    {winner ? formatQuizAddressLabel(winner.participant.address) : 'Waiting for participants'}
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-3xl font-black text-[#f0d79e]">{winner ? formatQuizAmount(winner.amountUsd) : '$0'}</div>
-                  <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-[#777]">100% of pot</div>
-                </div>
-              </div>
-              <div className="mt-4 text-sm leading-7 text-[#d8d8d8]">
-                {resolvedStatus === 'ended'
-                  ? 'Final winner locked. The full pot pays out to the top rank.'
-                  : 'Projected payout updates as scores change. The top rank takes everything.'}
-              </div>
+            <div className="rounded-3xl border border-[#d4af37]/25 bg-[linear-gradient(135deg,rgba(212, 175, 55,0.16),rgba(255,255,255,0.02))] p-5 text-center">
+              <div className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#f0d79e] mb-2">Winner takes all</div>
+              <div className="text-3xl font-black text-[#f0d79e]">{winner ? formatQuizAmount(winner.amountUsd) : '$0'}</div>
+              <div className="mt-2 truncate text-sm font-semibold text-white">{winner?.participant.name ?? 'No winner yet'}</div>
             </div>
           )
         ) : (
@@ -489,50 +298,6 @@ function PrizePanel({ pot, now }: { pot: QuizPot; now: number }) {
           />
         )}
       </div>
-
-      {resolvedStatus === 'ended' && isSplit && splitBreakdown.length > 0 ? (
-        <div className="mt-5 rounded-3xl border border-[#2a2a2a] bg-black/25 p-5">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <div className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">Podium view</div>
-              <div className="mt-2 text-sm font-semibold text-white">Top 3 winners and payout split</div>
-            </div>
-            <HubBadge>50 / 30 / 20</HubBadge>
-          </div>
-          <div className="mt-4 grid grid-cols-3 items-end gap-3">
-            {[
-              { label: '2nd', entry: splitBreakdown[1], heightClass: 'min-h-36' },
-              { label: '1st', entry: splitBreakdown[0], heightClass: 'min-h-44' },
-              { label: '3rd', entry: splitBreakdown[2], heightClass: 'min-h-28' },
-            ].map((slot) => (
-              <div
-                key={slot.label}
-                className={`rounded-3xl border border-[#2a2a2a] bg-black/30 p-4 text-center ${slot.heightClass}`}
-              >
-                <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">{slot.label}</div>
-                {slot.entry ? (
-                  <>
-                    <div className="mt-3 truncate text-sm font-semibold text-white">{slot.entry.participant.name}</div>
-                    <div className="mt-1 truncate text-[10px] font-mono uppercase tracking-[0.16em] text-[#777]">
-                      {formatQuizAddressLabel(slot.entry.participant.address)}
-                    </div>
-                    <div className="mt-4 text-lg font-black text-[#c9a84c]">{formatQuizAmount(slot.entry.amountUsd)}</div>
-                    <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-[#777]">{slot.entry.share}%</div>
-                  </>
-                ) : (
-                  <div className="mt-6 text-sm leading-7 text-[#777]">Waiting for a finalist</div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : null}
-
-      {resolvedStatus === 'ended' && breakdown.length > 0 ? (
-        <div className="mt-5 rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3 text-sm leading-7 text-[#9a9a9a]">
-          Final winners are locked. Top rankings shown above reflect the ended room.
-        </div>
-      ) : null}
     </HubCard>
   );
 }
@@ -541,65 +306,127 @@ function QuizFlowCard({
   pot,
   now,
   address,
-  participantExists,
   onSubmit,
   result,
 }: {
   pot: QuizPot;
   now: number;
   address: string;
-  participantExists: boolean;
   onSubmit: (questionId: string, answerIndex: number) => void;
   result: QuizSubmissionResult | null;
 }) {
   const normalizedAddress = address.trim().toLowerCase();
   const participant = pot.participants.find((entry) => entry.address.trim().toLowerCase() === normalizedAddress);
-  const answers = useQuizPotStore((state) => state.getQuizPotAnswersForAddress(pot.id, address));
+  const answers = useQuizPotStore(
+    (state) => state.answersByPot[pot.id]?.[address.trim().toLowerCase()] ?? EMPTY_ANSWERS,
+  );
   const answeredCount = Object.keys(answers).length;
   const currentQuestion = pot.questions[answeredCount];
   const currentScore = participant?.score ?? 0;
   const resolvedStatus = resolveQuizPotStatus(pot, now);
   const leaderboard = sortQuizParticipants(pot.participants);
-  const payoutBreakdown = buildQuizPrizeBreakdown(pot, leaderboard);
   const rankEstimate = participant ? leaderboard.findIndex((entry) => entry.address.trim().toLowerCase() === normalizedAddress) + 1 : null;
-  const payoutSlotCount = pot.distribution === 'winner-takes-all' ? 1 : 3;
-  const payoutEligible = rankEstimate !== null && rankEstimate > 0 && rankEstimate <= payoutSlotCount;
-  const payoutEntry = payoutBreakdown.find((entry) => entry.participant.address.trim().toLowerCase() === normalizedAddress);
-  const projectedPayout = payoutEntry?.amountUsd ?? 0;
-  const payoutShare = payoutEntry?.share ?? 0;
-  const payoutLabel = pot.distribution === 'winner-takes-all' ? 'Winner takes all' : 'Top 3 split';
   const isJoined = Boolean(participant);
   const isReady = resolvedStatus === 'live' && isJoined;
+  
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [timeLeft, setTimeLeft] = useState(QUESTION_TIMER);
+  const [showFeedback, setShowFeedback] = useState(false);
 
   useEffect(() => {
-    setSelectedOption(null);
-  }, [pot.id, answeredCount]);
+    if (isReady && currentQuestion && !showFeedback) {
+      setTimeLeft(QUESTION_TIMER);
+      const timer = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [isReady, answeredCount, showFeedback, currentQuestion]);
+
+  const handleOptionClick = (index: number) => {
+    if (showFeedback) return;
+    setSelectedOption(index);
+  };
+
+  const handleSubmit = () => {
+    if (selectedOption === null || !currentQuestion) return;
+    
+    onSubmit(currentQuestion.id, selectedOption);
+    setShowFeedback(true);
+    
+    setTimeout(() => {
+      setShowFeedback(false);
+      setSelectedOption(null);
+    }, 3000);
+  };
 
   if (resolvedStatus === 'ended') {
     return (
-      <HubCard as="section" className="p-6 sm:p-8">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#777]">Quiz flow</p>
-            <h2 className="mt-2 text-2xl font-black uppercase">Room ended</h2>
-          </div>
-          <HubBadge className="border-[#777]/30 bg-white/[0.02] text-[#d8d8d8]">Ended</HubBadge>
+      <HubCard as="section" className="p-12 text-center">
+        <div className="w-24 h-24 mx-auto mb-8 bg-[#d4af37]/10 rounded-full flex items-center justify-center border-2 border-[#d4af37]/30">
+          <Trophy size={48} className="text-[#d4af37]" />
         </div>
-        <HubEmptyState
-          icon={Trophy}
-          title="Final round complete"
-          description="This quiz pot is over. Review the winners in the prize panel and the final leaderboard on the right."
-          className="mt-5"
-        />
-        <div className="mt-5 grid gap-3 sm:grid-cols-2">
-          <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-            <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Your score</div>
-            <div className="mt-2 text-2xl font-black text-[#c9a84c]">{currentScore}</div>
+        <h2 className="text-4xl font-black uppercase mb-4">Quiz Ended</h2>
+        <p className="text-[#8a8a9a] mb-8 max-w-sm mx-auto">Check the final leaderboard and prize panel to see the winners.</p>
+        <div className="flex justify-center gap-4">
+          <div className="bg-black/30 border border-[#1a1a2e] rounded-2xl p-6 min-w-[140px]">
+            <div className="text-[10px] font-mono text-[#555566] uppercase mb-2">Final Score</div>
+            <div className="text-3xl font-black text-[#d4af37]">{currentScore}</div>
           </div>
-          <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-            <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Pot status</div>
-            <div className="mt-2 text-2xl font-black text-white">{resolvedStatus.toUpperCase()}</div>
+          <div className="bg-black/30 border border-[#1a1a2e] rounded-2xl p-6 min-w-[140px]">
+            <div className="text-[10px] font-mono text-[#555566] uppercase mb-2">Final Rank</div>
+            <div className="text-3xl font-black text-white">#{rankEstimate || '-'}</div>
+          </div>
+        </div>
+      </HubCard>
+    );
+  }
+
+  if (!isJoined) {
+    return (
+      <HubCard as="section" className="p-12 text-center border-dashed border-2 border-[#1a1a2e] bg-transparent">
+        <Users size={48} className="mx-auto text-[#555566] mb-6" />
+        <h3 className="text-2xl font-black uppercase mb-2">Ready to Play?</h3>
+        <p className="text-[#8a8a9a] mb-8 max-w-sm mx-auto">Join the quiz pot above to start answering questions and compete for the prize.</p>
+      </HubCard>
+    );
+  }
+
+  if (!isReady) {
+    return (
+      <HubCard as="section" className="p-12 text-center">
+        <Clock3 size={48} className="mx-auto text-[#d4af37] mb-6 animate-pulse" />
+        <h3 className="text-2xl font-black uppercase mb-2">Waiting for Start</h3>
+        <p className="text-[#8a8a9a] mb-4 max-w-sm mx-auto">The quiz room is opening soon. Get ready!</p>
+        <HubBadge className="mx-auto border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]">
+          Joined and Ready
+        </HubBadge>
+      </HubCard>
+    );
+  }
+
+  if (!currentQuestion) {
+    return (
+      <HubCard as="section" className="p-12 text-center bg-[linear-gradient(135deg,rgba(212,175,55,0.1),transparent)]">
+        <div className="animate-win">
+          <Sparkles size={64} className="mx-auto text-[#d4af37] mb-8" />
+          <h2 className="text-4xl font-black uppercase mb-4">Quiz Complete!</h2>
+          <p className="text-[#8a8a9a] mb-8">You've answered all questions. Waiting for the pot to close.</p>
+          <div className="grid grid-cols-2 gap-4 max-w-xs mx-auto">
+            <div className="bg-black/30 border border-[#d4af37]/30 rounded-2xl p-4">
+              <div className="text-[10px] font-mono text-[#555566] mb-1">FINAL SCORE</div>
+              <div className="text-2xl font-black text-[#d4af37]">{currentScore}</div>
+            </div>
+            <div className="bg-black/30 border border-[#1a1a2e] rounded-2xl p-4">
+              <div className="text-[10px] font-mono text-[#555566] mb-1">RANK</div>
+              <div className="text-2xl font-black text-white">#{rankEstimate || '-'}</div>
+            </div>
           </div>
         </div>
       </HubCard>
@@ -607,133 +434,87 @@ function QuizFlowCard({
   }
 
   return (
-    <HubCard as="section" className="p-6 sm:p-8">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#777]">Quiz flow</p>
-          <h2 className="mt-2 text-2xl font-black uppercase">One question at a time</h2>
-        </div>
-        <HubBadge className={resolvedStatus === 'live' ? 'border-[#30d158]/30 bg-[#30d158]/10 text-[#a6f4bf]' : 'border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]'}>
-          {resolvedStatus === 'live' ? 'Live' : 'Open'}
-        </HubBadge>
-      </div>
-
-      <div className="mt-4 grid gap-3 sm:grid-cols-3">
-        <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Answered</div>
-          <div className="mt-2 text-2xl font-black text-white">
-            {answeredCount}/{pot.questions.length}
-          </div>
-        </div>
-        <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Your score</div>
-          <div className="mt-2 text-2xl font-black text-[#c9a84c]">{currentScore}</div>
-        </div>
-        <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-          <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Next question</div>
-          <div className="mt-2 truncate text-sm font-semibold text-white">
-            {currentQuestion ? `#${answeredCount + 1}` : 'Completed'}
-          </div>
-        </div>
-      </div>
-
-      {!isJoined ? (
-        <HubEmptyState
-          icon={Users}
-          title="Join first"
-          description="Enter your name in the join section to unlock the quiz flow."
-          className="mt-5"
+    <HubCard as="section" className="p-6 sm:p-10 relative overflow-hidden">
+      {/* Progress Bar */}
+      <div className="absolute top-0 left-0 right-0 h-2 bg-black/40">
+        <div 
+          className="h-full bg-[#d4af37] transition-all duration-500 ease-out"
+          style={{ width: `${(answeredCount / pot.questions.length) * 100}%` }}
         />
-      ) : !isReady ? (
-        <div className="mt-5 rounded-3xl border border-[#2a2a2a] bg-black/30 p-5">
-          <div className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">Waiting for start</div>
-          <div className="mt-3 text-lg font-semibold text-white">
-            The pot is not live yet. You are joined and ready when the countdown expires.
-          </div>
-          <div className="mt-4 text-sm leading-7 text-[#9a9a9a]">
-            Use the time to review the prize panel and leaderboard before the room opens.
-          </div>
+      </div>
+
+      <div className="flex justify-between items-center mb-10 mt-2">
+        <div className="flex items-center gap-3">
+          <span className="text-[10px] font-mono text-[#555566] uppercase tracking-widest">Question</span>
+          <HubBadge className="border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e] px-3">
+            {answeredCount + 1} / {pot.questions.length}
+          </HubBadge>
         </div>
-      ) : currentQuestion ? (
-        <form
-          className="mt-5 space-y-5"
-          onSubmit={(event) => {
-            event.preventDefault();
-            if (selectedOption === null) {
-              return;
-            }
-            onSubmit(currentQuestion.id, selectedOption);
-          }}
-        >
-          <div className="rounded-3xl border border-[#2a2a2a] bg-white/[0.015] p-5">
-            <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">
-              <Sparkles size={14} className="text-[#c9a84c]" aria-hidden="true" />
-              Question {answeredCount + 1} of {pot.questions.length}
-            </div>
-            <p className="mt-4 text-2xl font-black uppercase leading-tight">{currentQuestion.prompt}</p>
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              {currentQuestion.options.map((option, index) => {
-                const optionLetter = String.fromCharCode(65 + index);
-                const active = selectedOption === index;
-                return (
-                  <button
-                    key={option}
-                    type="button"
-                    aria-pressed={active}
-                    className={`rounded-2xl border px-4 py-4 text-left text-sm leading-7 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
-                      active
-                        ? 'border-[#c9a84c]/40 bg-[#c9a84c]/10 text-white shadow-[0_0_0_1px_rgba(201,168,76,0.08)]'
-                        : 'border-[#2a2a2a] bg-black/30 text-[#d8d8d8] hover:border-[#c9a84c]/25 hover:bg-[#c9a84c]/5'
-                    }`}
-                    onClick={() => setSelectedOption(index)}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#2a2a2a] bg-white/[0.02] font-mono text-[10px] uppercase tracking-[0.18em] text-[#c9a84c]">
-                        {optionLetter}
-                      </span>
-                      <span className="min-w-0 flex-1">{option}</span>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-            <div className="mt-5 flex flex-wrap items-center gap-3">
-              <button type="submit" className="primary-button" disabled={!participantExists || selectedOption === null}>
-                Submit Answer
-              </button>
-              <div className="text-sm text-[#777]">
-                {participantExists
-                  ? selectedOption === null
-                    ? 'Select an option to continue.'
-                    : `Selected option ${String.fromCharCode(65 + selectedOption)}.`
-                  : 'Join the pot to submit answers.'}
+        <div className={`flex items-center gap-2 font-mono font-bold ${timeLeft <= 5 ? 'text-red-500 animate-pulse' : 'text-white'}`}>
+          <Clock3 size={16} />
+          {timeLeft}s
+        </div>
+      </div>
+
+      <h2 className="text-3xl sm:text-4xl font-black uppercase mb-10 leading-tight">
+        {currentQuestion.prompt}
+      </h2>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        {currentQuestion.options.map((option, index) => {
+          const letter = String.fromCharCode(65 + index);
+          const isSelected = selectedOption === index;
+          const isCorrect = showFeedback && index === currentQuestion.correctIndex;
+          const isWrong = showFeedback && isSelected && index !== currentQuestion.correctIndex;
+          
+          return (
+            <button
+              key={index}
+              disabled={showFeedback}
+              onClick={() => handleOptionClick(index)}
+              className={`group relative p-6 rounded-3xl border-2 text-left transition-all duration-200
+                ${isCorrect ? 'border-[#30d158] bg-[#30d158]/10 scale-[1.02]' : 
+                  isWrong ? 'border-red-500 bg-red-500/10' :
+                  isSelected ? 'border-[#d4af37] bg-[#d4af37]/10' : 
+                  'border-[#1a1a2e] bg-black/40 hover:border-[#2a2a4a] hover:bg-black/60'}`}
+            >
+              <div className="flex items-center gap-4">
+                <div className={`w-10 h-10 rounded-2xl flex items-center justify-center font-black transition-colors
+                  ${isCorrect ? 'bg-[#30d158] text-black' : 
+                    isWrong ? 'bg-red-500 text-white' :
+                    isSelected ? 'bg-[#d4af37] text-black' : 
+                    'bg-[#1a1a2e] text-[#555566] group-hover:text-white'}`}>
+                  {letter}
+                </div>
+                <div className="flex-1 font-bold text-lg">
+                  {option}
+                </div>
+                {isCorrect && <Check className="text-[#30d158]" size={24} />}
               </div>
-            </div>
-          </div>
-        </form>
-      ) : (
-        <div className="mt-5 rounded-3xl border border-[#2a2a2a] bg-black/30 p-5">
-          <div className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">Completed</div>
-          <div className="mt-3 text-2xl font-black text-[#c9a84c]">Quiz cleared</div>
-          <div className="mt-3 text-sm leading-7 text-[#9a9a9a]">
-            You have answered every question in this pot. Review the score reveal below or keep checking the leaderboard as the room closes.
-          </div>
-        </div>
-      )}
+            </button>
+          );
+        })}
+      </div>
 
-      <div className="mt-5">
-        <SubmissionReveal
-          result={result}
-          currentScore={currentScore}
-          answeredCount={answeredCount}
-          totalQuestions={pot.questions.length}
-          currentQuestionTitle={currentQuestion?.prompt}
-          rankEstimate={rankEstimate}
-          payoutEligible={payoutEligible}
-          projectedPayout={projectedPayout}
-          payoutShare={payoutShare}
-          payoutLabel={payoutLabel}
-        />
+      <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="flex-1">
+          {showFeedback && (
+            <div className={`animate-win p-4 rounded-2xl border ${result?.ok && result.correct ? 'border-[#30d158]/30 bg-[#30d158]/5 text-[#30d158]' : 'border-red-500/30 bg-red-500/5 text-red-400'}`}>
+              <div className="font-black uppercase text-xs mb-1">
+                {result?.ok && result.correct ? 'Awesome!' : 'Oops!'}
+              </div>
+              <p className="text-sm">{currentQuestion.explanation}</p>
+            </div>
+          )}
+        </div>
+        <button
+          onClick={handleSubmit}
+          disabled={selectedOption === null || showFeedback}
+          className={`primary-button h-16 px-12 rounded-2xl text-xl transition-all
+            ${selectedOption !== null && !showFeedback ? 'pulse-gold' : 'opacity-50 cursor-not-allowed'}`}
+        >
+          CONFIRM ANSWER
+        </button>
       </div>
     </HubCard>
   );
@@ -744,98 +525,99 @@ export default function QuizPotDetailPage() {
   const potId = Array.isArray(params?.id) ? params.id[0] : params?.id ?? '';
   const { hydrated, now } = useHydratedNow();
   const { ready: identityReady, name, setName, address } = useStoredQuizIdentity();
-  const gameStore = useGameStore((state) => ({
-    challenges: state.challenges,
-    luckyPacks: state.luckyPacks,
-    history: state.history,
-  }));
-  const gameProgress = useMemo(() => buildGameProgressSnapshot(gameStore, now), [gameStore, now]);
+  
+  const [toast, setToast] = useState<{ isVisible: boolean; type: 'win' | 'loss' | 'info'; title: string; message: string; amount?: string }>({
+    isVisible: false,
+    type: 'info',
+    title: '',
+    message: '',
+  });
+
+  const showToast = (type: 'win' | 'loss' | 'info', title: string, message: string, amount?: string) => {
+    setToast({ isVisible: true, type, title, message, amount });
+  };
+
+  const closeToast = () => setToast(prev => ({ ...prev, isVisible: false }));
+
+  const challenges = useGameStore((state) => state.challenges);
+  const luckyPacks = useGameStore((state) => state.luckyPacks);
+  const history = useGameStore((state) => state.history);
+  const gameProgress = useMemo(
+    () => buildGameProgressSnapshot({ challenges, luckyPacks, history }, now),
+    [challenges, luckyPacks, history, now],
+  );
+  
   const pot = useQuizPotStore((state) => (potId ? state.getQuizPotById(potId) : undefined));
   const joinQuizPot = useQuizPotStore((state) => state.joinQuizPot);
   const submitQuizAnswer = useQuizPotStore((state) => state.submitQuizAnswer);
-  const [joinMessage, setJoinMessage] = useState('');
   const [submission, setSubmission] = useState<QuizSubmissionResult | null>(null);
-  const [inviteLink, setInviteLink] = useState('');
-  const [inviteToast, setInviteToast] = useState<InviteToastState | null>(null);
-
-  useEffect(() => {
-    setSubmission(null);
-    setJoinMessage('');
-  }, [potId]);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    setInviteLink(`${window.location.origin}${window.location.pathname}`);
-    setInviteToast(null);
-  }, [potId]);
-
-  useEffect(() => {
-    if (!inviteToast) {
-      return;
-    }
-
-    const timer = window.setTimeout(() => {
-      setInviteToast(null);
-    }, 2500);
-
-    return () => window.clearTimeout(timer);
-  }, [inviteToast]);
+  const [txPending, setTxPending] = useState(false);
 
   const normalizedAddress = address.trim().toLowerCase();
   const participant = pot?.participants.find((entry) => entry.address.trim().toLowerCase() === normalizedAddress);
-  const answers = useQuizPotStore((state) => (pot ? state.getQuizPotAnswersForAddress(pot.id, address) : {}));
-  const answeredCount = Object.keys(answers).length;
-  const leaderboard = useMemo(() => (pot ? sortQuizParticipants(pot.participants) : []), [pot]);
   const resolvedStatus = pot ? resolveQuizPotStatus(pot, now) : 'ended';
   const isJoined = Boolean(participant);
-  const currentScore = participant?.score ?? 0;
 
-  const handleJoin = (event: FormEvent<HTMLFormElement>) => {
+  const handleJoin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!pot) {
-      return;
+    if (!pot) return;
+
+    const entryFee = Math.max(1, Math.round(pot.potUsd / 10));
+    setTxPending(true);
+    let txHash: string | undefined;
+    if (USE_REAL_TRANSFERS) {
+      const tx = await payToAdmin(entryFee);
+      setTxPending(false);
+      if (!tx.success) {
+        showToast('info', 'Transaction Failed', tx.error ?? 'Transaction failed. Please try again.');
+        return;
+      }
+      txHash = tx.txHash;
+    } else {
+      setTxPending(false);
     }
 
     const result = joinQuizPot(pot.id, address, name);
-    setJoinMessage(result.message);
+    if (result.ok) {
+      const msg = txHash
+        ? `Entry fee paid! View tx: ${explorerUrl(txHash)}`
+        : 'You are now a participant in this quiz room.';
+      showToast('info', 'Joined Pot', msg);
+    } else {
+      showToast('info', 'Join Status', result.message);
+    }
   };
 
   const handleSubmit = (questionId: string, answerIndex: number) => {
-    if (!pot) {
-      return;
-    }
+    if (!pot) return;
 
     const result = submitQuizAnswer(pot.id, address, questionId, answerIndex);
     setSubmission(result);
-  };
 
-  const handleCopyInviteLink = async () => {
-    if (!inviteLink) {
-      setInviteToast({
-        tone: 'error',
-        message: 'Invite link is not ready yet.',
-      });
-      return;
-    }
+    // Check if finished
+    const answers = useQuizPotStore.getState().answersByPot[pot.id]?.[normalizedAddress] ?? {};
+    if (Object.keys(answers).length === pot.questions.length) {
+      setTimeout(async () => {
+        const finalLeaderboard = sortQuizParticipants([...pot.participants]);
+        const rank = finalLeaderboard.findIndex(p => p.address.toLowerCase() === normalizedAddress) + 1;
+        const score = participant?.score || 0;
 
-    const success = await copyTextToClipboard(inviteLink);
-    setInviteToast(
-      success
-        ? {
-            tone: 'success',
-            message: 'Invite link copied to clipboard.',
+        const isWinner = rank === 1;
+        if (isWinner && USE_REAL_TRANSFERS) {
+          const breakdown = buildQuizPrizeBreakdown(pot, finalLeaderboard);
+          const prize = breakdown.find(e => e.place === 1)?.amountUsd ?? 0;
+          if (prize > 0) {
+            const tx = await payFromAdmin(address, prize);
+            const txMsg = tx.txHash ? ` View tx: ${explorerUrl(tx.txHash)}` : '';
+            showToast('win', 'You Won!', `Prize: $${prize} USDC transferred!${txMsg}`, String(prize));
+            return;
           }
-        : {
-            tone: 'error',
-            message: 'Copy failed. Use the visible route link instead.',
-        },
-    );
-  };
+        }
 
-  const inviteRoute = inviteLink ? inviteLink.replace(/^https?:\/\/[^/]+/, '') : 'Preparing current route...';
+        showToast(isWinner ? 'win' : 'info', isWinner ? 'You Won!' : 'Quiz Finished!', `Final Score: ${score}. Rank: #${rank}`, String(score));
+      }, 3500);
+    }
+  };
 
   if (!hydrated || !identityReady) {
     return (
@@ -858,7 +640,7 @@ export default function QuizPotDetailPage() {
           <HubEmptyState
             icon={Trophy}
             title="Quiz pot not found"
-            description="The selected quiz pot does not exist in the local store. Return to the hub and pick another room."
+            description="The selected quiz pot does not exist in the local store."
           >
             <Link href="/game/quiz-pot" className="primary-button">
               Back to Quiz Pot
@@ -869,133 +651,92 @@ export default function QuizPotDetailPage() {
     );
   }
 
-  const countdown = getCountdownText(pot, now);
-  const participantCount = pot.participants.length;
-  const currentQuestion = pot.questions[answeredCount];
-  const questionProgress = Math.min(answeredCount, pot.questions.length);
-
   return (
     <section className="section pt-24 sm:pt-28">
-      {inviteToast ? (
-        <div
-          role="status"
-          aria-live="polite"
-          className={`fixed right-4 top-20 z-50 w-[calc(100vw-2rem)] max-w-sm rounded-3xl border px-4 py-3 shadow-[0_18px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl transition-all duration-300 ${
-            inviteToast.tone === 'success'
-              ? 'border-[#30d158]/30 bg-[#07160d]/95 text-[#d8ffe5]'
-              : 'border-red-500/30 bg-[#21090a]/95 text-red-100'
-          }`}
-        >
-          <div className="flex items-start gap-3">
-            <div
-              className={`grid h-9 w-9 shrink-0 place-items-center rounded-full border ${
-                inviteToast.tone === 'success' ? 'border-[#30d158]/30 bg-[#30d158]/10 text-[#a6f4bf]' : 'border-red-500/30 bg-red-500/10 text-red-100'
-              }`}
-            >
-              {inviteToast.tone === 'success' ? <Check size={15} aria-hidden="true" /> : <AlertTriangle size={15} aria-hidden="true" />}
-            </div>
-            <div className="min-w-0">
-              <div className="text-sm font-semibold text-white">{inviteToast.message}</div>
-              <div className="mt-1 truncate text-xs text-[#9a9a9a]">{inviteRoute}</div>
-            </div>
-          </div>
-        </div>
-      ) : null}
       <div className="mx-auto max-w-7xl">
+        <GameToast
+          isVisible={toast.isVisible}
+          type={toast.type}
+          title={toast.title}
+          message={toast.message}
+          amount={toast.amount}
+          onClose={closeToast}
+        />
+
         <div className="reveal space-y-5">
           <div className="flex flex-wrap items-center gap-2">
             <HubBadge className={statusTone(resolvedStatus)}>{resolvedStatus.toUpperCase()}</HubBadge>
             <HubBadge>{pot.hostName}</HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-white">{pot.distribution.replace('-', ' ')}</HubBadge>
           </div>
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <Link href="/game/quiz-pot" className="nav-link text-[10px] uppercase tracking-[0.24em] text-[#777]">
+                <Link href="/game/quiz-pot" className="inline-flex items-center gap-2 border border-[#1a1a2e] rounded-full px-4 py-1.5 text-[10px] uppercase font-mono tracking-widest text-[#555566] hover:text-white transition-colors">
+                  <ArrowRight className="rotate-180" size={14} />
                   Quiz Hub
                 </Link>
               </div>
               <h1 className="max-w-5xl text-4xl font-black uppercase leading-tight sm:text-5xl lg:text-6xl">
                 {pot.title}
               </h1>
-              <p className="max-w-3xl text-base leading-7 text-[#9a9a9a] sm:text-lg">
-                Hosted by {pot.hostName}. Join the room, answer each question once, and watch the leaderboard and prize panel update locally.
-              </p>
+              <div className="flex flex-wrap items-center gap-3">
+                <button 
+                  onClick={() => {
+                    navigator.clipboard.writeText(window.location.href);
+                    showToast('info', 'Copied!', 'Invite link copied to clipboard.');
+                  }}
+                  className="flex items-center gap-2 border border-[#1a1a2e] rounded-xl px-4 py-2 text-sm hover:border-[#d4af37]/50 transition-colors"
+                >
+                  <Copy size={14} />
+                  Copy Link
+                </button>
+                <button 
+                  onClick={() => {
+                    const url = `https://twitter.com/intent/tweet?text=I'm playing ${pot.title} on Arc!&url=${encodeURIComponent(window.location.href)}`;
+                    window.open(url, '_blank');
+                  }}
+                  className="flex items-center gap-2 border border-[#1a1a2e] rounded-xl px-4 py-2 text-sm hover:border-[#d4af37]/50 transition-colors"
+                >
+                  <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                  Share on X
+                </button>
+              </div>
             </div>
 
             <div className="grid min-w-[280px] gap-3 sm:grid-cols-2">
-              <div className="rounded-3xl border border-[#2a2a2a] bg-black/30 p-5">
-                <div className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">Pot</div>
-                <div className="mt-2 text-3xl font-black text-[#c9a84c]">{formatQuizAmount(pot.potUsd)}</div>
+              <div className="rounded-3xl border border-[#1a1a2e] bg-black/30 p-5">
+                <div className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#555566]">Pot</div>
+                <div className="mt-2 text-3xl font-black text-[#d4af37]">{formatQuizAmount(pot.potUsd)}</div>
               </div>
               <CountdownTile pot={pot} now={now} />
-              <div className="rounded-3xl border border-[#c9a84c]/20 bg-[linear-gradient(135deg,rgba(201,168,76,0.12),rgba(48,209,88,0.04)_55%,rgba(255,255,255,0.02))] p-5 sm:col-span-2">
-                <div className="flex flex-wrap items-start justify-between gap-4">
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">
-                      <Link2 size={14} className="text-[#c9a84c]" aria-hidden="true" />
-                      Invite link
-                    </div>
-                    <div className="mt-2 truncate text-sm font-semibold text-white">{inviteRoute}</div>
-                    <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.16em] text-[#777]">
-                      Mock share link from the current route
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={handleCopyInviteLink}
-                    className="inline-flex items-center gap-2 rounded-full border border-[#c9a84c]/25 bg-[#c9a84c]/10 px-3 py-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#f0d79e] transition-colors hover:border-[#c9a84c]/40 hover:bg-[#c9a84c]/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-                  >
-                    {inviteToast?.tone === 'success' ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
-                    {inviteToast?.tone === 'success' ? 'Copied' : 'Copy Invite Link'}
-                  </button>
-                </div>
-                <p
-                  className={`mt-3 text-xs leading-6 ${
-                    inviteToast?.tone === 'error' ? 'text-red-100' : inviteToast?.tone === 'success' ? 'text-[#a6f4bf]' : 'text-[#9a9a9a]'
-                  }`}
-                  aria-live="polite"
-                >
-                  {inviteToast ? inviteToast.message : 'Share the current room with another player without leaving the page.'}
-                </p>
-              </div>
             </div>
           </div>
         </div>
 
-        <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <HubBadge className="justify-center border-[#2a2a2a] bg-white/[0.02] px-4 py-3 text-white">
-            {pot.questionCount} questions
-          </HubBadge>
-          <HubBadge className="justify-center border-[#2a2a2a] bg-white/[0.02] px-4 py-3 text-white">
-            {participantCount} participants
-          </HubBadge>
-          <HubBadge className="justify-center border-[#2a2a2a] bg-white/[0.02] px-4 py-3 text-white">
-            {pot.durationHours} hour room
-          </HubBadge>
-          <HubBadge className="justify-center border-[#2a2a2a] bg-white/[0.02] px-4 py-3 text-white">
-            {questionProgress}/{pot.questions.length} answered
-          </HubBadge>
-        </div>
-
-        <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(340px,0.85fr)]">
+        <div className="mt-10 grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(340px,0.85fr)]">
           <div className="space-y-6">
+            <QuizFlowCard
+              pot={pot}
+              now={now}
+              address={address}
+              onSubmit={handleSubmit}
+              result={submission}
+            />
+
             <HubCard as="section" className="p-6 sm:p-8">
-              <div className="flex flex-wrap items-start justify-between gap-4">
+              <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#777]">Join section</p>
-                  <h2 className="mt-2 text-2xl font-black uppercase">Enter the room</h2>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#555566]">Participant Info</p>
+                  <h2 className="mt-2 text-2xl font-black uppercase">Your Identity</h2>
                 </div>
-                <HubBadge className={isJoined ? 'border-[#30d158]/30 bg-[#30d158]/10 text-[#a6f4bf]' : 'border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]'}>
+                <HubBadge className={isJoined ? 'border-[#30d158]/30 bg-[#30d158]/10 text-[#a6f4bf]' : 'border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]'}>
                   {isJoined ? 'Joined' : 'Not joined'}
                 </HubBadge>
               </div>
 
-              <form className="mt-5 space-y-4" onSubmit={handleJoin}>
+              <form className="grid gap-6 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_auto]" onSubmit={handleJoin}>
                 <div className="space-y-2">
-                  <label className={hubLabelClass} htmlFor="quiz-name">
-                    Display name
-                  </label>
+                  <label className={hubLabelClass} htmlFor="quiz-name">Display name</label>
                   <input
                     id="quiz-name"
                     type="text"
@@ -1007,53 +748,29 @@ export default function QuizPotDetailPage() {
                   />
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <div className={hubLabelClass}>Participant address</div>
-                    <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3 font-mono text-xs uppercase tracking-[0.18em] text-[#aaa]">
-                      {formatQuizAddressLabel(address)}
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className={hubLabelClass}>Current score</div>
-                    <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3 text-2xl font-black text-[#c9a84c]">
-                      {currentScore}
-                    </div>
+                <div className="space-y-2">
+                  <div className={hubLabelClass}>Address</div>
+                  <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3 font-mono text-xs uppercase tracking-[0.18em] text-[#8a8a9a] truncate">
+                    {formatQuizAddressLabel(address)}
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-3 sm:flex-row">
-                  <button type="submit" className="primary-button w-full sm:w-auto">
-                    {isJoined ? 'Update Join' : 'Join Mock'}
+                <div className="flex items-end">
+                  <button type="submit" disabled={txPending} className="primary-button w-full justify-center h-12 disabled:opacity-60">
+                    {txPending ? 'Confirming…' : isJoined ? 'Update Name' : 'Join Room'}
                   </button>
-                  <Link href="/game/quiz-pot" className="secondary-button w-full justify-center sm:w-auto">
-                    Back to Hub
-                  </Link>
                 </div>
-
-                <p className="min-h-6 text-sm text-[#d8d8d8]" aria-live="polite">
-                  {joinMessage || (resolvedStatus === 'ended' ? 'This room has closed.' : 'No backend, wallet, or contract is involved in this join action.')}
-                </p>
               </form>
             </HubCard>
-
-            <QuizFlowCard
-              pot={pot}
-              now={now}
-              address={address}
-              participantExists={isJoined}
-              onSubmit={handleSubmit}
-              result={submission}
-            />
           </div>
 
           <div className="space-y-6">
-            <GameProgressPanel
-              snapshot={gameProgress}
-              description="Shared Arc game momentum carries into the quiz room. XP, streaks, and wins update from the same mock store."
-            />
             <LeaderboardCard pot={pot} address={address} />
             <PrizePanel pot={pot} now={now} />
+            <GameProgressPanel
+              snapshot={gameProgress}
+              description="Shared Arc game momentum carries into the quiz room."
+            />
           </div>
         </div>
       </div>

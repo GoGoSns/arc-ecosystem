@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -80,17 +80,17 @@ export default function NewThread() {
 
         <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-4xl items-center px-4 py-10 sm:px-6 lg:px-8">
           <div className="forum-panel relative mx-auto w-full max-w-xl overflow-hidden rounded-[1.75rem] p-6 text-center sm:p-8">
-            <div className="mx-auto grid h-16 w-16 place-items-center rounded-full border border-[#c9a84c]/25 bg-[rgba(201,168,76,0.08)]">
+            <div className="mx-auto grid h-16 w-16 place-items-center rounded-full border border-[#d4af37]/25 bg-[rgba(212, 175, 55,0.08)]">
               <BrandLogo href={null} decorative priority={false} className="forum-logo-glow h-10 w-10" />
             </div>
             <p className="forum-chip mx-auto mt-5 inline-flex">
-              <ShieldCheck size={11} className="text-[#c9a84c]" />
+              <ShieldCheck size={11} className="text-[#d4af37]" />
               Wallet required
             </p>
             <h1 className="mt-4 text-[clamp(2rem,4vw,3rem)] font-black leading-[0.95] tracking-[-0.05em] text-white">
               Connect to publish
             </h1>
-            <p className="mx-auto mt-4 max-w-md text-sm leading-7 text-[#8a8a8a]">
+            <p className="mx-auto mt-4 max-w-md text-sm leading-7 text-[#8a8a9a]">
               Arc Forum threads are authored from a connected wallet so every signal carries clear ownership.
             </p>
             <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row">
@@ -153,7 +153,7 @@ export default function NewThread() {
                 <h2 className="mt-2 text-lg font-bold text-white">Signal settings</h2>
               </div>
               <span className="forum-chip">
-                <ShieldCheck size={11} className="text-[#c9a84c]" />
+                <ShieldCheck size={11} className="text-[#d4af37]" />
                 Wallet-authored
               </span>
             </div>
@@ -187,7 +187,7 @@ export default function NewThread() {
                   );
                 })}
               </div>
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-[#8a8a8a]">
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-[#8a8a9a]">
                 {selectedCategory.description}
               </p>
             </div>
@@ -215,7 +215,7 @@ export default function NewThread() {
                   <span id="forum-title-error" className="text-xs text-[#ef4444]">
                     {errors.title ?? ''}
                   </span>
-                  <span className="text-xs text-[#8a8a8a]">{title.length}/150</span>
+                  <span className="text-xs text-[#8a8a9a]">{title.length}/150</span>
                 </div>
               </div>
 
@@ -240,7 +240,7 @@ export default function NewThread() {
                   <span id="forum-body-error" className="text-xs text-[#ef4444]">
                     {errors.content ?? ''}
                   </span>
-                  <span className="text-xs text-[#8a8a8a]">{content.length} chars</span>
+                  <span className="text-xs text-[#8a8a9a]">{content.length} chars</span>
                 </div>
               </div>
 
@@ -250,7 +250,7 @@ export default function NewThread() {
                   className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#bdbdbd]"
                 >
                   Display Name{' '}
-                  <span className="font-normal normal-case tracking-normal text-[#6f6f6f]">
+                  <span className="font-normal normal-case tracking-normal text-[#555566]">
                     (optional)
                   </span>
                 </label>
@@ -270,7 +270,7 @@ export default function NewThread() {
                     {errors.authorName}
                   </p>
                 ) : (
-                  <p className="mt-2 text-xs text-[#8a8a8a]">
+                  <p className="mt-2 text-xs text-[#8a8a9a]">
                     Optional. If empty, your wallet address will be shown.
                   </p>
                 )}
@@ -278,7 +278,7 @@ export default function NewThread() {
             </div>
 
             <div className="mt-8 flex flex-col gap-3 border-t border-[#1f1f1f] pt-5 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm leading-6 text-[#8a8a8a]">
+              <p className="text-sm leading-6 text-[#8a8a9a]">
                 Posts are public and tied to the connected wallet.
               </p>
               <button
@@ -301,7 +301,7 @@ export default function NewThread() {
                   <Link key={lane.href} href={lane.href} className="forum-thread-link w-full justify-between">
                     <span>
                       <span className="block text-sm font-bold text-white">{lane.label}</span>
-                      <span className="mt-1 block text-xs leading-6 text-[#8a8a8a]">{lane.description}</span>
+                      <span className="mt-1 block text-xs leading-6 text-[#8a8a9a]">{lane.description}</span>
                     </span>
                     <ArrowRight size={13} />
                   </Link>
@@ -315,7 +315,7 @@ export default function NewThread() {
               <ul className="mt-4 space-y-3">
                 {POSTING_RULES.map((rule) => (
                   <li key={rule} className="flex items-start gap-3 text-sm leading-6 text-[#bdbdbd]">
-                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#c9a84c] shadow-[0_0_10px_rgba(201,168,76,0.45)]" />
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d4af37] shadow-[0_0_10px_rgba(212, 175, 55,0.45)]" />
                     <span>{rule}</span>
                   </li>
                 ))}

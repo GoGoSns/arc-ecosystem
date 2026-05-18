@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { ArrowRight, BadgeCheck, Coins, Clock3, Percent, Sparkles, Trophy, type LucideIcon } from 'lucide-react';
@@ -15,6 +15,7 @@ import {
   useGameStore,
 } from '@/lib/gameStore';
 import type { VoiceTourSectionId } from '@/lib/voiceTourStore';
+import { ShareButtons } from '@/components/ShareButtons';
 
 const gameVoiceTourSections = [
   { id: 'gameHub' },
@@ -56,15 +57,15 @@ function GameLinkCard({
   return (
     <Link
       href={href}
-      className="bracket-card group relative block overflow-hidden p-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+      className="bracket-card group relative block overflow-hidden p-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
     >
       <HubBrackets />
       <div className="flex items-start justify-between gap-4">
-        <HubBadge className="border-[#c9a84c]/25 bg-[#c9a84c]/10 text-[#f0d79e]">{badge}</HubBadge>
-        <Icon size={20} className="shrink-0 text-[#c9a84c]" />
+        <HubBadge className="border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f0d79e]">{badge}</HubBadge>
+        <Icon size={20} className="shrink-0 text-[#d4af37]" />
       </div>
       <h2 className="mt-5 text-3xl font-black uppercase tracking-tight sm:text-4xl">{title}</h2>
-      <p className="mt-4 min-h-24 text-sm leading-7 text-[#9a9a9a]">{description}</p>
+      <p className="mt-4 min-h-24 text-sm leading-7 text-[#8a8a9a]">{description}</p>
       <div className="mt-6 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.24em] text-white">
         <span>{meta}</span>
         <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
@@ -127,13 +128,13 @@ export default function GameHubHomePage() {
         <div className="reveal grid gap-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-start" style={{ transitionDelay: '40ms' }}>
           <div className="space-y-6">
             <div className="flex flex-wrap items-center gap-2">
-              <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">// phase 2</HubBadge>
-              <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">Demo store only</HubBadge>
+              <HubBadge className="border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]">// phase 2</HubBadge>
+              <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">Demo store only</HubBadge>
             </div>
             <h1 className="max-w-5xl text-4xl font-black uppercase leading-tight sm:text-5xl lg:text-7xl">
               Arc Game Hub
             </h1>
-            <p className="max-w-3xl text-base leading-7 text-[#9a9a9a] sm:text-lg">
+            <p className="max-w-3xl text-base leading-7 text-[#8a8a9a] sm:text-lg">
               A premium game surface for challenge tracking, weighted lucky drops, and a local outcome archive.
               Everything on this page is powered by mock data, persisted in the browser, and designed to stay
               readable on mobile.
@@ -148,6 +149,10 @@ export default function GameHubHomePage() {
               </Link>
             </div>
 
+            <div className="flex flex-wrap items-center gap-3 pt-1">
+              <ShareButtons title="Arc Game Hub" />
+            </div>
+
             <div className="pt-2">
               <VoiceTour sections={gameVoiceTourSections} compact />
             </div>
@@ -156,47 +161,47 @@ export default function GameHubHomePage() {
           <HubCard as="aside" className="p-5 sm:p-6">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
-                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#8a8a8a]">Command deck</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#8a8a9a]">Command deck</p>
                 <h2 className="mt-2 text-2xl font-black uppercase leading-tight sm:text-3xl">
                   Local gameplay, premium shell
                 </h2>
               </div>
               <HubBadge className="border-[#30d158]/30 bg-[#30d158]/10 text-[#a6f4bf]">Mock store</HubBadge>
             </div>
-            <p className="mt-3 text-sm leading-7 text-[#9a9a9a]">
+            <p className="mt-3 text-sm leading-7 text-[#8a8a9a]">
               Move between the active game loops without leaving browser state. Every route is designed to read
               cleanly on mobile and keep the controls obvious.
             </p>
             <div className="mt-6 space-y-3">
               <Link href="/game/challenge" className="feature-link">
                 <span>Challenge Pay</span>
-                <span className="ml-auto text-[#8a8a8a]">{stats.activeChallenges.length} live</span>
+                <span className="ml-auto text-[#8a8a9a]">{stats.activeChallenges.length} live</span>
               </Link>
               <Link href="/game/lucky" className="feature-link">
                 <span>Lucky Card</span>
-                <span className="ml-auto text-[#8a8a8a]">{stats.openLuckyPacks.length} pending</span>
+                <span className="ml-auto text-[#8a8a9a]">{stats.openLuckyPacks.length} pending</span>
               </Link>
               <Link href="/game/quiz-pot" className="feature-link">
                 <span>Quiz Pot</span>
-                <span className="ml-auto text-[#8a8a8a]">Trivia rooms</span>
+                <span className="ml-auto text-[#8a8a9a]">Trivia rooms</span>
               </Link>
               <Link href="/game/history" className="feature-link">
                 <span>History</span>
-                <span className="ml-auto text-[#8a8a8a]">{history.length} events</span>
+                <span className="ml-auto text-[#8a8a9a]">{history.length} events</span>
               </Link>
             </div>
             <div className="mt-6 grid gap-3 sm:grid-cols-3">
-              <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-                <div className="text-[10px] font-mono uppercase tracking-[0.26em] text-[#8a8a8a]">Active</div>
+              <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+                <div className="text-[10px] font-mono uppercase tracking-[0.26em] text-[#8a8a9a]">Active</div>
                 <div className="mt-2 text-lg font-black text-white">{stats.activeChallenges.length}</div>
               </div>
-              <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-                <div className="text-[10px] font-mono uppercase tracking-[0.26em] text-[#8a8a8a]">Lucky</div>
+              <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+                <div className="text-[10px] font-mono uppercase tracking-[0.26em] text-[#8a8a9a]">Lucky</div>
                 <div className="mt-2 text-lg font-black text-white">{stats.openLuckyPacks.length}</div>
               </div>
-              <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-                <div className="text-[10px] font-mono uppercase tracking-[0.26em] text-[#8a8a8a]">Win rate</div>
-                <div className="mt-2 text-lg font-black text-[#f4dc9f]">{stats.winRate}%</div>
+              <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+                <div className="text-[10px] font-mono uppercase tracking-[0.26em] text-[#8a8a9a]">Win rate</div>
+                <div className="mt-2 text-lg font-black text-[#f5d060]">{stats.winRate}%</div>
               </div>
             </div>
           </HubCard>
@@ -248,12 +253,12 @@ export default function GameHubHomePage() {
           <HubCard as="section" className="p-6 sm:p-8">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Phase scope</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Phase scope</p>
                 <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">Local only, no backend calls</h2>
               </div>
-              <HubBadge className="border-[#c9a84c]/25 bg-[#c9a84c]/10 text-[#f0d79e]">Demo only</HubBadge>
+              <HubBadge className="border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f0d79e]">Demo only</HubBadge>
             </div>
-            <p className="mt-4 max-w-3xl text-sm leading-7 text-[#9a9a9a]">
+            <p className="mt-4 max-w-3xl text-sm leading-7 text-[#8a8a9a]">
               This first phase keeps all challenge progress, lucky reveals, and historical events inside the
               browser store so the hub can be exercised without auth, wallets, contracts, or API dependencies.
             </p>
@@ -263,7 +268,7 @@ export default function GameHubHomePage() {
                 'Lucky reveals use tier weights',
                 'History survives refreshes locally',
               ].map((item) => (
-                <div key={item} className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm text-[#d8d8d8]">
+                <div key={item} className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3 text-sm text-[#d8d8d8]">
                   {item}
                 </div>
               ))}
@@ -279,24 +284,24 @@ export default function GameHubHomePage() {
             <HubCard as="aside" className="p-6 sm:p-8">
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Quick read</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Quick read</p>
                   <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">Current snapshot</h2>
                 </div>
-                <span className="inline-flex rounded-full border border-[#2a2a2a] bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#aaa]">
+                <span className="inline-flex rounded-full border border-[#1a1a2e] bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#8a8a9a]">
                   live
                 </span>
               </div>
               <div className="mt-6 space-y-4">
-                <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-                  <span className="text-sm text-[#777]">Best active window</span>
+                <div className="flex items-center justify-between rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+                  <span className="text-sm text-[#555566]">Best active window</span>
                   <span className="text-sm font-semibold text-white">
                     {stats.activeChallenges[0]
                       ? `${stats.activeChallenges[0].title} - ${formatTimeLeft(Math.max(0, stats.activeChallenges[0].deadlineAt - now))}`
                       : 'No active challenge'}
                   </span>
                 </div>
-              <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-                <span className="text-sm text-[#777]">Recent archive item</span>
+              <div className="flex items-center justify-between rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+                <span className="text-sm text-[#555566]">Recent archive item</span>
                 <span className="text-sm font-semibold text-white">
                     {[...history].sort((a, b) => b.createdAt - a.createdAt)[0]?.title ?? 'No history yet'}
                 </span>

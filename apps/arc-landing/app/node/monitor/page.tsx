@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
@@ -69,32 +69,32 @@ export default function MonitorPage() {
   }, [autoRefresh, checkStatus]);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-[#050508] text-white">
       <SiteHeader />
 
       <div className="mx-auto max-w-4xl px-4 py-10">
         <div className="flex items-center gap-3 mb-2">
-          <Activity size={20} className="text-[#c9a84c]" />
+          <Activity size={20} className="text-[#d4af37]" />
           <h1 className="text-3xl font-black">RPC Monitor</h1>
         </div>
-        <p className="text-[#777] text-sm mb-8">Check demo status of Arc Testnet RPC endpoints.</p>
+        <p className="text-[#555566] text-sm mb-8">Check demo status of Arc Testnet RPC endpoints.</p>
 
         {/* URL input + controls */}
-        <div className="rounded-2xl p-6 mb-6" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(201,168,76,0.15)' }}>
+        <div className="rounded-2xl p-6 mb-6" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(212, 175, 55,0.15)' }}>
           <div className="flex flex-col sm:flex-row gap-3">
             <input
               aria-label="RPC endpoint URL"
               value={rpcUrl}
               onChange={(e) => setRpcUrl(e.target.value)}
               placeholder="https://rpc.testnet.arc.network"
-              className="flex-1 rounded-xl px-4 py-2.5 text-sm text-white font-mono placeholder-[#555] outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+              className="flex-1 rounded-xl px-4 py-2.5 text-sm text-white font-mono placeholder-[#555] outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
               style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)' }} />
             <button
               type="button"
               onClick={checkStatus}
               disabled={loading}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold shrink-0 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-              style={{ background: '#c9a84c', color: '#0a0a0a' }}>
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold shrink-0 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+              style={{ background: '#d4af37', color: '#0a0a0a' }}>
               <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
               {loading ? 'Checking...' : 'Check Status'}
             </button>
@@ -106,20 +106,20 @@ export default function MonitorPage() {
               aria-checked={autoRefresh}
               aria-label="Toggle auto refresh"
               onClick={() => setAuto((value) => !value)}
-              className="relative h-5 w-9 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-              style={{ background: autoRefresh ? '#c9a84c' : 'rgba(255,255,255,0.08)' }}
+              className="relative h-5 w-9 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+              style={{ background: autoRefresh ? '#d4af37' : 'rgba(255,255,255,0.08)' }}
             >
               <span
                 className="absolute top-0.5 h-4 w-4 rounded-full bg-white transition-all"
                 style={{ left: autoRefresh ? '18px' : '2px' }}
               />
             </button>
-            <span className="text-xs text-[#777]">Auto-refresh every 30s</span>
+            <span className="text-xs text-[#555566]">Auto-refresh every 30s</span>
           </div>
         </div>
 
         {!loading && !result ? (
-          <div className="rounded-2xl p-6 mb-6 text-sm text-[#777]" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)' }}>
+          <div className="rounded-2xl p-6 mb-6 text-sm text-[#555566]" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)' }}>
             Run a demo check to populate the RPC monitor.
           </div>
         ) : null}
@@ -151,7 +151,7 @@ export default function MonitorPage() {
               },
             ].map(({ label, value, extra, color }) => (
               <div key={label} className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
-                <p className="text-[10px] text-[#555] uppercase tracking-wider mb-2">{label}</p>
+                <p className="text-[10px] text-[#555566] uppercase tracking-wider mb-2">{label}</p>
                 <p className="text-xl font-black flex items-center" style={{ color }}>{extra}{value}</p>
               </div>
             ))}
@@ -167,16 +167,16 @@ export default function MonitorPage() {
         {/* Recent blocks */}
         {blocks.length > 0 && (
           <div className="rounded-2xl p-6 mb-8" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)' }}>
-            <h2 className="text-sm font-black uppercase tracking-widest text-[#c9a84c] mb-4">Recent Blocks</h2>
+            <h2 className="text-sm font-black uppercase tracking-widest text-[#d4af37] mb-4">Recent Blocks</h2>
             <div className="space-y-1">
-              <div className="grid grid-cols-3 text-[10px] text-[#555] uppercase tracking-wider px-2 mb-2">
+              <div className="grid grid-cols-3 text-[10px] text-[#555566] uppercase tracking-wider px-2 mb-2">
                 <span>Block</span><span>Time</span><span>Txs</span>
               </div>
               {blocks.map((b) => (
                 <div key={b.height} className="grid grid-cols-3 text-xs px-2 py-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.02)] transition-colors">
-                  <span className="font-mono text-[#c9a84c]">#{b.height.toLocaleString()}</span>
-                  <span className="text-[#777]">{b.time}</span>
-                  <span className="text-[#aaa]">{b.txs} tx</span>
+                  <span className="font-mono text-[#d4af37]">#{b.height.toLocaleString()}</span>
+                  <span className="text-[#555566]">{b.time}</span>
+                  <span className="text-[#8a8a9a]">{b.txs} tx</span>
                 </div>
               ))}
             </div>
@@ -185,7 +185,7 @@ export default function MonitorPage() {
 
         {/* RPC provider status dots */}
         <div className="rounded-2xl p-6" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)' }}>
-          <h2 className="text-sm font-black uppercase tracking-widest text-[#c9a84c] mb-4">Pre-configured Endpoints</h2>
+          <h2 className="text-sm font-black uppercase tracking-widest text-[#d4af37] mb-4">Pre-configured Endpoints</h2>
           <div className="space-y-2">
             {rpcProviders.map((rpc) => (
               <div key={rpc.id} className="flex items-center justify-between px-3 py-2.5 rounded-xl"
@@ -193,15 +193,15 @@ export default function MonitorPage() {
                 <div className="flex items-center gap-3">
                   <span className="h-2 w-2 rounded-full" style={{ background: '#facc15' }} />
                   <span className="text-sm font-bold">{rpc.name}</span>
-                  {rpc.isOfficial && <span className="text-[10px] text-[#c9a84c]">★ Official</span>}
+                  {rpc.isOfficial && <span className="text-[10px] text-[#d4af37]">★ Official</span>}
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-xs text-[#555] font-mono hidden sm:block">{rpc.url}</span>
+                  <span className="text-xs text-[#555566] font-mono hidden sm:block">{rpc.url}</span>
                   <button
                     type="button"
                     onClick={() => { setRpcUrl(rpc.url); }}
                     aria-label={`Monitor ${rpc.name}`}
-                    className="text-[11px] text-[#c9a84c] hover:underline"
+                    className="text-[11px] text-[#d4af37] hover:underline"
                   >
                     Monitor
                   </button>

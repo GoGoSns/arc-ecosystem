@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
@@ -80,7 +80,7 @@ const INITIAL_FORM = {
 const biasAccent: Record<SignalBias, string> = {
   bullish: '#4ade80',
   bearish: '#f87171',
-  neutral: '#c9a84c',
+  neutral: '#d4af37',
 };
 
 export default function SignalsPage() {
@@ -159,19 +159,19 @@ export default function SignalsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
+    <main className="min-h-screen bg-[#050508] text-white">
       <SiteHeader />
 
       <section className="relative overflow-hidden px-4 pt-24 sm:px-6 lg:px-8">
-        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-[#c9a84c]/10 via-[#c9a84c]/5 to-transparent blur-3xl" />
+        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-[#d4af37]/10 via-[#d4af37]/5 to-transparent blur-3xl" />
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
             <div className="relative">
-              <p className="font-mono text-xs uppercase tracking-[0.35em] text-[#c9a84c]">// signals</p>
+              <p className="font-mono text-xs uppercase tracking-[0.35em] text-[#d4af37]">// signals</p>
               <h1 className="mt-5 text-5xl font-black uppercase leading-none sm:text-7xl lg:text-8xl">
-                ECOSYSTEM <span className="text-[#c9a84c]">SIGNALS</span>
+                ECOSYSTEM <span className="text-[#d4af37]">SIGNALS</span>
               </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-[#9a9a9a]">
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-[#8a8a9a]">
                 Track the strongest momentum, risk, and product readings across the Arc ecosystem in one live feed.
               </p>
 
@@ -203,9 +203,9 @@ export default function SignalsPage() {
                 <HubBrackets />
                 <div className="grid gap-5 lg:grid-cols-[1fr_auto_auto] lg:items-end">
                   <div className="relative">
-                    <label className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Search</label>
+                    <label className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Search</label>
                     <div className="relative mt-2">
-                      <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#555]" size={16} />
+                      <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#555566]" size={16} />
                       <input
                         aria-label="Search signals"
                         value={search}
@@ -217,7 +217,7 @@ export default function SignalsPage() {
                   </div>
 
                   <div>
-                    <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                    <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                       Category
                     </label>
                     <select
@@ -235,7 +235,7 @@ export default function SignalsPage() {
                   </div>
 
                   <div>
-                    <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                    <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                       Bias
                     </label>
                     <select
@@ -262,8 +262,8 @@ export default function SignalsPage() {
                     onClick={() => setSortBy(option.id)}
                     className={`rounded-full border px-4 py-2 font-mono text-[10px] uppercase tracking-[0.22em] transition-colors ${
                       sortBy === option.id
-                        ? 'border-[#c9a84c] bg-[#c9a84c] text-black'
-                        : 'border-[#2a2a2a] text-[#777] hover:border-[#c9a84c]/50 hover:text-[#c9a84c]'
+                        ? 'border-[#d4af37] bg-[#d4af37] text-black'
+                        : 'border-[#1a1a2e] text-[#555566] hover:border-[#d4af37]/50 hover:text-[#d4af37]'
                     }`}
                   >
                     {option.label}
@@ -286,11 +286,11 @@ export default function SignalsPage() {
                       <HubBrackets />
                       <div className="flex items-start justify-between gap-4">
                         <div>
-                          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#c9a84c]">
+                          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#d4af37]">
                             {CATEGORY_LABELS[signal.category]}
                           </p>
                           <h3 className="mt-3 text-2xl font-black leading-tight">{signal.title}</h3>
-                          <p className="mt-2 text-sm text-[#777]">{signal.source}</p>
+                          <p className="mt-2 text-sm text-[#555566]">{signal.source}</p>
                         </div>
                         <span
                           className="rounded-full border px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em]"
@@ -300,10 +300,10 @@ export default function SignalsPage() {
                         </span>
                       </div>
 
-                      <p className="mt-5 text-sm leading-7 text-[#9a9a9a]">{signal.summary}</p>
+                      <p className="mt-5 text-sm leading-7 text-[#8a8a9a]">{signal.summary}</p>
 
                       <div className="mt-5 space-y-2">
-                        <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.22em] text-[#777]">
+                        <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.22em] text-[#555566]">
                           <span>Confidence</span>
                           <span>{signal.confidence}%</span>
                         </div>
@@ -320,7 +320,7 @@ export default function SignalsPage() {
                         {signal.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="rounded-full border border-[#2a2a2a] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#aaa]"
+                            className="rounded-full border border-[#1a1a2e] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#8a8a9a]"
                           >
                             {tag}
                           </span>
@@ -328,7 +328,7 @@ export default function SignalsPage() {
                       </div>
 
                       <div className="mt-6 flex items-center justify-between gap-3">
-                        <div className="flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.18em] text-[#777]">
+                        <div className="flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.18em] text-[#555566]">
                           <span>{signal.boostedBy.length} boosts</span>
                           <span>{signal.bookmarkedBy.length} saved</span>
                         </div>
@@ -336,15 +336,15 @@ export default function SignalsPage() {
                           <button
                             type="button"
                             onClick={() => toggleBoost(signal.id, viewerId)}
-                            className="rounded-full border border-[#2a2a2a] p-2 text-[#ddd] transition-colors hover:border-[#c9a84c]/60 hover:text-[#c9a84c]"
+                            className="rounded-full border border-[#1a1a2e] p-2 text-[#ddd] transition-colors hover:border-[#d4af37]/60 hover:text-[#d4af37]"
                             aria-label={boostActive ? 'Remove boost' : 'Boost signal'}
                           >
-                            <Zap size={14} className={boostActive ? 'fill-current text-[#c9a84c]' : ''} />
+                            <Zap size={14} className={boostActive ? 'fill-current text-[#d4af37]' : ''} />
                           </button>
                           <button
                             type="button"
                             onClick={() => toggleBookmark(signal.id, viewerId)}
-                            className="rounded-full border border-[#2a2a2a] p-2 text-[#ddd] transition-colors hover:border-[#c9a84c]/60 hover:text-[#c9a84c]"
+                            className="rounded-full border border-[#1a1a2e] p-2 text-[#ddd] transition-colors hover:border-[#d4af37]/60 hover:text-[#d4af37]"
                             aria-label={bookmarkActive ? 'Remove bookmark' : 'Bookmark signal'}
                           >
                             {bookmarkActive ? <BookmarkCheck size={14} /> : <Bookmark size={14} />}
@@ -374,7 +374,7 @@ export default function SignalsPage() {
             <aside className="space-y-6">
               <div className="bracket-card rounded-3xl p-6 sm:p-8">
                 <HubBrackets />
-                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#c9a84c]">// spotlight</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#d4af37]">// spotlight</p>
                 <h2 className="mt-4 text-3xl font-black uppercase leading-tight">Top signal</h2>
                 {spotlight ? (
                   <div className="mt-6 space-y-4">
@@ -384,18 +384,18 @@ export default function SignalsPage() {
                       <span className="soon-badge">{TIMEFRAME_LABELS[spotlight.timeframe]}</span>
                     </div>
                     <h3 className="text-2xl font-black">{spotlight.title}</h3>
-                    <p className="text-sm leading-7 text-[#9a9a9a]">{spotlight.summary}</p>
+                    <p className="text-sm leading-7 text-[#8a8a9a]">{spotlight.summary}</p>
                     <div className="grid grid-cols-2 gap-3">
-                      <div className="rounded-2xl border border-[#2a2a2a] bg-black/25 p-4">
-                        <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#777]">Source</p>
+                      <div className="rounded-2xl border border-[#1a1a2e] bg-black/25 p-4">
+                        <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#555566]">Source</p>
                         <p className="mt-2 text-lg font-black">{spotlight.source}</p>
                       </div>
-                      <div className="rounded-2xl border border-[#2a2a2a] bg-black/25 p-4">
-                        <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#777]">Confidence</p>
+                      <div className="rounded-2xl border border-[#1a1a2e] bg-black/25 p-4">
+                        <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#555566]">Confidence</p>
                         <p className="mt-2 text-lg font-black">{spotlight.confidence}%</p>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between border-t border-[#2a2a2a] pt-4 font-mono text-[10px] uppercase tracking-[0.24em] text-[#777]">
+                    <div className="flex items-center justify-between border-t border-[#1a1a2e] pt-4 font-mono text-[10px] uppercase tracking-[0.24em] text-[#555566]">
                       <span>{spotlight.boostedBy.length} boosts</span>
                       <span>{spotlight.bookmarkedBy.length} saves</span>
                     </div>
@@ -416,7 +416,7 @@ export default function SignalsPage() {
 
               <div className="bracket-card rounded-3xl p-6 sm:p-8">
                 <HubBrackets />
-                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#c9a84c]">// compose</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#d4af37]">// compose</p>
                 <h2 className="mt-4 text-3xl font-black uppercase leading-tight">Post a signal</h2>
                 <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
                   <input

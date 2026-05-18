@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { useEffect, useMemo, useState, type CSSProperties } from 'react';
@@ -113,8 +113,8 @@ function WorldBackdrop() {
           <path d="M 72 0 L 0 0 0 72" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
         </pattern>
         <radialGradient id="node-map-glow" cx="50%" cy="35%" r="70%">
-          <stop offset="0%" stopColor="rgba(201,168,76,0.15)" />
-          <stop offset="55%" stopColor="rgba(201,168,76,0.04)" />
+          <stop offset="0%" stopColor="rgba(212, 175, 55,0.15)" />
+          <stop offset="55%" stopColor="rgba(212, 175, 55,0.04)" />
           <stop offset="100%" stopColor="rgba(10,10,10,0)" />
         </radialGradient>
       </defs>
@@ -131,7 +131,7 @@ function WorldBackdrop() {
         <path d="M812 360 L886 370 L918 424 L872 460 L824 436 Z" />
       </g>
 
-      <g opacity="0.22" fill="none" stroke="rgba(201,168,76,0.16)" strokeDasharray="10 16">
+      <g opacity="0.22" fill="none" stroke="rgba(212, 175, 55,0.16)" strokeDasharray="10 16">
         <path d="M0 112 H1000" />
         <path d="M0 224 H1000" />
         <path d="M0 336 H1000" />
@@ -252,12 +252,12 @@ export default function NodeOperatorMapPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
-      <section className="border-b border-[#2a2a2a]/80 bg-[#0a0a0a]/90 backdrop-blur-xl">
+    <main className="min-h-screen bg-[#050508] text-white">
+      <section className="border-b border-[#1a1a2e]/80 bg-[#050508]/90 backdrop-blur-xl">
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           <Link
             href="/node"
-            className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-[#777] transition-colors hover:text-[#c9a84c]"
+            className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-[#555566] transition-colors hover:text-[#d4af37]"
           >
             <ArrowLeft size={14} />
             Node Hub
@@ -266,16 +266,16 @@ export default function NodeOperatorMapPage() {
       </section>
 
       <section className="relative overflow-hidden px-4 py-10 sm:px-6 lg:px-8">
-        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-[#c9a84c]/12 via-[#c9a84c]/6 to-transparent blur-3xl" />
+        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-[#d4af37]/12 via-[#d4af37]/6 to-transparent blur-3xl" />
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
             <div className="space-y-5">
-              <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#e9d39c]">NODE MAP</HubBadge>
+              <HubBadge className="border-[#d4af37]/30 bg-[#d4af37]/10 text-[#e9d39c]">NODE MAP</HubBadge>
               <div className="max-w-4xl">
                 <h1 className="text-4xl font-black uppercase leading-none sm:text-6xl">
                   Node Operator Map
                 </h1>
-                <p className="mt-4 max-w-3xl text-base leading-8 text-[#9a9a9a] sm:text-lg">
+                <p className="mt-4 max-w-3xl text-base leading-8 text-[#8a8a9a] sm:text-lg">
                   See decentralization coverage at a glance with a live mock view of operator uptime,
                   latency, and regional distribution across the Arc network.
                 </p>
@@ -288,12 +288,12 @@ export default function NodeOperatorMapPage() {
                   <Activity size={18} />
                 </span>
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Live pulse</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Live pulse</p>
                   <p className="mt-1 text-2xl font-black">{pulseLabel} UTC</p>
                 </div>
               </div>
               <div className="mt-4 space-y-3">
-                <div className="flex items-center justify-between text-sm text-[#9a9a9a]">
+                <div className="flex items-center justify-between text-sm text-[#8a8a9a]">
                   <span>Deterministic local refresh</span>
                   <span>{Math.floor(NODE_MAP_REFRESH_MS / 1000)}s</span>
                 </div>
@@ -303,13 +303,13 @@ export default function NodeOperatorMapPage() {
                     return (
                       <span
                         key={index}
-                        className={`h-1.5 rounded-full transition-colors ${active ? 'bg-[#c9a84c]' : 'bg-white/10'}`}
+                        className={`h-1.5 rounded-full transition-colors ${active ? 'bg-[#d4af37]' : 'bg-white/10'}`}
                         aria-hidden="true"
                       />
                     );
                   })}
                 </div>
-                <p className="text-xs leading-6 text-[#777]">
+                <p className="text-xs leading-6 text-[#555566]">
                   Pulse changes only through the local interval, so the demo remains deterministic
                   without backend polling.
                 </p>
@@ -347,13 +347,13 @@ export default function NodeOperatorMapPage() {
           <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(360px,0.85fr)]">
             <div className="space-y-6">
               <HubCard className="!overflow-visible p-0">
-                <div className="flex items-center justify-between gap-4 border-b border-[#2a2a2a] px-6 py-5">
+                <div className="flex items-center justify-between gap-4 border-b border-[#1a1a2e] px-6 py-5">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <MapPinned size={16} className="text-[#c9a84c]" />
+                      <MapPinned size={16} className="text-[#d4af37]" />
                       <h2 className="text-lg font-black uppercase tracking-[0.16em]">Global coverage</h2>
                     </div>
-                    <p className="mt-1 text-sm text-[#777]">
+                    <p className="mt-1 text-sm text-[#555566]">
                       {visibleNodes.length.toLocaleString('en-US')} visible operator
                       {visibleNodes.length === 1 ? '' : 's'} of {stats.totalNodes.toLocaleString('en-US')} total
                     </p>
@@ -366,7 +366,7 @@ export default function NodeOperatorMapPage() {
 
                 <div className="relative min-h-[520px]">
                   <WorldBackdrop />
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(201,168,76,0.12),transparent_45%),linear-gradient(180deg,rgba(10,10,10,0.12),rgba(10,10,10,0.45))]" />
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(212, 175, 55,0.12),transparent_45%),linear-gradient(180deg,rgba(10,10,10,0.12),rgba(10,10,10,0.45))]" />
 
                   {visibleNodes.map((node) => {
                     const position = getNodePosition(node);
@@ -391,7 +391,7 @@ export default function NodeOperatorMapPage() {
                         onBlur={() => setHoveredNodeId((current) => (current === node.id ? null : current))}
                         aria-label={`${node.operatorName} in ${node.city}, ${node.country}. ${getNodeStatusLabel(node.status)} node.`}
                         aria-pressed={selected}
-                        className="group absolute z-20 -translate-x-1/2 -translate-y-1/2 rounded-full outline-none transition-transform hover:scale-110 focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                        className="group absolute z-20 -translate-x-1/2 -translate-y-1/2 rounded-full outline-none transition-transform hover:scale-110 focus-visible:ring-2 focus-visible:ring-[#d4af37] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                         style={{ left: `${position.x}%`, top: `${position.y}%` }}
                       >
                         <span
@@ -400,7 +400,7 @@ export default function NodeOperatorMapPage() {
                         />
                         <span
                           className={`relative block rounded-full border border-black/40 ${theme.dot} ${sizeClass} ${
-                            selected ? 'ring-4 ring-[#c9a84c]/30' : ''
+                            selected ? 'ring-4 ring-[#d4af37]/30' : ''
                           }`}
                         />
                       </button>
@@ -412,11 +412,11 @@ export default function NodeOperatorMapPage() {
                       className="pointer-events-none absolute z-30 w-[min(18rem,calc(100%-1rem))]"
                       style={getTooltipStyle(activeTooltipNode)}
                     >
-                      <div className="rounded-3xl border border-[#2a2a2a] bg-[#0a0a0a]/95 p-4 shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl">
+                      <div className="rounded-3xl border border-[#1a1a2e] bg-[#050508]/95 p-4 shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl">
                         <div className="flex items-start justify-between gap-3">
                           <div>
                             <p className="text-sm font-black text-white">{activeTooltipNode.operatorName}</p>
-                            <p className="mt-1 text-[10px] uppercase tracking-[0.24em] text-[#777]">
+                            <p className="mt-1 text-[10px] uppercase tracking-[0.24em] text-[#555566]">
                               {activeTooltipNode.city}, {activeTooltipNode.country}
                             </p>
                           </div>
@@ -426,19 +426,19 @@ export default function NodeOperatorMapPage() {
                         </div>
                         <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
                           <div>
-                            <p className="text-[10px] uppercase tracking-[0.22em] text-[#666]">Uptime</p>
+                            <p className="text-[10px] uppercase tracking-[0.22em] text-[#555566]">Uptime</p>
                             <p className="mt-1 font-black text-white">{formatNodeUptime(activeTooltipNode.uptime)}</p>
                           </div>
                           <div>
-                            <p className="text-[10px] uppercase tracking-[0.22em] text-[#666]">Latency</p>
+                            <p className="text-[10px] uppercase tracking-[0.22em] text-[#555566]">Latency</p>
                             <p className="mt-1 font-black text-white">{formatNodeLatency(activeTooltipNode.avgLatencyMs)}</p>
                           </div>
                           <div>
-                            <p className="text-[10px] uppercase tracking-[0.22em] text-[#666]">Region</p>
+                            <p className="text-[10px] uppercase tracking-[0.22em] text-[#555566]">Region</p>
                             <p className="mt-1 font-black text-white">{getNodeRegionLabel(activeTooltipNode.region)}</p>
                           </div>
                           <div>
-                            <p className="text-[10px] uppercase tracking-[0.22em] text-[#666]">Validator</p>
+                            <p className="text-[10px] uppercase tracking-[0.22em] text-[#555566]">Validator</p>
                             <p className="mt-1 font-black text-white">{getNodeValidatorTypeLabel(activeTooltipNode.validatorType)}</p>
                           </div>
                         </div>
@@ -447,13 +447,13 @@ export default function NodeOperatorMapPage() {
                   ) : null}
                 </div>
 
-                <div className="border-t border-[#2a2a2a] px-6 py-5">
+                <div className="border-t border-[#1a1a2e] px-6 py-5">
                   <div className="flex flex-wrap items-center gap-3">
                     <StatusLegend status="online" label="Online" />
                     <StatusLegend status="degraded" label="Degraded" />
                     <StatusLegend status="offline" label="Offline" />
                   </div>
-                  <p className="mt-3 text-xs leading-6 text-[#777]">
+                  <p className="mt-3 text-xs leading-6 text-[#555566]">
                     Hover or focus a node point for quick details. Click to pin the selection in the
                     side panel.
                   </p>
@@ -463,8 +463,8 @@ export default function NodeOperatorMapPage() {
               <div className="grid gap-6 xl:grid-cols-2">
                 <HubCard className="p-6">
                   <div className="flex items-center gap-2">
-                    <Gauge size={16} className="text-[#c9a84c]" />
-                    <h3 className="text-sm font-black uppercase tracking-[0.18em] text-[#c9a84c]">
+                    <Gauge size={16} className="text-[#d4af37]" />
+                    <h3 className="text-sm font-black uppercase tracking-[0.18em] text-[#d4af37]">
                       Selected operator
                     </h3>
                   </div>
@@ -474,7 +474,7 @@ export default function NodeOperatorMapPage() {
                       <div className="flex items-start justify-between gap-4">
                         <div className="min-w-0">
                           <h4 className="text-2xl font-black">{selectedNode.operatorName}</h4>
-                          <p className="mt-2 text-sm text-[#9a9a9a]">
+                          <p className="mt-2 text-sm text-[#8a8a9a]">
                             {selectedNode.city}, {selectedNode.country} · {getNodeRegionLabel(selectedNode.region)}
                           </p>
                         </div>
@@ -486,25 +486,25 @@ export default function NodeOperatorMapPage() {
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
-                        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] p-4">
+                        <div className="rounded-2xl border border-[#1a1a2e] bg-white/[0.02] p-4">
                           <p className={hubLabelClass}>Validator</p>
                           <p className="mt-2 text-sm font-black text-white">
                             {getNodeValidatorTypeLabel(selectedNode.validatorType)}
                           </p>
                         </div>
-                        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] p-4">
+                        <div className="rounded-2xl border border-[#1a1a2e] bg-white/[0.02] p-4">
                           <p className={hubLabelClass}>Last seen</p>
                           <p className="mt-2 text-sm font-black text-white">
                             {formatNodeLastSeen(selectedNode.lastSeenAt)}
                           </p>
                         </div>
-                        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] p-4">
+                        <div className="rounded-2xl border border-[#1a1a2e] bg-white/[0.02] p-4">
                           <p className={hubLabelClass}>Uptime</p>
                           <p className="mt-2 text-sm font-black text-white">
                             {formatNodeUptime(selectedNode.uptime)}
                           </p>
                         </div>
-                        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] p-4">
+                        <div className="rounded-2xl border border-[#1a1a2e] bg-white/[0.02] p-4">
                           <p className={hubLabelClass}>Latency</p>
                           <p className="mt-2 text-sm font-black text-white">
                             {formatNodeLatency(selectedNode.avgLatencyMs)}
@@ -513,13 +513,13 @@ export default function NodeOperatorMapPage() {
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
-                        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] p-4">
+                        <div className="rounded-2xl border border-[#1a1a2e] bg-white/[0.02] p-4">
                           <p className={hubLabelClass}>Blocks produced</p>
                           <p className="mt-2 text-sm font-black text-white">
                             {selectedNode.blocksProduced.toLocaleString('en-US')}
                           </p>
                         </div>
-                        <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] p-4">
+                        <div className="rounded-2xl border border-[#1a1a2e] bg-white/[0.02] p-4">
                           <p className={hubLabelClass}>Coordinates</p>
                           <p className="mt-2 text-sm font-black text-white">
                             {selectedNode.lat.toFixed(2)}, {selectedNode.lng.toFixed(2)}
@@ -528,7 +528,7 @@ export default function NodeOperatorMapPage() {
                       </div>
                     </div>
                   ) : (
-                    <div className="mt-5 rounded-2xl border border-dashed border-[#2a2a2a] bg-white/[0.015] p-6 text-sm text-[#777]">
+                    <div className="mt-5 rounded-2xl border border-dashed border-[#1a1a2e] bg-white/[0.015] p-6 text-sm text-[#555566]">
                       Select an operator on the map or from the list to pin their live details here.
                     </div>
                   )}
@@ -536,20 +536,20 @@ export default function NodeOperatorMapPage() {
 
                 <HubCard className="p-6">
                   <div className="flex items-center gap-2">
-                    <CircleDot size={16} className="text-[#c9a84c]" />
-                    <h3 className="text-sm font-black uppercase tracking-[0.18em] text-[#c9a84c]">
+                    <CircleDot size={16} className="text-[#d4af37]" />
+                    <h3 className="text-sm font-black uppercase tracking-[0.18em] text-[#d4af37]">
                       Map notes
                     </h3>
                   </div>
-                  <ul className="mt-5 space-y-3 text-sm leading-7 text-[#9a9a9a]">
-                    <li className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
+                  <ul className="mt-5 space-y-3 text-sm leading-7 text-[#8a8a9a]">
+                    <li className="rounded-2xl border border-[#1a1a2e] bg-white/[0.02] px-4 py-3">
                       This view is a mock visualization and does not rely on backend map tiles or
                       geospatial services.
                     </li>
-                    <li className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
+                    <li className="rounded-2xl border border-[#1a1a2e] bg-white/[0.02] px-4 py-3">
                       Node markers are color-coded by status and can be navigated with keyboard focus.
                     </li>
-                    <li className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
+                    <li className="rounded-2xl border border-[#1a1a2e] bg-white/[0.02] px-4 py-3">
                       Filters and sorting only affect local mock state, so the interaction stays fast and
                       deterministic.
                     </li>
@@ -561,8 +561,8 @@ export default function NodeOperatorMapPage() {
             <aside className="space-y-6 lg:sticky lg:top-24">
               <HubCard className="p-6">
                 <div className="flex items-center gap-2">
-                  <Search size={16} className="text-[#c9a84c]" />
-                  <h2 className="text-sm font-black uppercase tracking-[0.18em] text-[#c9a84c]">
+                  <Search size={16} className="text-[#d4af37]" />
+                  <h2 className="text-sm font-black uppercase tracking-[0.18em] text-[#d4af37]">
                     Search and filters
                   </h2>
                 </div>
@@ -593,11 +593,11 @@ export default function NodeOperatorMapPage() {
                         onChange={(event) => setRegion(event.target.value as RegionFilter)}
                         className={`${hubSelectClass} mt-2 w-full`}
                       >
-                        <option value="all" className="bg-[#0a0a0a]">
+                        <option value="all" className="bg-[#050508]">
                           All regions
                         </option>
                         {NODE_MAP_REGIONS.map((item) => (
-                          <option key={item} value={item} className="bg-[#0a0a0a]">
+                          <option key={item} value={item} className="bg-[#050508]">
                             {getNodeRegionLabel(item)}
                           </option>
                         ))}
@@ -614,11 +614,11 @@ export default function NodeOperatorMapPage() {
                         onChange={(event) => setStatus(event.target.value as StatusFilter)}
                         className={`${hubSelectClass} mt-2 w-full`}
                       >
-                        <option value="all" className="bg-[#0a0a0a]">
+                        <option value="all" className="bg-[#050508]">
                           All statuses
                         </option>
                         {NODE_MAP_STATUSES.map((item) => (
-                          <option key={item} value={item} className="bg-[#0a0a0a]">
+                          <option key={item} value={item} className="bg-[#050508]">
                             {getNodeStatusLabel(item)}
                           </option>
                         ))}
@@ -635,11 +635,11 @@ export default function NodeOperatorMapPage() {
                         onChange={(event) => setValidatorType(event.target.value as ValidatorFilter)}
                         className={`${hubSelectClass} mt-2 w-full`}
                       >
-                        <option value="all" className="bg-[#0a0a0a]">
+                        <option value="all" className="bg-[#050508]">
                           All types
                         </option>
                         {NODE_MAP_VALIDATOR_TYPES.map((item) => (
-                          <option key={item} value={item} className="bg-[#0a0a0a]">
+                          <option key={item} value={item} className="bg-[#050508]">
                             {getNodeValidatorTypeLabel(item)}
                           </option>
                         ))}
@@ -656,16 +656,16 @@ export default function NodeOperatorMapPage() {
                         onChange={(event) => setSortBy(event.target.value as SortBy)}
                         className={`${hubSelectClass} mt-2 w-full`}
                       >
-                        <option value="uptime-desc" className="bg-[#0a0a0a]">
+                        <option value="uptime-desc" className="bg-[#050508]">
                           Uptime high to low
                         </option>
-                        <option value="uptime-asc" className="bg-[#0a0a0a]">
+                        <option value="uptime-asc" className="bg-[#050508]">
                           Uptime low to high
                         </option>
-                        <option value="latency-asc" className="bg-[#0a0a0a]">
+                        <option value="latency-asc" className="bg-[#050508]">
                           Latency low to high
                         </option>
-                        <option value="latency-desc" className="bg-[#0a0a0a]">
+                        <option value="latency-desc" className="bg-[#050508]">
                           Latency high to low
                         </option>
                       </select>
@@ -676,7 +676,7 @@ export default function NodeOperatorMapPage() {
                     <button
                       type="button"
                       onClick={resetFilters}
-                      className="inline-flex items-center gap-2 rounded-2xl border border-[#2a2a2a] bg-white/[0.03] px-4 py-2.5 text-xs font-bold uppercase tracking-[0.18em] text-white transition-colors hover:border-[#c9a84c]/40 hover:bg-[#c9a84c]/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                      className="inline-flex items-center gap-2 rounded-2xl border border-[#1a1a2e] bg-white/[0.03] px-4 py-2.5 text-xs font-bold uppercase tracking-[0.18em] text-white transition-colors hover:border-[#d4af37]/40 hover:bg-[#d4af37]/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                     >
                       <RotateCcw size={14} />
                       Reset filters
@@ -689,12 +689,12 @@ export default function NodeOperatorMapPage() {
               <HubCard className="p-6">
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
-                    <SlidersHorizontal size={16} className="text-[#c9a84c]" />
-                    <h2 className="text-sm font-black uppercase tracking-[0.18em] text-[#c9a84c]">
+                    <SlidersHorizontal size={16} className="text-[#d4af37]" />
+                    <h2 className="text-sm font-black uppercase tracking-[0.18em] text-[#d4af37]">
                       Node list
                     </h2>
                   </div>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                     {visibleNodes.length.toLocaleString('en-US')} shown
                   </span>
                 </div>
@@ -709,7 +709,7 @@ export default function NodeOperatorMapPage() {
                     <button
                       type="button"
                       onClick={resetFilters}
-                      className="inline-flex items-center gap-2 rounded-2xl border border-[#2a2a2a] bg-white/[0.03] px-4 py-2.5 text-xs font-bold uppercase tracking-[0.18em] text-white transition-colors hover:border-[#c9a84c]/40 hover:bg-[#c9a84c]/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                      className="inline-flex items-center gap-2 rounded-2xl border border-[#1a1a2e] bg-white/[0.03] px-4 py-2.5 text-xs font-bold uppercase tracking-[0.18em] text-white transition-colors hover:border-[#d4af37]/40 hover:bg-[#d4af37]/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                     >
                       <RotateCcw size={14} />
                       Clear filters
@@ -731,10 +731,10 @@ export default function NodeOperatorMapPage() {
                           onFocus={() => setHoveredNodeId(node.id)}
                           onBlur={() => setHoveredNodeId((current) => (current === node.id ? null : current))}
                           aria-pressed={selected}
-                          className={`w-full rounded-2xl border p-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
+                          className={`w-full rounded-2xl border p-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37] focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
                             selected
-                              ? 'border-[#c9a84c]/40 bg-[#c9a84c]/8'
-                              : 'border-[#2a2a2a] bg-white/[0.02] hover:border-[#c9a84c]/30 hover:bg-white/[0.03]'
+                              ? 'border-[#d4af37]/40 bg-[#d4af37]/8'
+                              : 'border-[#1a1a2e] bg-white/[0.02] hover:border-[#d4af37]/30 hover:bg-white/[0.03]'
                           }`}
                         >
                           <div className="flex items-start justify-between gap-3">
@@ -743,11 +743,11 @@ export default function NodeOperatorMapPage() {
                                 <span className={`h-2.5 w-2.5 rounded-full ${theme.dot}`} aria-hidden="true" />
                                 <span className="font-black text-white">{node.operatorName}</span>
                               </div>
-                              <p className="mt-2 text-sm text-[#9a9a9a]">
+                              <p className="mt-2 text-sm text-[#8a8a9a]">
                                 {node.city}, {node.country} · {getNodeRegionLabel(node.region)}
                               </p>
                             </div>
-                            <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#777]">
+                            <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#555566]">
                               #{String(index + 1).padStart(2, '0')}
                             </span>
                           </div>
@@ -760,7 +760,7 @@ export default function NodeOperatorMapPage() {
                             <HubBadge>{formatNodeUptime(node.uptime)}</HubBadge>
                           </div>
 
-                          <div className="mt-4 grid grid-cols-2 gap-3 text-xs text-[#9a9a9a]">
+                          <div className="mt-4 grid grid-cols-2 gap-3 text-xs text-[#8a8a9a]">
                             <div>
                               <p className={hubLabelClass}>Latency</p>
                               <p className="mt-1 font-black text-white">{formatNodeLatency(node.avgLatencyMs)}</p>

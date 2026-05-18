@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
@@ -79,25 +79,25 @@ export default function RaceHistoryPage() {
   };
 
   return (
-    <main className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white">
+    <main className="min-h-screen overflow-x-clip bg-[#050508] text-white">
       <SiteHeader />
 
       <section className="section pt-32 sm:pt-36">
         <div className="mx-auto max-w-7xl">
-          <Link href="/race" className="mb-8 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[#777] transition-colors hover:text-[#c9a84c]">
+          <Link href="/race" className="mb-8 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[#555566] transition-colors hover:text-[#d4af37]">
             <ArrowLeft size={14} aria-hidden="true" />
             Back to Hub
           </Link>
 
           <div className="space-y-5">
             <div className="flex flex-wrap items-center gap-2">
-              <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">// archives</HubBadge>
+              <HubBadge className="border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]">// archives</HubBadge>
               <HubBadge className="border-[#30d158]/30 bg-[#30d158]/10 text-[#a6f4bf]">{filteredRaces.length} filtered results</HubBadge>
             </div>
             <h1 className="max-w-4xl text-4xl font-black uppercase leading-tight sm:text-5xl lg:text-6xl">
               Race history with stable winner records, prize totals, and archive filters.
             </h1>
-            <p className="max-w-3xl text-base leading-7 text-[#9a9a9a] sm:text-lg">
+            <p className="max-w-3xl text-base leading-7 text-[#8a8a9a] sm:text-lg">
               Review ended competitions across categories and years. Filters combine cleanly, and winner and prize formatting stays consistent across the archive.
             </p>
           </div>
@@ -181,7 +181,7 @@ export default function RaceHistoryPage() {
                 <div className="overflow-x-auto">
                   <table className="min-w-[840px] w-full border-collapse text-left">
                     <thead>
-                      <tr className="border-b border-[#2a2a2a] text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">
+                      <tr className="border-b border-[#1a1a2e] text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">
                         <th scope="col" className="px-6 py-4">
                           Date
                         </th>
@@ -207,11 +207,11 @@ export default function RaceHistoryPage() {
                         const winner = getRaceWinner(race);
                         return (
                           <tr key={race.id} className="transition-colors hover:bg-white/[0.02]">
-                            <td className="px-6 py-4 text-sm text-[#9a9a9a]">{formatRaceDate(race.endDate)}</td>
+                            <td className="px-6 py-4 text-sm text-[#8a8a9a]">{formatRaceDate(race.endDate)}</td>
                             <td className="px-6 py-4">
                               <div className="min-w-0">
                                 <div className="text-sm font-semibold text-white">{race.title}</div>
-                                <div className="mt-1 max-w-[32rem] truncate text-xs text-[#777]">{race.description}</div>
+                                <div className="mt-1 max-w-[32rem] truncate text-xs text-[#555566]">{race.description}</div>
                               </div>
                             </td>
                             <td className="px-6 py-4">
@@ -221,24 +221,24 @@ export default function RaceHistoryPage() {
                               {winner ? (
                                 <div className="min-w-0">
                                   <div className="text-sm font-semibold text-white">{winner.name ?? formatRaceAddress(winner.address)}</div>
-                                  <div className="mt-1 truncate text-[10px] font-mono uppercase tracking-[0.18em] text-[#777]">
+                                  <div className="mt-1 truncate text-[10px] font-mono uppercase tracking-[0.18em] text-[#555566]">
                                     {winner.address}
                                   </div>
                                 </div>
                               ) : (
-                                <span className="text-sm text-[#777]">No winner recorded</span>
+                                <span className="text-sm text-[#555566]">No winner recorded</span>
                               )}
                             </td>
                             <td className="px-6 py-4">
-                              <div className="text-sm font-black text-[#c9a84c]">{formatRacePrize(race.prizes[0] ?? 0)}</div>
-                              <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-[#777]">
+                              <div className="text-sm font-black text-[#d4af37]">{formatRacePrize(race.prizes[0] ?? 0)}</div>
+                              <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-[#555566]">
                                 {race.participants.length} participants
                               </div>
                             </td>
                             <td className="px-6 py-4 text-right">
                               <Link
                                 href={`/race/${race.id}`}
-                                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#2a2a2a] text-[#9a9a9a] transition-colors hover:border-[#c9a84c]/50 hover:text-[#c9a84c]"
+                                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#1a1a2e] text-[#8a8a9a] transition-colors hover:border-[#d4af37]/50 hover:text-[#d4af37]"
                                 aria-label={`Open ${race.title}`}
                               >
                                 <ChevronRight size={16} aria-hidden="true" />

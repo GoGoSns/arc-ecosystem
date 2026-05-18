@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import type { ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
@@ -6,19 +6,19 @@ import type { LucideIcon } from 'lucide-react';
 type CardTag = 'div' | 'article' | 'section' | 'aside';
 
 const surfaceClass =
-  'bracket-card group relative overflow-hidden rounded-[var(--radius-card)] border border-[#2a2a2a]/95 bg-[linear-gradient(135deg,rgba(201,168,76,0.06),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.012))] shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-[border-color,box-shadow,transform] duration-300 ease-out hover:-translate-y-1.5 hover:border-[#c9a84c]/30 hover:shadow-[0_28px_88px_rgba(0,0,0,0.4),0_0_0_1px_rgba(201,168,76,0.12),0_20px_60px_rgba(201,168,76,0.12)] focus-within:border-[#c9a84c]/30 focus-within:shadow-[0_28px_88px_rgba(0,0,0,0.4),0_0_0_1px_rgba(201,168,76,0.12),0_20px_60px_rgba(201,168,76,0.12)]';
+  'bracket-card group relative overflow-hidden rounded-[var(--radius-card)] border border-[#1a1a2e]/95 bg-[linear-gradient(135deg,rgba(212, 175, 55,0.06),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.012))] shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-[border-color,box-shadow,transform] duration-300 ease-out hover:-translate-y-1.5 hover:border-[#d4af37]/30 hover:shadow-[0_28px_88px_rgba(0,0,0,0.4),0_0_0_1px_rgba(212, 175, 55,0.12),0_20px_60px_rgba(212, 175, 55,0.12)] focus-within:border-[#d4af37]/30 focus-within:shadow-[0_28px_88px_rgba(0,0,0,0.4),0_0_0_1px_rgba(212, 175, 55,0.12),0_20px_60px_rgba(212, 175, 55,0.12)]';
 
 export const hubInputClass =
-  'rounded-2xl border border-[#2a2a2a] bg-black/35 px-4 py-3 text-sm text-white outline-none transition-[border-color,box-shadow,background-color] duration-200 placeholder:text-[#4e4e4e] focus:border-[#c9a84c]/70 focus:bg-black/45 focus:ring-2 focus:ring-[#c9a84c]/20';
+  'rounded-2xl border border-[#1a1a2e] bg-black/35 px-4 py-3 text-sm text-white outline-none transition-[border-color,box-shadow,background-color] duration-200 placeholder:text-[#4e4e4e] focus:border-[#d4af37]/70 focus:bg-black/45 focus:ring-2 focus:ring-[#d4af37]/20';
 
 export const hubSelectClass = `${hubInputClass} uppercase tracking-[0.14em]`;
 
 export const hubTextareaClass = `${hubInputClass} min-h-[120px] resize-y`;
 
-export const hubLabelClass = 'font-mono text-[10px] uppercase tracking-[0.3em] text-[#8a8a8a]';
+export const hubLabelClass = 'font-mono text-[10px] uppercase tracking-[0.3em] text-[#8a8a9a]';
 
 export const hubBadgeClass =
-  'inline-flex items-center gap-1 rounded-full border border-[#2a2a2a]/95 bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#cfcfcf] backdrop-blur-sm';
+  'inline-flex items-center gap-1 rounded-full border border-[#1a1a2e]/95 bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#cfcfcf] backdrop-blur-sm';
 
 export function HubBadge({
   children,
@@ -71,8 +71,8 @@ export function HubMetricCard({
 }) {
   return (
     <HubCard className={`p-5 ${className}`.trim()}>
-      <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.26em] text-[#8a8a8a]">
-        <Icon size={14} className="text-[#c9a84c]" />
+      <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.26em] text-[#8a8a9a]">
+        <Icon size={14} className="text-[#d4af37]" />
         {label}
       </div>
       <div className="mt-3 text-[clamp(1.95rem,3vw,2.8rem)] font-black leading-none tracking-tight text-white">{value}</div>
@@ -100,15 +100,15 @@ export function HubEmptyState({
   return (
     <div
       className={`relative overflow-hidden rounded-3xl border border-dashed ${
-        isError ? 'border-red-500/25 bg-red-500/10 text-red-200' : 'border-[#2a2a2a] bg-white/[0.015] text-[#777]'
+        isError ? 'border-red-500/25 bg-red-500/10 text-red-200' : 'border-[#1a1a2e] bg-white/[0.015] text-[#555566]'
       } p-10 text-center ${className}`.trim()}
       role={isError ? 'alert' : 'status'}
       aria-live={isError ? 'assertive' : 'polite'}
     >
       <HubBrackets />
-      <Icon size={42} className={`mx-auto ${isError ? 'text-red-300' : 'text-[#333]'}`} aria-hidden="true" />
+      <Icon size={42} className={`mx-auto ${isError ? 'text-red-300' : 'text-[#1a1a2e]'}`} aria-hidden="true" />
       <h3 className={`mt-5 text-2xl font-black ${isError ? 'text-red-50' : 'text-white'}`}>{title}</h3>
-      <p className={`mx-auto mt-2 max-w-xl text-sm leading-7 ${isError ? 'text-red-100/80' : 'text-[#9a9a9a]'}`}>{description}</p>
+      <p className={`mx-auto mt-2 max-w-xl text-sm leading-7 ${isError ? 'text-red-100/80' : 'text-[#8a8a9a]'}`}>{description}</p>
       {children ? <div className="mt-6 flex flex-wrap justify-center gap-3">{children}</div> : null}
     </div>
   );

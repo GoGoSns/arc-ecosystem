@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { MessageSquare, X, Send, Bot, Loader2, Mic, MicOff, Volume2, VolumeX } from 'lucide-react';
@@ -253,7 +253,7 @@ export default function AssistantWidget() {
           aria-modal="false"
           aria-labelledby={titleId}
           className="mb-4 flex h-[500px] w-[350px] flex-col overflow-hidden rounded-2xl border border-[var(--border)] shadow-2xl animate-in slide-in-from-bottom-4 duration-300 md:w-[400px]"
-          style={{ background: 'var(--bg)', backgroundColor: '#0a0a0a' }}
+          style={{ background: 'var(--bg)', backgroundColor: '#050508' }}
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-[var(--border)] bg-zinc-900 p-4">

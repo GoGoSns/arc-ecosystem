@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -23,7 +23,7 @@ const TOOLS = [
     description: "Total USDC value of tokens & NFTs in any wallet. Live data from Arc Testnet.",
     icon: Coins,
     href: "/value/portfolio",
-    color: "#c9a84c", // Gold
+    color: "#d4af37", // Gold
     tag: "LIVE DATA",
   },
   {
@@ -49,7 +49,7 @@ const RECENT_LOOKUPS = [
   { address: '0xPunk.eth', score: 945, tier: 'Diamond', color: '#b9f2ff' },
   { address: '0xBuilder.eth', score: 876, tier: 'Platinum', color: '#e5e4e2' },
   { address: '0xTrader.eth', score: 723, tier: 'Platinum', color: '#e5e4e2' },
-  { address: '0xCollector.eth', score: 654, tier: 'Gold', color: '#c9a84c' },
+  { address: '0xCollector.eth', score: 654, tier: 'Gold', color: '#d4af37' },
 ];
 
 export default function ValueHub() {
@@ -64,17 +64,17 @@ export default function ValueHub() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-[#c9a84c]/30">
+    <div className="min-h-screen bg-black text-white selection:bg-[#d4af37]/30">
       {/* Background Decor */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-[#c9a84c]/5 blur-[120px] rounded-full" />
-        <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-[#c9a84c]/5 blur-[120px] rounded-full" />
+        <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-[#d4af37]/5 blur-[120px] rounded-full" />
+        <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-[#d4af37]/5 blur-[120px] rounded-full" />
       </div>
 
       <div className="relative max-w-6xl mx-auto px-6 pt-32 pb-20">
         <Link 
           href="/" 
-          className="inline-flex items-center gap-2 text-[#555] hover:text-[#c9a84c] transition-colors mb-12 group"
+          className="inline-flex items-center gap-2 text-[#555566] hover:text-[#d4af37] transition-colors mb-12 group"
         >
           <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
           <span className="font-mono text-xs tracking-widest">BACK TO ECOSYSTEM</span>
@@ -83,41 +83,41 @@ export default function ValueHub() {
         {/* Hero Section */}
         <div className="text-center mb-20">
           <h1 className="text-6xl sm:text-7xl font-black mb-6 tracking-tighter">
-            ARC <span className="text-[#c9a84c]">VALUE</span>
+            ARC <span className="text-[#d4af37]">VALUE</span>
           </h1>
-          <p className="text-xl text-[#888] max-w-2xl mx-auto mb-12 leading-relaxed">
+          <p className="text-xl text-[#8a8a9a] max-w-2xl mx-auto mb-12 leading-relaxed">
             Discover what your wallet is worth on Arc Network. 
             Track activity, value portfolios, and price services.
           </p>
 
           <form onSubmit={handleSearch} className="max-w-2xl mx-auto relative group" role="search" aria-label="Search Arc wallet values">
-            <div className="absolute inset-0 bg-[#c9a84c]/20 blur-2xl group-focus-within:bg-[#c9a84c]/30 transition-all duration-500 rounded-full" />
+            <div className="absolute inset-0 bg-[#d4af37]/20 blur-2xl group-focus-within:bg-[#d4af37]/30 transition-all duration-500 rounded-full" />
             <div className="relative flex items-center bg-zinc-900/80 border border-white/10 rounded-2xl p-2 backdrop-blur-xl">
-              <div className="pl-4 pr-2 text-[#555]">
+              <div className="pl-4 pr-2 text-[#555566]">
                 <Search size={20} />
               </div>
               <input
                 type="text"
                 aria-label="Search wallet address or ENS name"
                 placeholder="Enter wallet address or ENS name"
-                className="w-full bg-transparent border-none outline-none py-4 text-lg font-medium placeholder:text-[#333]"
+                className="w-full bg-transparent border-none outline-none py-4 text-lg font-medium placeholder:text-[#1a1a2e]"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
               <button
                 type="submit"
                 aria-label="Lookup wallet"
-                className="bg-[#c9a84c] hover:bg-[#d4b96a] text-black font-bold px-8 py-4 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="bg-[#d4af37] hover:bg-[#d4b96a] text-black font-bold px-8 py-4 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 LOOKUP
               </button>
             </div>
             <div className="mt-4 flex justify-center gap-4 text-sm">
-              <span className="text-[#555]">Or try:</span>
+              <span className="text-[#555566]">Or try:</span>
               <button 
                 type="button"
                 onClick={() => setSearch('0xB87B774a5b3D77E13a89C68F62810D5a23404365')}
-                className="text-[#888] hover:text-[#c9a84c] transition-colors underline decoration-[#333] underline-offset-4"
+                className="text-[#8a8a9a] hover:text-[#d4af37] transition-colors underline decoration-[#333] underline-offset-4"
               >
                 Use my wallet
               </button>
@@ -131,10 +131,10 @@ export default function ValueHub() {
             <Link 
               key={tool.title}
               href={tool.href}
-              className="group relative rounded-3xl p-8 bg-white/[0.02] border border-white/[0.05] hover:border-[#c9a84c]/30 transition-all duration-500 overflow-hidden"
+              className="group relative rounded-3xl p-8 bg-white/[0.02] border border-white/[0.05] hover:border-[#d4af37]/30 transition-all duration-500 overflow-hidden"
             >
               <div className="absolute top-0 right-0 p-4">
-                <div className="px-3 py-1 rounded-full bg-black/50 border border-white/10 text-[10px] font-bold tracking-widest text-[#555] group-hover:text-[#c9a84c] transition-colors">
+                <div className="px-3 py-1 rounded-full bg-black/50 border border-white/10 text-[10px] font-bold tracking-widest text-[#555566] group-hover:text-[#d4af37] transition-colors">
                   {tool.tag}
                 </div>
               </div>
@@ -143,9 +143,9 @@ export default function ValueHub() {
                 <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500" style={{ background: `${tool.color}15`, border: `1px solid ${tool.color}30` }}>
                   <tool.icon size={28} style={{ color: tool.color }} />
                 </div>
-                <h3 className="text-2xl font-black mb-3 group-hover:text-[#c9a84c] transition-colors">{tool.title}</h3>
-                <p className="text-[#888] leading-relaxed mb-6">{tool.description}</p>
-                <div className="flex items-center gap-2 text-sm font-bold tracking-widest text-[#555] group-hover:text-white transition-colors">
+                <h3 className="text-2xl font-black mb-3 group-hover:text-[#d4af37] transition-colors">{tool.title}</h3>
+                <p className="text-[#8a8a9a] leading-relaxed mb-6">{tool.description}</p>
+                <div className="flex items-center gap-2 text-sm font-bold tracking-widest text-[#555566] group-hover:text-white transition-colors">
                   LAUNCH TOOL <ArrowRight size={16} />
                 </div>
               </div>
@@ -161,9 +161,9 @@ export default function ValueHub() {
           <div className="flex items-center justify-between mb-10">
             <div>
               <h2 className="text-2xl font-black mb-1">RECENT LOOKUPS</h2>
-              <p className="text-sm text-[#555]">High-scoring wallets on Arc Network</p>
+              <p className="text-sm text-[#555566]">High-scoring wallets on Arc Network</p>
             </div>
-            <Award className="text-[#c9a84c]" size={32} />
+            <Award className="text-[#d4af37]" size={32} />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -171,14 +171,14 @@ export default function ValueHub() {
               <Link 
                 key={item.address}
                 href={`/value/${item.address}`}
-                className="p-4 rounded-2xl bg-black/40 border border-white/5 hover:border-[#c9a84c]/20 hover:bg-[#c9a84c]/5 transition-all group text-center"
+                className="p-4 rounded-2xl bg-black/40 border border-white/5 hover:border-[#d4af37]/20 hover:bg-[#d4af37]/5 transition-all group text-center"
               >
-                <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center bg-white/5 group-hover:bg-[#c9a84c]/20 transition-colors">
+                <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center bg-white/5 group-hover:bg-[#d4af37]/20 transition-colors">
                   <Gem size={20} style={{ color: item.color }} />
                 </div>
                 <div className="font-mono text-xs mb-2 text-white/80">{item.address}</div>
                 <div className="text-xl font-black mb-1" style={{ color: item.color }}>{item.score}</div>
-                <div className="text-[10px] font-bold tracking-tighter text-[#555] group-hover:text-white transition-colors uppercase">
+                <div className="text-[10px] font-bold tracking-tighter text-[#555566] group-hover:text-white transition-colors uppercase">
                   {item.tier} Tier
                 </div>
               </Link>

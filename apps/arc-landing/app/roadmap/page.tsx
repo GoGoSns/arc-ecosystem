@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
@@ -51,8 +51,8 @@ function StatCard({ label, value, icon: Icon }: { label: string, value: number, 
   return (
     <div className="rounded-2xl p-6 bg-white/[0.02] border border-white/[0.05]">
       <div className="flex items-center gap-2 mb-2">
-        <Icon size={14} className="text-[#c9a84c]" />
-        <span className="text-[10px] text-[#555] uppercase tracking-widest font-mono">{label}</span>
+        <Icon size={14} className="text-[#d4af37]" />
+        <span className="text-[10px] text-[#555566] uppercase tracking-widest font-mono">{label}</span>
       </div>
       <div className="text-3xl font-black text-white">{value}</div>
     </div>
@@ -188,15 +188,15 @@ export default function RoadmapPage() {
   };
 
   return (
-    <div className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white pb-20">
+    <div className="min-h-screen overflow-x-clip bg-[#050508] text-white pb-20">
       <SiteHeader />
 
       <div className="mx-auto max-w-6xl px-4 py-16">
         {/* Hero */}
         <div className="text-center mb-16">
-          <p className="font-mono text-xs uppercase tracking-[0.35em] text-[#c9a84c] mb-4">The Future of Arc</p>
+          <p className="font-mono text-xs uppercase tracking-[0.35em] text-[#d4af37] mb-4">The Future of Arc</p>
           <h1 className="text-5xl sm:text-7xl font-black mb-6 uppercase">Arc Roadmap</h1>
-          <p className="text-[#9a9a9a] text-lg max-w-2xl mx-auto">
+          <p className="text-[#8a8a9a] text-lg max-w-2xl mx-auto">
             Where we're heading. Vote on what matters to you and help shape the USDC economy.
           </p>
         </div>
@@ -214,14 +214,14 @@ export default function RoadmapPage() {
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {/* Quarter Filter */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-[9px] uppercase tracking-widest text-[#555] font-bold flex items-center gap-1">
+              <label className="text-[9px] uppercase tracking-widest text-[#555566] font-bold flex items-center gap-1">
                 <Calendar size={10} /> Quarter
               </label>
               <select 
                 aria-label="Filter roadmap by quarter"
                 value={quarterFilter}
                 onChange={(e) => setQuarterFilter(e.target.value as any)}
-                className="min-h-12 w-full bg-[#111] border border-[#2a2a2a] rounded-lg px-3 py-3 text-xs text-[#aaa] focus:outline-none focus:border-[#c9a84c]/50 appearance-none"
+                className="min-h-12 w-full bg-[#0d0d12] border border-[#1a1a2e] rounded-lg px-3 py-3 text-xs text-[#8a8a9a] focus:outline-none focus:border-[#d4af37]/50 appearance-none"
               >
                 <option value="All">All Quarters</option>
                 {QUARTERS.map(q => <option key={q} value={q}>{q}</option>)}
@@ -230,14 +230,14 @@ export default function RoadmapPage() {
 
             {/* Status Filter */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-[9px] uppercase tracking-widest text-[#555] font-bold flex items-center gap-1">
+              <label className="text-[9px] uppercase tracking-widest text-[#555566] font-bold flex items-center gap-1">
                 <Filter size={10} /> Status
               </label>
               <select 
                 aria-label="Filter roadmap by status"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value as any)}
-                className="min-h-12 w-full bg-[#111] border border-[#2a2a2a] rounded-lg px-3 py-3 text-xs text-[#aaa] focus:outline-none focus:border-[#c9a84c]/50 appearance-none"
+                className="min-h-12 w-full bg-[#0d0d12] border border-[#1a1a2e] rounded-lg px-3 py-3 text-xs text-[#8a8a9a] focus:outline-none focus:border-[#d4af37]/50 appearance-none"
               >
                 <option value="All">All Statuses</option>
                 {STATUSES.map(s => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
@@ -246,14 +246,14 @@ export default function RoadmapPage() {
 
             {/* Category Filter */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-[9px] uppercase tracking-widest text-[#555] font-bold flex items-center gap-1">
+              <label className="text-[9px] uppercase tracking-widest text-[#555566] font-bold flex items-center gap-1">
                 <Layers size={10} /> Category
               </label>
               <select 
                 aria-label="Filter roadmap by category"
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value as any)}
-                className="min-h-12 w-full bg-[#111] border border-[#2a2a2a] rounded-lg px-3 py-3 text-xs text-[#aaa] focus:outline-none focus:border-[#c9a84c]/50 appearance-none"
+                className="min-h-12 w-full bg-[#0d0d12] border border-[#1a1a2e] rounded-lg px-3 py-3 text-xs text-[#8a8a9a] focus:outline-none focus:border-[#d4af37]/50 appearance-none"
               >
                 <option value="All">All Categories</option>
                 {CATEGORIES.map(c => <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
@@ -262,17 +262,17 @@ export default function RoadmapPage() {
           </div>
 
           <div className="flex flex-col gap-1.5 xl:items-end">
-            <label className="text-[9px] uppercase tracking-widest text-[#555] font-bold flex items-center gap-1">
+            <label className="text-[9px] uppercase tracking-widest text-[#555566] font-bold flex items-center gap-1">
               <SortAsc size={10} /> Sort By
             </label>
-            <div className="flex w-full max-w-full border border-[#2a2a2a] rounded-lg overflow-hidden">
+            <div className="flex w-full max-w-full border border-[#1a1a2e] rounded-lg overflow-hidden">
               {(['quarter', 'votes', 'newest'] as const).map((sort) => (
                 <button
                   type="button"
                   key={sort}
                   onClick={() => setSortBy(sort)}
                   aria-pressed={sortBy === sort}
-                  className={`min-h-11 px-3 sm:px-4 py-2 text-[10px] uppercase font-bold tracking-wider transition-colors ${sortBy === sort ? 'bg-[#c9a84c] text-black' : 'bg-[#111] text-[#777] hover:text-white'}`}
+                  className={`min-h-11 px-3 sm:px-4 py-2 text-[10px] uppercase font-bold tracking-wider transition-colors ${sortBy === sort ? 'bg-[#d4af37] text-black' : 'bg-[#0d0d12] text-[#555566] hover:text-white'}`}
                 >
                   {sort}
                 </button>
@@ -290,7 +290,7 @@ export default function RoadmapPage() {
               aria-haspopup="dialog"
               aria-expanded={showAddModal}
               aria-controls="roadmap-add-modal"
-              className="flex min-h-12 items-center gap-2 bg-[#c9a84c] px-6 py-3 font-black text-black rounded-xl hover:scale-105 transition-transform"
+              className="flex min-h-12 items-center gap-2 bg-[#d4af37] px-6 py-3 font-black text-black rounded-xl hover:scale-105 transition-transform"
             >
               <Plus size={18} /> ADD NEW ITEM
             </button>
@@ -322,7 +322,7 @@ export default function RoadmapPage() {
         ) : null}
         <div className="relative">
           {/* Vertical Line */}
-          <div className="absolute left-[15px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-[#c9a84c]/50 via-[#2a2a2a] to-transparent hidden md:block" />
+          <div className="absolute left-[15px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-[#d4af37]/50 via-[#2a2a2a] to-transparent hidden md:block" />
 
           <div className="space-y-24">
             {QUARTERS.map((quarter) => {
@@ -334,8 +334,8 @@ export default function RoadmapPage() {
                 <div key={quarter} className="relative pl-0 md:pl-16">
                   {/* Quarter Marker */}
                   <div className="absolute left-0 top-[2px] hidden md:flex items-center justify-center">
-                    <div className="h-8 w-8 rounded-full bg-[#0a0a0a] border-2 border-[#c9a84c] flex items-center justify-center z-10">
-                      <div className="h-2 w-2 rounded-full bg-[#c9a84c]" />
+                    <div className="h-8 w-8 rounded-full bg-[#050508] border-2 border-[#d4af37] flex items-center justify-center z-10">
+                      <div className="h-2 w-2 rounded-full bg-[#d4af37]" />
                     </div>
                   </div>
 
@@ -343,7 +343,7 @@ export default function RoadmapPage() {
                     <h2 className="text-2xl font-black uppercase tracking-widest flex items-center gap-4">
                       {quarter.replace('-', ' ')}
                       <span className="h-[2px] flex-1 bg-[#2a2a2a]" />
-                      <span className="text-[#555] text-xs font-mono font-normal normal-case">
+                      <span className="text-[#555566] text-xs font-mono font-normal normal-case">
                         {quarter === 'Q1-2026' ? 'Foundation' : quarter === 'Q2-2026' ? 'Expansion' : quarter === 'Q3-2026' ? 'Governance' : 'Maturity'}
                       </span>
                     </h2>
@@ -351,7 +351,7 @@ export default function RoadmapPage() {
 
                   <div className="grid gap-6">
                     {itemsInQuarter.map((item) => (
-                      <div key={item.id} className="group relative bg-white/[0.02] border border-white/[0.05] rounded-3xl p-6 md:p-8 hover:bg-white/[0.04] transition-all hover:border-[#c9a84c]/20">
+                      <div key={item.id} className="group relative bg-white/[0.02] border border-white/[0.05] rounded-3xl p-6 md:p-8 hover:bg-white/[0.04] transition-all hover:border-[#d4af37]/20">
                         <div className="flex flex-col md:flex-row gap-6 md:items-start justify-between">
                           <div className="flex-1 space-y-4">
                             <div className="flex flex-wrap gap-2">
@@ -359,8 +359,8 @@ export default function RoadmapPage() {
                               <CategoryBadge category={item.category} />
                             </div>
                             <div>
-                              <h3 className="text-2xl font-bold mb-2 group-hover:text-[#c9a84c] transition-colors">{item.title}</h3>
-                              <p className="text-[#777] text-sm leading-relaxed max-w-2xl line-clamp-2 group-hover:line-clamp-none transition-all duration-500">
+                              <h3 className="text-2xl font-bold mb-2 group-hover:text-[#d4af37] transition-colors">{item.title}</h3>
+                              <p className="text-[#555566] text-sm leading-relaxed max-w-2xl line-clamp-2 group-hover:line-clamp-none transition-all duration-500">
                                 {item.description}
                               </p>
                             </div>
@@ -378,7 +378,7 @@ export default function RoadmapPage() {
                                     : `Vote for ${item.title}`
                                   : `Connect wallet to vote on ${item.title}`
                               }
-                              className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-black text-xs transition-all ${item.votes.includes(address || '') ? 'bg-[#c9a84c] text-black' : 'bg-[#1a1a1a] text-[#aaa] hover:bg-[#2a2a2a]'}`}
+                              className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-black text-xs transition-all ${item.votes.includes(address || '') ? 'bg-[#d4af37] text-black' : 'bg-[#0d0d12] text-[#8a8a9a] hover:bg-[#2a2a2a]'}`}
                             >
                               <ThumbsUp size={14} />
                               {item.votes.length}
@@ -389,11 +389,11 @@ export default function RoadmapPage() {
                                   aria-label={`Update ${item.title} status`}
                                   value={item.status}
                                   onChange={(e) => updateStatus(item.id, e.target.value as RoadmapStatus)}
-                                  className="appearance-none bg-[#111] border border-[#2a2a2a] text-[10px] font-bold uppercase px-4 py-2 rounded-xl text-[#777] cursor-pointer hover:border-[#c9a84c]/50 focus:outline-none"
+                                  className="appearance-none bg-[#0d0d12] border border-[#1a1a2e] text-[10px] font-bold uppercase px-4 py-2 rounded-xl text-[#555566] cursor-pointer hover:border-[#d4af37]/50 focus:outline-none"
                                 >
                                   {STATUSES.map(s => <option key={s} value={s}>{s.toUpperCase()}</option>)}
                                 </select>
-                                <ChevronDown size={10} className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#555]" />
+                                <ChevronDown size={10} className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#555566]" />
                               </div>
                             )}
                           </div>
@@ -421,52 +421,52 @@ export default function RoadmapPage() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="roadmap-add-modal-title"
-            className="max-h-[calc(100vh-2rem)] w-full max-w-lg overflow-y-auto rounded-3xl border border-[#2a2a2a] bg-[#111] p-8"
+            className="max-h-[calc(100vh-2rem)] w-full max-w-lg overflow-y-auto rounded-3xl border border-[#1a1a2e] bg-[#0d0d12] p-8"
           >
             <h3 id="roadmap-add-modal-title" className="text-2xl font-black mb-6">ADD ROADMAP ITEM</h3>
             <form onSubmit={handleAddItem} className="space-y-4">
               <div>
-                <label className="text-[10px] uppercase font-bold text-[#555] mb-1 block">Title</label>
+                <label className="text-[10px] uppercase font-bold text-[#555566] mb-1 block">Title</label>
                 <input 
                   value={newTitle}
                   onChange={e => setNewTitle(e.target.value)}
-                  className="w-full bg-black border border-[#2a2a2a] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#c9a84c]/50"
+                  className="w-full bg-black border border-[#1a1a2e] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]/50"
                   placeholder="Feature Name"
                 />
               </div>
               <div>
-                <label className="text-[10px] uppercase font-bold text-[#555] mb-1 block">Description</label>
+                <label className="text-[10px] uppercase font-bold text-[#555566] mb-1 block">Description</label>
                 <textarea 
                   value={newDesc}
                   onChange={e => setNewDesc(e.target.value)}
-                  className="w-full bg-black border border-[#2a2a2a] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#c9a84c]/50 min-h-[100px]"
+                  className="w-full bg-black border border-[#1a1a2e] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]/50 min-h-[100px]"
                   placeholder="Detailed description..."
                 />
               </div>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="text-[10px] uppercase font-bold text-[#555] mb-1 block">Quarter</label>
+                  <label className="text-[10px] uppercase font-bold text-[#555566] mb-1 block">Quarter</label>
                   <select 
                     value={newQuarter}
                     onChange={e => setNewQuarter(e.target.value as any)}
-                    className="w-full bg-black border border-[#2a2a2a] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#c9a84c]/50"
+                    className="w-full bg-black border border-[#1a1a2e] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]/50"
                   >
                     {QUARTERS.map(q => <option key={q} value={q}>{q}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="text-[10px] uppercase font-bold text-[#555] mb-1 block">Category</label>
+                  <label className="text-[10px] uppercase font-bold text-[#555566] mb-1 block">Category</label>
                   <select 
                     value={newCat}
                     onChange={e => setNewCat(e.target.value as any)}
-                    className="w-full bg-black border border-[#2a2a2a] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#c9a84c]/50"
+                    className="w-full bg-black border border-[#1a1a2e] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]/50"
                   >
                     {CATEGORIES.map(c => <option key={c} value={c}>{c.toUpperCase()}</option>)}
                   </select>
                 </div>
               </div>
               <div className="flex gap-3 pt-4">
-                <button type="submit" className="flex-1 min-h-12 rounded-xl bg-[#c9a84c] py-3 font-black text-black">ADD ITEM</button>
+                <button type="submit" className="flex-1 min-h-12 rounded-xl bg-[#d4af37] py-3 font-black text-black">ADD ITEM</button>
                 <button type="button" onClick={() => setShowAddModal(false)} className="flex-1 min-h-12 rounded-xl bg-white/5 py-3 font-black hover:bg-white/10 transition-colors">CANCEL</button>
               </div>
             </form>
@@ -513,9 +513,9 @@ function SuggestionForm({
         >
           <div className="text-left">
             <h3 className="text-xl font-bold mb-2 uppercase tracking-tight">Suggest a feature</h3>
-            <p className="text-[#555] text-sm italic">Share your ideas to help us grow the ecosystem.</p>
+            <p className="text-[#555566] text-sm italic">Share your ideas to help us grow the ecosystem.</p>
           </div>
-          <div className="h-12 w-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#c9a84c]/50 group-hover:text-[#c9a84c] transition-all">
+          <div className="h-12 w-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#d4af37]/50 group-hover:text-[#d4af37] transition-all">
             <Plus size={20} />
           </div>
         </button>
@@ -526,13 +526,13 @@ function SuggestionForm({
             <input 
               value={title}
               onChange={e => setTitle(e.target.value)}
-              className="w-full bg-black border border-[#2a2a2a] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#c9a84c]/50"
+              className="w-full bg-black border border-[#1a1a2e] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]/50"
               placeholder="What should we build?"
             />
             <textarea 
               value={desc}
               onChange={e => setDesc(e.target.value)}
-              className="w-full bg-black border border-[#2a2a2a] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#c9a84c]/50 min-h-[100px]"
+              className="w-full bg-black border border-[#1a1a2e] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]/50 min-h-[100px]"
               placeholder="Describe the benefit to the community..."
             />
             <div className="flex flex-wrap gap-2">
@@ -542,14 +542,14 @@ function SuggestionForm({
                   type="button"
                   onClick={() => setCat(c)}
                   aria-pressed={cat === c}
-                className={`min-h-11 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest border transition-all ${cat === c ? 'bg-[#c9a84c] border-[#c9a84c] text-black' : 'border-white/10 text-[#555] hover:border-white/20'}`}
+                className={`min-h-11 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest border transition-all ${cat === c ? 'bg-[#d4af37] border-[#d4af37] text-black' : 'border-white/10 text-[#555566] hover:border-white/20'}`}
               >
                 {c}
               </button>
             ))}
           </div>
           <div className="flex gap-3 pt-4">
-              <button type="submit" className="flex-1 min-h-12 rounded-xl bg-[#c9a84c] py-3 font-black text-black">SUBMIT IDEA</button>
+              <button type="submit" className="flex-1 min-h-12 rounded-xl bg-[#d4af37] py-3 font-black text-black">SUBMIT IDEA</button>
               <button type="button" onClick={() => setExpanded(false)} className="flex-1 min-h-12 rounded-xl bg-white/5 py-3 font-black hover:bg-white/10 transition-colors">CANCEL</button>
             </div>
           </form>

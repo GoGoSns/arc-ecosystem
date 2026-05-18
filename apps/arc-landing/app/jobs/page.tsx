@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useMemo } from 'react';
 import { useWallet } from '@/contexts/WalletContext';
@@ -85,7 +85,7 @@ export default function JobsPage() {
   }, [jobs]);
 
   return (
-    <main className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white">
+    <main className="min-h-screen overflow-x-clip bg-[#050508] text-white">
       <SiteHeader />
 
       {/* Hero Section */}
@@ -93,11 +93,11 @@ export default function JobsPage() {
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col md:flex-row justify-between items-end gap-8">
             <div className="max-w-2xl">
-              <p className="font-mono text-xs uppercase tracking-[0.35em] text-[#c9a84c]">// opportunities</p>
+              <p className="font-mono text-xs uppercase tracking-[0.35em] text-[#d4af37]">// opportunities</p>
               <h1 className="mt-6 text-5xl font-black uppercase sm:text-7xl">
-                ARC <span className="text-[#c9a84c]">JOB BOARD</span>
+                ARC <span className="text-[#d4af37]">JOB BOARD</span>
               </h1>
-              <p className="mt-6 text-lg text-[#9a9a9a]">
+              <p className="mt-6 text-lg text-[#8a8a9a]">
                 Find your next role in the USDC-native economy. 
                 High-impact Web3 jobs with stablecoin pay.
               </p>
@@ -112,8 +112,8 @@ export default function JobsPage() {
               <div key={stat.label} className="bracket-card p-6 bg-white/[0.02]">
                 <Brackets />
                 <div className="flex items-center justify-between">
-                  <p className="font-mono text-[10px] uppercase tracking-wider text-[#777]">{stat.label}</p>
-                  <div className="text-[#c9a84c]/50">{stat.icon}</div>
+                  <p className="font-mono text-[10px] uppercase tracking-wider text-[#555566]">{stat.label}</p>
+                  <div className="text-[#d4af37]/50">{stat.icon}</div>
                 </div>
                 <p className="mt-2 text-3xl font-black">{stat.value}</p>
               </div>
@@ -123,18 +123,18 @@ export default function JobsPage() {
       </section>
 
       {/* Filters & Search */}
-      <section className="sticky top-16 z-40 border-y border-[#2a2a2a] bg-[#0a0a0a]/90 backdrop-blur-md">
+      <section className="sticky top-16 z-40 border-y border-[#1a1a2e] bg-[#050508]/90 backdrop-blur-md">
         <div className="mx-auto max-w-7xl px-4 py-6">
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_auto]">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#555]" size={20} />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#555566]" size={20} />
               <input 
                 type="text" 
                 placeholder="Search by title, company, or tech stack..."
                 aria-label="Search jobs"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full min-h-12 bg-[#111] border border-[#2a2a2a] rounded-xl py-3 pl-12 pr-4 text-white placeholder:text-[#555] focus:outline-none focus:border-[#c9a84c]/50 transition-colors"
+                className="w-full min-h-12 bg-[#0d0d12] border border-[#1a1a2e] rounded-xl py-3 pl-12 pr-4 text-white placeholder:text-[#555566] focus:outline-none focus:border-[#d4af37]/50 transition-colors"
               />
             </div>
             <div className="grid gap-3 sm:grid-cols-2 xl:flex xl:flex-wrap xl:items-center">
@@ -142,7 +142,7 @@ export default function JobsPage() {
                 aria-label="Filter jobs by category"
                 value={activeCategory}
                 onChange={(e) => setActiveCategory(e.target.value as any)}
-                className="min-h-12 w-full bg-[#111] border border-[#2a2a2a] text-sm text-[#aaa] rounded-lg px-4 py-3 focus:outline-none focus:border-[#c9a84c]/50 xl:w-auto"
+                className="min-h-12 w-full bg-[#0d0d12] border border-[#1a1a2e] text-sm text-[#8a8a9a] rounded-lg px-4 py-3 focus:outline-none focus:border-[#d4af37]/50 xl:w-auto"
               >
                 {CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
               </select>
@@ -150,12 +150,12 @@ export default function JobsPage() {
                 aria-label="Filter jobs by type"
                 value={activeType}
                 onChange={(e) => setActiveType(e.target.value as any)}
-                className="min-h-12 w-full bg-[#111] border border-[#2a2a2a] text-sm text-[#aaa] rounded-lg px-4 py-3 focus:outline-none focus:border-[#c9a84c]/50 xl:w-auto"
+                className="min-h-12 w-full bg-[#0d0d12] border border-[#1a1a2e] text-sm text-[#8a8a9a] rounded-lg px-4 py-3 focus:outline-none focus:border-[#d4af37]/50 xl:w-auto"
               >
                 {TYPES.map(t => <option key={t.id} value={t.id}>{t.label}</option>)}
               </select>
-              <div className="flex flex-col gap-3 rounded-lg border border-[#2a2a2a] bg-[#111] px-4 py-3 sm:col-span-2 xl:min-w-[280px]">
-                <span className="text-xs font-mono uppercase text-[#555]">Min Salary: ${salaryRange}k</span>
+              <div className="flex flex-col gap-3 rounded-lg border border-[#1a1a2e] bg-[#0d0d12] px-4 py-3 sm:col-span-2 xl:min-w-[280px]">
+                <span className="text-xs font-mono uppercase text-[#555566]">Min Salary: ${salaryRange}k</span>
                 <input 
                   type="range" 
                   min="0" 
@@ -164,7 +164,7 @@ export default function JobsPage() {
                   value={salaryRange}
                   onChange={(e) => setSalaryRange(parseInt(e.target.value))}
                   aria-label="Minimum salary filter in thousands of USDC"
-                  className="accent-[#c9a84c] w-full"
+                  className="accent-[#d4af37] w-full"
                 />
               </div>
             </div>
@@ -177,7 +177,7 @@ export default function JobsPage() {
         <div className="mx-auto max-w-5xl">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-xl font-bold flex items-center gap-2">
-              <Briefcase size={20} className="text-[#c9a84c]" />
+              <Briefcase size={20} className="text-[#d4af37]" />
               {filteredJobs.length} {filteredJobs.length === 1 ? 'Job' : 'Jobs'} Available
             </h2>
           </div>
@@ -188,10 +188,10 @@ export default function JobsPage() {
                 <JobCard key={job.id} job={job} />
               ))
             ) : (
-              <div className="text-center py-20 border border-dashed border-[#2a2a2a] rounded-2xl">
+              <div className="text-center py-20 border border-dashed border-[#1a1a2e] rounded-2xl">
                 <Search size={48} className="mx-auto text-[#222]" />
                 <h3 className="mt-4 text-xl font-bold">No jobs matching your criteria</h3>
-                <p className="mt-2 text-[#777]">Try adjusting your search or filters.</p>
+                <p className="mt-2 text-[#555566]">Try adjusting your search or filters.</p>
                 <button 
                   type="button"
                   onClick={() => {setSearch(''); setActiveCategory('all'); setActiveType('all'); setSalaryRange(0);}}
@@ -216,7 +216,7 @@ function JobCard({ job }: { job: Job }) {
       <Brackets />
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="flex-shrink-0">
-          <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-[#c9a84c]/20 to-[#c9a84c]/5 border border-[#c9a84c]/20 flex items-center justify-center text-2xl font-black text-[#c9a84c]">
+          <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-[#d4af37]/20 to-[#d4af37]/5 border border-[#d4af37]/20 flex items-center justify-center text-2xl font-black text-[#d4af37]">
             {job.company[0]}
           </div>
         </div>
@@ -224,9 +224,9 @@ function JobCard({ job }: { job: Job }) {
         <div className="flex-grow">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <h3 className="text-2xl font-black group-hover:text-[#c9a84c] transition-colors">{job.title}</h3>
-              <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-[#777]">
-                <span className="flex items-center gap-1.5 font-bold text-[#aaa]">
+              <h3 className="text-2xl font-black group-hover:text-[#d4af37] transition-colors">{job.title}</h3>
+              <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-[#555566]">
+                <span className="flex items-center gap-1.5 font-bold text-[#8a8a9a]">
                   <Building2 size={14} /> {job.company}
                 </span>
                 <span className="flex items-center gap-1.5">
@@ -235,28 +235,28 @@ function JobCard({ job }: { job: Job }) {
                 <span className="flex items-center gap-1.5 uppercase font-mono text-[10px] tracking-wider bg-[#222] px-2 py-0.5 rounded border border-white/5">
                   {job.type}
                 </span>
-                <span className="flex items-center gap-1.5 uppercase font-mono text-[10px] tracking-wider bg-[#c9a84c]/10 text-[#c9a84c] px-2 py-0.5 rounded border border-[#c9a84c]/20">
+                <span className="flex items-center gap-1.5 uppercase font-mono text-[10px] tracking-wider bg-[#d4af37]/10 text-[#d4af37] px-2 py-0.5 rounded border border-[#d4af37]/20">
                   {job.experienceLevel}
                 </span>
               </div>
             </div>
             
             <div className="text-right">
-              <p className="text-xl font-black text-white">${job.salaryMin / 1000}k - ${job.salaryMax / 1000}k <span className="text-[#c9a84c] text-sm">USDC</span></p>
-              <p className="mt-1 text-xs font-mono text-[#555] uppercase">{daysAgo === 0 ? 'Posted today' : `Posted ${daysAgo} days ago`} &middot; {job.applicationCount} applications</p>
+              <p className="text-xl font-black text-white">${job.salaryMin / 1000}k - ${job.salaryMax / 1000}k <span className="text-[#d4af37] text-sm">USDC</span></p>
+              <p className="mt-1 text-xs font-mono text-[#555566] uppercase">{daysAgo === 0 ? 'Posted today' : `Posted ${daysAgo} days ago`} &middot; {job.applicationCount} applications</p>
             </div>
           </div>
           
           <div className="mt-6 flex flex-wrap gap-2">
             {job.techStack.map(tech => (
-              <span key={tech} className="px-3 py-1 bg-white/5 border border-white/5 rounded-full text-[10px] font-mono text-[#aaa]">
+              <span key={tech} className="px-3 py-1 bg-white/5 border border-white/5 rounded-full text-[10px] font-mono text-[#8a8a9a]">
                 {tech}
               </span>
             ))}
           </div>
           
           <div className="mt-6 flex items-center justify-between border-t border-white/5 pt-6">
-            <div className="flex items-center gap-2 text-xs text-[#555]">
+            <div className="flex items-center gap-2 text-xs text-[#555566]">
               <Globe size={14} />
               <span className="uppercase tracking-widest">{job.remotePolicy}</span>
             </div>

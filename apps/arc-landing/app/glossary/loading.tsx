@@ -1,12 +1,12 @@
-import SiteHeader from '@/components/SiteHeader';
+﻿import SiteHeader from '@/components/SiteHeader';
 
 export default function GlossaryLoading() {
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
+    <main className="min-h-screen bg-[#050508] text-white">
       <SiteHeader />
 
       <section className="relative overflow-hidden px-4 pt-24 sm:px-6 lg:px-8">
-        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-[#c9a84c]/10 via-[#c9a84c]/5 to-transparent blur-3xl" />
+        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-[#d4af37]/10 via-[#d4af37]/5 to-transparent blur-3xl" />
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
             <div className="space-y-6">
@@ -15,8 +15,8 @@ export default function GlossaryLoading() {
               <div className="h-5 w-full max-w-2xl rounded-full bg-white/10 animate-pulse" aria-hidden="true" />
               <div className="h-5 w-11/12 max-w-3xl rounded-full bg-white/10 animate-pulse" aria-hidden="true" />
               <div className="flex flex-wrap gap-4 pt-4" aria-hidden="true">
-                <div className="h-[3.25rem] w-44 rounded-none border border-[#c9a84c]/20 bg-white/5 animate-pulse" />
-                <div className="h-[3.25rem] w-36 rounded-none border border-[#2a2a2a] bg-white/5 animate-pulse" />
+                <div className="h-[3.25rem] w-44 rounded-none border border-[#d4af37]/20 bg-white/5 animate-pulse" />
+                <div className="h-[3.25rem] w-36 rounded-none border border-[#1a1a2e] bg-white/5 animate-pulse" />
               </div>
             </div>
 
@@ -82,7 +82,7 @@ export default function GlossaryLoading() {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-[10px] uppercase tracking-[0.24em] text-[#777]">
+          <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-[10px] uppercase tracking-[0.24em] text-[#555566]">
             <div className="h-3 w-44 rounded-full bg-white/10 animate-pulse" />
             <div className="flex flex-wrap gap-2">
               <div className="h-7 w-16 rounded-full bg-white/10 animate-pulse" />
@@ -103,7 +103,7 @@ export default function GlossaryLoading() {
                 <div className="mt-5 h-4 w-full rounded-full bg-white/10 animate-pulse" />
                 <div className="mt-3 h-4 w-11/12 rounded-full bg-white/10 animate-pulse" />
                 <div className="mt-3 h-4 w-10/12 rounded-full bg-white/10 animate-pulse" />
-                <div className="mt-6 border-t border-[#2a2a2a] pt-4">
+                <div className="mt-6 border-t border-[#1a1a2e] pt-4">
                   <div className="h-3 w-28 rounded-full bg-white/10 animate-pulse" />
                 </div>
               </div>

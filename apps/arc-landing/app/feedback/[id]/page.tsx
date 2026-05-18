@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { use, useState } from 'react';
 import { notFound, useRouter } from 'next/navigation';
@@ -26,7 +26,7 @@ const STATUS_CONFIG: Record<FeedbackStatus, { label: string; color: string }> = 
   reviewing:     { label: 'Reviewing',   color: '#60a5fa' },
   planned:       { label: 'Planned',     color: '#facc15' },
   'in-progress': { label: 'In Progress', color: '#fb923c' },
-  completed:     { label: 'Completed',   color: '#c9a84c' },
+  completed:     { label: 'Completed',   color: '#d4af37' },
   declined:      { label: 'Declined',    color: '#ef4444' },
 };
 
@@ -49,7 +49,7 @@ function WalletConnect() {
       <button
         onClick={disconnect}
         className="px-3 py-1.5 rounded-lg text-xs font-mono border"
-        style={{ borderColor: '#c9a84c', color: '#c9a84c', background: 'rgba(201,168,76,0.08)' }}
+        style={{ borderColor: '#d4af37', color: '#d4af37', background: 'rgba(212, 175, 55,0.08)' }}
       >
         {shortenAddress(address)}
       </button>
@@ -59,7 +59,7 @@ function WalletConnect() {
     <button
       onClick={connect}
       className="px-3 py-1.5 rounded-lg text-xs font-bold"
-      style={{ background: '#c9a84c', color: '#0a0a0a' }}
+      style={{ background: '#d4af37', color: '#0a0a0a' }}
     >
       Connect Wallet
     </button>
@@ -82,10 +82,10 @@ export default function FeedbackDetail({ params }: { params: Promise<{ id: strin
   if (!fb) {
     notFound();
     return (
-      <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center">
+      <div className="min-h-screen bg-[#050508] text-white flex items-center justify-center">
         <div className="text-center">
-          <p className="text-[#555] text-lg mb-4">Feedback not found.</p>
-          <Link href="/feedback" className="text-[#c9a84c] text-sm hover:underline">
+          <p className="text-[#555566] text-lg mb-4">Feedback not found.</p>
+          <Link href="/feedback" className="text-[#d4af37] text-sm hover:underline">
             ← Back to Feedback Hub
           </Link>
         </div>
@@ -123,7 +123,7 @@ export default function FeedbackDetail({ params }: { params: Promise<{ id: strin
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-[#050508] text-white">
       <SiteHeader />
 
       <div className="mx-auto max-w-3xl px-4 py-10">
@@ -134,13 +134,13 @@ export default function FeedbackDetail({ params }: { params: Promise<{ id: strin
             onClick={() => address && toggleVote(fb.id, address)}
             className="flex flex-col items-center gap-1.5 min-w-[56px] p-3 rounded-xl border transition-all hover:scale-105 h-fit"
             style={{
-              background: hasVoted ? 'rgba(201,168,76,0.1)' : 'rgba(255,255,255,0.03)',
-              borderColor: hasVoted ? '#c9a84c' : 'rgba(255,255,255,0.08)',
+              background: hasVoted ? 'rgba(212, 175, 55,0.1)' : 'rgba(255,255,255,0.03)',
+              borderColor: hasVoted ? '#d4af37' : 'rgba(255,255,255,0.08)',
             }}
             title={address ? (hasVoted ? 'Remove vote' : 'Upvote') : 'Connect wallet to vote'}
           >
-            <ChevronUp size={22} style={{ color: hasVoted ? '#c9a84c' : '#555' }} />
-            <span className="text-sm font-black" style={{ color: hasVoted ? '#c9a84c' : '#777' }}>
+            <ChevronUp size={22} style={{ color: hasVoted ? '#d4af37' : '#555' }} />
+            <span className="text-sm font-black" style={{ color: hasVoted ? '#d4af37' : '#777' }}>
               {fb.votes.length}
             </span>
           </button>
@@ -162,7 +162,7 @@ export default function FeedbackDetail({ params }: { params: Promise<{ id: strin
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black leading-tight mb-3">{fb.title}</h1>
-            <div className="flex flex-wrap gap-4 text-xs text-[#555]">
+            <div className="flex flex-wrap gap-4 text-xs text-[#555566]">
               <span className="flex items-center gap-1">
                 <User size={11} />
                 {fb.authorName || shortenAddress(fb.authorAddress)}
@@ -191,11 +191,11 @@ export default function FeedbackDetail({ params }: { params: Promise<{ id: strin
         {fb.adminResponse && (
           <div
             className="rounded-xl p-6 mb-6"
-            style={{ background: 'rgba(201,168,76,0.06)', border: '1px solid rgba(201,168,76,0.25)' }}
+            style={{ background: 'rgba(212, 175, 55,0.06)', border: '1px solid rgba(212, 175, 55,0.25)' }}
           >
             <div className="flex items-center gap-2 mb-3">
-              <Shield size={14} style={{ color: '#c9a84c' }} />
-              <span className="text-xs font-bold uppercase tracking-widest text-[#c9a84c]">Admin Response</span>
+              <Shield size={14} style={{ color: '#d4af37' }} />
+              <span className="text-xs font-bold uppercase tracking-widest text-[#d4af37]">Admin Response</span>
             </div>
             <p className="text-[#ddd] text-sm whitespace-pre-wrap">{fb.adminResponse}</p>
           </div>
@@ -205,18 +205,18 @@ export default function FeedbackDetail({ params }: { params: Promise<{ id: strin
         {admin && (
           <div
             className="rounded-xl p-6 mb-8"
-            style={{ background: 'rgba(201,168,76,0.04)', border: '1px solid rgba(201,168,76,0.2)' }}
+            style={{ background: 'rgba(212, 175, 55,0.04)', border: '1px solid rgba(212, 175, 55,0.2)' }}
           >
             <div className="flex items-center gap-2 mb-5">
-              <Shield size={14} style={{ color: '#c9a84c' }} />
-              <span className="text-sm font-bold text-[#c9a84c]">Admin Actions</span>
+              <Shield size={14} style={{ color: '#d4af37' }} />
+              <span className="text-sm font-bold text-[#d4af37]">Admin Actions</span>
             </div>
             <div className="flex flex-col gap-3">
               <select
                 value={newStatus}
                 onChange={(e) => setNewStatus(e.target.value as FeedbackStatus)}
                 className="rounded-lg px-3 py-2.5 text-sm text-white outline-none"
-                style={{ background: '#111', border: '1px solid rgba(201,168,76,0.3)' }}
+                style={{ background: '#111', border: '1px solid rgba(212, 175, 55,0.3)' }}
               >
                 {(Object.keys(STATUS_CONFIG) as FeedbackStatus[]).map((s) => (
                   <option key={s} value={s}>{STATUS_CONFIG[s].label}</option>
@@ -228,13 +228,13 @@ export default function FeedbackDetail({ params }: { params: Promise<{ id: strin
                 rows={3}
                 placeholder="Admin response visible to everyone (optional)..."
                 className="w-full rounded-xl px-4 py-3 text-white placeholder-[#555] outline-none resize-none text-sm"
-                style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(201,168,76,0.2)' }}
+                style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(212, 175, 55,0.2)' }}
               />
               <div className="flex gap-3">
                 <button
                   onClick={handleUpdateStatus}
                   className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold"
-                  style={{ background: '#c9a84c', color: '#0a0a0a' }}
+                  style={{ background: '#d4af37', color: '#0a0a0a' }}
                 >
                   <Check size={14} />
                   Update
@@ -256,7 +256,7 @@ export default function FeedbackDetail({ params }: { params: Promise<{ id: strin
         <div>
           <h2 className="text-lg font-black mb-5">
             Comments{' '}
-            <span className="text-[#555] font-normal text-base">({fb.comments.length})</span>
+            <span className="text-[#555566] font-normal text-base">({fb.comments.length})</span>
           </h2>
 
           {fb.comments.length > 0 && (
@@ -268,10 +268,10 @@ export default function FeedbackDetail({ params }: { params: Promise<{ id: strin
                   style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)' }}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-[#aaa]">
+                    <span className="text-xs font-bold text-[#8a8a9a]">
                       {comment.authorName || shortenAddress(comment.authorAddress)}
                     </span>
-                    <span className="text-xs text-[#555]">{timeAgo(comment.createdAt)}</span>
+                    <span className="text-xs text-[#555566]">{timeAgo(comment.createdAt)}</span>
                   </div>
                   <p className="text-sm text-[#ccc] whitespace-pre-wrap">{comment.content}</p>
                 </div>
@@ -296,7 +296,7 @@ export default function FeedbackDetail({ params }: { params: Promise<{ id: strin
                   onClick={handlePostComment}
                   disabled={!commentText.trim() || posting}
                   className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed"
-                  style={{ background: '#c9a84c', color: '#0a0a0a' }}
+                  style={{ background: '#d4af37', color: '#0a0a0a' }}
                 >
                   <Send size={14} />
                   Post Comment
@@ -305,7 +305,7 @@ export default function FeedbackDetail({ params }: { params: Promise<{ id: strin
             </div>
           ) : (
             <div className="text-center py-8">
-              <p className="text-sm text-[#555] mb-3">Connect your wallet to join the conversation.</p>
+              <p className="text-sm text-[#555566] mb-3">Connect your wallet to join the conversation.</p>
               <WalletConnect />
             </div>
           )}

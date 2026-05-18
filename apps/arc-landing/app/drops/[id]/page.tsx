@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { useWallet } from '@/contexts/WalletContext';
@@ -65,19 +65,19 @@ function Countdown({ targetDate }: { targetDate: number }) {
     <div className="flex gap-4 font-mono">
       <div className="flex flex-col items-center">
         <span className="text-3xl font-black">{timeLeft.days}</span>
-        <span className="text-[10px] text-[#777] uppercase">Days</span>
+        <span className="text-[10px] text-[#555566] uppercase">Days</span>
       </div>
       <div className="flex flex-col items-center">
         <span className="text-3xl font-black">{timeLeft.hours}</span>
-        <span className="text-[10px] text-[#777] uppercase">Hrs</span>
+        <span className="text-[10px] text-[#555566] uppercase">Hrs</span>
       </div>
       <div className="flex flex-col items-center">
         <span className="text-3xl font-black">{timeLeft.minutes}</span>
-        <span className="text-[10px] text-[#777] uppercase">Min</span>
+        <span className="text-[10px] text-[#555566] uppercase">Min</span>
       </div>
       <div className="flex flex-col items-center">
-        <span className="text-3xl font-black text-[#c9a84c]">{timeLeft.seconds}</span>
-        <span className="text-[10px] text-[#777] uppercase">Sec</span>
+        <span className="text-3xl font-black text-[#d4af37]">{timeLeft.seconds}</span>
+        <span className="text-[10px] text-[#555566] uppercase">Sec</span>
       </div>
     </div>
   );
@@ -137,12 +137,12 @@ export default function DropDetailPage({ params }: { params: Promise<{ id: strin
   }
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
+    <main className="min-h-screen bg-[#050508] text-white">
       <SiteHeader />
 
       <section className="pt-32 pb-24 px-4">
         <div className="mx-auto max-w-6xl">
-          <Link href="/drops" className="flex items-center gap-2 text-[#777] hover:text-[#c9a84c] transition-colors mb-8 font-mono text-xs uppercase tracking-widest">
+          <Link href="/drops" className="flex items-center gap-2 text-[#555566] hover:text-[#d4af37] transition-colors mb-8 font-mono text-xs uppercase tracking-widest">
             <ArrowLeft size={14} /> Back to Drops
           </Link>
 
@@ -157,7 +157,7 @@ export default function DropDetailPage({ params }: { params: Promise<{ id: strin
                    <Gift size={96} className="text-white/20 group-hover:scale-110 transition-transform duration-700" />
                    <div className="absolute inset-0 bg-black/20" />
                    <div className="absolute bottom-6 left-6 text-left">
-                     <p className="font-mono text-[10px] uppercase text-[#c9a84c] tracking-[0.2em] mb-2">// reward</p>
+                     <p className="font-mono text-[10px] uppercase text-[#d4af37] tracking-[0.2em] mb-2">// reward</p>
                      <h2 className="text-4xl font-black uppercase">
                        {drop.prizeType === 'usdc' ? `$${drop.prizeAmount.toLocaleString()} USDC` : `${drop.prizeAmount} Rare NFTs`}
                      </h2>
@@ -168,17 +168,17 @@ export default function DropDetailPage({ params }: { params: Promise<{ id: strin
                   <div className={`px-3 py-1 rounded text-[10px] font-black uppercase border ${
                     drop.status === 'active' ? 'bg-green-500/10 text-green-500 border-green-500/20' :
                     drop.status === 'upcoming' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' :
-                    'bg-white/5 text-[#777] border-white/10'
+                    'bg-white/5 text-[#555566] border-white/10'
                   }`}>
                     {drop.status}
                   </div>
-                  <div className="px-3 py-1 bg-white/5 border border-white/10 rounded text-[10px] font-black uppercase text-[#777]">
+                  <div className="px-3 py-1 bg-white/5 border border-white/10 rounded text-[10px] font-black uppercase text-[#555566]">
                     {drop.winnerCount} Winners
                   </div>
                 </div>
 
                 <h1 className="text-4xl font-black uppercase sm:text-5xl lg:text-6xl mb-6">{drop.title}</h1>
-                <p className="text-[#9a9a9a] text-lg leading-relaxed mb-10">
+                <p className="text-[#8a8a9a] text-lg leading-relaxed mb-10">
                   {drop.description}
                 </p>
 
@@ -186,7 +186,7 @@ export default function DropDetailPage({ params }: { params: Promise<{ id: strin
                 <div className="bracket-card p-8 bg-white/[0.01]">
                   <Brackets />
                   <h3 className="text-xl font-black uppercase mb-8 flex items-center gap-3">
-                    <UserCheck className="text-[#c9a84c]" size={20} /> Requirements
+                    <UserCheck className="text-[#d4af37]" size={20} /> Requirements
                   </h3>
                   
                   <div className="space-y-4">
@@ -207,7 +207,7 @@ export default function DropDetailPage({ params }: { params: Promise<{ id: strin
                               {isComplete && <CheckCircle2 size={14} />}
                             </div>
                             <div>
-                              <p className={`text-sm font-bold uppercase ${isComplete ? 'text-white' : 'text-[#777]'}`}>
+                              <p className={`text-sm font-bold uppercase ${isComplete ? 'text-white' : 'text-[#555566]'}`}>
                                 {req === 'wallet-connect' && 'Connect Wallet'}
                                 {req === 'twitter-follow' && 'Follow @arcnetwork_ on Twitter'}
                                 {req === 'twitter-retweet' && 'Retweet the Drop Post'}
@@ -219,7 +219,7 @@ export default function DropDetailPage({ params }: { params: Promise<{ id: strin
                                   href={drop.twitterUrl || '#'}
                                   target={drop.twitterUrl ? '_blank' : undefined}
                                   rel={drop.twitterUrl ? 'noopener noreferrer' : undefined}
-                                  className="mt-1 flex items-center gap-1 text-[10px] text-[#c9a84c] hover:underline"
+                                  className="mt-1 flex items-center gap-1 text-[10px] text-[#d4af37] hover:underline"
                                 >
                                   Go to Twitter <ExternalLink size={8} />
                                 </a>
@@ -229,7 +229,7 @@ export default function DropDetailPage({ params }: { params: Promise<{ id: strin
                                   href={drop.discordUrl || '#'}
                                   target={drop.discordUrl ? '_blank' : undefined}
                                   rel={drop.discordUrl ? 'noopener noreferrer' : undefined}
-                                  className="mt-1 flex items-center gap-1 text-[10px] text-[#c9a84c] hover:underline"
+                                  className="mt-1 flex items-center gap-1 text-[10px] text-[#d4af37] hover:underline"
                                 >
                                   Go to Discord <ExternalLink size={8} />
                                 </a>
@@ -247,7 +247,7 @@ export default function DropDetailPage({ params }: { params: Promise<{ id: strin
                       <div className="p-6 bg-green-500/10 border border-green-500/20 rounded-xl text-center">
                         <CheckCircle2 size={32} className="text-green-500 mx-auto mb-4" />
                         <h4 className="text-lg font-black uppercase text-green-500">Entry Submitted</h4>
-                        <p className="text-xs text-[#777] mt-2">
+                        <p className="text-xs text-[#555566] mt-2">
                           You entered this drop on {new Date(userEntry.enteredAt).toLocaleDateString()}. Winners will be announced after the countdown ends.
                         </p>
                       </div>
@@ -266,7 +266,7 @@ export default function DropDetailPage({ params }: { params: Promise<{ id: strin
                       </button>
                     ) : (
                       <div className="text-center p-6 border border-white/10 rounded-xl">
-                        <p className="text-[#555] font-mono text-sm uppercase">Drop has ended</p>
+                        <p className="text-[#555566] font-mono text-sm uppercase">Drop has ended</p>
                       </div>
                     )}
                   </div>
@@ -275,21 +275,21 @@ export default function DropDetailPage({ params }: { params: Promise<{ id: strin
 
               {/* Winners Section (if ended) */}
               {drop.status === 'ended' && drop.winners.length > 0 && (
-                <div className="bracket-card p-8 bg-[#c9a84c]/5 border-[#c9a84c]/20">
+                <div className="bracket-card p-8 bg-[#d4af37]/5 border-[#d4af37]/20">
                   <Brackets />
                   <h3 className="text-2xl font-black uppercase mb-8 flex items-center gap-3">
-                    <Zap className="text-[#c9a84c]" size={24} /> Winners Revealed
+                    <Zap className="text-[#d4af37]" size={24} /> Winners Revealed
                   </h3>
                   <div className="grid gap-4 sm:grid-cols-2">
                     {drop.winners.map((winner, idx) => (
                       <div key={idx} className="flex items-center gap-3 p-3 bg-black/40 rounded-lg border border-white/5 font-mono text-xs">
-                        <span className="text-[#c9a84c] font-black">#{idx + 1}</span>
+                        <span className="text-[#d4af37] font-black">#{idx + 1}</span>
                         <span className="text-white/80">{winner}</span>
                       </div>
                     ))}
                   </div>
                   <div className="mt-8 pt-8 border-t border-white/10 text-center">
-                    <p className="text-[10px] text-[#777] uppercase tracking-widest">
+                    <p className="text-[10px] text-[#555566] uppercase tracking-widest">
                       Winners were selected randomly from all valid entries.
                     </p>
                   </div>
@@ -302,8 +302,8 @@ export default function DropDetailPage({ params }: { params: Promise<{ id: strin
               {/* Timer Card */}
               <div className="bracket-card p-8 bg-black/40 border-white/5 text-center">
                 <Brackets />
-                <Timer className="mx-auto mb-4 text-[#c9a84c]" size={32} />
-                <p className="text-[10px] font-mono text-[#777] uppercase mb-4">
+                <Timer className="mx-auto mb-4 text-[#d4af37]" size={32} />
+                <p className="text-[10px] font-mono text-[#555566] uppercase mb-4">
                   {drop.status === 'upcoming' ? 'Starts In' : drop.status === 'active' ? 'Ends In' : 'Status'}
                 </p>
                 <Countdown targetDate={drop.status === 'upcoming' ? drop.startDate : drop.endDate} />
@@ -314,12 +314,12 @@ export default function DropDetailPage({ params }: { params: Promise<{ id: strin
                 <Brackets />
                 <div className="space-y-6">
                   <div>
-                    <p className="text-[10px] font-mono text-[#777] uppercase mb-1">Total Entries</p>
+                    <p className="text-[10px] font-mono text-[#555566] uppercase mb-1">Total Entries</p>
                     <p className="text-3xl font-black">{drop.entries.length}</p>
                   </div>
                   <div>
-                    <p className="text-[10px] font-mono text-[#777] uppercase mb-1">Success Probability</p>
-                    <p className="text-3xl font-black text-[#c9a84c]">
+                    <p className="text-[10px] font-mono text-[#555566] uppercase mb-1">Success Probability</p>
+                    <p className="text-3xl font-black text-[#d4af37]">
                       {drop.entries.length > 0 ? `${Math.min(100, (drop.winnerCount / drop.entries.length * 100)).toFixed(1)}%` : '100%'}
                     </p>
                   </div>
@@ -341,7 +341,7 @@ export default function DropDetailPage({ params }: { params: Promise<{ id: strin
                     >
                       SELECT WINNERS
                     </button>
-                    <p className="text-[10px] text-center text-[#777] uppercase font-mono mt-4 leading-relaxed">
+                    <p className="text-[10px] text-center text-[#555566] uppercase font-mono mt-4 leading-relaxed">
                       Randomly selects {drop.winnerCount} winners and moves drop to 'ended' status.
                     </p>
                   </div>
@@ -350,7 +350,7 @@ export default function DropDetailPage({ params }: { params: Promise<{ id: strin
 
               {/* Recent Entries Feed */}
               <div>
-                <h3 className="text-xs font-black uppercase tracking-widest text-[#777] mb-6 flex items-center gap-2">
+                <h3 className="text-xs font-black uppercase tracking-widest text-[#555566] mb-6 flex items-center gap-2">
                   <Users size={14} /> Recent Entries
                 </h3>
                 <div className="space-y-3">
@@ -358,15 +358,15 @@ export default function DropDetailPage({ params }: { params: Promise<{ id: strin
                     <div key={idx} className="flex items-center justify-between p-3 bg-white/[0.01] border border-white/5 rounded-lg">
                       <div className="flex items-center gap-3">
                         <div className="h-2 w-2 rounded-full bg-green-500/50" />
-                        <span className="font-mono text-[10px] text-[#aaa]">{entry.address.slice(0, 6)}...{entry.address.slice(-4)}</span>
+                        <span className="font-mono text-[10px] text-[#8a8a9a]">{entry.address.slice(0, 6)}...{entry.address.slice(-4)}</span>
                       </div>
-                      <span className="text-[9px] text-[#555] font-mono">
+                      <span className="text-[9px] text-[#555566] font-mono">
                         {Math.floor((Date.now() - entry.enteredAt) / 60000)}m ago
                       </span>
                     </div>
                   ))}
                   {drop.entries.length === 0 && (
-                    <p className="text-center text-[10px] text-[#555] font-mono py-8 uppercase">No entries yet</p>
+                    <p className="text-center text-[10px] text-[#555566] font-mono py-8 uppercase">No entries yet</p>
                   )}
                 </div>
               </div>
@@ -382,7 +382,7 @@ export default function DropDetailPage({ params }: { params: Promise<{ id: strin
           {[...Array(60)].map((_, i) => (
             <div 
               key={i}
-              className="absolute h-2 w-2 bg-[#c9a84c] rounded-sm animate-confetti"
+              className="absolute h-2 w-2 bg-[#d4af37] rounded-sm animate-confetti"
               style={{ 
                 left: `${Math.random() * 100}%`,
                 top: `-20px`,

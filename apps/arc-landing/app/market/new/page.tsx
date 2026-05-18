@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
@@ -86,18 +86,18 @@ function PreviewCard({ form }: { form: FormState }) {
       <div className="relative aspect-[4/3] min-h-[300px]">
         <img src={image} alt={form.title || 'Listing preview'} className="h-full w-full object-cover" />
         <div className="absolute left-4 top-4 flex flex-wrap gap-2">
-          <HubBadge className="border-[#c9a84c]/25 bg-[#c9a84c]/15 text-[#f4dc9f]">Preview</HubBadge>
-          <HubBadge className="border-[#2a2a2a] bg-black/45 text-[#e8e8e8]">Arc Pay Ready</HubBadge>
+          <HubBadge className="border-[#d4af37]/25 bg-[#d4af37]/15 text-[#f5d060]">Preview</HubBadge>
+          <HubBadge className="border-[#1a1a2e] bg-black/45 text-[#e8e8e8]">Arc Pay Ready</HubBadge>
         </div>
       </div>
       <div className="space-y-4 p-6 sm:p-8">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">{form.category}</p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">{form.category}</p>
             <h3 className="mt-2 text-3xl font-black uppercase leading-tight">{form.title || 'Your Listing Title'}</h3>
           </div>
           <div className="text-right">
-            <div className="text-3xl font-black text-[#f4dc9f]">
+            <div className="text-3xl font-black text-[#f5d060]">
               {price > 0 ? `$${Math.round(price).toLocaleString('en-US')}` : '$0'}
             </div>
             <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-[#8b8b8b]">
@@ -107,7 +107,7 @@ function PreviewCard({ form }: { form: FormState }) {
           </div>
         </div>
 
-        <p className="text-sm leading-7 text-[#9a9a9a]">
+        <p className="text-sm leading-7 text-[#8a8a9a]">
           {form.description || 'Short summary of the item, service, or collectible you want to list.'}
         </p>
 
@@ -116,8 +116,8 @@ function PreviewCard({ form }: { form: FormState }) {
             ['Condition', form.condition],
             ['Image', form.imageUrl.trim() ? 'Connected' : 'Missing'],
           ].map(([label, value]) => (
-            <div key={label} className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">{label}</div>
+            <div key={label} className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">{label}</div>
               <div className="mt-2 text-sm font-semibold text-white">{value}</div>
             </div>
           ))}
@@ -202,10 +202,10 @@ export default function NewMarketListingPage() {
           <div
             role="status"
             aria-live="polite"
-            className="rounded-3xl border border-[#c9a84c]/25 bg-[linear-gradient(135deg,rgba(201,168,76,0.18),rgba(48,209,88,0.08)),rgba(0,0,0,0.92)] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
+            className="rounded-3xl border border-[#d4af37]/25 bg-[linear-gradient(135deg,rgba(212, 175, 55,0.18),rgba(48,209,88,0.08)),rgba(0,0,0,0.92)] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
           >
             <div className="flex items-start gap-3">
-              <CheckCircle2 size={18} className="mt-0.5 text-[#f4dc9f]" aria-hidden="true" />
+              <CheckCircle2 size={18} className="mt-0.5 text-[#f5d060]" aria-hidden="true" />
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-white">Listing created</p>
                 <p className="mt-1 text-xs leading-6 text-[#cfcfcf]">{createdSummary}</p>
@@ -214,7 +214,7 @@ export default function NewMarketListingPage() {
                 type="button"
                 onClick={() => setToastOpen(false)}
                 aria-label="Dismiss success message"
-                className="rounded-full border border-[#2a2a2a] bg-white/[0.02] px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-[#bdbdbd] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+                className="rounded-full border border-[#1a1a2e] bg-white/[0.02] px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-[#bdbdbd] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
               >
                 Close
               </button>
@@ -235,18 +235,18 @@ export default function NewMarketListingPage() {
       <div className="mx-auto max-w-7xl">
         <div className="reveal space-y-6">
           <div className="flex flex-wrap items-center gap-2">
-            <Link href="/market" className="inline-flex items-center gap-2 rounded-full border border-[#2a2a2a] bg-white/[0.02] px-4 py-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#bdbdbd] transition-colors hover:border-[#c9a84c]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60">
+            <Link href="/market" className="inline-flex items-center gap-2 rounded-full border border-[#1a1a2e] bg-white/[0.02] px-4 py-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#bdbdbd] transition-colors hover:border-[#d4af37]/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60">
               <ArrowLeft size={14} />
               Back to Market
             </Link>
-            <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">Create Listing</HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">Demo form only</HubBadge>
+            <HubBadge className="border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]">Create Listing</HubBadge>
+            <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">Demo form only</HubBadge>
           </div>
 
           <h1 className="max-w-5xl text-4xl font-black uppercase leading-tight sm:text-5xl lg:text-7xl">
             Add a new market listing
           </h1>
-          <p className="max-w-3xl text-base leading-7 text-[#9a9a9a] sm:text-lg">
+          <p className="max-w-3xl text-base leading-7 text-[#8a8a9a] sm:text-lg">
             Create a mock listing, preview it live, and save it to the browser store with no backend calls.
           </p>
         </div>
@@ -256,10 +256,10 @@ export default function NewMarketListingPage() {
             <form className="p-6 sm:p-8" onSubmit={handleSubmit}>
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Listing form</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Listing form</p>
                 <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">Fill in the details</h2>
               </div>
-              <HubBadge className="border-[#c9a84c]/25 bg-[#c9a84c]/10 text-[#f4dc9f]">
+              <HubBadge className="border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f5d060]">
                 <BadgeCheck size={10} className="mr-1 inline-block" aria-hidden="true" />
                 Arc Pay Ready
               </HubBadge>
@@ -267,7 +267,7 @@ export default function NewMarketListingPage() {
 
             <div className="mt-6 grid gap-5">
               <div>
-                <label htmlFor="market-title" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                <label htmlFor="market-title" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                   Title
                 </label>
                 <input
@@ -290,7 +290,7 @@ export default function NewMarketListingPage() {
 
               <div className="grid gap-5 md:grid-cols-2">
                 <div>
-                  <label htmlFor="market-price" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                  <label htmlFor="market-price" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                     Price USD
                   </label>
                 <input
@@ -315,7 +315,7 @@ export default function NewMarketListingPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="market-category" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                  <label htmlFor="market-category" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                     Category
                   </label>
                   <select
@@ -335,7 +335,7 @@ export default function NewMarketListingPage() {
 
               <div className="grid gap-5 md:grid-cols-2">
                 <div>
-                  <label htmlFor="market-city" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                  <label htmlFor="market-city" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                     City
                   </label>
                 <input
@@ -357,7 +357,7 @@ export default function NewMarketListingPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="market-condition" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                  <label htmlFor="market-condition" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                     Condition
                   </label>
                   <select
@@ -376,7 +376,7 @@ export default function NewMarketListingPage() {
               </div>
 
               <div>
-                <label htmlFor="market-description" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                <label htmlFor="market-description" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                   Description
                 </label>
                 <textarea
@@ -397,7 +397,7 @@ export default function NewMarketListingPage() {
               </div>
 
               <div>
-                <label htmlFor="market-image" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">
+                <label htmlFor="market-image" className="mb-2 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">
                   Image URL
                 </label>
                 <input
@@ -420,7 +420,7 @@ export default function NewMarketListingPage() {
             </div>
 
             <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
-              <p className="text-xs leading-6 text-[#777]">
+              <p className="text-xs leading-6 text-[#555566]">
                 Local persistence only. Your market listing is added to the browser store and available in the market hub.
               </p>
               <button type="submit" disabled={submitting} className="primary-button disabled:cursor-not-allowed disabled:opacity-50">
@@ -437,10 +437,10 @@ export default function NewMarketListingPage() {
             <HubCard as="aside" className="p-6 sm:p-8">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Create flow</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Create flow</p>
                   <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">What happens next</h2>
                 </div>
-                <Store size={20} className="text-[#c9a84c]" aria-hidden="true" />
+                <Store size={20} className="text-[#d4af37]" aria-hidden="true" />
               </div>
               <div className="mt-6 space-y-3">
                 {[
@@ -448,7 +448,7 @@ export default function NewMarketListingPage() {
                   'A success toast appears with a direct listing link.',
                   'The marketplace hub updates instantly after submission.',
                 ].map((item) => (
-                  <div key={item} className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm leading-7 text-[#d8d8d8]">
+                  <div key={item} className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3 text-sm leading-7 text-[#d8d8d8]">
                     {item}
                   </div>
                 ))}

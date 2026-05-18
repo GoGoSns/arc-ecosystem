@@ -102,7 +102,7 @@ function RaceCountdown({
   if (status === 'ended') {
     return (
       <div className="space-y-1 text-center">
-        <p className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">{labels.finalised}</p>
+        <p className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#555566]">{labels.finalised}</p>
         <p className="text-2xl font-black text-white">{labels.finalised} {formatRaceDate(targetDate)}</p>
       </div>
     );
@@ -113,10 +113,10 @@ function RaceCountdown({
   if (remaining === 0) {
     return (
       <div className="space-y-1 text-center" aria-live="polite">
-        <p className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">
+        <p className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#555566]">
           {labels.countdown}
         </p>
-        <p className="text-2xl font-black text-[#c9a84c]">
+        <p className="text-2xl font-black text-[#d4af37]">
           {status === 'active' ? labels.wrappingUp : labels.startingNow}
         </p>
       </div>
@@ -126,9 +126,9 @@ function RaceCountdown({
   return (
     <div className="grid grid-cols-4 gap-2 sm:gap-3" aria-live="polite">
       {formatRaceCountDown(remaining, countdownUnits).map((part) => (
-        <div key={part.label} className="rounded-2xl border border-[#2a2a2a] bg-black/40 px-2 py-3 text-center">
+        <div key={part.label} className="rounded-2xl border border-[#1a1a2e] bg-black/40 px-2 py-3 text-center">
           <div className="text-xl font-black text-white sm:text-2xl">{part.value}</div>
-          <div className="mt-1 text-[9px] font-mono uppercase tracking-[0.24em] text-[#777]">{part.label}</div>
+          <div className="mt-1 text-[9px] font-mono uppercase tracking-[0.24em] text-[#555566]">{part.label}</div>
         </div>
       ))}
     </div>
@@ -182,21 +182,21 @@ function RaceSurface({
               <HubBadge>{race.participants.length} {copy.surfaces.participants}</HubBadge>
             </div>
             <div className="space-y-2">
-              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">{title}</p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">{title}</p>
               <h2 className="text-3xl font-black uppercase sm:text-4xl">{race.title}</h2>
-              <p className="max-w-2xl text-sm leading-7 text-[#9a9a9a] sm:text-base">{subtitle}</p>
+              <p className="max-w-2xl text-sm leading-7 text-[#8a8a9a] sm:text-base">{subtitle}</p>
             </div>
           </div>
-          <div className="rounded-2xl border border-[#2a2a2a] bg-black/40 px-4 py-3 text-right">
-            <p className="text-[10px] font-mono uppercase tracking-[0.26em] text-[#777]">{copy.surfaces.prizePool}</p>
-            <p className="mt-1 text-2xl font-black text-[#c9a84c]">{formatRacePrize(race.prizePool)}</p>
+          <div className="rounded-2xl border border-[#1a1a2e] bg-black/40 px-4 py-3 text-right">
+            <p className="text-[10px] font-mono uppercase tracking-[0.26em] text-[#555566]">{copy.surfaces.prizePool}</p>
+            <p className="mt-1 text-2xl font-black text-[#d4af37]">{formatRacePrize(race.prizePool)}</p>
           </div>
         </div>
 
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
-          <div className="rounded-3xl border border-[#2a2a2a] bg-white/[0.015] p-5">
-            <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[#777]">
-              <ShieldAlert size={14} className="text-[#c9a84c]" aria-hidden="true" />
+          <div className="rounded-3xl border border-[#1a1a2e] bg-white/[0.015] p-5">
+            <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[#555566]">
+              <ShieldAlert size={14} className="text-[#d4af37]" aria-hidden="true" />
               {tone === 'active' ? copy.labels.endsIn : copy.labels.startsIn}
             </div>
             <div className="mt-4">
@@ -209,20 +209,20 @@ function RaceSurface({
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-3xl border border-[#2a2a2a] bg-white/[0.015] p-5">
-              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">{copy.labels.start}</div>
+            <div className="rounded-3xl border border-[#1a1a2e] bg-white/[0.015] p-5">
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">{copy.labels.start}</div>
               <div className="mt-2 text-sm font-semibold text-white">{formatRaceDate(race.startDate)}</div>
             </div>
-            <div className="rounded-3xl border border-[#2a2a2a] bg-white/[0.015] p-5">
-              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">{copy.labels.end}</div>
+            <div className="rounded-3xl border border-[#1a1a2e] bg-white/[0.015] p-5">
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">{copy.labels.end}</div>
               <div className="mt-2 text-sm font-semibold text-white">{formatRaceDate(race.endDate)}</div>
             </div>
-            <div className="rounded-3xl border border-[#2a2a2a] bg-white/[0.015] p-5">
-              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">{copy.labels.topPrize}</div>
+            <div className="rounded-3xl border border-[#1a1a2e] bg-white/[0.015] p-5">
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">{copy.labels.topPrize}</div>
               <div className="mt-2 text-sm font-semibold text-white">{formatRacePrize(race.prizes[0] ?? 0)}</div>
             </div>
-            <div className="rounded-3xl border border-[#2a2a2a] bg-white/[0.015] p-5">
-              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">{copy.labels.leader}</div>
+            <div className="rounded-3xl border border-[#1a1a2e] bg-white/[0.015] p-5">
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">{copy.labels.leader}</div>
               <div className="mt-2 text-sm font-semibold text-white">
                 {winner ? winner.name ?? formatRaceAddress(winner.address) : copy.labels.noEntries}
               </div>
@@ -232,8 +232,8 @@ function RaceSurface({
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div>
-            <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[#777]">
-              <Medal size={14} className="text-[#c9a84c]" aria-hidden="true" />
+            <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[#555566]">
+              <Medal size={14} className="text-[#d4af37]" aria-hidden="true" />
               {previewLabel}
             </div>
             <div className="mt-4 space-y-3">
@@ -241,47 +241,47 @@ function RaceSurface({
                 previewParticipants.map((participant, index) => (
                 <div
                   key={participant.address}
-                  className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3"
+                  className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3"
                 >
-                    <span className="inline-flex min-w-12 items-center justify-center rounded-full border border-[#2a2a2a] bg-white/[0.02] px-3 py-1 text-[10px] font-mono uppercase tracking-[0.24em] text-white">
+                    <span className="inline-flex min-w-12 items-center justify-center rounded-full border border-[#1a1a2e] bg-white/[0.02] px-3 py-1 text-[10px] font-mono uppercase tracking-[0.24em] text-white">
                       {getRaceOrdinal(index + 1)}
                     </span>
                     <div className="min-w-0">
                       <div className="truncate text-sm font-semibold text-white">
                         {participant.name ?? formatRaceAddress(participant.address)}
                       </div>
-                      <div className="truncate text-[10px] font-mono uppercase tracking-[0.16em] text-[#777]">
+                      <div className="truncate text-[10px] font-mono uppercase tracking-[0.16em] text-[#555566]">
                         {participant.address}
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-sm font-black text-[#c9a84c]">{participant.score.toLocaleString()}</div>
-                      <div className="text-[10px] font-mono uppercase tracking-[0.18em] text-[#777]">{copy.labels.score}</div>
+                      <div className="text-sm font-black text-[#d4af37]">{participant.score.toLocaleString()}</div>
+                      <div className="text-[10px] font-mono uppercase tracking-[0.18em] text-[#555566]">{copy.labels.score}</div>
                     </div>
                   </div>
                 ))
               ) : (
-                <div className="rounded-3xl border border-dashed border-[#2a2a2a] bg-black/20 px-5 py-8 text-center text-sm text-[#777]">
+                <div className="rounded-3xl border border-dashed border-[#1a1a2e] bg-black/20 px-5 py-8 text-center text-sm text-[#555566]">
                   {copy.labels.noParticipantsDescription}
                 </div>
               )}
             </div>
           </div>
 
-          <div className="rounded-3xl border border-[#2a2a2a] bg-white/[0.015] p-5">
-            <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[#777]">
-              <Sparkles size={14} className="text-[#c9a84c]" aria-hidden="true" />
+          <div className="rounded-3xl border border-[#1a1a2e] bg-white/[0.015] p-5">
+            <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[#555566]">
+              <Sparkles size={14} className="text-[#d4af37]" aria-hidden="true" />
               {copy.surfaces.quickLink}
             </div>
             <h3 className="mt-3 text-xl font-black uppercase text-white">{copy.surfaces.raceDetails}</h3>
-            <p className="mt-2 text-sm leading-7 text-[#9a9a9a]">{race.description}</p>
+            <p className="mt-2 text-sm leading-7 text-[#8a8a9a]">{race.description}</p>
             <div className="mt-5 space-y-3">
-              <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm">
-                <span className="text-[#777]">{copy.surfaces.participants}</span>
+              <div className="flex items-center justify-between rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3 text-sm">
+                <span className="text-[#555566]">{copy.surfaces.participants}</span>
                 <span className="font-semibold text-white">{race.participants.length}</span>
               </div>
-              <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm">
-                <span className="text-[#777]">{copy.surfaces.prizePool}</span>
+              <div className="flex items-center justify-between rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3 text-sm">
+                <span className="text-[#555566]">{copy.surfaces.prizePool}</span>
                 <span className="font-semibold text-white">{formatRacePrize(race.prizePool)}</span>
               </div>
             </div>
@@ -360,7 +360,7 @@ export default function RaceHubPage() {
 
   if (races.length === 0) {
     return (
-      <main className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white">
+      <main className="min-h-screen overflow-x-clip bg-[#050508] text-white">
         <section className="section pt-32">
           <div className="mx-auto max-w-5xl">
             <HubEmptyState
@@ -386,13 +386,13 @@ export default function RaceHubPage() {
         <div className="mx-auto max-w-7xl">
           <div className="reveal space-y-5" style={{ transitionDelay: '40ms' }}>
             <div className="flex flex-wrap items-center gap-2">
-              <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">{copy.header.badge}</HubBadge>
+              <HubBadge className="border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]">{copy.header.badge}</HubBadge>
               <HubBadge className="border-[#30d158]/30 bg-[#30d158]/10 text-[#a6f4bf]">{copy.header.leaderboard}</HubBadge>
             </div>
             <h1 className="max-w-4xl text-4xl font-black uppercase leading-tight sm:text-5xl lg:text-6xl">
               {copy.hero.title}
             </h1>
-            <p className="max-w-3xl text-base leading-7 text-[#9a9a9a] sm:text-lg">
+            <p className="max-w-3xl text-base leading-7 text-[#8a8a9a] sm:text-lg">
               {copy.hero.description}
             </p>
           </div>
@@ -408,7 +408,7 @@ export default function RaceHubPage() {
             <HubCard as="section" className="p-5 sm:p-6">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#777]">{copy.overview.personalize}</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#555566]">{copy.overview.personalize}</p>
                   <h2 className="mt-2 text-2xl font-black uppercase">{copy.overview.demoAddress}</h2>
                 </div>
                 <HubBadge>{demoAddress ? formatRaceAddress(demoAddress) : copy.overview.notSet}</HubBadge>
@@ -427,28 +427,28 @@ export default function RaceHubPage() {
                   placeholder="0x1234...abcd"
                   className={`w-full ${hubInputClass}`}
                 />
-                <p className="text-sm leading-7 text-[#9a9a9a]">
+                <p className="text-sm leading-7 text-[#8a8a9a]">
                   {copy.overview.demoNote}
                 </p>
               </div>
             </HubCard>
 
             <HubCard as="section" className="p-5 sm:p-6">
-              <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[#777]">
-                <Info size={14} className="text-[#c9a84c]" aria-hidden="true" />
+              <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[#555566]">
+                <Info size={14} className="text-[#d4af37]" aria-hidden="true" />
                 {copy.overview.archiveTitle}
               </div>
               <div className="mt-4 space-y-4">
-                <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-                  <span className="text-sm text-[#777]">{copy.overview.ended}</span>
+                <div className="flex items-center justify-between rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+                  <span className="text-sm text-[#555566]">{copy.overview.ended}</span>
                   <span className="text-sm font-semibold text-white">{endedRaces.length}</span>
                 </div>
-                <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-                  <span className="text-sm text-[#777]">{copy.overview.currentWins}</span>
-                  <span className="text-sm font-semibold text-[#c9a84c]">{yourWins}</span>
+                <div className="flex items-center justify-between rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+                  <span className="text-sm text-[#555566]">{copy.overview.currentWins}</span>
+                  <span className="text-sm font-semibold text-[#d4af37]">{yourWins}</span>
                 </div>
-                <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3">
-                  <span className="text-sm text-[#777]">{copy.overview.latest}</span>
+                <div className="flex items-center justify-between rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+                  <span className="text-sm text-[#555566]">{copy.overview.latest}</span>
                   <span className="text-sm font-semibold text-white">{endedRaces[0] ? formatRaceDate(endedRaces[0].endDate) : '—'}</span>
                 </div>
               </div>
@@ -486,10 +486,10 @@ export default function RaceHubPage() {
               <HubCard as="section" className="p-5 sm:p-6">
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#777]">{copy.feed.recentWinners}</p>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#555566]">{copy.feed.recentWinners}</p>
                     <h2 className="mt-2 text-2xl font-black uppercase">{copy.feed.archiveFeed}</h2>
                   </div>
-                  <Medal className="text-[#c9a84c]" size={22} aria-hidden="true" />
+                  <Medal className="text-[#d4af37]" size={22} aria-hidden="true" />
                 </div>
                 <div className="mt-5 space-y-3">
                   {endedRaces.length > 0 ? (
@@ -498,24 +498,24 @@ export default function RaceHubPage() {
                       return (
                         <div
                           key={race.id}
-                          className="flex items-start justify-between gap-4 rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4"
+                          className="flex items-start justify-between gap-4 rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-4"
                         >
                           <div className="min-w-0">
                             <div className="flex flex-wrap items-center gap-2">
                               <HubBadge>{race.category.replace('-', ' ')}</HubBadge>
-                              <span className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">
+                              <span className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">
                                 {formatRaceDate(race.endDate)}
                               </span>
                             </div>
                             <div className="mt-2 truncate text-sm font-semibold text-white">{race.title}</div>
-                            <div className="mt-1 truncate text-xs text-[#9a9a9a]">
+                            <div className="mt-1 truncate text-xs text-[#8a8a9a]">
                               {copy.feed.winner}:{' '}
                               {winner ? winner.name ?? formatRaceAddress(winner.address) : copy.labels.noWinner} · {race.participants.length} {copy.surfaces.participants}
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">{copy.feed.payout}</div>
-                            <div className="mt-2 text-sm font-black text-[#c9a84c]">{formatRacePrize(race.prizes[0] ?? 0)}</div>
+                            <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">{copy.feed.payout}</div>
+                            <div className="mt-2 text-sm font-black text-[#d4af37]">{formatRacePrize(race.prizes[0] ?? 0)}</div>
                           </div>
                         </div>
                       );
@@ -531,15 +531,15 @@ export default function RaceHubPage() {
               </HubCard>
 
               <HubCard as="section" className="p-5 sm:p-6">
-                <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[#777]">
-                  <CalendarDays size={14} className="text-[#c9a84c]" aria-hidden="true" />
+                <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-[#555566]">
+                  <CalendarDays size={14} className="text-[#d4af37]" aria-hidden="true" />
                   {copy.timeline.title}
                 </div>
                 <div className="mt-4 space-y-3">
-                  <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm text-[#9a9a9a]">
+                  <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3 text-sm text-[#8a8a9a]">
                     {copy.timeline.line1}
                   </div>
-                  <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3 text-sm text-[#9a9a9a]">
+                  <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3 text-sm text-[#8a8a9a]">
                     {copy.timeline.line2}
                   </div>
                 </div>

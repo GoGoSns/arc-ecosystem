@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -17,7 +17,7 @@ const SEV_COLOR: Record<BugSeverity, string> = {
 const STATUS_COLOR: Record<BugStatus, string> = {
   reported:  '#9ca3af',
   triaged:   '#facc15',
-  fixed:     '#c9a84c',
+  fixed:     '#d4af37',
   duplicate: '#6b7280',
   invalid:   '#6b7280',
 };
@@ -77,7 +77,7 @@ export default function BountyPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-[#050508] text-white">
       <SiteHeader />
 
       <div className="mx-auto max-w-5xl px-4 py-10">
@@ -85,10 +85,10 @@ export default function BountyPage() {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <Bug size={20} className="text-[#c9a84c]" />
+              <Bug size={20} className="text-[#d4af37]" />
               <h1 className="text-3xl font-black">Bug Bounty Program</h1>
             </div>
-            <p className="text-[#777] text-sm">Find security issues. Earn USDC. Help secure Arc.</p>
+            <p className="text-[#555566] text-sm">Find security issues. Earn USDC. Help secure Arc.</p>
           </div>
           <a href="https://hackerone.com" target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold shrink-0 transition-all hover:scale-105"
@@ -98,11 +98,11 @@ export default function BountyPage() {
         </div>
 
         {/* Info */}
-        <div className="rounded-2xl p-5 mb-6" style={{ background: 'rgba(201,168,76,0.05)', border: '1px solid rgba(201,168,76,0.18)' }}>
+        <div className="rounded-2xl p-5 mb-6" style={{ background: 'rgba(212, 175, 55,0.05)', border: '1px solid rgba(212, 175, 55,0.18)' }}>
           <div className="grid sm:grid-cols-3 gap-4 text-sm">
-            <p className="text-[#aaa]">🛡️ Powered by HackerOne — official Arc bounty program</p>
-            <p className="text-[#aaa]">💰 Rewards: <span className="text-[#c9a84c] font-bold">$50 – $50,000 USDC</span> by severity</p>
-            <p className="text-[#aaa]">📤 Submit through HackerOne, track progress here</p>
+            <p className="text-[#8a8a9a]">🛡️ Powered by HackerOne — official Arc bounty program</p>
+            <p className="text-[#8a8a9a]">💰 Rewards: <span className="text-[#d4af37] font-bold">$50 – $50,000 USDC</span> by severity</p>
+            <p className="text-[#8a8a9a]">📤 Submit through HackerOne, track progress here</p>
           </div>
         </div>
 
@@ -113,9 +113,9 @@ export default function BountyPage() {
             { label: 'Resolved',      value: resolvedCount },
             { label: 'Total Paid',    value: `$${totalPaid.toLocaleString()}` },
           ].map(({ label, value }) => (
-            <div key={label} className="rounded-xl p-4 text-center" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(201,168,76,0.12)' }}>
+            <div key={label} className="rounded-xl p-4 text-center" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(212, 175, 55,0.12)' }}>
               <div className="text-2xl font-black">{value}</div>
-              <div className="text-[10px] text-[#555] uppercase tracking-wider mt-1">{label}</div>
+              <div className="text-[10px] text-[#555566] uppercase tracking-wider mt-1">{label}</div>
             </div>
           ))}
         </div>
@@ -126,7 +126,7 @@ export default function BountyPage() {
             {(['all', 'critical', 'high', 'medium', 'low'] as const).map((s) => (
               <button key={s} onClick={() => setSevFilter(s)}
                 className="px-2 py-1 rounded-lg text-xs font-bold capitalize transition-all"
-                style={{ background: sevFilter === s ? 'rgba(201,168,76,0.15)' : 'transparent', color: sevFilter === s ? '#c9a84c' : '#777' }}>
+                style={{ background: sevFilter === s ? 'rgba(212, 175, 55,0.15)' : 'transparent', color: sevFilter === s ? '#d4af37' : '#777' }}>
                 {s === 'all' ? 'All' : s}
               </button>
             ))}
@@ -135,7 +135,7 @@ export default function BountyPage() {
             {(['newest', 'reward'] as const).map((s) => (
               <button key={s} onClick={() => setSort(s)}
                 className="px-3 py-1 rounded-lg text-xs font-bold capitalize transition-all"
-                style={{ background: sort === s ? 'rgba(201,168,76,0.15)' : 'transparent', color: sort === s ? '#c9a84c' : '#777' }}>
+                style={{ background: sort === s ? 'rgba(212, 175, 55,0.15)' : 'transparent', color: sort === s ? '#d4af37' : '#777' }}>
                 {s === 'newest' ? 'Newest' : 'Highest Reward'}
               </button>
             ))}
@@ -143,11 +143,11 @@ export default function BountyPage() {
           {isConnected ? (
             <button onClick={() => setShowModal(true)}
               className="px-4 py-2 rounded-xl text-sm font-bold shrink-0"
-              style={{ background: '#c9a84c', color: '#0a0a0a' }}>
+              style={{ background: '#d4af37', color: '#0a0a0a' }}>
               + Report Bug
             </button>
           ) : (
-            <button onClick={connect} className="px-4 py-2 rounded-xl text-sm font-bold shrink-0" style={{ background: '#c9a84c', color: '#0a0a0a' }}>
+            <button onClick={connect} className="px-4 py-2 rounded-xl text-sm font-bold shrink-0" style={{ background: '#d4af37', color: '#0a0a0a' }}>
               Connect to Report
             </button>
           )}
@@ -157,7 +157,7 @@ export default function BountyPage() {
         {filtered.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-5xl mb-4">🦺</div>
-            <p className="text-[#555] text-lg mb-2">No bugs reported yet.</p>
+            <p className="text-[#555566] text-lg mb-2">No bugs reported yet.</p>
             <p className="text-[#444] text-sm">Be the hero who finds the first!</p>
           </div>
         ) : (
@@ -181,15 +181,15 @@ export default function BountyPage() {
                   )}
                 </div>
                 <h3 className="font-bold text-[15px] mb-1">{bug.title}</h3>
-                <p className="text-xs text-[#666] mb-3 leading-relaxed">
+                <p className="text-xs text-[#555566] mb-3 leading-relaxed">
                   {bug.description.slice(0, 200)}{bug.description.length > 200 ? '...' : ''}
                 </p>
-                <div className="flex flex-wrap items-center gap-x-4 text-[11px] text-[#555]">
+                <div className="flex flex-wrap items-center gap-x-4 text-[11px] text-[#555566]">
                   <span>by {bug.reporterName || shortenAddr(bug.reporterAddress)}</span>
                   <span>{new Date(bug.reportedAt).toLocaleDateString()}</span>
                   {bug.cveLink && (
                     <a href={bug.cveLink} target="_blank" rel="noopener noreferrer"
-                      className="text-[#c9a84c] hover:underline">HackerOne →</a>
+                      className="text-[#d4af37] hover:underline">HackerOne →</a>
                   )}
                 </div>
 
@@ -206,17 +206,17 @@ export default function BountyPage() {
       {/* Report modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)' }}>
-          <div className="w-full max-w-lg rounded-2xl p-6" style={{ background: '#111', border: '1px solid rgba(201,168,76,0.2)' }}>
+          <div className="w-full max-w-lg rounded-2xl p-6" style={{ background: '#111', border: '1px solid rgba(212, 175, 55,0.2)' }}>
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-black">Report a Bug</h2>
-              <button onClick={() => setShowModal(false)} className="text-[#555] hover:text-white">
+              <button onClick={() => setShowModal(false)} className="text-[#555566] hover:text-white">
                 <X size={18} />
               </button>
             </div>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-[#aaa] mb-1.5">Title *</label>
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#8a8a9a] mb-1.5">Title *</label>
                 <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Brief description of the issue"
                   className="w-full rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#555] outline-none"
                   style={{ background: 'rgba(255,255,255,0.04)', border: `1px solid ${formErrors.title ? '#ef4444' : 'rgba(255,255,255,0.09)'}` }} />
@@ -224,7 +224,7 @@ export default function BountyPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-[#aaa] mb-1.5">Severity</label>
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#8a8a9a] mb-1.5">Severity</label>
                 <div className="grid grid-cols-4 gap-2">
                   {(['critical', 'high', 'medium', 'low'] as BugSeverity[]).map((s) => (
                     <button key={s} onClick={() => setSev(s)}
@@ -241,19 +241,19 @@ export default function BountyPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-[#aaa] mb-1.5">Description * (min 100 chars)</label>
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#8a8a9a] mb-1.5">Description * (min 100 chars)</label>
                 <textarea value={desc} onChange={(e) => setDesc(e.target.value)} rows={5}
                   placeholder="Steps to reproduce, impact, proof of concept..."
                   className="w-full rounded-xl px-4 py-3 text-sm text-white placeholder-[#555] outline-none resize-none"
                   style={{ background: 'rgba(255,255,255,0.04)', border: `1px solid ${formErrors.desc ? '#ef4444' : 'rgba(255,255,255,0.09)'}` }} />
                 <div className="flex justify-between mt-1">
                   <span className="text-xs text-[#ef4444]">{formErrors.desc ?? ''}</span>
-                  <span className="text-xs text-[#555]">{desc.length} chars</span>
+                  <span className="text-xs text-[#555566]">{desc.length} chars</span>
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-[#aaa] mb-1.5">HackerOne Link (optional)</label>
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#8a8a9a] mb-1.5">HackerOne Link (optional)</label>
                 <input value={cveLink} onChange={(e) => setCveLink(e.target.value)} placeholder="https://hackerone.com/reports/..."
                   className="w-full rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#555] outline-none"
                   style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)' }} />
@@ -261,7 +261,7 @@ export default function BountyPage() {
 
               <button onClick={handleSubmit}
                 className="w-full py-2.5 rounded-xl text-sm font-bold"
-                style={{ background: '#c9a84c', color: '#0a0a0a' }}>
+                style={{ background: '#d4af37', color: '#0a0a0a' }}>
                 Submit Report
               </button>
             </div>
@@ -278,12 +278,12 @@ function AdminBugPanel({ bug, onUpdate }: { bug: { status: BugStatus; rewardAmou
 
   return (
     <div className="mt-3 pt-3 border-t border-[#1e1e1e] flex flex-wrap items-center gap-2">
-      <span className="text-[10px] font-bold uppercase tracking-widest text-[#c9a84c]">Admin</span>
+      <span className="text-[10px] font-bold uppercase tracking-widest text-[#d4af37]">Admin</span>
       <select value={status} onChange={(e) => setStatus(e.target.value as BugStatus)}
         className="rounded-lg px-2 py-1 text-xs text-white outline-none"
         style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
         {(['reported', 'triaged', 'fixed', 'duplicate', 'invalid'] as BugStatus[]).map((s) => (
-          <option key={s} value={s} className="bg-[#111]">{s}</option>
+          <option key={s} value={s} className="bg-[#0d0d12]">{s}</option>
         ))}
       </select>
       <input value={reward} onChange={(e) => setReward(e.target.value)} placeholder="Reward $" type="number"
@@ -291,7 +291,7 @@ function AdminBugPanel({ bug, onUpdate }: { bug: { status: BugStatus; rewardAmou
         style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }} />
       <button onClick={() => onUpdate({ status, rewardAmount: reward ? Number(reward) : undefined })}
         className="px-3 py-1 rounded-lg text-xs font-bold"
-        style={{ background: 'rgba(201,168,76,0.15)', color: '#c9a84c' }}>
+        style={{ background: 'rgba(212, 175, 55,0.15)', color: '#d4af37' }}>
         Update
       </button>
     </div>

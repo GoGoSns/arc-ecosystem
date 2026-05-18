@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
@@ -25,7 +25,7 @@ const STATUS_CONFIG: Record<FeedbackStatus, { label: string; color: string }> = 
   reviewing:     { label: 'Reviewing',   color: '#60a5fa' },
   planned:       { label: 'Planned',     color: '#facc15' },
   'in-progress': { label: 'In Progress', color: '#fb923c' },
-  completed:     { label: 'Completed',   color: '#c9a84c' },
+  completed:     { label: 'Completed',   color: '#d4af37' },
   declined:      { label: 'Declined',    color: '#ef4444' },
 };
 
@@ -50,7 +50,7 @@ function WalletConnect() {
         onClick={disconnect}
         aria-label={`Disconnect wallet ${shortenAddress(address)}`}
         className="px-3 py-1.5 rounded-lg text-xs font-mono border"
-        style={{ borderColor: '#c9a84c', color: '#c9a84c', background: 'rgba(201,168,76,0.08)' }}
+        style={{ borderColor: '#d4af37', color: '#d4af37', background: 'rgba(212, 175, 55,0.08)' }}
       >
         {shortenAddress(address)}
       </button>
@@ -62,7 +62,7 @@ function WalletConnect() {
       onClick={connect}
       aria-label="Connect wallet"
       className="px-3 py-1.5 rounded-lg text-xs font-bold"
-      style={{ background: '#c9a84c', color: '#0a0a0a' }}
+      style={{ background: '#d4af37', color: '#0a0a0a' }}
     >
       Connect Wallet
     </button>
@@ -96,7 +96,7 @@ export default function FeedbackBrowse() {
   }, [feedbacks, category, status, sort, search]);
 
   return (
-    <div className="min-h-screen overflow-x-clip bg-[#0a0a0a] text-white">
+    <div className="min-h-screen overflow-x-clip bg-[#050508] text-white">
       <SiteHeader />
 
       <div className="mx-auto max-w-4xl px-4 py-10">
@@ -104,7 +104,7 @@ export default function FeedbackBrowse() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-black text-white">Feedback Hub</h1>
-            <p className="mt-1 text-sm text-[#777]">
+            <p className="mt-1 text-sm text-[#555566]">
               Help shape Arc Ecosystem. Report bugs, suggest features, share ideas.
             </p>
           </div>
@@ -125,10 +125,10 @@ export default function FeedbackBrowse() {
             <div
               key={s.label}
               className="rounded-xl p-4 text-center"
-              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(201,168,76,0.15)' }}
+              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(212, 175, 55,0.15)' }}
             >
-              <div className="text-2xl font-black text-[#c9a84c]">{s.value}</div>
-              <div className="text-xs text-[#777] uppercase tracking-widest mt-1">{s.label}</div>
+              <div className="text-2xl font-black text-[#d4af37]">{s.value}</div>
+              <div className="text-xs text-[#555566] uppercase tracking-widest mt-1">{s.label}</div>
             </div>
           ))}
         </div>
@@ -143,9 +143,9 @@ export default function FeedbackBrowse() {
               aria-pressed={category === 'all'}
               className="min-h-11 px-3 py-2 rounded-lg text-xs font-bold transition-all"
               style={{
-                background: category === 'all' ? 'rgba(201,168,76,0.15)' : 'rgba(255,255,255,0.03)',
-                border: `1px solid ${category === 'all' ? 'rgba(201,168,76,0.4)' : 'rgba(255,255,255,0.08)'}`,
-                color: category === 'all' ? '#c9a84c' : '#777',
+                background: category === 'all' ? 'rgba(212, 175, 55,0.15)' : 'rgba(255,255,255,0.03)',
+                border: `1px solid ${category === 'all' ? 'rgba(212, 175, 55,0.4)' : 'rgba(255,255,255,0.08)'}`,
+                color: category === 'all' ? '#d4af37' : '#777',
               }}
             >
               All
@@ -176,7 +176,7 @@ export default function FeedbackBrowse() {
           {/* Search + Status + Sort */}
           <div className="flex flex-col sm:flex-row gap-2">
             <div className="relative flex-1">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#555]" />
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#555566]" />
               <input
                 type="text"
                 placeholder="Search feedback..."
@@ -191,7 +191,7 @@ export default function FeedbackBrowse() {
               aria-label="Filter feedback by status"
               value={status}
               onChange={(e) => setStatus(e.target.value as FeedbackStatus | 'all')}
-              className="min-h-11 rounded-lg px-3 py-2 text-sm text-[#aaa] outline-none"
+              className="min-h-11 rounded-lg px-3 py-2 text-sm text-[#8a8a9a] outline-none"
               style={{ background: '#111', border: '1px solid rgba(255,255,255,0.08)' }}
             >
               <option value="all">All Statuses</option>
@@ -203,7 +203,7 @@ export default function FeedbackBrowse() {
               aria-label="Sort feedback"
               value={sort}
               onChange={(e) => setSort(e.target.value as 'votes' | 'newest' | 'oldest')}
-              className="min-h-11 rounded-lg px-3 py-2 text-sm text-[#aaa] outline-none"
+              className="min-h-11 rounded-lg px-3 py-2 text-sm text-[#8a8a9a] outline-none"
               style={{ background: '#111', border: '1px solid rgba(255,255,255,0.08)' }}
             >
               <option value="votes">Most Votes</option>
@@ -216,7 +216,7 @@ export default function FeedbackBrowse() {
         {/* List */}
         {filtered.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-[#555] text-lg mb-6">
+            <p className="text-[#555566] text-lg mb-6">
               {search || category !== 'all' || status !== 'all'
                 ? 'No feedback matches your filters.'
                 : 'No feedback yet. Be the first!'}
@@ -253,10 +253,10 @@ export default function FeedbackBrowse() {
                     className="flex min-w-[44px] flex-col items-center justify-start gap-1 pt-1 transition-all hover:scale-110"
                     title={address ? (hasVoted ? 'Remove vote' : 'Upvote') : 'Connect wallet to vote'}
                   >
-                    <ChevronUp size={18} style={{ color: hasVoted ? '#c9a84c' : '#555' }} />
+                    <ChevronUp size={18} style={{ color: hasVoted ? '#d4af37' : '#555' }} />
                     <span
                       className="text-xs font-black"
-                      style={{ color: hasVoted ? '#c9a84c' : '#777' }}
+                      style={{ color: hasVoted ? '#d4af37' : '#777' }}
                     >
                       {fb.votes.length}
                     </span>
@@ -267,7 +267,7 @@ export default function FeedbackBrowse() {
                     <div className="flex flex-wrap items-center gap-2 mb-1">
                       <Link
                         href={`/feedback/${fb.id}`}
-                        className="font-bold text-white hover:text-[#c9a84c] transition-colors text-sm sm:text-base"
+                        className="font-bold text-white hover:text-[#d4af37] transition-colors text-sm sm:text-base"
                       >
                         {fb.title}
                       </Link>
@@ -293,8 +293,8 @@ export default function FeedbackBrowse() {
                         {statusCfg.label}
                       </span>
                     </div>
-                    <p className="text-sm text-[#777] line-clamp-2 mb-2">{fb.description}</p>
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-[#555]">
+                    <p className="text-sm text-[#555566] line-clamp-2 mb-2">{fb.description}</p>
+                    <div className="flex flex-wrap items-center gap-3 text-xs text-[#555566]">
                       <span className="flex items-center gap-1">
                         <User size={11} />
                         {fb.authorName || shortenAddress(fb.authorAddress)}

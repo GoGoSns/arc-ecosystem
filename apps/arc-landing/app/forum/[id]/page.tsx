@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { use, useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -120,7 +120,7 @@ export default function ThreadPage({ params }: { params: Promise<{ id: string }>
         <div
           className="forum-panel mb-6 rounded-[1.75rem] p-6 sm:p-8"
           style={{
-            borderColor: score >= 3 ? 'rgba(201,168,76,0.3)' : 'rgba(201,168,76,0.14)',
+            borderColor: score >= 3 ? 'rgba(212, 175, 55,0.3)' : 'rgba(212, 175, 55,0.14)',
           }}
         >
           <div className="forum-thread-badges">
@@ -182,10 +182,10 @@ export default function ThreadPage({ params }: { params: Promise<{ id: string }>
               onClick={() => address && toggleVote(id, address, 'up')}
               className="forum-vote-button flex items-center gap-1.5 px-3 py-1.5 text-sm font-bold"
               style={{
-                background: hasUp ? 'rgba(201,168,76,0.15)' : 'rgba(255,255,255,0.04)',
-                color: hasUp ? '#c9a84c' : '#666',
+                background: hasUp ? 'rgba(212, 175, 55,0.15)' : 'rgba(255,255,255,0.04)',
+                color: hasUp ? '#d4af37' : '#666',
                 border: `1px solid ${
-                  hasUp ? 'rgba(201,168,76,0.3)' : 'rgba(255,255,255,0.08)'
+                  hasUp ? 'rgba(212, 175, 55,0.3)' : 'rgba(255,255,255,0.08)'
                 }`,
               }}
               title={address ? 'Upvote' : 'Connect wallet to vote'}
@@ -196,7 +196,7 @@ export default function ThreadPage({ params }: { params: Promise<{ id: string }>
 
             <span
               className="text-lg font-black"
-              style={{ color: score > 0 ? '#c9a84c' : score < 0 ? '#ef4444' : '#555' }}
+              style={{ color: score > 0 ? '#d4af37' : score < 0 ? '#ef4444' : '#555' }}
             >
               {score}
             </span>
@@ -219,7 +219,7 @@ export default function ThreadPage({ params }: { params: Promise<{ id: string }>
             </button>
 
             {!address && (
-              <span className="ml-2 text-xs text-[#555]">
+              <span className="ml-2 text-xs text-[#555566]">
                 <button type="button" onClick={connect} className="forum-button forum-button--gold px-3 py-2 text-[10px]">
                   Connect wallet
                 </button>{' '}
@@ -237,9 +237,9 @@ export default function ThreadPage({ params }: { params: Promise<{ id: string }>
               onClick={() => pinThread(id)}
               className="forum-button text-[10px] px-3 py-2"
               style={{
-                background: thread.pinned ? 'rgba(201,168,76,0.2)' : 'rgba(255,255,255,0.05)',
-                color: thread.pinned ? '#c9a84c' : '#888',
-                border: '1px solid rgba(201,168,76,0.2)',
+                background: thread.pinned ? 'rgba(212, 175, 55,0.2)' : 'rgba(255,255,255,0.05)',
+                color: thread.pinned ? '#d4af37' : '#888',
+                border: '1px solid rgba(212, 175, 55,0.2)',
               }}
             >
               <Pin size={12} />
@@ -294,7 +294,7 @@ export default function ThreadPage({ params }: { params: Promise<{ id: string }>
               />
             ) : (
               <div className="forum-panel mb-6 rounded-[1.25rem] p-5 text-center">
-                <p className="text-sm leading-7 text-[#8a8a8a]">
+                <p className="text-sm leading-7 text-[#8a8a9a]">
                   Connect your wallet to join the discussion.
                 </p>
                 <button onClick={connect} className="forum-button forum-button--gold mt-4">
@@ -316,7 +316,7 @@ export default function ThreadPage({ params }: { params: Promise<{ id: string }>
           <div className="space-y-4">
             {topLevel.length === 0 && (
               <div className="forum-panel rounded-[1.25rem] p-5 text-center">
-                <p className="text-sm leading-7 text-[#8a8a8a]">No comments yet. Be the first signal here.</p>
+                <p className="text-sm leading-7 text-[#8a8a9a]">No comments yet. Be the first signal here.</p>
               </div>
             )}
 
@@ -371,7 +371,7 @@ function CommentBox({
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="forum-panel-title">{label}</p>
-          <p className="mt-1 text-xs text-[#8a8a8a]">Keep it concise, specific, and useful.</p>
+          <p className="mt-1 text-xs text-[#8a8a9a]">Keep it concise, specific, and useful.</p>
         </div>
         <span className="forum-chip">Wallet-authored</span>
       </div>
@@ -484,12 +484,12 @@ function CommentNode({
           style={{
             borderColor:
               cscore > 0
-                ? 'rgba(201,168,76,0.3)'
+                ? 'rgba(212, 175, 55,0.3)'
                 : cscore < 0
                   ? 'rgba(239,68,68,0.3)'
                   : 'rgba(255,255,255,0.08)',
-            color: cscore > 0 ? '#c9a84c' : cscore < 0 ? '#ef4444' : '#8a8a8a',
-            background: cscore > 0 ? 'rgba(201,168,76,0.08)' : 'rgba(255,255,255,0.03)',
+            color: cscore > 0 ? '#d4af37' : cscore < 0 ? '#ef4444' : '#8a8a8a',
+            background: cscore > 0 ? 'rgba(212, 175, 55,0.08)' : 'rgba(255,255,255,0.03)',
           }}
         >
           {cscore}
@@ -505,7 +505,7 @@ function CommentNode({
           type="button"
           onClick={() => onVote(comment.id, 'up')}
           className="forum-vote-button"
-          style={{ color: hasUp ? '#c9a84c' : '#6b6b6b' }}
+          style={{ color: hasUp ? '#d4af37' : '#6b6b6b' }}
           aria-label="Upvote comment"
         >
           <ArrowUp size={12} />
@@ -556,7 +556,7 @@ function CommentNode({
       </div>
 
       {isReplying && (
-        <div id={replyFormId} className="mt-4 border-l border-[#2a2a2a] pl-4">
+        <div id={replyFormId} className="mt-4 border-l border-[#1a1a2e] pl-4">
           <CommentBox
             label="Write a reply..."
             value={replyText}
@@ -581,15 +581,15 @@ function CommentNode({
                       <span className="text-xs font-bold text-white">
                         {reply.authorName || shortenAddress(reply.authorAddress)}
                       </span>
-                      <span className="text-[10px] uppercase tracking-[0.18em] text-[#8a8a8a]">
+                      <span className="text-[10px] uppercase tracking-[0.18em] text-[#8a8a9a]">
                         Reply
                       </span>
                     </div>
-                    <div className="mt-1 text-[10px] text-[#6f6f6f]">
+                    <div className="mt-1 text-[10px] text-[#555566]">
                       {timeAgo(reply.createdAt)}
                     </div>
                   </div>
-                  <span className="text-xs font-bold text-[#8a8a8a]">{replyScore}</span>
+                  <span className="text-xs font-bold text-[#8a8a9a]">{replyScore}</span>
                 </div>
 
                 <p className="mt-2 whitespace-pre-wrap text-sm leading-7 text-[#cfcfcf]">
@@ -602,7 +602,7 @@ function CommentNode({
                     onClick={() => onVote(reply.id, 'up')}
                     className="forum-vote-button"
                     style={{
-                      color: address && reply.upvotes.includes(address) ? '#c9a84c' : '#6b6b6b',
+                      color: address && reply.upvotes.includes(address) ? '#d4af37' : '#6b6b6b',
                     }}
                     aria-label="Upvote reply"
                   >
@@ -645,7 +645,7 @@ function WalletChip({
       <button
         type="button"
         onClick={disconnect}
-        className="forum-wallet focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+        className="forum-wallet focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
       >
         <span className="inline-block h-2 w-2 rounded-full bg-[#30d158] shadow-[0_0_12px_rgba(48,209,88,0.45)]" />
         {shortenAddress(address)}
@@ -657,7 +657,7 @@ function WalletChip({
     <button
       type="button"
       onClick={connect}
-      className="forum-button forum-button--gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+      className="forum-button forum-button--gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
     >
       Connect Wallet
     </button>

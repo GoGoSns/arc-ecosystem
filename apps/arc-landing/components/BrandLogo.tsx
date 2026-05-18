@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React from 'react';
 import Link from 'next/link';
@@ -21,7 +21,7 @@ export default function BrandLogo({
         src="/brand/arc-logo.svg"
         alt="Arc Ecosystem"
         className="h-10 w-auto min-w-[180px] object-contain sm:h-12 lg:h-14"
-        style={{ filter: 'drop-shadow(0 0 12px rgba(201,168,76,0.1))' }}
+        style={{ filter: 'drop-shadow(0 0 12px rgba(212, 175, 55,0.1))' }}
       />
     </div>
   );

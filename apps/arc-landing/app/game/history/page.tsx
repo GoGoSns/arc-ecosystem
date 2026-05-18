@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { Coins, History, Sparkles, Trophy } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -26,11 +26,11 @@ function badgeTone(status: string) {
     case 'lost':
       return 'border-[#f87171]/30 bg-[#f87171]/10 text-[#fecaca]';
     case 'opened':
-      return 'border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]';
+      return 'border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]';
     case 'expired':
       return 'border-[#f59e0b]/30 bg-[#f59e0b]/10 text-[#fde68a]';
     default:
-      return 'border-[#2a2a2a] bg-white/[0.02] text-[#aaa]';
+      return 'border-[#1a1a2e] bg-white/[0.02] text-[#8a8a9a]';
   }
 }
 
@@ -86,13 +86,13 @@ export default function GameHistoryPage() {
       <div className="mx-auto max-w-7xl">
         <div className="reveal space-y-5">
           <div className="flex flex-wrap items-center gap-2">
-            <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">History</HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">Timeline + table</HubBadge>
+            <HubBadge className="border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]">History</HubBadge>
+            <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">Timeline + table</HubBadge>
           </div>
           <h1 className="max-w-4xl text-4xl font-black uppercase leading-tight sm:text-5xl lg:text-6xl">
             Game history
           </h1>
-          <p className="max-w-3xl text-base leading-7 text-[#9a9a9a] sm:text-lg">
+          <p className="max-w-3xl text-base leading-7 text-[#8a8a9a] sm:text-lg">
             Filter the local archive by challenge or lucky outcome and review the mock events in a responsive
             table-style timeline.
           </p>
@@ -107,9 +107,9 @@ export default function GameHistoryPage() {
 
         <div className="mt-6">
           <HubCard as="section" className="overflow-hidden p-0">
-            <div className="flex flex-col gap-4 border-b border-[#2a2a2a] px-5 py-5 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-4 border-b border-[#1a1a2e] px-5 py-5 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Archive filter</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Archive filter</p>
                 <h2 className="mt-2 text-2xl font-black uppercase">Outcome timeline</h2>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -123,10 +123,10 @@ export default function GameHistoryPage() {
                     <button
                       key={value}
                       type="button"
-                      className={`rounded-full border px-4 py-2 font-mono text-[10px] uppercase tracking-[0.18em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
+                      className={`rounded-full border px-4 py-2 font-mono text-[10px] uppercase tracking-[0.18em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
                         active
-                          ? 'border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]'
-                          : 'border-[#2a2a2a] bg-white/[0.02] text-[#aaa] hover:border-[#c9a84c]/25 hover:text-[#f0d79e]'
+                          ? 'border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]'
+                          : 'border-[#1a1a2e] bg-white/[0.02] text-[#8a8a9a] hover:border-[#d4af37]/25 hover:text-[#f0d79e]'
                       }`}
                       onClick={() => setFilter(value)}
                       aria-pressed={active}
@@ -151,33 +151,33 @@ export default function GameHistoryPage() {
                       className="grid gap-4 px-5 py-4 md:grid-cols-[160px_110px_minmax(0,1fr)_140px_120px] md:items-center"
                     >
                       <div className="min-w-0">
-                        <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777] md:hidden">When</p>
+                        <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566] md:hidden">When</p>
                         <div className="text-sm font-semibold text-white">{formatGameTimestamp(item.createdAt)}</div>
-                        <div className="mt-1 text-xs text-[#777]">Recorded locally</div>
+                        <div className="mt-1 text-xs text-[#555566]">Recorded locally</div>
                       </div>
 
                       <div className="min-w-0">
-                        <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777] md:hidden">Type</p>
-                        <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#aaa]">
+                        <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566] md:hidden">Type</p>
+                        <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#8a8a9a]">
                           {typeLabel}
                         </HubBadge>
                       </div>
 
                       <div className="min-w-0">
-                        <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777] md:hidden">Event</p>
+                        <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566] md:hidden">Event</p>
                         <div className="truncate text-sm font-semibold text-white">{item.title}</div>
-                        <div className="mt-1 text-xs leading-6 text-[#777]">
+                        <div className="mt-1 text-xs leading-6 text-[#555566]">
                           {item.type === 'challenge' ? 'Challenge outcome' : 'Lucky card reveal'}
                         </div>
                       </div>
 
                       <div className="min-w-0 md:text-right">
-                        <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777] md:hidden">Amount</p>
-                        <div className="text-sm font-black text-[#c9a84c]">{amountText}</div>
+                        <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566] md:hidden">Amount</p>
+                        <div className="text-sm font-black text-[#d4af37]">{amountText}</div>
                       </div>
 
                       <div className="min-w-0 md:text-right">
-                        <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777] md:hidden">Status</p>
+                        <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566] md:hidden">Status</p>
                         <HubBadge className={badgeTone(item.status)}>{item.status.toUpperCase()}</HubBadge>
                       </div>
                     </div>

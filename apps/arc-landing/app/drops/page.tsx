@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useMemo, useEffect } from 'react';
 import { useWallet } from '@/contexts/WalletContext';
@@ -22,6 +22,7 @@ import LanguageToggle from '@/components/LanguageToggle';
 import SiteHeader from '@/components/SiteHeader';
 import { HubMetricCard } from '@/components/HubPrimitives';
 import { translations, type Lang } from '@/lib/translations';
+import { ShareButtons } from '@/components/ShareButtons';
 
 function Brackets() {
   return (
@@ -64,22 +65,22 @@ function Countdown({ targetDate }: { targetDate: number }) {
     <div className="flex gap-2 font-mono text-sm">
       <div className="flex flex-col items-center min-w-[40px]">
         <span className="font-black text-white">{timeLeft.days}</span>
-        <span className="text-[8px] text-[#555] uppercase">d</span>
+        <span className="text-[8px] text-[#555566] uppercase">d</span>
       </div>
       <span className="text-white/20">:</span>
       <div className="flex flex-col items-center min-w-[40px]">
         <span className="font-black text-white">{timeLeft.hours}</span>
-        <span className="text-[8px] text-[#555] uppercase">h</span>
+        <span className="text-[8px] text-[#555566] uppercase">h</span>
       </div>
       <span className="text-white/20">:</span>
       <div className="flex flex-col items-center min-w-[40px]">
         <span className="font-black text-white">{timeLeft.minutes}</span>
-        <span className="text-[8px] text-[#555] uppercase">m</span>
+        <span className="text-[8px] text-[#555566] uppercase">m</span>
       </div>
       <span className="text-white/20">:</span>
       <div className="flex flex-col items-center min-w-[40px]">
-        <span className="font-black text-[#c9a84c]">{timeLeft.seconds}</span>
-        <span className="text-[8px] text-[#555] uppercase">s</span>
+        <span className="font-black text-[#d4af37]">{timeLeft.seconds}</span>
+        <span className="text-[8px] text-[#555566] uppercase">s</span>
       </div>
     </div>
   );
@@ -121,13 +122,16 @@ export default function DropsPage() {
         <div className="mx-auto max-w-7xl">
           <div className="reveal mb-16 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between" style={{ transitionDelay: '40ms' }}>
             <div>
-              <p className="font-mono text-xs uppercase tracking-[0.35em] text-[#c9a84c]">{copy.hero.tagline}</p>
+              <p className="font-mono text-xs uppercase tracking-[0.35em] text-[#d4af37]">{copy.hero.tagline}</p>
               <h1 className="mt-6 text-5xl font-black uppercase sm:text-7xl lg:text-8xl">
-                {copy.hero.titlePrefix} <span className="text-[#c9a84c]">{copy.hero.titleAccent}</span>
+                {copy.hero.titlePrefix} <span className="text-[#d4af37]">{copy.hero.titleAccent}</span>
               </h1>
-              <p className="mt-6 max-w-2xl text-xl text-[#9a9a9a]">
+              <p className="mt-6 max-w-2xl text-xl text-[#8a8a9a]">
                 {copy.hero.description}
               </p>
+              <div className="mt-4">
+                <ShareButtons title="Arc Drops" />
+              </div>
             </div>
             <Link href="/drops/archive" className="bracket-button flex items-center gap-2">
               <Archive size={16} /> {copy.hero.archiveCta}
@@ -165,31 +169,31 @@ export default function DropsPage() {
                     
                     <div className="p-8 flex-1 flex flex-col">
                       <div className="flex justify-between items-start mb-4">
-                        <h3 className="text-3xl font-black uppercase group-hover:text-[#c9a84c] transition-colors">{drop.title}</h3>
+                        <h3 className="text-3xl font-black uppercase group-hover:text-[#d4af37] transition-colors">{drop.title}</h3>
                         <div className="text-right">
-                          <p className="text-[10px] font-mono text-[#777] uppercase">{copy.cards.prize}</p>
-                          <p className="text-xl font-black text-[#c9a84c]">
+                          <p className="text-[10px] font-mono text-[#555566] uppercase">{copy.cards.prize}</p>
+                          <p className="text-xl font-black text-[#d4af37]">
                             {drop.prizeType === 'usdc' ? `$${drop.prizeAmount}` : `${drop.prizeAmount} NFTs`}
                           </p>
                         </div>
                       </div>
                       
-                      <p className="text-[#777] text-sm leading-relaxed mb-8 line-clamp-2">
+                      <p className="text-[#555566] text-sm leading-relaxed mb-8 line-clamp-2">
                         {drop.description}
                       </p>
                       
                       <div className="mt-auto pt-8 border-t border-white/5 flex items-center justify-between">
                         <div className="flex gap-4">
-                          <div className="flex items-center gap-1.5 text-[10px] font-mono text-[#555] uppercase">
+                          <div className="flex items-center gap-1.5 text-[10px] font-mono text-[#555566] uppercase">
                             <Users size={12} /> {drop.entries.length} {copy.cards.entries}
                           </div>
-                          <div className="flex items-center gap-1.5 text-[10px] font-mono text-[#555] uppercase">
+                          <div className="flex items-center gap-1.5 text-[10px] font-mono text-[#555566] uppercase">
                             <LayoutGrid size={12} /> {drop.winnerCount} {copy.cards.winners}
                           </div>
                         </div>
                         <div className="flex gap-2">
                           {drop.requirements.map(req => (
-                            <div key={req} className="p-1.5 bg-white/5 rounded border border-white/10 text-[#777]">
+                            <div key={req} className="p-1.5 bg-white/5 rounded border border-white/10 text-[#555566]">
                               {req.includes('twitter') ? <Twitter size={12} /> : 
                                req.includes('discord') ? <MessageSquare size={12} /> : 
                                <Zap size={12} />}
@@ -208,7 +212,7 @@ export default function DropsPage() {
           <div className="reveal" style={{ transitionDelay: '180ms' }}>
             <div className="flex items-center gap-3 mb-10">
               <div className="h-2 w-2 rounded-full bg-blue-500" />
-              <h2 className="text-2xl font-black uppercase tracking-wider text-[#777]">{copy.sections.upcoming}</h2>
+              <h2 className="text-2xl font-black uppercase tracking-wider text-[#555566]">{copy.sections.upcoming}</h2>
             </div>
             
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -218,20 +222,20 @@ export default function DropsPage() {
                   <div className="flex justify-between items-start mb-6">
                     <div>
                       <h3 className="text-xl font-black uppercase mb-1">{drop.title}</h3>
-                      <p className="text-[10px] font-mono text-[#c9a84c] uppercase">
+                      <p className="text-[10px] font-mono text-[#d4af37] uppercase">
                         {copy.cards.startsIn} {Math.floor((drop.startDate - Date.now()) / 86400000)} {copy.cards.days}
                       </p>
                     </div>
                     <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-                      <Timer size={20} className="text-[#555]" />
+                      <Timer size={20} className="text-[#555566]" />
                     </div>
                   </div>
-                  <p className="text-xs text-[#555] mb-6 line-clamp-2">{drop.description}</p>
+                  <p className="text-xs text-[#555566] mb-6 line-clamp-2">{drop.description}</p>
                   <div className="flex justify-between items-center pt-4 border-t border-white/5">
                     <span className="text-xs font-black text-white/40">
                       {drop.prizeType === 'usdc' ? `$${drop.prizeAmount}` : `${drop.prizeAmount} NFTs`}
                     </span>
-                    <Link href={`/drops/${drop.id}`} className="text-[10px] font-mono text-[#555] hover:text-white transition-colors">
+                    <Link href={`/drops/${drop.id}`} className="text-[10px] font-mono text-[#555566] hover:text-white transition-colors">
                       {copy.cards.details} <ArrowRight size={10} className="inline ml-1" />
                     </Link>
                   </div>
@@ -242,8 +246,8 @@ export default function DropsPage() {
         </div>
       </section>
 
-      <footer className="border-t border-[#2a2a2a] px-4 py-12 mt-24">
-        <div className="mx-auto flex max-w-7xl flex-col gap-5 font-mono text-xs uppercase tracking-[0.16em] text-[#777] md:flex-row md:items-center md:justify-between">
+      <footer className="border-t border-[#1a1a2e] px-4 py-12 mt-24">
+        <div className="mx-auto flex max-w-7xl flex-col gap-5 font-mono text-xs uppercase tracking-[0.16em] text-[#555566] md:flex-row md:items-center md:justify-between">
           <p>&copy; 2026 Arc Ecosystem &middot; Verified Giveaways</p>
           <div className="flex gap-5">
             <Link href="/drops" className="nav-link">// Active</Link>

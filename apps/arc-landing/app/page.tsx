@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import {
   ArrowRight,
@@ -322,26 +322,26 @@ export default function Page() {
         <div className="mx-auto grid min-h-screen max-w-7xl items-center gap-10 py-20 lg:grid-cols-[minmax(0,1.08fr)_minmax(340px,0.92fr)] lg:py-28">
           <div className="reveal relative z-10 max-w-3xl text-left" style={revealDelay(80)}>
             <div className="flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center rounded-full border border-[#c9a84c]/25 bg-[#c9a84c]/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-[#f4dc9f]">
+              <span className="inline-flex items-center rounded-full border border-[#d4af37]/25 bg-[#d4af37]/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-[#f5d060]">
                 Dark + arc gold
               </span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-[#2a2a2a] bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-[#bdbdbd]">
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#1a1a2e] bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-[#bdbdbd]">
                 <span className="pulse-dot" />
                 Controlled motion
               </span>
             </div>
-            <p className="mt-6 font-mono text-xs uppercase tracking-[0.35em] text-[#c9a84c]">{t.hero.tagline}</p>
+            <p className="mt-6 font-mono text-xs uppercase tracking-[0.35em] text-[#d4af37]">{t.hero.tagline}</p>
             <h1
               className="mt-8 max-w-4xl text-[clamp(3.4rem,8vw,8rem)] font-black uppercase leading-[0.88] tracking-[-0.05em] text-white"
               data-text={t.hero.title}
             >
               <span className="block">{heroFirst}</span>
-              <span className="block text-[#c9a84c]">{heroRest}</span>
+              <span className="block text-[#d4af37]">{heroRest}</span>
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-[#c7c7c7] sm:text-xl">
               {t.hero.subtitle}
             </p>
-            <p className="mt-6 max-w-2xl text-base leading-7 text-[#9a9a9a] sm:text-lg">
+            <p className="mt-6 max-w-2xl text-base leading-7 text-[#8a8a9a] sm:text-lg">
               {t.hero.description}
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
@@ -375,8 +375,8 @@ export default function Page() {
                 { label: t.home.cards.creatorLabel, value: t.apps.creatorDescription },
                 { label: t.home.cards.playLabel, value: t.apps.playDescription },
               ].map((item) => (
-                <div key={item.label} className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-[#8a8a8a]">{item.label}</p>
+                <div key={item.label} className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-4">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-[#8a8a9a]">{item.label}</p>
                   <p className="mt-2 text-sm leading-6 text-white">{item.value}</p>
                 </div>
               ))}
@@ -387,7 +387,7 @@ export default function Page() {
             <div className="bracket-card relative overflow-hidden p-6 sm:p-8">
               <Brackets />
               <div className="flex items-center justify-between gap-3">
-                <p className="font-mono text-xs uppercase tracking-[0.28em] text-[#c9a84c]">// live system map</p>
+                <p className="font-mono text-xs uppercase tracking-[0.28em] text-[#d4af37]">// live system map</p>
                 <span className="inline-flex items-center gap-2 rounded-full border border-[#30d158]/20 bg-[#30d158]/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-[#a6f4bf]">
                   <span className="green-dot" />
                   Synced
@@ -396,7 +396,7 @@ export default function Page() {
               <h2 className="mt-5 text-3xl font-black uppercase leading-tight sm:text-4xl">
                 Three apps. One network language.
               </h2>
-              <p className="mt-3 text-sm leading-7 text-[#9a9a9a]">
+              <p className="mt-3 text-sm leading-7 text-[#8a8a9a]">
                 Stablecoin payments, creator monetization, and play systems share the same visual grammar and
                 infrastructure story.
               </p>
@@ -404,30 +404,30 @@ export default function Page() {
                 {appCards.map((card) => (
                   <div
                     key={card.title}
-                    className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4 transition-colors hover:border-[#c9a84c]/25"
+                    className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-4 transition-colors hover:border-[#d4af37]/25"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-[#8a8a8a]">{card.label}</p>
+                        <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-[#8a8a9a]">{card.label}</p>
                         <h3 className="mt-1 text-lg font-black uppercase text-white">{card.title}</h3>
                       </div>
                       <span className="soon-badge">{card.features.length} routes</span>
                     </div>
-                    <p className="mt-2 text-sm leading-6 text-[#9a9a9a]">{card.description}</p>
+                    <p className="mt-2 text-sm leading-6 text-[#8a8a9a]">{card.description}</p>
                   </div>
                 ))}
               </div>
               <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-[#8a8a8a]">Chain</p>
+                <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-4">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-[#8a8a9a]">Chain</p>
                   <p className="mt-2 text-sm font-semibold text-white">5042002</p>
                 </div>
-                <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-[#8a8a8a]">Gas</p>
+                <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-4">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-[#8a8a9a]">Gas</p>
                   <p className="mt-2 text-sm font-semibold text-white">USDC native</p>
                 </div>
-                <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-4">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-[#8a8a8a]">Latency</p>
+                <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-4">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-[#8a8a9a]">Latency</p>
                   <p className="mt-2 text-sm font-semibold text-white">&lt; 1s blocks</p>
                 </div>
               </div>
@@ -436,11 +436,11 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="border-y border-[#2a2a2a] bg-white/[0.015] px-4 py-5 font-mono text-xs uppercase tracking-[0.22em] text-[#aaa]">
+      <section className="border-y border-[#1a1a2e] bg-white/[0.015] px-4 py-5 font-mono text-xs uppercase tracking-[0.22em] text-[#8a8a9a]">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-6 gap-y-3">
-          <span>[ {t.stats.apps} &middot; 3 ]</span><span className="text-[#333]">|</span>
-          <span>[ {t.stats.features} &middot; 13 ]</span><span className="text-[#333]">|</span>
-          <span>[ {t.stats.network} &middot; {t.stats.networkValue} ]</span><span className="text-[#333]">|</span>
+          <span>[ {t.stats.apps} &middot; 3 ]</span><span className="text-[#1a1a2e]">|</span>
+          <span>[ {t.stats.features} &middot; 13 ]</span><span className="text-[#1a1a2e]">|</span>
+          <span>[ {t.stats.network} &middot; {t.stats.networkValue} ]</span><span className="text-[#1a1a2e]">|</span>
           <span>[ {t.stats.status} &middot; <span className="pulse-dot" /> {t.stats.live} ]</span>
         </div>
       </section>
@@ -461,19 +461,19 @@ export default function Page() {
               data-active={activeVoiceSectionId === card.voiceId ? 'true' : undefined}
               className={`reveal pillars-card bracket-card flex min-h-[560px] flex-col p-6 sm:p-8 transition-all duration-300 ${
                 activeVoiceSectionId === card.voiceId
-                  ? 'ring-1 ring-[#c9a84c]/45 shadow-[0_24px_80px_rgba(201,168,76,0.12)]'
+                  ? 'ring-1 ring-[#d4af37]/45 shadow-[0_24px_80px_rgba(212, 175, 55,0.12)]'
                   : ''
               }`}
               style={revealDelay(120 + idx * 90)}
             >
               <Brackets />
               <div className="mt-1 flex items-center justify-between gap-3">
-                <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">{appCardLabels[idx]}</p>
+                <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#d4af37]">{appCardLabels[idx]}</p>
                 <button
                     type="button"
                     onClick={() => requestVoiceTour('section', card.voiceId)}
                     aria-label={`${t.voiceTour.listen} ${card.title}`}
-                    className="inline-flex items-center gap-2 rounded-full border border-[#c9a84c]/25 bg-[#c9a84c]/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-[#f4dc9f] transition-colors hover:bg-[#c9a84c]/18 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+                    className="inline-flex items-center gap-2 rounded-full border border-[#d4af37]/25 bg-[#d4af37]/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-[#f5d060] transition-colors hover:bg-[#d4af37]/18 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
                   >
                     {t.voiceTour.listen}
                   </button>
@@ -531,7 +531,7 @@ export default function Page() {
         </div>
       </section>
 
-      <section id="architecture" className="section border-y border-[#141414] bg-white/[0.01]">
+      <section id="architecture" className="section border-y border-[#1a1a2e] bg-white/[0.01]">
         <div className="reveal mx-auto max-w-7xl">
           <SectionTitle label={`// ${t.sections.architectureTitle.toLowerCase()}`} title="How Arc routes value across apps in real time." />
           <div className="architecture mt-14 grid gap-8 lg:grid-cols-[1fr_1.1fr_1fr]">
@@ -540,9 +540,9 @@ export default function Page() {
             <DiagramColumn title="SOURCES" items={["Users", "Creators", "Teams", "Events"]} activeIndex={0} />
             <div className="bracket-card core-box p-8 text-center">
               <Brackets />
-              <p className="font-mono text-xs uppercase tracking-[0.28em] text-[#c9a84c]">ARC RAIL</p>
+              <p className="font-mono text-xs uppercase tracking-[0.28em] text-[#d4af37]">ARC RAIL</p>
               <h3 className="mt-4 text-4xl font-black">Settlement Engine</h3>
-              <div className="mt-8 space-y-3 font-mono text-sm text-[#aaa]">
+              <div className="mt-8 space-y-3 font-mono text-sm text-[#8a8a9a]">
                 <p>Routing Rules: Active</p>
                 <p>Reliability: 99.9%</p>
                 <p>Avg Conf: &lt;1s</p>
@@ -552,7 +552,7 @@ export default function Page() {
             <DiagramColumn title="DESTINATIONS" items={["Arc Pay", "Arc Creator", "Arc Play", "Market", "Rewards"]} activeIndex={2} />
           </div>
           
-          <div className="mt-12 grid grid-cols-2 gap-4 border-t border-[#1a1a1a] pt-12 md:grid-cols-4">
+          <div className="mt-12 grid grid-cols-2 gap-4 border-t border-[#1a1a2e] pt-12 md:grid-cols-4">
             {[
               { step: "Initiate", desc: "User triggers USDC action" },
               { step: "Route", desc: "Arc Rail validates paths" },
@@ -561,17 +561,17 @@ export default function Page() {
             ].map((item, idx) => (
               <div key={item.step} className="text-center md:text-left">
                 <div className="flex items-center justify-center gap-3 md:justify-start">
-                  <span className="font-mono text-[10px] text-[#c9a84c]">0{idx + 1}</span>
+                  <span className="font-mono text-[10px] text-[#d4af37]">0{idx + 1}</span>
                   <h4 className="font-mono text-xs uppercase tracking-widest text-white">{item.step}</h4>
-                  {idx < 3 && <ArrowRight size={12} className="hidden text-[#333] md:block" />}
+                  {idx < 3 && <ArrowRight size={12} className="hidden text-[#1a1a2e] md:block" />}
                 </div>
-                <p className="mt-2 text-[10px] uppercase tracking-wider text-[#555]">{item.desc}</p>
+                <p className="mt-2 text-[10px] uppercase tracking-wider text-[#555566]">{item.desc}</p>
               </div>
             ))}
           </div>
 
-          <p className="mt-16 text-center font-mono text-xs uppercase tracking-[0.24em] text-[#777]">
-            Success Rate &middot; 99.9% <span className="mx-3 text-[#333]">|</span> Conf. Time &middot; &lt; 1s <span className="mx-3 text-[#333]">|</span>{" "}
+          <p className="mt-16 text-center font-mono text-xs uppercase tracking-[0.24em] text-[#555566]">
+            Success Rate &middot; 99.9% <span className="mx-3 text-[#1a1a2e]">|</span> Conf. Time &middot; &lt; 1s <span className="mx-3 text-[#1a1a2e]">|</span>{" "}
             Modules &middot; 13 Active
           </p>
         </div>
@@ -584,23 +584,23 @@ export default function Page() {
             <div className="space-y-5">
               {sdkSteps.map((step, index) => (
                 <div key={step.title} className="step-row" data-active={sdkStep === index ? 'true' : undefined}>
-                  <span className="font-mono text-[10px] text-[#c9a84c]">[0{index + 1}]</span>
+                  <span className="font-mono text-[10px] text-[#d4af37]">[0{index + 1}]</span>
                   <div className="flex-1">
                     <h3 className="font-mono text-xs uppercase tracking-widest text-white">{step.title}</h3>
-                    <p className="mt-1 text-sm font-bold text-[#c9a84c]">{step.body}</p>
+                    <p className="mt-1 text-sm font-bold text-[#d4af37]">{step.body}</p>
                     <div className="mt-2 flex gap-3">
                       {step.benefits.map((benefit) => (
-                        <span key={benefit} className="font-mono text-[9px] uppercase tracking-tighter text-[#555]">
+                        <span key={benefit} className="font-mono text-[9px] uppercase tracking-tighter text-[#555566]">
                           &middot; {benefit}
                         </span>
                       ))}
                     </div>
                   </div>
-                  <ArrowRight className="ml-auto text-[#333]" size={18} />
+                  <ArrowRight className="ml-auto text-[#1a1a2e]" size={18} />
                 </div>
               ))}
               <div className="pt-6">
-                <p className="inline-flex border border-[#2a2a2a] px-3 py-1 font-mono text-xs uppercase text-[#777]">// arc-kit &middot; v0.1.0</p>
+                <p className="inline-flex border border-[#1a1a2e] px-3 py-1 font-mono text-xs uppercase text-[#555566]">// arc-kit &middot; v0.1.0</p>
                 <p className="mt-5 max-w-xl leading-7 text-[#8b8b8b]">
                   A TypeScript-first SDK for building on Arc Network. Submit USDC transactions with sub-cent fees.
                 </p>
@@ -611,7 +611,7 @@ export default function Page() {
         </div>
       </section>
 
-      <section id="resources" className="section border-y border-[#141414] bg-white/[0.01]">
+      <section id="resources" className="section border-y border-[#1a1a2e] bg-white/[0.01]">
         <div className="reveal mx-auto max-w-7xl">
           <SectionTitle label={t.sections.resourcesTitle.toLowerCase()} title={t.sections.resourcesSubtitle} />
           <div className="mt-14 grid gap-6 lg:grid-cols-3">
@@ -655,11 +655,11 @@ export default function Page() {
           <span className="cta-grid" aria-hidden="true" />
           <div className="relative z-10">
             <Brackets />
-            <p className="font-mono text-xs uppercase tracking-[0.32em] text-[#c9a84c]">// ready</p>
+            <p className="font-mono text-xs uppercase tracking-[0.32em] text-[#d4af37]">// ready</p>
             <h2 className="mx-auto mt-8 max-w-5xl text-4xl font-black uppercase leading-tight sm:text-6xl lg:text-7xl">
               {t.sections.ctaTitle}
             </h2>
-            <p className="mx-auto mt-8 max-w-xl leading-7 text-[#9a9a9a]">
+            <p className="mx-auto mt-8 max-w-xl leading-7 text-[#8a8a9a]">
               {t.sections.ctaSubtitle}
             </p>
             {arcPayUrl ? (
@@ -684,7 +684,7 @@ export default function Page() {
       <section id="faq" className="section pt-0">
         <div className="reveal mx-auto max-w-4xl">
           <SectionTitle label={`[ ${t.sections.faqTitle} ]`} title={t.sections.faqSubtitle} />
-          <div className="mt-12 border-t border-[#2a2a2a]">
+          <div className="mt-12 border-t border-[#1a1a2e]">
             {faqs.map(([question, answer], index) => {
               const isOpen = openFaq === index;
               const answerId = `faq-answer-${index}`;
@@ -696,12 +696,12 @@ export default function Page() {
                   aria-expanded={isOpen}
                   aria-controls={answerId}
                   data-open={isOpen ? 'true' : undefined}
-                  className="faq-row w-full border-b border-[#2a2a2a] py-6 text-left"
+                  className="faq-row w-full border-b border-[#1a1a2e] py-6 text-left"
                   onClick={() => setOpenFaq(isOpen ? -1 : index)}
                 >
                   <span className="faq-accent" aria-hidden="true" />
                   <div className="flex items-start gap-5">
-                    <span className="font-mono text-sm text-[#c9a84c]">{String(index + 1).padStart(2, "0")}</span>
+                    <span className="font-mono text-sm text-[#d4af37]">{String(index + 1).padStart(2, "0")}</span>
                     <div className="min-w-0 flex-1">
                       <h3 className="text-lg font-semibold text-white">{question}</h3>
                       <div id={answerId} className={`faq-answer ${isOpen ? "open" : ""}`}>
@@ -717,8 +717,8 @@ export default function Page() {
         </div>
       </section>
 
-      <footer className="border-t border-[#2a2a2a] px-4 py-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-5 font-mono text-xs uppercase tracking-[0.16em] text-[#777] md:flex-row md:items-center md:justify-between">
+      <footer className="border-t border-[#1a1a2e] px-4 py-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-5 font-mono text-xs uppercase tracking-[0.16em] text-[#555566] md:flex-row md:items-center md:justify-between">
           <p>&copy; 2026 Arc Ecosystem &middot; {t.footer.builtOn} &middot; by GoGo</p>
           <div className="flex gap-5">
             <span aria-disabled="true" className="nav-link cursor-not-allowed opacity-50">// X</span>
@@ -734,7 +734,7 @@ export default function Page() {
 function SectionTitle({ label, title }: { label: string; title: string }) {
   return (
     <div>
-      <p className="font-mono text-xs uppercase tracking-[0.28em] text-[#c9a84c]">{label}</p>
+      <p className="font-mono text-xs uppercase tracking-[0.28em] text-[#d4af37]">{label}</p>
       <h2 className="mt-4 max-w-4xl text-4xl font-black leading-tight sm:text-5xl lg:text-6xl">{title}</h2>
     </div>
   );
@@ -753,7 +753,7 @@ function DiagramColumn({
 }) {
   return (
     <div className="diagram-column">
-      <p className="mb-5 font-mono text-xs uppercase tracking-[0.28em] text-[#c9a84c]">{title}</p>
+      <p className="mb-5 font-mono text-xs uppercase tracking-[0.28em] text-[#d4af37]">{title}</p>
       <div className="space-y-3">
         {items.map((item, index) => (
           <div
@@ -771,9 +771,9 @@ function DiagramColumn({
               />
             ) : null}
             {index === activeIndex && (plannedStart === undefined || index < plannedStart) ? (
-              <span className="ml-auto text-[10px] uppercase tracking-[0.28em] text-[#f8e7b5]">live</span>
+              <span className="ml-auto text-[10px] uppercase tracking-[0.28em] text-[#f5d060]">live</span>
             ) : plannedStart !== undefined && index >= plannedStart ? (
-              <span className="ml-auto text-[#555]">(planned)</span>
+              <span className="ml-auto text-[#555566]">(planned)</span>
             ) : null}
           </div>
         ))}
@@ -790,15 +790,15 @@ function CodeTerminal({ activeStep }: { activeStep: number }) {
       <Brackets />
       
       {/* Utility Row */}
-      <div className="flex items-center justify-between border-b border-[#2a2a2a] bg-white/[0.02] px-5 py-3">
+      <div className="flex items-center justify-between border-b border-[#1a1a2e] bg-white/[0.02] px-5 py-3">
         <div className="flex gap-2">
           <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]/80" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]/80" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]/80" />
         </div>
         <div className="flex gap-4 font-mono text-[9px] uppercase tracking-widest">
-          <button type="button" className="text-[#555] hover:text-[#c9a84c]">Copy Snippet</button>
-          <a href="/learn" className="text-[#555] hover:text-[#c9a84c]">Open Docs</a>
+          <button type="button" className="text-[#555566] hover:text-[#d4af37]">Copy Snippet</button>
+          <a href="/learn" className="text-[#555566] hover:text-[#d4af37]">Open Docs</a>
         </div>
       </div>
 
@@ -807,39 +807,39 @@ function CodeTerminal({ activeStep }: { activeStep: number }) {
         <span className="code-terminal-cursor z-0" style={{ transform: `translateY(${cursorTop}rem)` }} aria-hidden="true" />
         <pre className="overflow-x-auto p-5 text-sm leading-7 text-[#d8d8d8] sm:p-8">
           <code className="relative z-10 grid gap-1">
-            <div className={activeStep === 0 ? 'text-white' : 'text-[#555] transition-colors'}>
-              <span className="text-[#c9a84c]">arc@sdk:~$</span> pnpm add @arc-ecosystem/arc-kit
+            <div className={activeStep === 0 ? 'text-white' : 'text-[#555566] transition-colors'}>
+              <span className="text-[#d4af37]">arc@sdk:~$</span> pnpm add @arc-ecosystem/arc-kit
             </div>
-            <div className={`mt-4 ${activeStep === 0 ? 'text-white' : 'text-[#555] transition-colors'}`}>
-              <span className="text-[#c9a84c]">import</span> {"{ kit }"} <span className="text-[#c9a84c]">from</span>{" "}
+            <div className={`mt-4 ${activeStep === 0 ? 'text-white' : 'text-[#555566] transition-colors'}`}>
+              <span className="text-[#d4af37]">import</span> {"{ kit }"} <span className="text-[#d4af37]">from</span>{" "}
               <span className="text-white">'@arc-ecosystem/arc-kit'</span>
             </div>
-            <div className={`mt-2 ${activeStep === 1 ? 'text-white' : 'text-[#555] transition-colors'}`}>
-              <span className="text-[#555]">// 1. Initiate settlement</span>
+            <div className={`mt-2 ${activeStep === 1 ? 'text-white' : 'text-[#555566] transition-colors'}`}>
+              <span className="text-[#555566]">// 1. Initiate settlement</span>
             </div>
-            <div className={activeStep === 1 ? 'text-white' : 'text-[#555] transition-colors'}>
-              <span className="text-[#c9a84c]">const</span> tx = <span className="text-[#c9a84c]">await</span> kit.send(&#123;
+            <div className={activeStep === 1 ? 'text-white' : 'text-[#555566] transition-colors'}>
+              <span className="text-[#d4af37]">const</span> tx = <span className="text-[#d4af37]">await</span> kit.send(&#123;
             </div>
-            <div className={activeStep === 1 ? 'text-white' : 'text-[#555] transition-colors'}>  to: <span className="text-white">'0xB87B...4365'</span>,</div>
-            <div className={activeStep === 1 ? 'text-white' : 'text-[#555] transition-colors'}>  amount: <span className="text-white">'10.00'</span>,</div>
-            <div className={activeStep === 1 ? 'text-white' : 'text-[#555] transition-colors'}>  token: <span className="text-white">'USDC'</span></div>
-            <div className={activeStep === 1 ? 'text-white' : 'text-[#555] transition-colors'}>
+            <div className={activeStep === 1 ? 'text-white' : 'text-[#555566] transition-colors'}>  to: <span className="text-white">'0xB87B...4365'</span>,</div>
+            <div className={activeStep === 1 ? 'text-white' : 'text-[#555566] transition-colors'}>  amount: <span className="text-white">'10.00'</span>,</div>
+            <div className={activeStep === 1 ? 'text-white' : 'text-[#555566] transition-colors'}>  token: <span className="text-white">'USDC'</span></div>
+            <div className={activeStep === 1 ? 'text-white' : 'text-[#555566] transition-colors'}>
               &#125;)
             </div>
-            <div className={`mt-4 ${activeStep === 2 ? 'text-white' : 'text-[#555] transition-colors'}`}>
-              <span className="text-[#555]">// 2. Track on-chain</span>
+            <div className={`mt-4 ${activeStep === 2 ? 'text-white' : 'text-[#555566] transition-colors'}`}>
+              <span className="text-[#555566]">// 2. Track on-chain</span>
             </div>
-            <div className={activeStep === 2 ? 'text-white' : 'text-[#555] transition-colors'}>
-              console.log(<span className="text-[#c9a84c]">{`\`Confirmed: \${tx.hash}\``}</span>)
+            <div className={activeStep === 2 ? 'text-white' : 'text-[#555566] transition-colors'}>
+              console.log(<span className="text-[#d4af37]">{`\`Confirmed: \${tx.hash}\``}</span>)
             </div>
           </code>
         </pre>
       </div>
 
       {/* Lower Info Band */}
-      <div className="flex items-center justify-between border-t border-[#2a2a2a] bg-white/[0.01] px-5 py-3 font-mono text-[9px] uppercase tracking-widest text-[#444]">
+      <div className="flex items-center justify-between border-t border-[#1a1a2e] bg-white/[0.01] px-5 py-3 font-mono text-[9px] uppercase tracking-widest text-[#444]">
         <span>Expected integration: &lt; 15 min</span>
-        <span className="text-[#c9a84c]/60">Type-safe helpers included</span>
+        <span className="text-[#d4af37]/60">Type-safe helpers included</span>
       </div>
     </div>
   );
@@ -865,7 +865,7 @@ function ResourceCard({
       <div className="resource-card bracket-card group p-6" aria-disabled="true">
         <Brackets />
         <div className="resource-card-icon grid min-h-56 place-items-center text-white">{icon}</div>
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">{label}</p>
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#d4af37]">{label}</p>
         <h3 className="resource-card-title mt-3 text-3xl font-black">{title}</h3>
         <p className="mt-4 min-h-20 leading-7 text-[#8b8b8b]">{text}</p>
         <p className="resource-card-footer mt-7 font-mono text-xs uppercase tracking-[0.2em] text-white">
@@ -885,7 +885,7 @@ function ResourceCard({
     >
       <Brackets />
       <div className="resource-card-icon grid min-h-56 place-items-center text-white">{icon}</div>
-      <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#c9a84c]">{label}</p>
+      <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#d4af37]">{label}</p>
       <h3 className="resource-card-title mt-3 text-3xl font-black">{title}</h3>
       <p className="mt-4 min-h-20 leading-7 text-[#8b8b8b]">{text}</p>
       <p className="resource-card-footer mt-7 font-mono text-xs uppercase tracking-[0.2em] text-white">

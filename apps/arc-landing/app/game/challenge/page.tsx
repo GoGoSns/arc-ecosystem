@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import {
@@ -38,6 +38,9 @@ import {
   type Challenge,
   type CreateChallengeInput,
 } from '@/lib/gameStore';
+import { useWallet } from '@/contexts/WalletContext';
+import { ShareButtons } from '@/components/ShareButtons';
+import { payToAdmin, USE_REAL_TRANSFERS, explorerUrl } from '@/lib/usdcTransfer';
 
 const DAY_MS = 86_400_000;
 
@@ -81,7 +84,7 @@ function statusTone(status: ReturnType<typeof resolveChallengeStatus>) {
       return 'border-[#f59e0b]/30 bg-[#f59e0b]/10 text-[#fde68a]';
     case 'open':
     default:
-      return 'border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]';
+      return 'border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]';
   }
 }
 
@@ -139,7 +142,7 @@ function ChallengeStatusRing({
         ? 'from-[#f87171] via-[#fda4af] to-[#f87171]'
         : status === 'expired'
           ? 'from-[#f59e0b] via-[#fcd34d] to-[#f59e0b]'
-          : 'from-[#c9a84c] via-[#f0d79e] to-[#c9a84c]';
+          : 'from-[#d4af37] via-[#f0d79e] to-[#d4af37]';
 
   return (
     <div className="relative mx-auto grid h-40 w-40 place-items-center">
@@ -152,10 +155,10 @@ function ChallengeStatusRing({
         }
         aria-hidden="true"
       />
-      <div className="absolute inset-3 rounded-full border border-[#2a2a2a] bg-[#050505] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.02)]" />
+      <div className="absolute inset-3 rounded-full border border-[#1a1a2e] bg-[#050505] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.02)]" />
       <div className="relative text-center">
         <div className="text-4xl font-black text-white">{percent}%</div>
-        <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.28em] text-[#777]">Progress</div>
+        <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.28em] text-[#555566]">Progress</div>
       </div>
     </div>
   );
@@ -186,29 +189,29 @@ function ChallengeCard({
               <StatusIcon size={12} className="mr-1" aria-hidden="true" />
               {status.toUpperCase()}
             </HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">{challenge.game}</HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-white">
+            <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">{challenge.game}</HubBadge>
+            <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-white">
               {formatGameAmount(challenge.rewardUsd)} USDC
             </HubBadge>
           </div>
           <div className="space-y-2">
             <h2 className="text-2xl font-black uppercase sm:text-3xl">{challenge.title}</h2>
-            <p className="max-w-3xl text-sm leading-7 text-[#9a9a9a]">
+            <p className="max-w-3xl text-sm leading-7 text-[#8a8a9a]">
               {challenge.senderName} challenged {challenge.receiverName}. Reach {challenge.targetValue}{' '}
               {formatTargetType(challenge.targetType)} before the deadline to unlock the reward.
             </p>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3 text-right">
-          <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">{deadline.label}</p>
+        <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3 text-right">
+          <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">{deadline.label}</p>
           <p className="mt-1 text-sm font-semibold text-white">{deadline.value}</p>
         </div>
       </div>
 
       <div className="mt-6 grid gap-5 xl:grid-cols-[minmax(0,1fr)_230px]">
         <div>
-          <div className="flex items-center justify-between gap-3 text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">
+          <div className="flex items-center justify-between gap-3 text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">
             <span>
               Progress {challenge.currentProgress}/{challenge.targetValue}
             </span>
@@ -223,7 +226,7 @@ function ChallengeCard({
                     ? 'bg-[linear-gradient(90deg,#f87171,#fda4af)]'
                     : status === 'expired'
                       ? 'bg-[linear-gradient(90deg,#f59e0b,#fcd34d)]'
-                      : 'bg-[linear-gradient(90deg,#c9a84c,#f0d79e)]'
+                      : 'bg-[linear-gradient(90deg,#d4af37,#f0d79e)]'
               }`}
               style={{ width: `${percent}%` }}
               role="progressbar"
@@ -234,22 +237,22 @@ function ChallengeCard({
             />
           </div>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-            <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
-              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Game</div>
+            <div className="rounded-2xl border border-[#1a1a2e] bg-white/[0.02] px-4 py-3">
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Game</div>
               <div className="mt-2 text-sm font-semibold text-white">{challenge.game}</div>
             </div>
-            <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
-              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Target</div>
+            <div className="rounded-2xl border border-[#1a1a2e] bg-white/[0.02] px-4 py-3">
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Target</div>
               <div className="mt-2 text-sm font-semibold text-white">
                 {challenge.targetValue} {formatTargetType(challenge.targetType)}
               </div>
             </div>
-            <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
-              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Reward</div>
+            <div className="rounded-2xl border border-[#1a1a2e] bg-white/[0.02] px-4 py-3">
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Reward</div>
               <div className="mt-2 text-sm font-semibold text-[#f0d79e]">{formatGameAmount(challenge.rewardUsd)} USDC</div>
             </div>
-            <div className="rounded-2xl border border-[#2a2a2a] bg-white/[0.02] px-4 py-3">
-              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">Created</div>
+            <div className="rounded-2xl border border-[#1a1a2e] bg-white/[0.02] px-4 py-3">
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Created</div>
               <div className="mt-2 text-sm font-semibold text-white">{formatGameTimestamp(challenge.createdAt)}</div>
             </div>
           </div>
@@ -257,8 +260,8 @@ function ChallengeCard({
 
         <div className="space-y-3">
           <ChallengeStatusRing challenge={challenge} status={status} />
-          <div className="rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3 text-center">
-            <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#777]">{deadline.label}</div>
+          <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3 text-center">
+            <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">{deadline.label}</div>
             <div className="mt-2 text-sm font-semibold text-white">{deadline.value}</div>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -277,7 +280,7 @@ function ChallengeCard({
 
       <div className="mt-5 flex flex-wrap items-center gap-2">
         {challenge.timeline.slice(-3).map((event) => (
-          <HubBadge key={event.id} className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">
+          <HubBadge key={event.id} className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">
             {event.kind}
           </HubBadge>
         ))}
@@ -288,8 +291,11 @@ function ChallengeCard({
 
 export default function GameChallengePage() {
   const { challenges, createChallenge, claimChallengeReward } = useGameStore();
+  const deductBalance = useGameStore((state) => state.deductBalance);
+  const { address, isConnected } = useWallet();
   const { hydrated, now } = useHydratedNow();
   const [toast, setToast] = useState<{ tone: 'success' | 'error'; message: string } | null>(null);
+  const [txPending, setTxPending] = useState(false);
   const [title, setTitle] = useState('Streak Surge');
   const [senderName, setSenderName] = useState('Nova Host');
   const [receiverName, setReceiverName] = useState('Open slot');
@@ -308,12 +314,12 @@ export default function GameChallengePage() {
     return () => window.clearTimeout(timer);
   }, [toast]);
 
-  const gameStore = useGameStore((state) => ({
-    challenges: state.challenges,
-    luckyPacks: state.luckyPacks,
-    history: state.history,
-  }));
-  const progress = useMemo(() => buildGameProgressSnapshot(gameStore, now), [gameStore, now]);
+  const luckyPacks = useGameStore((state) => state.luckyPacks);
+  const history = useGameStore((state) => state.history);
+  const progress = useMemo(
+    () => buildGameProgressSnapshot({ challenges, luckyPacks, history }, now),
+    [challenges, luckyPacks, history, now],
+  );
 
   const sortedChallenges = useMemo(() => {
     const rank: Record<string, number> = {
@@ -355,8 +361,13 @@ export default function GameChallengePage() {
     { href: '/game/history', label: 'History', description: 'Read the local archive.' },
   ];
 
-  const handleCreateChallenge = (event: FormEvent<HTMLFormElement>) => {
+  const handleCreateChallenge = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!isConnected || !address) {
+      setToast({ tone: 'error', message: 'Connect your wallet to create a challenge.' });
+      return;
+    }
 
     const parsedDeadlineAt = fromDatetimeLocalValue(deadlineAt);
     const parsedAmount = Number(amountUsd);
@@ -377,6 +388,24 @@ export default function GameChallengePage() {
       return;
     }
 
+    setTxPending(true);
+    let txHash: string | undefined;
+    if (USE_REAL_TRANSFERS) {
+      const tx = await payToAdmin(parsedAmount);
+      setTxPending(false);
+      if (!tx.success) {
+        setToast({ tone: 'error', message: tx.error ?? 'Transaction failed. Please try again.' });
+        return;
+      }
+      txHash = tx.txHash;
+    } else {
+      setTxPending(false);
+      if (!deductBalance(address, parsedAmount)) {
+        setToast({ tone: 'error', message: `Insufficient balance. Top up your wallet to wager $${parsedAmount}.` });
+        return;
+      }
+    }
+
     const created = createChallenge({
       title: title.trim(),
       senderName: senderName.trim(),
@@ -388,7 +417,10 @@ export default function GameChallengePage() {
       deadlineAt: parsedDeadlineAt,
     } satisfies CreateChallengeInput);
 
-    setToast({ tone: 'success', message: `${created.title} was added to Challenge Pay.` });
+    const successMsg = txHash
+      ? `${created.title} created! View tx: ${explorerUrl(txHash)}`
+      : `${created.title} was added to Challenge Pay.`;
+    setToast({ tone: 'success', message: successMsg });
     setTitle('Streak Surge');
     setSenderName('Nova Host');
     setReceiverName('Open slot');
@@ -438,11 +470,11 @@ export default function GameChallengePage() {
 
         <div className="reveal space-y-5">
           <div className="flex flex-wrap items-center gap-2">
-            <HubBadge className="border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#f0d79e]">Challenge Pay</HubBadge>
-            <HubBadge className="border-[#2a2a2a] bg-white/[0.02] text-[#bdbdbd]">Mock escrow + proof flow</HubBadge>
+            <HubBadge className="border-[#d4af37]/30 bg-[#d4af37]/10 text-[#f0d79e]">Challenge Pay</HubBadge>
+            <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">Mock escrow + proof flow</HubBadge>
           </div>
           <h1 className="max-w-5xl text-4xl font-black uppercase leading-tight sm:text-5xl lg:text-7xl">Arc Challenge Pay</h1>
-          <p className="max-w-3xl text-base leading-7 text-[#9a9a9a] sm:text-lg">
+          <p className="max-w-3xl text-base leading-7 text-[#8a8a9a] sm:text-lg">
             Create local challenges, accept them, update progress, attach proof, and settle rewards in the browser
             only. No backend or wallet wiring is involved.
           </p>
@@ -457,6 +489,9 @@ export default function GameChallengePage() {
             <Link href="/game/history" className="secondary-button">
               History
             </Link>
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <ShareButtons title="Arc Challenge Pay" />
           </div>
         </div>
 
@@ -496,10 +531,10 @@ export default function GameChallengePage() {
             <HubCard as="section" className="p-6 sm:p-8">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Create challenge</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Create challenge</p>
                   <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">New mock challenge</h2>
                 </div>
-                <Plus size={18} className="text-[#c9a84c]" aria-hidden="true" />
+                <Plus size={18} className="text-[#d4af37]" aria-hidden="true" />
               </div>
 
               <form className="mt-6 space-y-4" onSubmit={handleCreateChallenge}>
@@ -595,8 +630,8 @@ export default function GameChallengePage() {
                   />
                 </label>
 
-                <button type="submit" className="primary-button w-full justify-center">
-                  Create Challenge
+                <button type="submit" disabled={txPending} className="primary-button w-full justify-center disabled:opacity-60">
+                  {txPending ? 'Confirming transaction…' : 'Create Challenge'}
                   <Sparkles size={15} />
                 </button>
               </form>
@@ -610,23 +645,23 @@ export default function GameChallengePage() {
             <HubCard as="aside" className="p-6 sm:p-8">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#777]">Game links</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Game links</p>
                   <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">Move across the hub</h2>
                 </div>
-                <Flame size={18} className="text-[#c9a84c]" aria-hidden="true" />
+                <Flame size={18} className="text-[#d4af37]" aria-hidden="true" />
               </div>
               <div className="mt-6 space-y-3">
                 {quickLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="flex items-center justify-between gap-4 rounded-2xl border border-[#2a2a2a] bg-black/30 px-4 py-3 transition-colors hover:border-[#c9a84c]/30 hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60"
+                    className="flex items-center justify-between gap-4 rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3 transition-colors hover:border-[#d4af37]/30 hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]/60"
                   >
                     <span className="min-w-0">
                       <span className="block text-sm font-semibold text-white">{link.label}</span>
-                      <span className="block text-xs leading-6 text-[#777]">{link.description}</span>
+                      <span className="block text-xs leading-6 text-[#555566]">{link.description}</span>
                     </span>
-                    <ArrowRight size={15} className="shrink-0 text-[#c9a84c]" />
+                    <ArrowRight size={15} className="shrink-0 text-[#d4af37]" />
                   </Link>
                 ))}
               </div>
