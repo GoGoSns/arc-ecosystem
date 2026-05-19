@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import Link from 'next/link';
-import { ArrowRight, BadgeCheck, Coins, Clock3, Percent, Sparkles, Trophy, type LucideIcon } from 'lucide-react';
+import { ArrowRight, BadgeCheck, Coins, Clock3, Gamepad2, Percent, Sparkles, Star, Trophy, type LucideIcon } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { HubBadge, HubCard, HubMetricCard, HubBrackets, HubSkeletonCard } from '@/components/HubPrimitives';
 import GameProgressPanel from '@/components/GameProgressPanel';
@@ -75,8 +75,34 @@ function GameLinkCard({
 }
 
 export default function GameHubHomePage() {
-  const { challenges, luckyPacks, history } = useGameStore();
+  const challenges = useGameStore((s) => s.challenges);
+  const luckyPacks = useGameStore((s) => s.luckyPacks);
+  const history = useGameStore((s) => s.history);
+  const bonusXp = useGameStore((s) => s.bonusXp);
+  const dailyPackClaimedAt = useGameStore((s) => s.dailyPackClaimedAt);
+  const claimDailyPack = useGameStore((s) => s.claimDailyPack);
+  const arcadeBests = useGameStore((s) => s.arcadeBests);
   const { hydrated, now } = useHydratedNow();
+
+  const [dailyToast, setDailyToast] = useState<{ isVisible: boolean; message: string }>({ isVisible: false, message: '' });
+
+  const isDailyAvailable = useMemo(() => {
+    if (!dailyPackClaimedAt) return true;
+    const todayDay = Math.floor(now / 86_400_000);
+    const lastDay = Math.floor(dailyPackClaimedAt / 86_400_000);
+    return todayDay > lastDay;
+  }, [now, dailyPackClaimedAt]);
+
+  const handleDailyClaim = () => {
+    const result = claimDailyPack('hub-user');
+    setDailyToast({
+      isVisible: true,
+      message: result.alreadyClaimed
+        ? 'Already claimed today. Come back tomorrow!'
+        : `+${result.xpGained} XP + 5 USDC added to mock balance!`,
+    });
+    setTimeout(() => setDailyToast((p) => ({ ...p, isVisible: false })), 3000);
+  };
 
   const stats = useMemo(() => {
     const activeChallenges = [...challenges]
@@ -97,8 +123,8 @@ export default function GameHubHomePage() {
   }, [challenges, history, luckyPacks, now]);
 
   const progress = useMemo(
-    () => buildGameProgressSnapshot({ challenges, luckyPacks, history }, now),
-    [challenges, history, luckyPacks, now],
+    () => buildGameProgressSnapshot({ challenges, luckyPacks, history, bonusXp }, now),
+    [challenges, history, luckyPacks, bonusXp, now],
   );
 
   if (!hydrated) {
@@ -125,6 +151,51 @@ export default function GameHubHomePage() {
   return (
     <section className="section pt-24 sm:pt-28">
       <div className="mx-auto max-w-7xl">
+
+        {/* XP / Level / Streak bar */}
+        <div className="reveal mb-8 grid gap-3 sm:grid-cols-3 lg:grid-cols-6" style={{ transitionDelay: '0ms' }}>
+          <div className="sm:col-span-3 lg:col-span-2 rounded-3xl border border-[#d4af37]/20 bg-[#d4af37]/5 px-5 py-4 flex items-center gap-4">
+            <Star size={20} className="shrink-0 text-[#d4af37]" />
+            <div className="min-w-0">
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#8a8a9a]">Level {progress.level}</div>
+              <div className="mt-1 h-1.5 w-full rounded-full bg-[#1a1a2e]">
+                <div className="h-full rounded-full bg-[#d4af37] transition-all" style={{ width: `${Math.round(progress.levelProgress * 100)}%` }} />
+              </div>
+              <div className="mt-1 text-xs text-[#8a8a9a]">{progress.xp} XP · {progress.xpToNextLevel} to next</div>
+            </div>
+          </div>
+          <div className="rounded-3xl border border-[#1a1a2e] bg-black/30 px-5 py-4">
+            <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Streak</div>
+            <div className="mt-1 text-2xl font-black text-[#f5d060]">{progress.streak}🔥</div>
+          </div>
+          <div className="rounded-3xl border border-[#1a1a2e] bg-black/30 px-5 py-4">
+            <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Win Rate</div>
+            <div className="mt-1 text-2xl font-black text-white">{progress.winRate}%</div>
+          </div>
+          <div className="rounded-3xl border border-[#1a1a2e] bg-black/30 px-5 py-4">
+            <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Arcade Best</div>
+            <div className="mt-1 text-2xl font-black text-[#30d158]">{arcadeBests.tapGold + arcadeBests.memoryMatch}</div>
+          </div>
+          <div className="rounded-3xl border border-[#30d158]/20 bg-[#30d158]/5 px-5 py-4 flex items-center justify-between gap-3">
+            <div>
+              <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Daily Pack</div>
+              <div className="mt-1 text-xs text-[#8a8a9a]">{isDailyAvailable ? '+50 XP + 5 USDC' : 'Come back tomorrow'}</div>
+            </div>
+            <button
+              onClick={handleDailyClaim}
+              className={`shrink-0 rounded-xl border px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] transition-all ${isDailyAvailable ? 'border-[#30d158]/40 bg-[#30d158]/10 text-[#a6f4bf] hover:bg-[#30d158]/20' : 'border-[#1a1a2e] bg-black/30 text-[#555566] cursor-not-allowed'}`}
+            >
+              {isDailyAvailable ? 'Claim' : 'Done'}
+            </button>
+          </div>
+        </div>
+
+        {dailyToast.isVisible && (
+          <div className="mb-4 rounded-2xl border border-[#30d158]/30 bg-[#30d158]/10 px-4 py-3 text-sm text-[#a6f4bf]">
+            {dailyToast.message}
+          </div>
+        )}
+
         <div className="reveal grid gap-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-start" style={{ transitionDelay: '40ms' }}>
           <div className="space-y-6">
             <div className="flex flex-wrap items-center gap-2">
@@ -174,7 +245,7 @@ export default function GameHubHomePage() {
             </p>
             <div className="mt-6 space-y-3">
               <Link href="/game/challenge" className="feature-link">
-                <span>Challenge Pay</span>
+                <span>Challenge</span>
                 <span className="ml-auto text-[#8a8a9a]">{stats.activeChallenges.length} live</span>
               </Link>
               <Link href="/game/lucky" className="feature-link">
@@ -183,7 +254,15 @@ export default function GameHubHomePage() {
               </Link>
               <Link href="/game/quiz-pot" className="feature-link">
                 <span>Quiz Pot</span>
-                <span className="ml-auto text-[#8a8a9a]">Trivia rooms</span>
+                <span className="ml-auto text-[#8a8a9a]">Trivia</span>
+              </Link>
+              <Link href="/game/arcade" className="feature-link">
+                <span>Arcade</span>
+                <span className="ml-auto text-[#8a8a9a]">Free · XP</span>
+              </Link>
+              <Link href="/roulette" className="feature-link">
+                <span>Roulette</span>
+                <span className="ml-auto text-[#8a8a9a]">Spin &amp; win</span>
               </Link>
               <Link href="/game/history" className="feature-link">
                 <span>History</span>
@@ -214,12 +293,12 @@ export default function GameHubHomePage() {
           <HubMetricCard label="Win Rate" value={`${stats.winRate}%`} icon={Percent} />
         </div>
 
-        <div className="mt-6 grid gap-6 lg:grid-cols-4">
+        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           <GameLinkCard
             href="/game/challenge"
             badge={`${stats.activeChallenges.length} live`}
-            title="Challenge Pay"
-            description="Create a challenge, accept it, update progress, submit proof, and settle the reward with local mock state."
+            title="Challenge"
+            description="Create a USDC challenge, accept it, update progress, submit proof, and settle the reward."
             meta="Manage missions"
             icon={Trophy}
           />
@@ -227,7 +306,7 @@ export default function GameHubHomePage() {
             href="/game/quiz-pot"
             badge="Trivia"
             title="Quiz Pot"
-            description="Join mock quiz rooms, answer one question at a time, and review prize splits with fully local gameplay."
+            description="Join trivia rooms, answer Web3 questions, and earn XP or split the prize pot."
             meta="Play trivia"
             icon={BadgeCheck}
           />
@@ -235,15 +314,23 @@ export default function GameHubHomePage() {
             href="/game/lucky"
             badge={`${stats.openLuckyPacks.length} pending`}
             title="Lucky Card"
-            description="Open weighted lucky cards, inspect the reveal amount, and keep the result in your local demo archive."
+            description="Open weighted lucky packs, reveal your USDC amount, and keep the result in your archive."
             meta="Open cards"
             icon={Sparkles}
+          />
+          <GameLinkCard
+            href="/game/arcade"
+            badge="Free · XP"
+            title="Arcade"
+            description="Tap The Gold and Memory Match — two free mini-games that earn XP every time you play."
+            meta="Play now"
+            icon={Gamepad2}
           />
           <GameLinkCard
             href="/game/history"
             badge={`${history.length} events`}
             title="History"
-            description="Review challenge wins, losses, and lucky opens in a compact timeline that stays responsive on small screens."
+            description="Review challenge wins, losses, and lucky opens in a compact timeline."
             meta="View archive"
             icon={Clock3}
           />

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, type PersistStorage } from 'zustand/middleware';
+import { getAddress } from 'viem';
 
 export type RaceCategory = 'transactions' | 'volume' | 'forum-posts' | 'quests' | 'referrals';
 export type RaceStatus = 'upcoming' | 'active' | 'ended';
@@ -37,7 +38,7 @@ export interface Race {
   participants: RaceParticipant[];
 }
 
-export const ADMIN_ADDRESS = '0xB87B774a5b3D77E13a89C68F62810D5a23404365';
+export const ADMIN_ADDRESS = getAddress('0xB87B774a5b3D77E13a89C68F62810D5a23404365');
 
 export const RACE_CATEGORY_LABELS: Record<RaceCategory, string> = {
   transactions: 'Transactions',

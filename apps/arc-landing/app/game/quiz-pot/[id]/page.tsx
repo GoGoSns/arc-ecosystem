@@ -20,6 +20,7 @@ import {
   type QuizSubmissionResult,
 } from '@/lib/quizPotStore';
 import { buildGameProgressSnapshot, useGameStore } from '@/lib/gameStore';
+import { useWallet } from '@/contexts/WalletContext';
 import { ShareButtons } from '@/components/ShareButtons';
 import { GameToast } from '@/components/GameToast';
 import { payToAdmin, payFromAdmin, USE_REAL_TRANSFERS, explorerUrl } from '@/lib/usdcTransfer';
@@ -525,6 +526,7 @@ export default function QuizPotDetailPage() {
   const potId = Array.isArray(params?.id) ? params.id[0] : params?.id ?? '';
   const { hydrated, now } = useHydratedNow();
   const { ready: identityReady, name, setName, address } = useStoredQuizIdentity();
+  const { isConnected } = useWallet();
   
   const [toast, setToast] = useState<{ isVisible: boolean; type: 'win' | 'loss' | 'info'; title: string; message: string; amount?: string }>({
     isVisible: false,
@@ -539,9 +541,7 @@ export default function QuizPotDetailPage() {
 
   const closeToast = () => setToast(prev => ({ ...prev, isVisible: false }));
 
-  const challenges = useGameStore((state) => state.challenges);
-  const luckyPacks = useGameStore((state) => state.luckyPacks);
-  const history = useGameStore((state) => state.history);
+  const { challenges, luckyPacks, history, addBalance, deductBalance } = useGameStore();
   const gameProgress = useMemo(
     () => buildGameProgressSnapshot({ challenges, luckyPacks, history }, now),
     [challenges, luckyPacks, history, now],
@@ -562,29 +562,43 @@ export default function QuizPotDetailPage() {
     event.preventDefault();
     if (!pot) return;
 
+    if (!isConnected || !address) {
+      showToast('info', 'Connect Wallet', 'Please connect your wallet to join.');
+      return;
+    }
+
     const entryFee = Math.max(1, Math.round(pot.potUsd / 10));
     setTxPending(true);
-    let txHash: string | undefined;
-    if (USE_REAL_TRANSFERS) {
+    
+    try {
       const tx = await payToAdmin(entryFee);
       setTxPending(false);
+      
       if (!tx.success) {
         showToast('info', 'Transaction Failed', tx.error ?? 'Transaction failed. Please try again.');
         return;
       }
-      txHash = tx.txHash;
-    } else {
-      setTxPending(false);
-    }
 
-    const result = joinQuizPot(pot.id, address, name);
-    if (result.ok) {
-      const msg = txHash
-        ? `Entry fee paid! View tx: ${explorerUrl(txHash)}`
-        : 'You are now a participant in this quiz room.';
-      showToast('info', 'Joined Pot', msg);
-    } else {
-      showToast('info', 'Join Status', result.message);
+      // Update mock balance for UI (happens in both modes as per requirements)
+      if (!deductBalance(address, entryFee)) {
+        if (!USE_REAL_TRANSFERS) {
+          showToast('info', 'Insufficient Balance', `Insufficient balance (Demo Mode).`);
+          return;
+        }
+      }
+
+      const result = joinQuizPot(pot.id, address, name);
+      if (result.ok) {
+        const msg = !USE_REAL_TRANSFERS
+          ? 'Joined Pot! (Demo mode)'
+          : `Entry fee paid! View on Arcscan: ${tx.explorerUrl}`;
+        showToast('info', 'Joined Pot', msg);
+      } else {
+        showToast('info', 'Join Status', result.message);
+      }
+    } catch (e: any) {
+      setTxPending(false);
+      showToast('info', 'Transaction Failed', e?.message || 'Transaction failed');
     }
   };
 
@@ -603,14 +617,24 @@ export default function QuizPotDetailPage() {
         const score = participant?.score || 0;
 
         const isWinner = rank === 1;
-        if (isWinner && USE_REAL_TRANSFERS) {
+        if (isWinner) {
           const breakdown = buildQuizPrizeBreakdown(pot, finalLeaderboard);
           const prize = breakdown.find(e => e.place === 1)?.amountUsd ?? 0;
           if (prize > 0) {
-            const tx = await payFromAdmin(address, prize);
-            const txMsg = tx.txHash ? ` View tx: ${explorerUrl(tx.txHash)}` : '';
-            showToast('win', 'You Won!', `Prize: $${prize} USDC transferred!${txMsg}`, String(prize));
-            return;
+            try {
+              const tx = await payFromAdmin(address, prize);
+              
+              // Update mock balance for UI
+              addBalance(address, prize);
+              
+              const msg = !USE_REAL_TRANSFERS
+                ? `You Won! Prize: $${prize} claimed! (Demo mode)`
+                : `You Won! Reward claimed! View on Arcscan: ${tx.explorerUrl}`;
+              showToast('win', 'You Won!', msg, String(prize));
+              return;
+            } catch (e: any) {
+              showToast('info', 'Payout Error', e?.message || 'Transaction failed');
+            }
           }
         }
 

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { getAddress } from 'viem';
 
 export type DropStatus = 'upcoming' | 'active' | 'ended';
 export type EntryRequirement = 'twitter-follow' | 'twitter-retweet' | 'forum-post' | 'wallet-connect' | 'discord-join';
@@ -31,7 +32,7 @@ export interface Drop {
   createdAt: number;
 }
 
-export const ADMIN_ADDRESS = '0xB87B774a5b3D77E13a89C68F62810D5a23404365';
+export const ADMIN_ADDRESS = getAddress('0xB87B774a5b3D77E13a89C68F62810D5a23404365');
 
 interface DropsStore {
   drops: Drop[];

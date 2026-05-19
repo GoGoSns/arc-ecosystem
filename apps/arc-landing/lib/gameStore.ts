@@ -89,11 +89,20 @@ export interface LuckyReveal {
   rarity: 'bronze' | 'gold' | 'legendary';
 }
 
+export interface DailyPackResult {
+  ok: boolean;
+  alreadyClaimed: boolean;
+  xpGained: number;
+}
+
 export interface GameStore {
   challenges: Challenge[];
   luckyPacks: LuckyPack[];
   history: GameHistoryItem[];
   mockBalance: Record<string, number>;
+  bonusXp: number;
+  dailyPackClaimedAt: number;
+  arcadeBests: { tapGold: number; memoryMatch: number };
   createChallenge: (input: CreateChallengeInput) => Challenge;
   acceptChallenge: (challengeId: string, receiverName?: string) => boolean;
   updateChallengeProgress: (challengeId: string, amount?: number) => void;
@@ -106,6 +115,9 @@ export interface GameStore {
   topUp: (address: string) => void;
   deductBalance: (address: string, amount: number) => boolean;
   addBalance: (address: string, amount: number) => void;
+  addBonusXP: (amount: number) => void;
+  claimDailyPack: (address: string) => DailyPackResult;
+  saveArcadeBest: (game: 'tapGold' | 'memoryMatch', score: number) => boolean;
 }
 
 export interface CreateChallengeInput {
@@ -793,6 +805,14 @@ function normalizePersistedGameState(state: unknown): PersistedGameState {
               .map(([k, v]) => [k.trim().toLowerCase(), Math.max(0, v as number)]),
           )
         : {},
+    bonusXp: typeof candidate.bonusXp === 'number' && Number.isFinite(candidate.bonusXp) ? Math.max(0, Math.round(candidate.bonusXp)) : 0,
+    dailyPackClaimedAt: typeof candidate.dailyPackClaimedAt === 'number' && Number.isFinite(candidate.dailyPackClaimedAt) ? Math.round(candidate.dailyPackClaimedAt) : 0,
+    arcadeBests: candidate.arcadeBests && typeof candidate.arcadeBests === 'object' && !Array.isArray(candidate.arcadeBests)
+      ? {
+          tapGold: typeof (candidate.arcadeBests as Record<string, unknown>).tapGold === 'number' ? Math.max(0, Math.round(Number((candidate.arcadeBests as Record<string, unknown>).tapGold))) : 0,
+          memoryMatch: typeof (candidate.arcadeBests as Record<string, unknown>).memoryMatch === 'number' ? Math.max(0, Math.round(Number((candidate.arcadeBests as Record<string, unknown>).memoryMatch))) : 0,
+        }
+      : { tapGold: 0, memoryMatch: 0 },
   };
 }
 
@@ -959,7 +979,7 @@ export function formatTimeLeft(ms: number): string {
 }
 
 export function buildGameProgressSnapshot(
-  state: Pick<GameStore, 'challenges' | 'luckyPacks' | 'history'>,
+  state: Pick<GameStore, 'challenges' | 'luckyPacks' | 'history'> & { bonusXp?: number },
   now = Date.now(),
 ): GameProgressSnapshot {
   const activeChallenges = state.challenges.filter((challenge) => resolveChallengeStatus(challenge, now) === 'open').length;
@@ -1027,7 +1047,7 @@ export function buildGameProgressSnapshot(
     }
   }, 0);
 
-  const xp = historyXp + challengeXp + luckyXp + streak * 50;
+  const xp = historyXp + challengeXp + luckyXp + streak * 50 + (state.bonusXp ?? 0);
   const level = Math.max(1, Math.floor(xp / 500) + 1);
   const xpIntoLevel = xp % 500;
   const levelProgress = xpIntoLevel / 500;
@@ -1149,6 +1169,9 @@ interface PersistedGameState {
   luckyPacks: LuckyPack[];
   history: GameHistoryItem[];
   mockBalance: Record<string, number>;
+  bonusXp: number;
+  dailyPackClaimedAt: number;
+  arcadeBests: { tapGold: number; memoryMatch: number };
 }
 
 interface GameState extends GameStore {}
@@ -1160,6 +1183,9 @@ export const useGameStore = create<GameState>()(
       luckyPacks: INITIAL_LUCKY_PACKS,
       history: INITIAL_HISTORY,
       mockBalance: {},
+      bonusXp: 0,
+      dailyPackClaimedAt: 0,
+      arcadeBests: { tapGold: 0, memoryMatch: 0 },
       topUp: (address) => {
         const key = address.trim().toLowerCase();
         set((state) => ({
@@ -1189,6 +1215,43 @@ export const useGameStore = create<GameState>()(
             [key]: (state.mockBalance[key] ?? 0) + amount,
           },
         }));
+      },
+      addBonusXP: (amount) => {
+        const safe = Math.max(0, Math.round(amount));
+        if (safe === 0) return;
+        set((state) => ({ bonusXp: (state.bonusXp ?? 0) + safe }));
+      },
+      claimDailyPack: (address) => {
+        const now = Date.now();
+        const lastClaimed = get().dailyPackClaimedAt ?? 0;
+        const todayDay = Math.floor(now / DAY_MS);
+        const lastDay = Math.floor(lastClaimed / DAY_MS);
+        if (lastClaimed > 0 && lastDay >= todayDay) {
+          return { ok: false, alreadyClaimed: true, xpGained: 0 };
+        }
+        const xpGained = 50;
+        const key = address.trim().toLowerCase();
+        set((state) => ({
+          dailyPackClaimedAt: now,
+          bonusXp: (state.bonusXp ?? 0) + xpGained,
+          mockBalance: {
+            ...state.mockBalance,
+            [key]: (state.mockBalance[key] ?? 0) + 5,
+          },
+        }));
+        return { ok: true, alreadyClaimed: false, xpGained };
+      },
+      saveArcadeBest: (game, score) => {
+        const bests = get().arcadeBests ?? { tapGold: 0, memoryMatch: 0 };
+        if (score <= (bests[game] ?? 0)) return false;
+        set((state) => ({
+          arcadeBests: {
+            tapGold: state.arcadeBests.tapGold,
+            memoryMatch: state.arcadeBests.memoryMatch,
+            [game]: score,
+          },
+        }));
+        return true;
       },
       createChallenge: (input) => {
         const now = Date.now();
@@ -1644,12 +1707,15 @@ export const useGameStore = create<GameState>()(
     }),
     {
       name: 'arclanding:game-hub',
-      version: 2,
+      version: 3,
       partialize: (state): PersistedGameState => ({
         challenges: state.challenges,
         luckyPacks: state.luckyPacks,
         history: state.history,
         mockBalance: state.mockBalance,
+        bonusXp: state.bonusXp,
+        dailyPackClaimedAt: state.dailyPackClaimedAt,
+        arcadeBests: state.arcadeBests,
       }),
       migrate: (persistedState) => normalizePersistedGameState(persistedState),
       merge: (persistedState, currentState) => ({

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { getAddress } from 'viem';
 
 export type FeedbackCategory = 'bug' | 'feature' | 'idea' | 'general';
 export type FeedbackStatus = 'open' | 'reviewing' | 'planned' | 'in-progress' | 'completed' | 'declined';
@@ -28,7 +29,7 @@ export interface Feedback {
   updatedAt: number;
 }
 
-export const ADMIN_ADDRESS = '0xB87B774a5b3D77E13a89C68F62810D5a23404365';
+export const ADMIN_ADDRESS = getAddress('0xB87B774a5b3D77E13a89C68F62810D5a23404365');
 
 interface FeedbackStore {
   feedbacks: Feedback[];

@@ -332,48 +332,53 @@ export default function GameLuckyPage() {
       }));
 
     setTxPending(true);
-    let txHash: string | undefined;
-    if (USE_REAL_TRANSFERS) {
+    
+    try {
       const tx = await payToAdmin(parsedBaseAmount);
       setTxPending(false);
+      
       if (!tx.success) {
         showToast('info', 'Transaction Failed', tx.error ?? 'Transaction failed. Please try again.');
         return;
       }
-      txHash = tx.txHash;
-    } else {
-      setTxPending(false);
+
+      // Update mock balance for UI (happens in both modes as per requirements)
       if (!deductBalance(address, parsedBaseAmount)) {
-        showToast('info', 'Insufficient Balance', `Top up to wager $${parsedBaseAmount}.`);
-        return;
+        if (!USE_REAL_TRANSFERS) {
+          showToast('info', 'Insufficient Balance', `Insufficient balance (Demo Mode).`);
+          return;
+        }
       }
+
+      const created = createLuckyPack({
+        title: title.trim(),
+        senderName: senderName.trim(),
+        receiverName: receiverName.trim() || 'Open drawer',
+        baseAmount: parsedBaseAmount,
+        tiers: tiers.length > 0 ? tiers : [{ amount: parsedBaseAmount, weight: 100 }],
+        expiresAt: parsedExpiresAt,
+      } satisfies CreateLuckyPackInput);
+
+      const successMsg = !USE_REAL_TRANSFERS
+        ? `${created.title} created! (Demo mode)`
+        : `${created.title} created! View on Arcscan: ${tx.explorerUrl}`;
+      showToast('win', 'Pack Created!', successMsg);
+      
+      setTitle('Midnight Pack');
+      setSenderName('Night Market');
+      setReceiverName('Open drawer');
+      setBaseAmount('25');
+      setExpiresAt(toDatetimeLocalValue(Date.now() + DAY_MS * 2));
+      setTierDrafts([
+        { amount: '25', weight: '55' },
+        { amount: '45', weight: '25' },
+        { amount: '90', weight: '15' },
+        { amount: '200', weight: '5' },
+      ]);
+    } catch (e: any) {
+      setTxPending(false);
+      showToast('info', 'Transaction Failed', e?.message || 'Transaction failed');
     }
-
-    const created = createLuckyPack({
-      title: title.trim(),
-      senderName: senderName.trim(),
-      receiverName: receiverName.trim() || 'Open drawer',
-      baseAmount: parsedBaseAmount,
-      tiers: tiers.length > 0 ? tiers : [{ amount: parsedBaseAmount, weight: 100 }],
-      expiresAt: parsedExpiresAt,
-    } satisfies CreateLuckyPackInput);
-
-    const successMsg = txHash
-      ? `${created.title} created! View tx: ${explorerUrl(txHash)}`
-      : `${created.title} was successfully added to the deck.`;
-    showToast('win', 'Pack Created!', successMsg);
-    
-    setTitle('Midnight Pack');
-    setSenderName('Night Market');
-    setReceiverName('Open drawer');
-    setBaseAmount('25');
-    setExpiresAt(toDatetimeLocalValue(Date.now() + DAY_MS * 2));
-    setTierDrafts([
-      { amount: '25', weight: '55' },
-      { amount: '45', weight: '25' },
-      { amount: '90', weight: '15' },
-      { amount: '200', weight: '5' },
-    ]);
   };
 
   if (!hydrated) {

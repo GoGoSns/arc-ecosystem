@@ -21,7 +21,8 @@ import Link from 'next/link';
 import AppSwitcher from '@/components/AppSwitcher';
 import LanguageToggle from '@/components/LanguageToggle';
 import SiteHeader from '@/components/SiteHeader';
-import { payToAdmin, payFromAdmin, USE_REAL_TRANSFERS, explorerUrl } from '@/lib/usdcTransfer';
+import { payToAdmin, payFromAdmin, USE_REAL_TRANSFERS } from '@/lib/usdcTransfer';
+import { useGameStore } from '@/lib/gameStore';
 
 const PAYOUTS: Record<RouletteResult, number> = {
   'loss': 0,
@@ -56,6 +57,10 @@ export default function RoulettePage() {
   const [lastResult, setLastResult] = useState<Spin | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [lang, setLang] = useState<Lang>('en');
+  const [funMode, setFunMode] = useState(false);
+  const [sessionXP, setSessionXP] = useState(0);
+
+  const addBonusXP = useGameStore((s) => s.addBonusXP);
 
   useEffect(() => {
     const saved = localStorage.getItem('arc-lang') as Lang | null;
@@ -91,21 +96,29 @@ export default function RoulettePage() {
   }, [spins, address]);
 
   const handleSpin = async () => {
-    if (!isConnected || isSpinning || txPending || balance < betAmount) return;
+    if (isSpinning || txPending) return;
+    if (!funMode && (!isConnected || balance < betAmount)) return;
 
-    // Pay first (real mode) or just proceed (mock mode)
-    if (USE_REAL_TRANSFERS) {
+    if (!funMode) {
       setTxPending(true);
-      const tx = await payToAdmin(betAmount);
-      setTxPending(false);
-      if (!tx.success) {
-        setTxNotice(tx.error ?? 'Transaction failed. Please try again.');
+      try {
+        const tx = await payToAdmin(betAmount);
+        setTxPending(false);
+        if (!tx.success) {
+          setTxNotice(tx.error ?? 'Transaction failed. Please try again.');
+          setTimeout(() => setTxNotice(null), 4000);
+          return;
+        }
+        const successMsg = !USE_REAL_TRANSFERS
+          ? 'Bet placed! (Demo mode)'
+          : `Bet confirmed! View on Arcscan: ${tx.explorerUrl}`;
+        setTxNotice(successMsg);
+        setTimeout(() => setTxNotice(null), 5000);
+      } catch (e: unknown) {
+        setTxPending(false);
+        setTxNotice((e instanceof Error ? e.message : null) || 'Transaction failed');
         setTimeout(() => setTxNotice(null), 4000);
         return;
-      }
-      if (tx.txHash) {
-        setTxNotice(`Bet confirmed! ${explorerUrl(tx.txHash)}`);
-        setTimeout(() => setTxNotice(null), 5000);
       }
     }
 
@@ -158,13 +171,29 @@ export default function RoulettePage() {
       if (finalResult !== 'loss') {
         setShowConfetti(true);
         setTimeout(() => setShowConfetti(false), 3000);
-        if (USE_REAL_TRANSFERS && address) {
-          const tx = await payFromAdmin(address, payout);
-          if (tx.txHash) {
-            setTxNotice(`Winnings sent! ${explorerUrl(tx.txHash)}`);
+
+        if (funMode) {
+          const xpGained = finalResult === 'win-50x' ? 60 : finalResult === 'win-5x' ? 30 : 15;
+          addBonusXP(xpGained);
+          setSessionXP((prev) => prev + xpGained);
+          setTxNotice(`🎉 WINNER! +${xpGained} XP earned (Fun Mode)`);
+          setTimeout(() => setTxNotice(null), 5000);
+        } else {
+          try {
+            const tx = await payFromAdmin(address!, payout);
+            const winMsg = !USE_REAL_TRANSFERS
+              ? `WINNER! $${payout.toFixed(2)} claimed! (Demo mode)`
+              : `WINNER! Winnings sent! View on Arcscan: ${tx.explorerUrl}`;
+            setTxNotice(winMsg);
             setTimeout(() => setTxNotice(null), 6000);
+          } catch (e: unknown) {
+            setTxNotice(`Payout error: ${e instanceof Error ? e.message : 'unknown'}`);
           }
         }
+      } else if (funMode) {
+        const xpGained = 5;
+        addBonusXP(xpGained);
+        setSessionXP((prev) => prev + xpGained);
       }
     }, 2000);
   };
@@ -282,6 +311,24 @@ export default function RoulettePage() {
 
               {/* Betting */}
               <div className="mt-10 w-full space-y-6">
+                {/* Fun Mode Toggle */}
+                <div className="flex items-center justify-between rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
+                  <div>
+                    <div className="text-xs font-black uppercase text-white">Fun Mode</div>
+                    <div className="text-[10px] text-[#555566]">No wallet · Earn XP instead</div>
+                  </div>
+                  <button
+                    onClick={() => setFunMode((v) => !v)}
+                    className={`relative h-6 w-12 rounded-full border transition-all ${funMode ? 'border-[#30d158]/50 bg-[#30d158]/20' : 'border-[#1a1a2e] bg-[#0d0d12]'}`}
+                  >
+                    <span className={`absolute top-0.5 h-5 w-5 rounded-full transition-all ${funMode ? 'left-6 bg-[#30d158]' : 'left-0.5 bg-[#333]'}`} />
+                  </button>
+                </div>
+                {sessionXP > 0 && (
+                  <div className="flex items-center gap-2 rounded-2xl border border-[#d4af37]/20 bg-[#d4af37]/5 px-4 py-2 text-sm font-black text-[#f0d79e]">
+                    ⭐ +{sessionXP} XP this session
+                  </div>
+                )}
                 <div className="flex flex-wrap gap-2 justify-center">
                   {[0.10, 0.50, 1.00, 5.00].map(amount => (
                     <button 
@@ -304,28 +351,37 @@ export default function RoulettePage() {
                   </button>
                 </div>
 
-                {!isConnected ? (
+                {funMode ? (
+                  <button
+                    onClick={handleSpin}
+                    disabled={isSpinning}
+                    className="primary-button w-full justify-center py-5 text-xl disabled:opacity-50 group relative overflow-hidden"
+                  >
+                    <span className="relative z-10">
+                      {isSpinning ? 'SPINNING...' : 'SPIN FOR XP ⭐'}
+                    </span>
+                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform" />
+                  </button>
+                ) : !isConnected ? (
                   <button onClick={connect} className="primary-button w-full justify-center py-5">
                     CONNECT WALLET TO PLAY
                   </button>
                 ) : (
-                  <>
-                    <button
-                      onClick={handleSpin}
-                      disabled={isSpinning || txPending || balance < betAmount}
-                      className="primary-button w-full justify-center py-5 text-xl disabled:opacity-50 group relative overflow-hidden"
-                    >
-                      <span className="relative z-10">
-                        {txPending ? 'CONFIRMING...' : isSpinning ? 'SPINNING...' : `SPIN $${betAmount.toFixed(2)}`}
-                      </span>
-                      <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform" />
-                    </button>
-                    {txNotice && (
-                      <div className="mt-3 rounded-xl border border-[#d4af37]/30 bg-[#d4af37]/10 px-4 py-2 text-xs font-mono text-[#f0d79e] break-all">
-                        {txNotice}
-                      </div>
-                    )}
-                  </>
+                  <button
+                    onClick={handleSpin}
+                    disabled={isSpinning || txPending || balance < betAmount}
+                    className="primary-button w-full justify-center py-5 text-xl disabled:opacity-50 group relative overflow-hidden"
+                  >
+                    <span className="relative z-10">
+                      {txPending ? 'CONFIRMING...' : isSpinning ? 'SPINNING...' : `SPIN $${betAmount.toFixed(2)}`}
+                    </span>
+                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform" />
+                  </button>
+                )}
+                {txNotice && (
+                  <div className="mt-3 rounded-xl border border-[#d4af37]/30 bg-[#d4af37]/10 px-4 py-2 text-xs font-mono text-[#f0d79e] break-all">
+                    {txNotice}
+                  </div>
                 )}
 
                 {lastResult && (

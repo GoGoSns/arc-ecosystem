@@ -327,12 +327,11 @@ export default function LuckyDetailPage() {
     setTimeout(() => {
       const reveal = openLuckyPack(pack.id);
       if (reveal) {
-        addBalance(address, reveal.amount);
         const isHighTier = reveal.amount >= 90;
         showToast(
           isHighTier ? 'win' : 'info', 
           isHighTier ? 'BIG WIN!' : 'Revealed', 
-          `${formatGameAmount(reveal.amount)} USDC revealed and added to your wallet!`,
+          `${formatGameAmount(reveal.amount)} USDC revealed! Claim it now.`,
           String(reveal.amount)
         );
       }
@@ -347,24 +346,28 @@ export default function LuckyDetailPage() {
     }
     const openedAmount = pack.openedAmount ?? 0;
     setTxPending(true);
-    let txHash: string | undefined;
-    if (USE_REAL_TRANSFERS) {
+    
+    try {
       const tx = await payFromAdmin(address, openedAmount);
       setTxPending(false);
+      
       if (!tx.success) {
         showToast('loss', 'Transaction Failed', tx.error ?? 'Transaction failed. Please try again.');
         return;
       }
-      txHash = tx.txHash;
-    } else {
+
+      if (claimLuckyPack(pack.id)) {
+        // Update mock balance for UI (happens in both modes as per requirements)
+        addBalance(address, openedAmount);
+        
+        const msg = !USE_REAL_TRANSFERS
+          ? `Reward of $${openedAmount} claimed! (Demo mode)`
+          : `Reward claimed! View on Arcscan: ${tx.explorerUrl}`;
+        showToast('win', 'Reward Claimed!', msg, String(openedAmount));
+      }
+    } catch (e: any) {
       setTxPending(false);
-    }
-    if (claimLuckyPack(pack.id)) {
-      if (!USE_REAL_TRANSFERS && openedAmount) addBalance(address, openedAmount);
-      const msg = txHash
-        ? `Winnings transferred! View tx: ${explorerUrl(txHash)}`
-        : 'Your winnings have been added to your balance.';
-      showToast('win', 'Reward Claimed!', msg, String(openedAmount));
+      showToast('loss', 'Transaction Failed', e?.message || 'Transaction failed');
     }
   };
 

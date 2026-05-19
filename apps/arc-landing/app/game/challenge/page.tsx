@@ -40,7 +40,7 @@ import {
 } from '@/lib/gameStore';
 import { useWallet } from '@/contexts/WalletContext';
 import { ShareButtons } from '@/components/ShareButtons';
-import { payToAdmin, USE_REAL_TRANSFERS, explorerUrl } from '@/lib/usdcTransfer';
+import { payToAdmin, payFromAdmin, USE_REAL_TRANSFERS, explorerUrl } from '@/lib/usdcTransfer';
 
 const DAY_MS = 86_400_000;
 
@@ -290,8 +290,7 @@ function ChallengeCard({
 }
 
 export default function GameChallengePage() {
-  const { challenges, createChallenge, claimChallengeReward } = useGameStore();
-  const deductBalance = useGameStore((state) => state.deductBalance);
+  const { challenges, createChallenge, claimChallengeReward, addBalance, deductBalance } = useGameStore();
   const { address, isConnected } = useWallet();
   const { hydrated, now } = useHydratedNow();
   const [toast, setToast] = useState<{ tone: 'success' | 'error'; message: string } | null>(null);
@@ -389,46 +388,84 @@ export default function GameChallengePage() {
     }
 
     setTxPending(true);
-    let txHash: string | undefined;
-    if (USE_REAL_TRANSFERS) {
+    
+    try {
       const tx = await payToAdmin(parsedAmount);
       setTxPending(false);
+      
       if (!tx.success) {
         setToast({ tone: 'error', message: tx.error ?? 'Transaction failed. Please try again.' });
         return;
       }
-      txHash = tx.txHash;
-    } else {
-      setTxPending(false);
+
+      // Update mock balance for UI (happens in both modes as per requirements)
       if (!deductBalance(address, parsedAmount)) {
-        setToast({ tone: 'error', message: `Insufficient balance. Top up your wallet to wager $${parsedAmount}.` });
-        return;
+        if (!USE_REAL_TRANSFERS) {
+          setToast({ tone: 'error', message: `Insufficient balance (Demo Mode).` });
+          return;
+        }
       }
+
+      const created = createChallenge({
+        title: title.trim(),
+        senderName: senderName.trim(),
+        receiverName: receiverName.trim() || 'Open slot',
+        amountUsd: parsedAmount,
+        game: game.trim(),
+        targetType: targetType.trim(),
+        targetValue: parsedTargetValue,
+        deadlineAt: parsedDeadlineAt,
+      } satisfies CreateChallengeInput);
+
+      const successMsg = !USE_REAL_TRANSFERS
+        ? `${created.title} created! (Demo mode)`
+        : `${created.title} created! View on Arcscan: ${tx.explorerUrl}`;
+      setToast({ tone: 'success', message: successMsg });
+      
+      setTitle('Streak Surge');
+      setSenderName('Nova Host');
+      setReceiverName('Open slot');
+      setAmountUsd('180');
+      setGame('Arc Runner');
+      setTargetType('rounds');
+      setTargetValue('12');
+      setDeadlineAt(toDatetimeLocalValue(Date.now() + DAY_MS * 2));
+    } catch (e: any) {
+      setTxPending(false);
+      setToast({ tone: 'error', message: e?.message || 'Transaction failed' });
+    }
+  };
+
+  const handleClaimReward = async (challengeId: string) => {
+    const ch = challenges.find((c) => c.id === challengeId);
+    if (!ch) return;
+
+    if (!isConnected || !address) {
+      setToast({ tone: 'error', message: 'Connect your wallet to claim this reward.' });
+      return;
     }
 
-    const created = createChallenge({
-      title: title.trim(),
-      senderName: senderName.trim(),
-      receiverName: receiverName.trim() || 'Open slot',
-      amountUsd: parsedAmount,
-      game: game.trim(),
-      targetType: targetType.trim(),
-      targetValue: parsedTargetValue,
-      deadlineAt: parsedDeadlineAt,
-    } satisfies CreateChallengeInput);
+    setTxPending(true);
+    try {
+      const tx = await payFromAdmin(address, ch.rewardUsd);
+      setTxPending(false);
 
-    const successMsg = txHash
-      ? `${created.title} created! View tx: ${explorerUrl(txHash)}`
-      : `${created.title} was added to Challenge Pay.`;
-    setToast({ tone: 'success', message: successMsg });
-    setTitle('Streak Surge');
-    setSenderName('Nova Host');
-    setReceiverName('Open slot');
-    setAmountUsd('180');
-    setGame('Arc Runner');
-    setTargetType('rounds');
-    setTargetValue('12');
-    setDeadlineAt(toDatetimeLocalValue(Date.now() + DAY_MS * 2));
+      if (!tx.success) {
+        setToast({ tone: 'error', message: tx.error ?? 'Transaction failed. Please try again.' });
+        return;
+      }
+
+      if (claimChallengeReward(ch.id)) {
+        addBalance(address, ch.rewardUsd);
+        const msg = !USE_REAL_TRANSFERS
+          ? `Reward of $${ch.rewardUsd} claimed! (Demo mode)`
+          : `Reward claimed! View on Arcscan: ${tx.explorerUrl}`;
+        setToast({ tone: 'success', message: msg });
+      }
+    } catch (e: any) {
+      setTxPending(false);
+      setToast({ tone: 'error', message: e?.message || 'Transaction failed' });
+    }
   };
 
   if (!hydrated) {
@@ -511,11 +548,7 @@ export default function GameChallengePage() {
                   key={challenge.id}
                   challenge={challenge}
                   now={now}
-                  onClaim={(challengeId) => {
-                    if (claimChallengeReward(challengeId)) {
-                      setToast({ tone: 'success', message: 'Reward claimed and archived locally.' });
-                    }
-                  }}
+                  onClaim={handleClaimReward}
                 />
               ))
             ) : (

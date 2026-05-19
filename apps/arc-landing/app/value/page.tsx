@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { getAddress } from 'viem';
 import { 
   Search, Wallet, Gem, Coins, Wrench, Globe, ArrowRight, Award,
   ChevronRight, ArrowLeft
@@ -116,7 +117,7 @@ export default function ValueHub() {
               <span className="text-[#555566]">Or try:</span>
               <button 
                 type="button"
-                onClick={() => setSearch('0xB87B774a5b3D77E13a89C68F62810D5a23404365')}
+                onClick={() => setSearch(getAddress('0xB87B774a5b3D77E13a89C68F62810D5a23404365'))}
                 className="text-[#8a8a9a] hover:text-[#d4af37] transition-colors underline decoration-[#333] underline-offset-4"
               >
                 Use my wallet

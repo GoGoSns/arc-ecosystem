@@ -306,29 +306,35 @@ export default function ChallengeDetailPage() {
       return;
     }
     setTxPending(true);
-    let txHash: string | undefined;
-    if (USE_REAL_TRANSFERS) {
+    
+    try {
       const tx = await payToAdmin(challenge.amountUsd);
       setTxPending(false);
+      
       if (!tx.success) {
         handleToast('error', tx.error ?? 'Transaction failed. Please try again.');
         return;
       }
-      txHash = tx.txHash;
-    } else {
-      setTxPending(false);
+
+      // Update mock balance for UI (happens in both modes as per requirements)
       if (!deductBalance(address, challenge.amountUsd)) {
-        handleToast('error', 'Insufficient balance to accept this challenge.');
-        return;
+        if (!USE_REAL_TRANSFERS) {
+          handleToast('error', 'Insufficient balance (Demo Mode).');
+          return;
+        }
       }
-    }
-    if (acceptChallenge(challenge.id, joinerName.trim() || 'You')) {
-      const msg = txHash
-        ? `Challenge accepted! View tx: ${explorerUrl(txHash)}`
-        : 'Challenge accepted.';
-      handleToast('success', msg);
-    } else {
-      handleToast('error', 'This challenge can no longer be accepted.');
+
+      if (acceptChallenge(challenge.id, joinerName.trim() || 'You')) {
+        const msg = !USE_REAL_TRANSFERS
+          ? 'Challenge accepted! (Demo mode)'
+          : `Challenge accepted! View on Arcscan: ${tx.explorerUrl}`;
+        handleToast('success', msg);
+      } else {
+        handleToast('error', 'This challenge can no longer be accepted.');
+      }
+    } catch (e: any) {
+      setTxPending(false);
+      handleToast('error', e?.message || 'Transaction failed');
     }
   };
 
@@ -385,26 +391,30 @@ export default function ChallengeDetailPage() {
       return;
     }
     setTxPending(true);
-    let txHash: string | undefined;
-    if (USE_REAL_TRANSFERS) {
+    
+    try {
       const tx = await payFromAdmin(address, challenge.rewardUsd);
       setTxPending(false);
+      
       if (!tx.success) {
         handleToast('error', tx.error ?? 'Transaction failed. Please try again.');
         return;
       }
-      txHash = tx.txHash;
-    } else {
+
+      if (claimChallengeReward(challenge.id)) {
+        // Update mock balance for UI
+        addBalance(address, challenge.rewardUsd);
+        
+        const msg = !USE_REAL_TRANSFERS
+          ? `Reward of $${challenge.rewardUsd} claimed! (Demo mode)`
+          : `Reward claimed! View on Arcscan: ${tx.explorerUrl}`;
+        handleToast('success', msg);
+      } else {
+        handleToast('error', 'Reward is not claimable yet.');
+      }
+    } catch (e: any) {
       setTxPending(false);
-    }
-    if (claimChallengeReward(challenge.id)) {
-      if (!USE_REAL_TRANSFERS) addBalance(address, challenge.rewardUsd);
-      const msg = txHash
-        ? `Reward claimed! View tx: ${explorerUrl(txHash)}`
-        : `Reward of $${challenge.rewardUsd} claimed and added to your balance.`;
-      handleToast('success', msg);
-    } else {
-      handleToast('error', 'Reward is not claimable yet.');
+      handleToast('error', e?.message || 'Transaction failed');
     }
   };
 

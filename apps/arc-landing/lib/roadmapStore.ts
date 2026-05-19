@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { getAddress } from 'viem';
 
 export type RoadmapStatus = 'planned' | 'in-progress' | 'completed' | 'cancelled';
 export type RoadmapQuarter = 'Q1-2026' | 'Q2-2026' | 'Q3-2026' | 'Q4-2026' | 'Q1-2027';
@@ -50,7 +51,7 @@ interface RoadmapStore {
   updateStatus: (id: string, status: RoadmapStatus) => void;  // admin only
 }
 
-export const ADMIN_ADDRESS = '0xB87B774a5b3D77E13a89C68F62810D5a23404365';
+export const ADMIN_ADDRESS = getAddress('0xB87B774a5b3D77E13a89C68F62810D5a23404365');
 
 export const useRoadmapStore = create<RoadmapStore>()(
   persist(

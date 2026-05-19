@@ -64,9 +64,13 @@ export function GameWalletStrip() {
           <span className="inline-flex h-2 w-2 rounded-full bg-[#30d158] shadow-[0_0_6px_rgba(48,209,88,0.6)]" />
           <span className="hidden font-mono text-xs text-white/50 sm:block">{short}</span>
           <span className="text-sm font-bold text-emerald-400">${displayBalance.toFixed(2)} USDC</span>
-          {USE_REAL_TRANSFERS && (
+          {USE_REAL_TRANSFERS ? (
             <span className="hidden rounded-full border border-[#30d158]/30 bg-[#30d158]/10 px-2 py-0.5 text-[9px] font-mono uppercase tracking-[0.2em] text-[#30d158] sm:block">
               Arc Testnet
+            </span>
+          ) : (
+            <span className="hidden rounded-full border border-[#d4af37]/30 bg-[#d4af37]/10 px-2 py-0.5 text-[9px] font-mono uppercase tracking-[0.2em] text-[#d4af37] sm:block">
+              Demo Mode
             </span>
           )}
         </div>

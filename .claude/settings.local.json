@@ -44,7 +44,17 @@
       "Bash(pnpm dev *)",
       "Bash(pnpm add *)",
       "PowerShell(pnpm build --filter @arc-ecosystem/arc-landing 2>&1)",
-      "PowerShell(pnpm --filter @arc-ecosystem/arc-landing build 2>&1)"
+      "PowerShell(pnpm --filter @arc-ecosystem/arc-landing build 2>&1)",
+      "Bash(New-Item -ItemType Directory -Force \"c:\\\\Users\\\\User\\\\Documents\\\\projects\\\\arc-ecosystem\\\\apps\\\\arc-landing\\\\app\\\\game\\\\arcade\")",
+      "Bash(Out-Null)",
+      "Bash(Write-Output \"done\")",
+      "PowerShell(New-Item -ItemType Directory -Force \"c:\\\\Users\\\\User\\\\Documents\\\\projects\\\\arc-ecosystem\\\\apps\\\\arc-landing\\\\app\\\\game\\\\arcade\")",
+      "WebFetch(domain:agents.circle.com)",
+      "Bash(npm install *)",
+      "Bash(circle --version)",
+      "Bash(npx skills *)",
+      "Bash(circle wallet *)",
+      "Bash(circle terms *)"
     ],
     "additionalDirectories": [
       "c:\\Users\\User\\Documents\\projects\\arc-ecosystem\\apps\\arc-play\\app\\raffle"

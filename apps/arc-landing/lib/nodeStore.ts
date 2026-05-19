@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { getAddress } from 'viem';
 
 export type NodeStatus = 'pending' | 'verified' | 'inactive';
 export type Region = 'NA' | 'EU' | 'ASIA' | 'OCEANIA' | 'OTHER';
@@ -71,7 +72,7 @@ interface NodeStore {
   removeRpc: (id: string) => void;
 }
 
-export const NODE_ADMIN = '0xB87B774a5b3D77E13a89C68F62810D5a23404365';
+export const NODE_ADMIN = getAddress('0xB87B774a5b3D77E13a89C68F62810D5a23404365');
 export const isNodeAdmin = (address?: string): boolean =>
   !!address && address.toLowerCase() === NODE_ADMIN.toLowerCase();
 

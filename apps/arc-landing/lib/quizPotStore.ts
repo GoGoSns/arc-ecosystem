@@ -165,6 +165,36 @@ const QUIZ_QUESTION_BANK: Array<Omit<QuizQuestion, 'id'>> = [
     correctIndex: 1,
     explanation: 'Validators in PoS networks stake tokens and confirm transaction blocks to earn rewards.',
   },
+  {
+    prompt: 'What is a block explorer?',
+    options: ['A file browser', 'A tool to view blockchain transactions', 'A mining software', 'A wallet extension'],
+    correctIndex: 1,
+    explanation: 'A block explorer lets you search and view all transactions, addresses, and blocks on a blockchain.',
+  },
+  {
+    prompt: 'What is a seed phrase?',
+    options: ['A blockchain protocol', 'Backup words to recover a wallet', 'A type of transaction', 'A smart contract function'],
+    correctIndex: 1,
+    explanation: 'A seed phrase (mnemonic) is a sequence of words that can restore access to a crypto wallet if lost.',
+  },
+  {
+    prompt: 'What is liquidity in DeFi?',
+    options: ['Transaction speed', 'Funds available for trading or lending', 'A governance token', 'Network bandwidth'],
+    correctIndex: 1,
+    explanation: 'Liquidity refers to assets available in a pool for trading or lending without significant price impact.',
+  },
+  {
+    prompt: 'What is a DAO?',
+    options: ['Digital Asset Oracle', 'Decentralized Autonomous Organization', 'Direct Access Object', 'Data Audit Operation'],
+    correctIndex: 1,
+    explanation: 'A DAO is a community governed by smart contracts rather than traditional centralized leadership.',
+  },
+  {
+    prompt: 'What is staking in crypto?',
+    options: ['Mining with GPUs', 'Locking tokens to earn rewards', 'Selling tokens instantly', 'Converting to stablecoins'],
+    correctIndex: 1,
+    explanation: 'Staking means locking your tokens in a protocol to help secure the network and earn rewards.',
+  },
 ];
 
 function slugify(value: string): string {
@@ -230,7 +260,7 @@ function buildQuizQuestions(potId: string, count: number): QuizQuestion[] {
 
 function createQuizPotRecord(input: CreateQuizPotInput, overrides?: Partial<QuizPot>): QuizPot {
   const title = input.title.trim() || 'Untitled Quiz Pot';
-  const questionCount = clampNumber(input.questionCount, 3, QUIZ_QUESTION_BANK.length);
+  const questionCount = clampNumber(input.questionCount, 1, QUIZ_QUESTION_BANK.length);
   const durationHours = clampNumber(input.durationHours, 1, 24);
   const potUsd = clampNumber(input.potUsd, 25, 100_000);
   const distribution = isQuizDistribution(input.distribution) ? input.distribution : 'winner-takes-all';

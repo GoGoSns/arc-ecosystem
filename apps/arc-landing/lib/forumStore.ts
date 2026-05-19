@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { getAddress } from 'viem';
 
 export type ForumCategory = 'general' | 'bugs' | 'features' | 'node' | 'dev' | 'showcase' | 'help';
 
@@ -32,7 +33,7 @@ export interface Thread {
   updatedAt: number;
 }
 
-export const FORUM_ADMIN = '0xB87B774a5b3D77E13a89C68F62810D5a23404365';
+export const FORUM_ADMIN = getAddress('0xB87B774a5b3D77E13a89C68F62810D5a23404365');
 
 export const isForumAdmin = (address?: string): boolean =>
   !!address && address.toLowerCase() === FORUM_ADMIN.toLowerCase();

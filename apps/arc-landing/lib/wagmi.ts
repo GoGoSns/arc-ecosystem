@@ -1,5 +1,5 @@
-import { createConfig, http } from 'wagmi';
-import { defineChain } from 'viem';
+import { createConfig, http } from 'wagmi'
+import { defineChain } from 'viem'
 
 export const arcTestnet = defineChain({
   id: 5042002,
@@ -20,11 +20,11 @@ export const arcTestnet = defineChain({
       url: 'https://testnet.arcscan.app',
     },
   },
-});
+})
 
-export const wagmiConfig = createConfig({
+export const config = createConfig({
   chains: [arcTestnet],
   transports: {
     [arcTestnet.id]: http('https://rpc.testnet.arc.network'),
   },
-});
+})
