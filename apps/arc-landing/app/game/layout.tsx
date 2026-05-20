@@ -20,8 +20,8 @@ export default function GameLayout({
       <SiteHeader />
       <GameWalletStrip />
 
-      {/* pt-11 offsets the fixed wallet strip (44px) that sits below the 64px SiteHeader */}
-      <div className="relative pt-11">{children}</div>
+      {/* Reserve space for the 64px header plus the 44px wallet strip. */}
+      <div className="relative pt-[108px]">{children}</div>
     </main>
   );
 }
