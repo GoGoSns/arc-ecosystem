@@ -1,18 +1,23 @@
 {
-  "name": "arc-ecosystem",
-  "version": "1.0.0",
-  "private": true,
-  
-  "scripts": {
-    "dev": "turbo run dev",
-    "build": "turbo run build",
-    "lint": "turbo run lint"
-  },
-  "devDependencies": {
-    "turbo": "^2.9.6"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": ["bufferutil", "core-js", "sharp", "unrs-resolver", "utf-8-validate"]
-  }
+    "name":  "arc-ecosystem",
+    "version":  "1.0.0",
+    "private":  true,
+    "scripts":  {
+                    "dev":  "turbo run dev",
+                    "build":  "turbo run build",
+                    "lint":  "turbo run lint"
+                },
+    "devDependencies":  {
+                            "turbo":  "^2.9.6"
+                        },
+    "pnpm":  {
+                 "onlyBuiltDependencies":  [
+                                               "bufferutil",
+                                               "core-js",
+                                               "sharp",
+                                               "unrs-resolver",
+                                               "utf-8-validate"
+                                           ]
+             },
+    "packageManager":  "npm@10.8.0"
 }
-
