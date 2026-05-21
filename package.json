@@ -2,7 +2,7 @@
   "name": "arc-ecosystem",
   "version": "1.0.0",
   "private": true,
-  "packageManager": "pnpm@9.15.4",
+  
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
@@ -15,3 +15,4 @@
     "onlyBuiltDependencies": ["bufferutil", "core-js", "sharp", "unrs-resolver", "utf-8-validate"]
   }
 }
+
