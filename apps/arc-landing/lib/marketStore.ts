@@ -342,6 +342,14 @@ export const useMarketStore = create<MarketState>()(
         listings: state.listings,
         orders: state.orders,
       }),
+      merge: (persisted, current) => {
+        const persistedState = persisted as Partial<PersistedMarketState> | undefined;
+        return {
+          ...current,
+          listings: persistedState?.listings && persistedState.listings.length > 0 ? persistedState.listings : INITIAL_LISTINGS,
+          orders: persistedState?.orders && persistedState.orders.length > 0 ? persistedState.orders : INITIAL_ORDERS,
+        };
+      },
       onRehydrateStorage: () => (state, error) => {
         if (!error && state) {
           state.setHasHydrated(true);
