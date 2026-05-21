@@ -1,7 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo } from 'react';
+import Image from 'next/image';
+import { useMemo, useEffect, useState } from 'react';
+import { Twitter } from 'lucide-react';
 import { HubBadge, HubCard } from '@/components/HubPrimitives';
 import {
   formatChallengeAmount,
@@ -23,7 +25,7 @@ type GameCard = {
 const liveGames: GameCard[] = [
   {
     mark: 'MS',
-    title: 'Mayın Tarlas',
+    title: 'Minesweeper',
     description: 'Classic Minesweeper with safe first clicks, flags, timer pressure, and clean difficulty modes.',
     href: '/game/minesweeper',
   },
@@ -41,7 +43,7 @@ const liveGames: GameCard[] = [
   },
   {
     mark: 'BB',
-    title: 'Bil Bakalım',
+    title: 'Word Guess',
     description: 'Hangman-style guessing with 30 Web3 words, streak chasing, and challenge support.',
     href: '/game/bilbakalim',
   },
@@ -164,14 +166,57 @@ export default function GameHubPage() {
     [challenges],
   );
 
+  const [xUser, setXUser] = useState<any>(null);
+
+  useEffect(() => {
+    const cookie = document.cookie
+      .split('; ')
+      .find((row) => row.startsWith('arc_x_user='));
+    if (cookie) {
+      try {
+        const userData = JSON.parse(decodeURIComponent(cookie.split('=')[1]));
+        setXUser(userData);
+      } catch (e) {
+        console.error('Error parsing xUser cookie:', e);
+      }
+    }
+  }, []);
+
   return (
     <section className="px-4 pt-4 pb-20 sm:px-6 sm:pt-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="flex flex-wrap items-center gap-2">
-          <HubBadge className="border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f0d79e]">Arc Game Hub</HubBadge>
-          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#8a8a8a]">
-            {liveGames.length} live games
-          </span>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <HubBadge className="border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f0d79e]">Arc Game Hub</HubBadge>
+            <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#8a8a8a]">
+              {liveGames.length} live games
+            </span>
+          </div>
+
+          {xUser ? (
+            <Link
+              href={`/u/${xUser.username.toLowerCase()}`}
+              className="flex items-center gap-3 rounded-full border border-[#d4af37]/20 bg-black/40 p-1 pr-4 transition-all hover:border-[#d4af37]/50"
+            >
+              <div className="relative h-8 w-8 overflow-hidden rounded-full border border-[#d4af37]/30">
+                <Image src={xUser.avatar} alt={xUser.username} fill className="object-cover" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[10px] font-black uppercase tracking-wider text-white">
+                  @{xUser.username}
+                </span>
+                <span className="text-[8px] font-mono text-[#8a8a8a]">View Profile</span>
+              </div>
+            </Link>
+          ) : (
+            <Link
+              href="/api/auth"
+              className="inline-flex items-center gap-2 rounded-full border border-[#1d9bf0] bg-[#1d9bf0]/10 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-[#1d9bf0] transition-all hover:bg-[#1d9bf0] hover:text-white"
+            >
+              <Twitter size={14} />
+              Connect X to challenge friends
+            </Link>
+          )}
         </div>
 
         <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
@@ -232,3 +277,4 @@ export default function GameHubPage() {
     </section>
   );
 }
+

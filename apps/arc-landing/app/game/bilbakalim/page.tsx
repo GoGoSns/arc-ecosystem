@@ -230,11 +230,11 @@ export default function BilBakalimPage() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
-              <HubBadge className="border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f0d79e]">Bil Bakalım</HubBadge>
+              <HubBadge className="border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f0d79e]">Word Guess</HubBadge>
               <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#8a8a9a]">Hangman Word Guess</HubBadge>
               <HubBadge className="border-[#30d158]/20 bg-[#30d158]/10 text-[#a6f4bf]">30 words</HubBadge>
             </div>
-            <h1 className="text-4xl font-black uppercase leading-none sm:text-5xl lg:text-6xl">Bil Bakalım</h1>
+            <h1 className="text-4xl font-black uppercase leading-none sm:text-5xl lg:text-6xl">Word Guess</h1>
             <p className="max-w-3xl text-base leading-7 text-[#8a8a9a] sm:text-lg">
               Guess the hidden Web3 word, keep your streak alive, and beat the hangman before all six lives are gone.
             </p>

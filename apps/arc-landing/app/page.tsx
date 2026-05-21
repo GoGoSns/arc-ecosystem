@@ -717,16 +717,6 @@ export default function Page() {
         </div>
       </section>
 
-      <footer className="border-t border-[#1a1a2e] px-4 py-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-5 font-mono text-xs uppercase tracking-[0.16em] text-[#555566] md:flex-row md:items-center md:justify-between">
-          <p>&copy; 2026 Arc Ecosystem &middot; {t.footer.builtOn} &middot; by GoGo</p>
-          <div className="flex gap-5">
-            <span aria-disabled="true" className="nav-link cursor-not-allowed opacity-50">// X</span>
-            <a href={githubHref} target="_blank" rel="noopener noreferrer" className="nav-link">// GitHub</a>
-            <a href="mailto:hello@arc.ecosystem" className="nav-link">// Email</a>
-          </div>
-        </div>
-      </footer>
     </main>
   );
 }

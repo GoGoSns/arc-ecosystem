@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import "./globals.css";
 import AssistantWidget from "@/components/AssistantWidget";
 import { WalletProvider } from "@/contexts/WalletContext";
+import { SiteFooter } from "@/components/SiteFooter";
 
 export const metadata: Metadata = {
   title: "Arc Ecosystem - Three Apps, One USDC Economy",
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body className="font-sans">
         <WalletProvider>
           {children}
+          <SiteFooter />
           <AssistantWidget />
         </WalletProvider>
       </body>

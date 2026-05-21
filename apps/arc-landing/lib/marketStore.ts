@@ -73,19 +73,18 @@ function makeId(prefix: string): string {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
     return `${prefix}-${crypto.randomUUID().slice(0, 8)}`;
   }
-
   return `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
+// Güvenli Unsplash yapılandırıcı
 function buildImages(baseUrl: string): string[] {
-  return [1, 2, 3].map((sig) => `${baseUrl}&sig=${sig}`);
+  return [`${baseUrl}&auto=format&fit=crop&w=800&q=80`];
 }
 
 function clampRating(value: number): number {
   if (!Number.isFinite(value)) {
     return 5;
   }
-
   return Math.max(1, Math.min(5, Math.round(value * 10) / 10));
 }
 
@@ -98,7 +97,7 @@ const INITIAL_LISTINGS: Listing[] = [
     priceUsd: 420,
     city: 'Istanbul',
     condition: 'Excellent',
-    images: buildImages('https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1400&q=80'),
+    images: buildImages('https://images.unsplash.com/photo-1550009158-9effb619a647?ixlib=rb-4.0.3'), // Temiz teknoloji resmi
     sellerName: 'Mina K.',
     sellerRating: 4.9,
     createdAt: FIXED_NOW - 1_000 * 60 * 60 * 12,
@@ -112,7 +111,7 @@ const INITIAL_LISTINGS: Listing[] = [
     priceUsd: 145,
     city: 'Paris',
     condition: 'New',
-    images: buildImages('https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1400&q=80'),
+    images: buildImages('https://images.unsplash.com/photo-1551028719-00167b16eac5?ixlib=rb-4.0.3'), // Deri/Şık ceket resmi
     sellerName: 'Aylin R.',
     sellerRating: 4.7,
     createdAt: FIXED_NOW - 1_000 * 60 * 60 * 18,
@@ -126,7 +125,7 @@ const INITIAL_LISTINGS: Listing[] = [
     priceUsd: 88,
     city: 'Berlin',
     condition: 'Like New',
-    images: buildImages('https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=80'),
+    images: buildImages('https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-4.0.3'), // Şık masa lambası
     sellerName: 'Jonas P.',
     sellerRating: 4.8,
     createdAt: FIXED_NOW - 1_000 * 60 * 60 * 30,
@@ -140,7 +139,7 @@ const INITIAL_LISTINGS: Listing[] = [
     priceUsd: 260,
     city: 'Singapore',
     condition: 'New',
-    images: buildImages('https://images.unsplash.com/photo-1518544889284-8e9b1f78e3be?auto=format&fit=crop&w=1400&q=80'),
+    images: buildImages('https://images.unsplash.com/photo-1608222351212-18fe0ec7b13b?ixlib=rb-4.0.3'), // Koleksiyon figürü
     sellerName: 'Noah S.',
     sellerRating: 5,
     createdAt: FIXED_NOW - 1_000 * 60 * 60 * 6,
@@ -154,7 +153,7 @@ const INITIAL_LISTINGS: Listing[] = [
     priceUsd: 230,
     city: 'Lisbon',
     condition: 'Excellent',
-    images: buildImages('https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1400&q=80'),
+    images: buildImages('https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?ixlib=rb-4.0.3'), // Şık monitör
     sellerName: 'Lea M.',
     sellerRating: 4.6,
     createdAt: FIXED_NOW - 1_000 * 60 * 60 * 8,
@@ -168,7 +167,7 @@ const INITIAL_LISTINGS: Listing[] = [
     priceUsd: 980,
     city: 'Dubai',
     condition: 'Refurbished',
-    images: buildImages('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=80'),
+    images: buildImages('https://images.unsplash.com/photo-1558981403-c5f9899a28bc?ixlib=rb-4.0.3'), // Bisiklet/Batarya
     sellerName: 'Sana A.',
     sellerRating: 4.9,
     createdAt: FIXED_NOW - 1_000 * 60 * 60 * 22,
@@ -182,7 +181,7 @@ const INITIAL_LISTINGS: Listing[] = [
     priceUsd: 340,
     city: 'London',
     condition: 'Good',
-    images: buildImages('https://images.unsplash.com/photo-1517445312882-bc9910d016b9?auto=format&fit=crop&w=1400&q=80'),
+    images: buildImages('https://images.unsplash.com/photo-1545454675-3531b543be5d?ixlib=rb-4.0.3'), // Premium hoparlör seti
     sellerName: 'Theo B.',
     sellerRating: 4.8,
     createdAt: FIXED_NOW - 1_000 * 60 * 60 * 14,
@@ -196,7 +195,7 @@ const INITIAL_LISTINGS: Listing[] = [
     priceUsd: 160,
     city: 'Remote',
     condition: 'New',
-    images: buildImages('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=80'),
+    images: buildImages('https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3'), // Toplantı/Strateji
     sellerName: 'Arc Studio',
     sellerRating: 5,
     createdAt: FIXED_NOW - 1_000 * 60 * 60 * 4,
@@ -324,7 +323,7 @@ export const useMarketStore = create<MarketState>()(
           city: input.city.trim(),
           condition: input.condition,
           images: [input.imageUrl.trim()],
-          sellerName: 'Arc Seller',
+          sellerName: 'GoGo',
           sellerRating: 5,
           createdAt: Date.now(),
           status: 'active',
@@ -338,7 +337,7 @@ export const useMarketStore = create<MarketState>()(
       },
     }),
     {
-      name: 'arc-market-store',
+      name: 'arc-market-store-v2',
       partialize: (state): PersistedMarketState => ({
         listings: state.listings,
         orders: state.orders,

@@ -339,13 +339,13 @@ export default function MinesweeperPage() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
-              <HubBadge className="border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f0d79e]">Mayın Tarlası</HubBadge>
+              <HubBadge className="border-[#d4af37]/25 bg-[#d4af37]/10 text-[#f0d79e]">Minesweeper</HubBadge>
               <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#8a8a9a]">Minesweeper</HubBadge>
               <HubBadge className="border-[#30d158]/20 bg-[#30d158]/10 text-[#a6f4bf]">
                 {config.label} · {config.cols}x{config.rows}
               </HubBadge>
             </div>
-            <h1 className="text-4xl font-black uppercase leading-none sm:text-5xl lg:text-6xl">Mayın Tarlası</h1>
+            <h1 className="text-4xl font-black uppercase leading-none sm:text-5xl lg:text-6xl">Minesweeper</h1>
             <p className="max-w-3xl text-base leading-7 text-[#8a8a9a] sm:text-lg">
               Open safe tiles, flag the mines, and keep the timer low. The first click can never hit a mine.
             </p>
