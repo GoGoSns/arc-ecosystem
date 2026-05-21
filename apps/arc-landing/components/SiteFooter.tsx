@@ -51,7 +51,7 @@ export function SiteFooter() {
               <li><Link href="/" className="text-sm text-[#8a8a9a] transition-colors hover:text-[#d4af37]">Arc Creator</Link></li>
               <li><Link href="/" className="text-sm text-[#8a8a9a] transition-colors hover:text-[#d4af37]">Arc Play</Link></li>
               <li><Link href="/game" className="text-sm text-[#8a8a9a] transition-colors hover:text-[#d4af37]">Games</Link></li>
-              <li><Link href="/assistant" className="text-sm text-[#8a8a9a] transition-colors hover:text-[#d4af37]">AI Assistant</Link></li>
+              <li><Link href="#" className="text-sm text-[#8a8a9a] transition-colors hover:text-[#d4af37]">AI Assistant</Link></li>
             </ul>
           </div>
 

@@ -36,7 +36,7 @@ type AppCard = {
   features: Feature[];
 };
 
-const arcPayUrl = getArcAppUrl('pay');
+const arcPayUrl = getArcAppUrl('pay') ?? 'https://arc-payouts.vercel.app';
 const arcCreatorUrl = getArcAppUrl('creator');
 const arcPlayUrl = getArcAppUrl('play');
 const docsHref = '/learn';
@@ -355,9 +355,14 @@ export default function Page() {
                   {t.hero.ctaPrimary} <ArrowRight size={16} />
                 </a>
               ) : (
-                <span aria-disabled="true" className="primary-button cursor-not-allowed opacity-50">
+                <a
+                  href="https://arc-payouts.vercel.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="primary-button"
+                >
                   {t.hero.ctaPrimary} <ArrowRight size={16} />
-                </span>
+                </a>
               )}
               <a href="#apps" className="secondary-button">{t.hero.ctaSecondary}</a>
               <button
@@ -641,8 +646,8 @@ export default function Page() {
                 label={t.home.resources.communityLabel}
                 title={t.home.resources.communityTitle}
                 text={t.home.resources.communityText}
-                footer={t.home.resources.communityFooter}
-                href={null}
+                footer="FOLLOW US"
+                href="https://x.com/0xGoGochain"
               />
             </div>
           </div>
@@ -672,9 +677,14 @@ export default function Page() {
                 {t.home.cta.start}
               </a>
             ) : (
-              <span aria-disabled="true" className="primary-button mt-10 cursor-not-allowed opacity-50">
+              <a
+                href="https://arc-payouts.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="primary-button mt-10"
+              >
                 {t.home.cta.start}
-              </span>
+              </a>
             )}
             <p className="mt-14 font-mono text-xs uppercase tracking-[0.35em] text-white/15">// arc &middot; stablecoin &middot; onchain</p>
           </div>

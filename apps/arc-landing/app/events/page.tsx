@@ -328,23 +328,23 @@ function FeaturedEventCard({
   const links = buildEventCalendarLinks(event);
 
   return (
-    <HubCard as="article" className="overflow-hidden p-0">
+    <HubCard as="article" className="overflow-hidden p-0 xl:min-w-[420px]">
       <div className={`h-1.5 bg-gradient-to-r ${accents.gradient}`} aria-hidden="true" />
-      <div className="grid gap-0 lg:grid-cols-[minmax(0,1.08fr)_minmax(320px,0.92fr)]">
+      <div className="grid gap-0 lg:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
         <div className="min-w-0 p-6 sm:p-8">
           <div className="flex flex-wrap items-center gap-2">
             <HubBadge className={accents.badge}>Featured event</HubBadge>
             <HubBadge className={EVENT_STATUS_STYLES[status]}>{getEventStatusLabel(status)}</HubBadge>
             <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#cfcfcf]">Protected mock RSVP</HubBadge>
           </div>
-          <div className="mt-5 flex gap-4">
-            <div className={`grid h-20 w-20 shrink-0 place-items-center rounded-3xl border ${accents.monogram} font-mono text-base font-bold uppercase tracking-[0.26em]`}>
+          <div className="mt-5 flex items-start gap-4">
+            <div className={`grid h-16 w-16 sm:h-20 sm:w-20 shrink-0 place-items-center rounded-3xl border ${accents.monogram} font-mono text-base font-bold uppercase tracking-[0.26em]`}>
               {getEventMonogram(event.type)}
             </div>
             <div className="min-w-0">
               <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">{event.organizer}</p>
-              <h2 className="mt-2 text-3xl font-black uppercase leading-tight text-white sm:text-4xl">{event.title}</h2>
-              <p className="mt-3 max-w-3xl text-sm leading-7 text-[#8a8a9a] sm:text-base">{event.description}</p>
+              <h2 className="mt-2 text-2xl font-black uppercase leading-tight text-white sm:text-3xl line-clamp-2">{event.title}</h2>
+              <p className="mt-3 max-w-3xl text-sm leading-7 text-[#8a8a9a] sm:text-base line-clamp-3">{event.description}</p>
             </div>
           </div>
 
@@ -356,23 +356,23 @@ function FeaturedEventCard({
             ))}
           </div>
 
-          <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          <div className="mt-6 grid gap-3 sm:grid-cols-3 xl:grid-cols-2 2xl:grid-cols-3">
             <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
               <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">When</div>
-              <div className="mt-2 text-sm font-semibold text-white">{formatEventDateRange(event.startsAt, event.endsAt, event.timezone)}</div>
+              <div className="mt-2 truncate text-sm font-semibold text-white">{formatEventDateRange(event.startsAt, event.endsAt, event.timezone)}</div>
             </div>
             <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
               <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Where</div>
-              <div className="mt-2 text-sm font-semibold text-white">{event.location}</div>
+              <div className="mt-2 truncate text-sm font-semibold text-white">{event.location}</div>
             </div>
             <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
               <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Who</div>
-              <div className="mt-2 text-sm font-semibold text-white">{event.speakers.join(' / ')}</div>
+              <div className="mt-2 truncate text-sm font-semibold text-white">{event.speakers.join(' / ')}</div>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-[#1a1a2e] bg-black/35 p-6 sm:p-8 lg:border-l lg:border-t-0">
+        <div className="border-t border-[#1a1a2e] bg-black/35 p-6 sm:p-8 lg:border-l lg:border-t-0 xl:border-l-0 xl:border-t 2xl:border-l 2xl:border-t-0">
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#555566]">Countdown</p>
@@ -384,7 +384,7 @@ function FeaturedEventCard({
             </div>
           </div>
 
-          <div className="mt-6 grid gap-3">
+          <div className="mt-6 grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3 2xl:grid-cols-1">
             <div className="rounded-2xl border border-[#1a1a2e] bg-black/30 px-4 py-3">
               <div className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#555566]">Type</div>
               <div className="mt-2 text-sm font-semibold text-white">{getEventTypeLabel(event.type)}</div>
@@ -716,13 +716,13 @@ export default function EventsPage() {
             <HubBadge className="border-[#1a1a2e] bg-white/[0.02] text-[#bdbdbd]">{metrics.total} events seeded</HubBadge>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
-            <div className="space-y-5">
+          <div className="grid gap-12 xl:grid-cols-2 xl:items-center">
+            <div className="reveal space-y-6" style={{ transitionDelay: '60ms' }}>
               <p className="font-mono text-xs uppercase tracking-[0.32em] text-[#555566]">Arc calendar</p>
-              <h1 className="max-w-5xl text-4xl font-black uppercase leading-[0.92] sm:text-5xl lg:text-7xl">
+              <h1 className="text-4xl font-black uppercase leading-[0.92] sm:text-5xl lg:text-7xl">
                 Arc Events
               </h1>
-              <p className="max-w-3xl text-base leading-7 text-[#8a8a9a] sm:text-lg">
+              <p className="max-w-2xl text-base leading-7 text-[#8a8a9a] sm:text-lg">
                 Browse Arc AMAs, hackathons, workshops, and community meetups. Everything here is powered by local
                 mock state, with RSVP counts, calendar links, and a mobile-safe calendar board.
               </p>
