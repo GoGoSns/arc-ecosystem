@@ -47,12 +47,12 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           {features.map((feature) => {
             const Icon = feature.icon;
             const card = (
               <div
-                className="sweep rounded-xl p-4 sm:p-6 flex flex-col gap-4 transition-colors h-full"
+                className="sweep rounded-xl p-4 sm:p-6 flex flex-col gap-4 transition-colors h-auto"
                 style={{
                   border: "1px solid var(--border)",
                   background: "var(--card)",
