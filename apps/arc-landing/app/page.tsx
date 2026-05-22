@@ -68,8 +68,8 @@ const appCards: AppCard[] = [
     features: [
       { name: "Tip Jar", href: getArcAppUrl('creator', '/tip') },
       { name: "Subscription", href: getArcAppUrl('creator', '/subscription') },
-      { name: "Bounty Board", href: getArcAppUrl('creator', '/bounty'), soon: true },
-      { name: "Marketplace", href: getArcAppUrl('creator', '/marketplace'), soon: true },
+      { name: "Bounty Board", href: getArcAppUrl('creator', '/bounty'), soon: false },
+      { name: "Marketplace", href: getArcAppUrl('creator', '/marketplace'), soon: false },
     ],
   },
   {
@@ -83,8 +83,8 @@ const appCards: AppCard[] = [
       { name: "Portfolio Tracker", href: getArcAppUrl('play', '/portfolio') },
       { name: "Prediction Market", href: getArcAppUrl('play', '/prediction') },
       { name: "NFT Raffle", href: getArcAppUrl('play', '/raffle') },
-      { name: "Play to Earn", href: getArcAppUrl('play', '/games'), soon: true },
-      { name: "Token Launchpad", href: getArcAppUrl('play', '/launchpad'), soon: true },
+      { name: "Play to Earn", href: getArcAppUrl('play', '/games'), soon: false },
+      { name: "Token Launchpad", href: getArcAppUrl('play', '/launchpad'), soon: false },
     ],
   },
 ] ;
@@ -416,7 +416,7 @@ export default function Page() {
                         <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-[#8a8a9a]">{card.label}</p>
                         <h3 className="mt-1 text-lg font-black uppercase text-white">{card.title}</h3>
                       </div>
-                      <span className="soon-badge">{card.features.length} routes</span>
+                      
                     </div>
                     <p className="mt-2 text-sm leading-6 text-[#8a8a9a]">{card.description}</p>
                   </div>
@@ -487,7 +487,7 @@ export default function Page() {
                 <p className="mt-4 min-h-14 text-[#8b8b8b]">{cardDesc[idx].description}</p>
                 <div className="mt-8 space-y-3">
                   {card.features.map((feature) => (
-                    feature.href && !feature.soon ? (
+                    feature.href ? (
                       <a
                         key={feature.name}
                         href={feature.href}
@@ -497,7 +497,7 @@ export default function Page() {
                       >
                         <span>{feature.name}</span>
                         <span className="ml-auto flex items-center gap-2">
-                          <span className="soon-badge soon-badge--pulse">{t.home.soon}</span>
+                          
                           <ChevronRight className="feature-arrow pillars-arrow" size={16} />
                         </span>
                       </a>
@@ -505,11 +505,11 @@ export default function Page() {
                       <span
                         key={feature.name}
                         aria-disabled="true"
-                        className="feature-link cursor-not-allowed opacity-45"
+                        className="feature-link transition-colors hover:border-[#d4af37]/30"
                       >
                         <span>{feature.name}</span>
                         <span className="ml-auto flex items-center gap-2">
-                          <span className="soon-badge soon-badge--pulse">{t.home.soon}</span>
+                          
                           <ChevronRight className="feature-arrow pillars-arrow" size={16} />
                         </span>
                       </span>
