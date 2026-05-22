@@ -2,7 +2,7 @@
 
 A complete Web3 ecosystem for stablecoin payments, creator monetization, and on-chain gaming — built on Arc Network with native USDC.
 
-**Live Demo:** [arc-ecosystem-taupe.vercel.app](https://arc-ecosystem-taupe.vercel.app)
+**Live Demo:** [arc-ecosystem.vercel.app](https://arc-ecosystem.vercel.app)
 
 ## Architecture
 Users (Browser + MetaMask)
@@ -132,9 +132,9 @@ pnpm build
 
 | App | URL |
 |-----|-----|
-| Arc Landing | https://arc-ecosystem-taupe.vercel.app |
+| Arc Landing | https://arc-ecosystem.vercel.app |
 | Arc Pay | https://arc-ecosystem-pay.vercel.app |
-| Arc Creator | https://arc-creator.vercel.app |
+| Arc Creator | https://arc-ecosystem-creator.vercel.app |
 | Arc Play | https://arc-play-6j19a7q4q-gogosns-projects.vercel.app |
 
 ## Circle Product Feedback
