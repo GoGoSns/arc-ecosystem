@@ -19,5 +19,5 @@
                                                "utf-8-validate"
                                            ]
              },
-    "packageManager":  "npm@10.8.0"
+    "packageManager": "pnpm@10.0.0"
 }
