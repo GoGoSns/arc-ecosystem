@@ -9,9 +9,9 @@ const ARC_APP_ENV_KEYS: Record<ArcAppKey, string> = {
 };
 
 const LOCAL_FALLBACKS: Record<ArcAppKey, string> = {
-  pay: 'https://arc-payouts.vercel.app',
-  creator: 'http://localhost:3001',
-  play: 'http://localhost:3002',
+  pay: 'https://arcpaymain.vercel.app',
+  creator: 'https://arccreatormain.vercel.app',
+  play: 'https://arcplaymain.vercel.app',
   market: 'http://localhost:3003/market',
   hub: 'http://localhost:3003',
 };

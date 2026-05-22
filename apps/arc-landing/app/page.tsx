@@ -36,7 +36,7 @@ type AppCard = {
   features: Feature[];
 };
 
-const arcPayUrl = getArcAppUrl('pay') ?? 'https://arc-payouts.vercel.app';
+const arcPayUrl = getArcAppUrl('pay') ?? 'https://arcpaymain.vercel.app';
 const arcCreatorUrl = getArcAppUrl('creator');
 const arcPlayUrl = getArcAppUrl('play');
 const docsHref = '/learn';
@@ -356,7 +356,7 @@ export default function Page() {
                 </a>
               ) : (
                 <a
-                  href="https://arc-payouts.vercel.app"
+                  href="https://arcpaymain.vercel.app"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="primary-button"
@@ -678,14 +678,13 @@ export default function Page() {
               </a>
             ) : (
               <a
-                href="https://arc-payouts.vercel.app"
+                href="https://arcpaymain.vercel.app"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="primary-button mt-10"
               >
                 {t.home.cta.start}
-              </a>
-            )}
+              </a>            )}
             <p className="mt-14 font-mono text-xs uppercase tracking-[0.35em] text-white/15">// arc &middot; stablecoin &middot; onchain</p>
           </div>
         </div>
