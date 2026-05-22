@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { Gamepad2, Home, ShoppingBag, Sparkles, Wallet } from 'lucide-react';
-import { getArcAppBaseUrl, isExternalUrl } from '@/lib/arcAppLinks';
+import { getArcAppUrl, isExternalUrl } from '@/lib/arcAppLinks';
 
 type AppItem = {
   key: 'pay' | 'creator' | 'play' | 'market' | 'hub';
@@ -17,11 +17,11 @@ type Props = {
 };
 
 const APPS: AppItem[] = [
-  { key: 'pay', name: 'Pay', icon: Wallet, href: getArcAppBaseUrl('pay'), color: '#60a5fa' },
-  { key: 'creator', name: 'Creator', icon: Sparkles, href: getArcAppBaseUrl('creator'), color: '#f472b6' },
-  { key: 'play', name: 'Play', icon: Gamepad2, href: getArcAppBaseUrl('play'), color: '#34d399' },
-  { key: 'market', name: 'Market', icon: ShoppingBag, href: getArcAppBaseUrl('market'), color: '#d4af37' },
-  { key: 'hub', name: 'Hub', icon: Home, href: getArcAppBaseUrl('hub'), color: '#d4af37' },
+  { key: 'pay', name: 'Pay', icon: Wallet, href: getArcAppUrl('pay'), color: '#60a5fa' },
+  { key: 'creator', name: 'Creator', icon: Sparkles, href: getArcAppUrl('creator'), color: '#f472b6' },
+  { key: 'play', name: 'Play', icon: Gamepad2, href: getArcAppUrl('play'), color: '#34d399' },
+  { key: 'market', name: 'Market', icon: ShoppingBag, href: getArcAppUrl('market'), color: '#d4af37' },
+  { key: 'hub', name: 'Hub', icon: Home, href: getArcAppUrl('hub'), color: '#d4af37' },
 ];
 
 export default function AppSwitcher({ compact = false }: Props) {

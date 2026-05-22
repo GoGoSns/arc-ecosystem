@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react';
 import { Wallet, Sparkles, Gamepad2, Home } from 'lucide-react';
 
 const APPS = [
-  { name: 'Pay', icon: Wallet, url: 'http://localhost:3000', port: 3000, color: '#60a5fa' },
-  { name: 'Creator', icon: Sparkles, url: 'http://localhost:3001', port: 3001, color: '#f472b6' },
-  { name: 'Play', icon: Gamepad2, url: 'http://localhost:3002', port: 3002, color: '#34d399' },
-  { name: 'Hub', icon: Home, url: 'http://localhost:3003', port: 3003, color: '#c9a84c' },
+  { name: 'Pay', icon: Wallet, url: 'https://arcpaymain.vercel.app', port: 3000, color: '#60a5fa' },
+  { name: 'Creator', icon: Sparkles, url: 'https://arccreatormain.vercel.app', port: 3001, color: '#f472b6' },
+  { name: 'Play', icon: Gamepad2, url: 'https://arcplaymain.vercel.app', port: 3002, color: '#34d399' },
+  { name: 'Hub', icon: Home, url: 'https://arcecosystemmain.vercel.app', port: 3003, color: '#c9a84c' },
 ];
 
 export default function AppSwitcher() {
