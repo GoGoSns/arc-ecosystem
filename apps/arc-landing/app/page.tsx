@@ -19,6 +19,7 @@ import { getArcAppUrl, isExternalUrl } from "@/lib/arcAppLinks";
 import { useVoiceTourStore, type VoiceTourSectionId } from "@/lib/voiceTourStore";
 import { translations, type Lang } from "@/lib/translations";
 import LanguageToggle from "@/components/LanguageToggle";
+import DelphiTerminal from "@/components/DelphiTerminal";
 
 type Feature = {
   name: string;
@@ -726,6 +727,7 @@ export default function Page() {
         </div>
       </section>
 
+      <DelphiTerminal />
     </main>
   );
 }
