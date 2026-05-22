@@ -116,7 +116,7 @@ TWITTER_CLIENT_ID=your_twitter_client_id
 TWITTER_CLIENT_SECRET=your_twitter_client_secret
 KV_REST_API_URL=your_upstash_url
 KV_REST_API_TOKEN=your_upstash_token
-NEXT_PUBLIC_APP_URL=http://localhost:3003
+NEXT_PUBLIC_APP_URL=https://arcecosystemmain.vercel.app
 
 ### Run Development
 ```bash

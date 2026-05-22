@@ -15,7 +15,7 @@ export default function Navbar() {
           </span>
           <AppSwitcher />
           <a
-            href="http://localhost:3003/feedback"
+            href="https://arcecosystemmain.vercel.app/feedback"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all hover:scale-105"
@@ -33,7 +33,7 @@ export default function Navbar() {
             <span className="hidden sm:inline">Feedback</span>
           </a>
           <a
-            href="http://localhost:3003/forum"
+            href="https://arcecosystemmain.vercel.app/forum"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all hover:scale-105"
@@ -51,7 +51,7 @@ export default function Navbar() {
             <span className="hidden sm:inline">Forum</span>
           </a>
           <a
-            href="http://localhost:3003/node"
+            href="https://arcecosystemmain.vercel.app/node"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all hover:scale-105"

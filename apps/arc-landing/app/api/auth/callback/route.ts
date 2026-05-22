@@ -4,7 +4,7 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const code = searchParams.get('code');
   const error = searchParams.get('error');
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3003';
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://arcecosystemmain.vercel.app';
   if (error) return NextResponse.redirect(`${appUrl}?auth_error=${error}`);
   if (!code) return NextResponse.redirect(`${appUrl}?auth_error=no_code`);
   try {

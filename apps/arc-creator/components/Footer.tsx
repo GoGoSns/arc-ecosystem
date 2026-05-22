@@ -18,7 +18,7 @@ export default function Footer() {
 
         <div className="flex items-center gap-4">
           <Link
-            href="http://localhost:3003"
+            href="https://arcecosystemmain.vercel.app"
             className="flex items-center gap-1.5 text-xs opacity-50 hover:opacity-100 transition-opacity"
           >
             <BookOpen size={14} />

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   const clientId = process.env.TWITTER_CLIENT_ID!;
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3003';
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://arcecosystemmain.vercel.app';
   const redirectUri = `${appUrl}/api/auth/callback`;
   const state = Math.random().toString(36).slice(2);
   const authUrl = new URL('https://twitter.com/i/oauth2/authorize');
