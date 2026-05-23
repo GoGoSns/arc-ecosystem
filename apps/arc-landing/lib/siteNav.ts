@@ -12,6 +12,7 @@ export const PRIMARY_SITE_NAV = [
   { key: 'game', href: '/game' },
   { key: 'market', href: '/market' },
   { key: 'events', href: '/events' },
+  { key: 'chat', href: '/chat' },
   { key: 'docs', href: '/#resources' },
 ] as const satisfies readonly SiteNavLink[];
 

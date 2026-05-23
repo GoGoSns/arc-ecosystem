@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { Sparkles, Send, X, Terminal } from "lucide-react";
 
-export default function DelphiTerminal() {
+export default function GogoTerminal() {
   const [isOpen, setIsOpen] = useState(false);
   const [prompt, setPrompt] = useState("");
   const [logs, setLogs] = useState<Array<{type: 'user' | 'agent' | 'system', text: string}>>([
-    { type: 'system', text: '// Delphi AI Agent v1.0.0 initialized.' },
-    { type: 'agent', text: 'Ready for on-chain intents. Try: "Send 10 USDC to Alice" or "Ekibe parayı böl"' }
+    { type: 'system', text: '// Gogo AI Agent v1.0.0 initialized.' },
+    { type: 'agent', text: 'Ready for on-chain intents. Try: "Send 10 USDC to 0x..." or "Pay 5 USDC"' }
   ]);
   const [loading, setLoading] = useState(false);
 
@@ -25,22 +25,27 @@ export default function DelphiTerminal() {
       const res = await fetch("/api/agent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: userPrompt, walletAddress: "0x319d...460F" })
+        body: JSON.stringify({ prompt: userPrompt })
       });
       const data = await res.json();
 
       if (data.success) {
-        setLogs(prev => [
-          ...prev,
-          { type: 'system', text: `>> Intent Detected: ${data.intent}` },
-          { type: 'agent', text: `[Delphi]: ${data.message}` },
-          { type: 'system', text: `>> TX HASH: ${data.simulatedTxHash.slice(0, 20)}... (Settled <1s)` }
-        ]);
+        const newLogs = [...prev];
+        if (data.intent !== "CHAT") {
+          newLogs.push({ type: 'system', text: `>> Intent Detected: ${data.intent}` });
+        }
+        newLogs.push({ type: 'agent', text: `[Gogo]: ${data.reply}` });
+        
+        if (data.isCommand && data.amount) {
+          newLogs.push({ type: 'system', text: `>> Action Required: Confirm transfer of ${data.amount} USDC` });
+        }
+        
+        setLogs(newLogs);
       } else {
         setLogs(prev => [...prev, { type: 'agent', text: 'Error: Failed to execute agent intent.' }]);
       }
     } catch {
-      setLogs(prev => [...prev, { type: 'agent', text: 'Network error connecting to Delphi core.' }]);
+      setLogs(prev => [...prev, { type: 'agent', text: 'Network error connecting to Gogo core.' }]);
     } finally {
       setLoading(false);
     }
@@ -53,14 +58,14 @@ export default function DelphiTerminal() {
           onClick={() => setIsOpen(true)}
           className="flex items-center gap-2 rounded-full border border-[#d4af37]/40 bg-black px-4 py-3 text-xs uppercase tracking-widest text-[#f5d060] shadow-[0_0_30px_rgba(212,175,55,0.15)] transition-all hover:bg-[#d4af37]/10"
         >
-          <Sparkles size={14} className="animate-pulse" /> Ask Delphi AI
+          <Sparkles size={14} className="animate-pulse" /> Ask Gogo AI
         </button>
       ) : (
         <div className="w-[360px] sm:w-[420px] rounded-2xl border border-[#1a1a2e] bg-black/95 p-4 shadow-[0_24px_80px_rgba(0,0,0,0.8)] backdrop-blur-xl">
           <div className="flex items-center justify-between border-b border-[#1a1a2e] pb-3">
             <div className="flex items-center gap-2 text-[#d4af37]">
               <Terminal size={14} />
-              <span className="text-xs uppercase tracking-widest">// Delphi Agent Terminal</span>
+              <span className="text-xs uppercase tracking-widest">// Gogo Agent Terminal</span>
             </div>
             <button onClick={() => setIsOpen(false)} className="text-white/40 hover:text-white">
               <X size={14} />
@@ -73,7 +78,7 @@ export default function DelphiTerminal() {
                 {log.text}
               </div>
             ))}
-            {loading && <div className="text-white/40 animate-pulse">// Delphi is parsing intent rails...</div>}
+            {loading && <div className="text-white/40 animate-pulse">// Gogo is parsing intent rails...</div>}
           </div>
 
           <form onSubmit={handleSend} className="flex gap-2 border-t border-[#1a1a2e] pt-3">

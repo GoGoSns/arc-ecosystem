@@ -26,6 +26,7 @@ The ecosystem has 4 apps:
   /forum — Community forum
   /feedback — Feedback hub
   /node — Node operator hub
+  /chat — Gogo AI conversational payments
 
 Arc Network details:
 - Chain ID: 5042002

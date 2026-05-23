@@ -35,6 +35,7 @@ export const translations = {
       signals: 'SIGNALS',
       learn: 'LEARN',
       glossary: 'GLOSSARY',
+      chat: 'CHAT',
     },
     hero: {
       tagline: '[ // ARC.ECOSYSTEM ]',
@@ -348,6 +349,7 @@ export const translations = {
       signals: 'SİNYALLER',
       learn: 'ÖĞREN',
       glossary: 'SÖZLÜK',
+      chat: 'SOHBET',
     },
     hero: {
       tagline: '[ // ARC.EKOSİSTEM ]',
