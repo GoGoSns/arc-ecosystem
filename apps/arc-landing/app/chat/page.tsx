@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useState, useRef, useEffect } from "react";
-import { payToAdmin, getUSDCBalance } from "@/lib/usdcTransfer";
+import { sendToAddress, getUSDCBalance } from "@/lib/usdcTransfer";
 
 interface Msg {
   role: "user" | "agent";
@@ -114,8 +114,8 @@ export default function ChatPage() {
 
         setMessages((m) => [...m, { role: "agent", text: `Initiating real-time settlement of ${data.amount} USDC to ${recipient.slice(0,6)}... on Arc Testnet...` }]);
         
-        // Call payToAdmin directly - adapter creation is now internal to lib (matching arc-payouts)
-        const result = await payToAdmin(numAmount);
+        // Send to the parsed recipient address through the shared transfer helper
+        const result = await sendToAddress(recipient, numAmount);
         
         if (result.success && result.txHash) {
           setMessages((m) => [...m, {
@@ -132,9 +132,33 @@ export default function ChatPage() {
           }
           setMessages((m) => [...m, { role: "agent", text: `Transaction Failed: ${errorDisplay}` }]);
         }
-      } else {
-        setMessages((m) => [...m, { role: "agent", text: data.reply || "I'm sorry, I couldn't process that request." }]);
-      }
+        } else if (data.isCommand && data.intent === "SEND_MULTI" && Array.isArray(data.transfers) && data.transfers.length > 0) {
+          const eth = (window as any).ethereum;
+          if (!eth) { setMessages((m) => [...m, { role: "agent", text: "Error: No wallet found. Please install MetaMask." }]); setLoading(false); return; }
+          if (!wallet) { setMessages((m) => [...m, { role: "agent", text: "Wallet not connected. Click 'Connect Wallet' first." }]); setLoading(false); return; }
+          setMessages((m) => [...m, { role: "agent", text: `Executing ${data.transfers.length} real USDC transfers on Arc Testnet...` }]);
+          let okCount = 0;
+          for (const t of data.transfers) {
+            const amt = Number(t.amount);
+            if (!/^0x[a-fA-F0-9]{40}$/.test(t.to) || isNaN(amt) || amt <= 0) {
+              setMessages((m) => [...m, { role: "agent", text: `Skipped invalid transfer: ${t.amount} to ${t.to}` }]);
+              continue;
+            }
+            const r = await sendToAddress(t.to, amt);
+            if (r.success && r.txHash) {
+              okCount++;
+              const txHash = r.txHash;
+              setMessages((m) => [...m, { role: "agent", text: `Settled ${t.amount} USDC to ${t.to.slice(0,6)}...`, tx: { hash: txHash, url: r.explorerUrl || `https://testnet.arcscan.app/tx/${txHash}`, amount: t.amount } }]);
+            } else {
+              setMessages((m) => [...m, { role: "agent", text: `Failed ${t.amount} USDC to ${t.to.slice(0,6)}...: ${r.error || "error"}` }]);
+            }
+          }
+          const bal = await getUSDCBalance(wallet);
+          setBalance(bal);
+          setMessages((m) => [...m, { role: "agent", text: `Batch complete: ${okCount}/${data.transfers.length} transfers settled.` }]);
+        } else {
+          setMessages((m) => [...m, { role: "agent", text: data.reply || "I'm sorry, I couldn't process that request." }]);
+        }
     } catch (e) {
       console.error("Chat Error:", e);
       setMessages((m) => [...m, { role: "agent", text: "Service temporarily unavailable. Please check your connection and try again." }]);

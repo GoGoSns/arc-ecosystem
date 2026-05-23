@@ -80,6 +80,28 @@ export async function payFromAdmin(toAddress: string, amount: number): Promise<{
   return { success: true, txHash: 'pending-payout-' + Date.now(), explorerUrl: '' };
 }
 
+// Send USDC to a specific recipient address (used by Gogo AI chat)
+export async function sendToAddress(toAddress: string, amount: number): Promise<{ success: boolean; txHash?: string; explorerUrl?: string; error?: string }> {
+  if (isLocalhost()) {
+    return { success: true, txHash: 'mock-tx-' + Date.now(), explorerUrl: '' };
+  }
+
+  if (!toAddress || !/^0x[a-fA-F0-9]{40}$/.test(toAddress)) {
+    return { success: false, error: "Invalid recipient address" };
+  }
+
+  if (amount <= 0) {
+    return { success: false, error: "Invalid amount: Must be greater than 0" };
+  }
+
+  try {
+    const result = await sendUSDC(toAddress, String(amount));
+    return { success: true, txHash: result.txHash, explorerUrl: result.explorerUrl };
+  } catch (e: any) {
+    return { success: false, error: e?.message || "Transaction failed" };
+  }
+}
+
 export async function getUSDCBalance(address: string): Promise<number> {
   try {
     const res = await fetch(ARC_RPC_URL, {
