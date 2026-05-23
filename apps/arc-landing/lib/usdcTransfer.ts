@@ -11,44 +11,44 @@ const ARC_CHAIN_ID = 5042002;
 const ARC_RPC_URL = 'https://rpc.testnet.arc.network';
 
 async function sendUSDC(toAddress: string, amount: string): Promise<{ txHash: string; explorerUrl: string }> {
-  const eth = (window as any).ethereum;
-  if (!eth) throw new Error("MetaMask provider not found. Please install MetaMask to continue.");
-
-  // Preflight: Check Network
-  const chainId = await eth.request({ method: 'eth_chainId' });
-  if (parseInt(chainId, 16) !== ARC_CHAIN_ID) {
-    throw new Error(`Incorrect Network: Please switch your wallet to Arc Testnet (Chain ID: ${ARC_CHAIN_ID})`);
-  }
-
-  // Circle AppKit ve Viem Adaptörünü dinamik yükle
+  // Reference implementation from arc-payouts
   const { AppKit } = await import('@circle-fin/app-kit');
   const { createViemAdapterFromProvider } = await import('@circle-fin/adapter-viem-v2');
 
   const kit = new AppKit();
-  
-  // Sağlayıcıyı (MetaMask) temiz bir şekilde Viem adaptörüne bağla
+  const eth = (window as any).ethereum;
+  if (!eth) throw new Error("MetaMask provider not found.");
+
   const adapter = await createViemAdapterFromProvider({
-    provider: eth,
+    provider: eth
   });
 
-  // Arc Testnet parametrelerini explicit (açıkça) göndererek AppKit RPC uyuşmazlığını çözüyoruz
-  const res = await kit.send({
-    from: { 
-      adapter, 
-      chain: {
-        id: ARC_CHAIN_ID,
-        name: 'Arc Testnet',
-        rpcUrl: ARC_RPC_URL,
-        nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 }
-      } as any
+  if (!adapter) throw new Error("Failed to create wallet adapter.");
+
+  // Payload shape exactly matching working reference
+  const payload = {
+    from: {
+      adapter,
+      chain: 'Arc_Testnet' as never
     },
     to: toAddress,
-    amount,
-    token: 'USDC',
-  });
+    amount: amount,
+    token: 'USDC'
+  };
+
+  // Dev log for payload verification
+  if (process.env.NODE_ENV === 'development' || isLocalhost()) {
+    console.log("[sendUSDC] kit.send payload keys:", Object.keys(payload));
+    console.log("[sendUSDC] kit.send from shape:", { 
+      hasAdapter: !!(payload.from as any).adapter, 
+      chain: (payload.from as any).chain 
+    });
+  }
+
+  const res = await kit.send(payload);
 
   const txHash = (res as any)?.hash || (res as any)?.txHash || '';
-  if (!txHash) throw new Error("Transaction failed: No hash returned from network.");
+  if (!txHash) throw new Error("Transaction failed: No hash returned.");
   
   return {
     txHash,

@@ -83,21 +83,38 @@ export default function ChatPage() {
       // If it is a real send command, execute the real transfer
       if (data.isCommand && data.intent === "SEND_USDC" && data.amount) {
         const numAmount = Number(data.amount);
+        const eth = (window as any).ethereum;
         
+        // Comprehensive Readiness Check - Task Requirements
+        if (!eth) {
+          setMessages((m) => [...m, { role: "agent", text: "Error: No Ethereum provider (MetaMask) found. Please install a wallet to continue." }]);
+          setLoading(false);
+          return;
+        }
+
         if (!wallet) {
-          setMessages((m) => [...m, { role: "agent", text: "Wallet not connected. Please connect your MetaMask wallet first to execute this transfer." }]);
+          setMessages((m) => [...m, { role: "agent", text: "Wallet not connected. Click 'Connect Wallet' at the top right before sending USDC." }]);
           setLoading(false);
           return;
         }
 
+        // Field-specific UI errors - Task Requirements
         if (isNaN(numAmount) || numAmount <= 0) {
-          setMessages((m) => [...m, { role: "agent", text: `I couldn't parse a valid amount from your request (${data.amount}). Please try again with a specific number.` }]);
+          setMessages((m) => [...m, { role: "agent", text: `Invalid Amount: "${data.amount}" is not a valid positive number. Please specify a numeric amount like '5.5'.` }]);
           setLoading(false);
           return;
         }
 
-        setMessages((m) => [...m, { role: "agent", text: `Initiating real-time settlement of ${data.amount} USDC on Arc Testnet...` }]);
+        const recipient = data.recipient || "0xB87B774a5b3D77E13a89C68F62810D5a23404365"; 
+        if (!/^0x[a-fA-F0-9]{40}$/.test(recipient)) {
+          setMessages((m) => [...m, { role: "agent", text: `Invalid Recipient: "${recipient}" is not a valid EVM address. Must be 0x followed by 40 hex characters.` }]);
+          setLoading(false);
+          return;
+        }
+
+        setMessages((m) => [...m, { role: "agent", text: `Initiating real-time settlement of ${data.amount} USDC to ${recipient.slice(0,6)}... on Arc Testnet...` }]);
         
+        // Call payToAdmin directly - adapter creation is now internal to lib (matching arc-payouts)
         const result = await payToAdmin(numAmount);
         
         if (result.success && result.txHash) {
