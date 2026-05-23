@@ -32,6 +32,31 @@ export default function ChatPage() {
       }
       const accounts = await eth.request({ method: "eth_requestAccounts" });
       const addr = accounts[0];
+
+      // Switch Network if needed
+      const chainId = await eth.request({ method: 'eth_chainId' });
+      if (parseInt(chainId, 16) !== 5042002) {
+        try {
+          await eth.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0x4ce936' }], // 5042002 in hex
+          });
+        } catch (switchError: any) {
+          if (switchError.code === 4902) {
+            await eth.request({
+              method: 'wallet_addEthereumChain',
+              params: [{
+                chainId: '0x4ce936',
+                chainName: 'Arc Testnet',
+                nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 },
+                rpcUrls: ['https://rpc.testnet.arc.network'],
+                blockExplorerUrls: ['https://testnet.arcscan.app'],
+              }],
+            });
+          }
+        }
+      }
+
       setWallet(addr);
       const bal = await getUSDCBalance(addr);
       setBalance(bal);
@@ -57,29 +82,45 @@ export default function ChatPage() {
 
       // If it is a real send command, execute the real transfer
       if (data.isCommand && data.intent === "SEND_USDC" && data.amount) {
+        const numAmount = Number(data.amount);
+        
         if (!wallet) {
-          setMessages((m) => [...m, { role: "agent", text: "Please connect your wallet first to execute a real USDC transfer." }]);
+          setMessages((m) => [...m, { role: "agent", text: "Wallet not connected. Please connect your MetaMask wallet first to execute this transfer." }]);
           setLoading(false);
           return;
         }
-        setMessages((m) => [...m, { role: "agent", text: `Executing real transfer of ${data.amount} USDC on Arc Testnet...` }]);
-        const result = await payToAdmin(Number(data.amount));
+
+        if (isNaN(numAmount) || numAmount <= 0) {
+          setMessages((m) => [...m, { role: "agent", text: `I couldn't parse a valid amount from your request (${data.amount}). Please try again with a specific number.` }]);
+          setLoading(false);
+          return;
+        }
+
+        setMessages((m) => [...m, { role: "agent", text: `Initiating real-time settlement of ${data.amount} USDC on Arc Testnet...` }]);
+        
+        const result = await payToAdmin(numAmount);
+        
         if (result.success && result.txHash) {
           setMessages((m) => [...m, {
             role: "agent",
-            text: `Transfer settled on Arc Testnet.`,
+            text: `Transfer successfully settled on Arc Testnet.`,
             tx: { hash: result.txHash!, url: result.explorerUrl || `https://testnet.arcscan.app/tx/${result.txHash}`, amount: data.amount },
           }]);
           const bal = await getUSDCBalance(wallet);
           setBalance(bal);
         } else {
-          setMessages((m) => [...m, { role: "agent", text: `Transfer failed: ${result.error || "unknown error"}` }]);
+          let errorDisplay = result.error || "Unknown network error.";
+          if (errorDisplay.includes("Incorrect Network")) {
+            errorDisplay += " Click 'Connect Wallet' again to trigger a network switch.";
+          }
+          setMessages((m) => [...m, { role: "agent", text: `Transaction Failed: ${errorDisplay}` }]);
         }
       } else {
-        setMessages((m) => [...m, { role: "agent", text: data.reply || "..." }]);
+        setMessages((m) => [...m, { role: "agent", text: data.reply || "I'm sorry, I couldn't process that request." }]);
       }
-    } catch {
-      setMessages((m) => [...m, { role: "agent", text: "Network error. Please try again." }]);
+    } catch (e) {
+      console.error("Chat Error:", e);
+      setMessages((m) => [...m, { role: "agent", text: "Service temporarily unavailable. Please check your connection and try again." }]);
     }
     setLoading(false);
   }
