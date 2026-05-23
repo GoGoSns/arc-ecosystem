@@ -1,4 +1,4 @@
-import { getAddress } from 'viem';
+﻿import { getAddress } from 'viem';
 
 const ADMIN_WALLET = getAddress('0xB87B774a5b3D77E13a89C68F62810D5a23404365');
 
@@ -8,7 +8,7 @@ function isLocalhost(): boolean {
 }
 
 const ARC_CHAIN_ID = 5042002;
-const ARC_RPC_URL = 'https://rpc.testnet.arc.network';
+const ARC_RPC_URL = 'https://rpc.drpc.testnet.arc.network';
 
 async function sendUSDC(toAddress: string, amount: string): Promise<{ txHash: string; explorerUrl: string }> {
   // Reference implementation from arc-payouts

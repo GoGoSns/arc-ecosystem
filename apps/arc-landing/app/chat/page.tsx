@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef, useEffect } from "react";
 import { payToAdmin, getUSDCBalance } from "@/lib/usdcTransfer";
@@ -49,7 +49,7 @@ export default function ChatPage() {
                 chainId: '0x4ce936',
                 chainName: 'Arc Testnet',
                 nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 },
-                rpcUrls: ['https://rpc.testnet.arc.network'],
+                rpcUrls: ['https://rpc.drpc.testnet.arc.network'],
                 blockExplorerUrls: ['https://testnet.arcscan.app'],
               }],
             });
@@ -171,7 +171,7 @@ export default function ChatPage() {
                 <div>{m.text}</div>
                 {m.tx && (
                   <div className="mt-3 rounded-xl border border-[#d4af37]/30 bg-[#d4af37]/5 p-3">
-                    <div className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#d4af37]">Live Settled · Arc Testnet</div>
+                    <div className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#d4af37]">Live Settled Â· Arc Testnet</div>
                     <div className="mt-1 text-lg font-bold text-[#f5d060]">{m.tx.amount} USDC</div>
                     <a href={m.tx.url} target="_blank" rel="noopener noreferrer" className="mt-1 block break-all font-mono text-[11px] text-[#8a8a9a] underline hover:text-[#d4af37]">
                       {m.tx.hash}
