@@ -132,33 +132,134 @@ export default function ChatPage() {
           }
           setMessages((m) => [...m, { role: "agent", text: `Transaction Failed: ${errorDisplay}` }]);
         }
-        } else if (data.isCommand && data.intent === "SEND_MULTI" && Array.isArray(data.transfers) && data.transfers.length > 0) {
-          const eth = (window as any).ethereum;
-          if (!eth) { setMessages((m) => [...m, { role: "agent", text: "Error: No wallet found. Please install MetaMask." }]); setLoading(false); return; }
-          if (!wallet) { setMessages((m) => [...m, { role: "agent", text: "Wallet not connected. Click 'Connect Wallet' first." }]); setLoading(false); return; }
-          setMessages((m) => [...m, { role: "agent", text: `Executing ${data.transfers.length} real USDC transfers on Arc Testnet...` }]);
-          let okCount = 0;
-          for (const t of data.transfers) {
-            const amt = Number(t.amount);
-            if (!/^0x[a-fA-F0-9]{40}$/.test(t.to) || isNaN(amt) || amt <= 0) {
-              setMessages((m) => [...m, { role: "agent", text: `Skipped invalid transfer: ${t.amount} to ${t.to}` }]);
-              continue;
-            }
-            const r = await sendToAddress(t.to, amt);
-            if (r.success && r.txHash) {
-              okCount++;
-              const txHash = r.txHash;
-              setMessages((m) => [...m, { role: "agent", text: `Settled ${t.amount} USDC to ${t.to.slice(0,6)}...`, tx: { hash: txHash, url: r.explorerUrl || `https://testnet.arcscan.app/tx/${txHash}`, amount: t.amount } }]);
-            } else {
-              setMessages((m) => [...m, { role: "agent", text: `Failed ${t.amount} USDC to ${t.to.slice(0,6)}...: ${r.error || "error"}` }]);
-            }
+      } else if (data.isCommand && data.intent === "SEND_MULTI" && Array.isArray(data.transfers) && data.transfers.length > 0) {
+        const eth = (window as any).ethereum;
+        if (!eth) {
+          setMessages((m) => [...m, { role: "agent", text: "Error: No wallet found. Please install MetaMask." }]);
+          setLoading(false);
+          return;
+        }
+        if (!wallet) {
+          setMessages((m) => [...m, { role: "agent", text: "Wallet not connected. Click 'Connect Wallet' first." }]);
+          setLoading(false);
+          return;
+        }
+        setMessages((m) => [...m, { role: "agent", text: `Executing ${data.transfers.length} real USDC transfers on Arc Testnet...` }]);
+        let okCount = 0;
+        for (const t of data.transfers) {
+          const amt = Number(t.amount);
+          if (!/^0x[a-fA-F0-9]{40}$/.test(t.to) || isNaN(amt) || amt <= 0) {
+            setMessages((m) => [...m, { role: "agent", text: `Skipped invalid transfer: ${t.amount} to ${t.to}` }]);
+            continue;
           }
+          const r = await sendToAddress(t.to, amt);
+          if (r.success && r.txHash) {
+            okCount++;
+            const txHash = r.txHash;
+            setMessages((m) => [...m, { role: "agent", text: `Settled ${t.amount} USDC to ${t.to.slice(0,6)}...`, tx: { hash: txHash, url: r.explorerUrl || `https://testnet.arcscan.app/tx/${txHash}`, amount: t.amount } }]);
+          } else {
+            setMessages((m) => [...m, { role: "agent", text: `Failed ${t.amount} USDC to ${t.to.slice(0,6)}...: ${r.error || "error"}` }]);
+          }
+        }
+        const bal = await getUSDCBalance(wallet);
+        setBalance(bal);
+        setMessages((m) => [...m, { role: "agent", text: `Batch complete: ${okCount}/${data.transfers.length} transfers settled.` }]);
+      } else if (data.isCommand && data.intent === "CONDITIONAL_SEND" && data.amount && data.recipient && data.condition) {
+        const eth = (window as any).ethereum;
+        if (!eth) {
+          setMessages((m) => [...m, { role: "agent", text: "Error: No Ethereum provider (MetaMask) found. Please install a wallet to continue." }]);
+          setLoading(false);
+          return;
+        }
+
+        if (!wallet) {
+          setMessages((m) => [...m, { role: "agent", text: "Wallet not connected. Click 'Connect Wallet' at the top right before sending USDC." }]);
+          setLoading(false);
+          return;
+        }
+
+        setMessages((m) => [...m, { role: "agent", text: "Checking condition against live balance..." }]);
+        const liveBalance = await getUSDCBalance(wallet);
+        const threshold = Number(data.condition.threshold);
+        const balanceText = String(liveBalance);
+        const thresholdText = String(data.condition.threshold);
+        const meetsCondition =
+          data.condition.type === "above" ? liveBalance > threshold : liveBalance < threshold;
+
+        if (!meetsCondition) {
+          setMessages((m) => [
+            ...m,
+            {
+              role: "agent",
+              text: `Condition not met: balance is ${balanceText} USDC, required ${data.condition.type} ${thresholdText}. No transfer executed.`,
+            },
+          ]);
+          setLoading(false);
+          return;
+        }
+
+        const numAmount = Number(data.amount);
+        if (isNaN(numAmount) || numAmount <= 0) {
+          setMessages((m) => [
+            ...m,
+            {
+              role: "agent",
+              text: `Invalid Amount: "${data.amount}" is not a valid positive number. Please specify a numeric amount like '5.5'.`,
+            },
+          ]);
+          setLoading(false);
+          return;
+        }
+
+        const recipient = data.recipient;
+        if (!/^0x[a-fA-F0-9]{40}$/.test(recipient)) {
+          setMessages((m) => [
+            ...m,
+            {
+              role: "agent",
+              text: `Invalid Recipient: "${recipient}" is not a valid EVM address. Must be 0x followed by 40 hex characters.`,
+            },
+          ]);
+          setLoading(false);
+          return;
+        }
+
+        setMessages((m) => [
+          ...m,
+          {
+            role: "agent",
+            text: `Condition met. Initiating real-time settlement of ${data.amount} USDC to ${recipient.slice(0, 6)}... on Arc Testnet...`,
+          },
+        ]);
+
+        const result = await sendToAddress(recipient, numAmount);
+
+        if (result.success && result.txHash) {
+          const txHash = result.txHash;
+          setMessages((m) => [
+            ...m,
+            {
+              role: "agent",
+              text: "Transfer successfully settled on Arc Testnet.",
+              tx: {
+                hash: txHash,
+                url: result.explorerUrl || `https://testnet.arcscan.app/tx/${txHash}`,
+                amount: data.amount,
+              },
+            },
+          ]);
           const bal = await getUSDCBalance(wallet);
           setBalance(bal);
-          setMessages((m) => [...m, { role: "agent", text: `Batch complete: ${okCount}/${data.transfers.length} transfers settled.` }]);
         } else {
-          setMessages((m) => [...m, { role: "agent", text: data.reply || "I'm sorry, I couldn't process that request." }]);
+          let errorDisplay = result.error || "Unknown network error.";
+          if (errorDisplay.includes("Incorrect Network")) {
+            errorDisplay += " Click 'Connect Wallet' again to trigger a network switch.";
+          }
+          setMessages((m) => [...m, { role: "agent", text: `Transaction Failed: ${errorDisplay}` }]);
         }
+      } else {
+        setMessages((m) => [...m, { role: "agent", text: data.reply || "I'm sorry, I couldn't process that request." }]);
+      }
     } catch (e) {
       console.error("Chat Error:", e);
       setMessages((m) => [...m, { role: "agent", text: "Service temporarily unavailable. Please check your connection and try again." }]);

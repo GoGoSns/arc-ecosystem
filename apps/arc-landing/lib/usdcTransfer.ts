@@ -57,10 +57,6 @@ async function sendUSDC(toAddress: string, amount: string): Promise<{ txHash: st
 }
 
 export async function payToAdmin(amount: number): Promise<{ success: boolean; txHash?: string; explorerUrl?: string; error?: string }> {
-  if (isLocalhost()) {
-    return { success: true, txHash: 'mock-tx-' + Date.now(), explorerUrl: '' };
-  }
-  
   if (amount <= 0) {
     return { success: false, error: "Invalid amount: Must be greater than 0" };
   }
@@ -77,15 +73,11 @@ export async function payToAdmin(amount: number): Promise<{ success: boolean; tx
 }
 
 export async function payFromAdmin(toAddress: string, amount: number): Promise<{ success: boolean; txHash?: string; explorerUrl?: string; error?: string }> {
-  return { success: true, txHash: 'pending-payout-' + Date.now(), explorerUrl: '' };
+  return { success: false, error: "Real admin payouts are not configured in this environment." };
 }
 
 // Send USDC to a specific recipient address (used by Gogo AI chat)
 export async function sendToAddress(toAddress: string, amount: number): Promise<{ success: boolean; txHash?: string; explorerUrl?: string; error?: string }> {
-  if (isLocalhost()) {
-    return { success: true, txHash: 'mock-tx-' + Date.now(), explorerUrl: '' };
-  }
-
   if (!toAddress || !/^0x[a-fA-F0-9]{40}$/.test(toAddress)) {
     return { success: false, error: "Invalid recipient address" };
   }
@@ -128,4 +120,4 @@ export function explorerUrl(txHash: string): string {
   return `https://testnet.arcscan.app/tx/${txHash}`;
 }
 
-export const USE_REAL_TRANSFERS = !isLocalhost();
+export const USE_REAL_TRANSFERS = true;
