@@ -441,19 +441,19 @@ All four apps deploy independently from the same monorepo on Vercel (root direct
 
 | | Arc Pay | Arc Creator | Arc Play | Arc Landing |
 |--|:--:|:--:|:--:|:--:|
-| Real USDC transfers | [x] | [x] | [x] | [x] |
-| Circle AppKit | [x] | [x] | [x] | [x] |
-| Agent auto-settlement | -- | -- | [x] | [x] |
-| QR / Invoice / PDF | [x] | -- | -- | -- |
-| Batch payroll (CSV) | [x] | -- | -- | -- |
-| Escrow | [x] | [x] | -- | -- |
-| Tips / Subscriptions | -- | [x] | -- | -- |
-| Prediction market | -- | -- | [x] | [x] |
-| Browser games | -- | -- | [x] | [x] |
-| USDC challenge wagers | -- | -- | -- | [x] |
-| AI assistant | [x] | [x] | [x] | [x] |
-| X OAuth | -- | -- | -- | [x] |
-| EN/TR i18n | -- | -- | -- | [x] |
+| Real USDC transfers | ✅ | ✅ | ✅ | ✅ |
+| Circle AppKit | ✅ | ✅ | ✅ | ✅ |
+| Agent auto-settlement | ⬜ | ⬜ | ✅ | ✅ |
+| QR / Invoice / PDF | ✅ | ⬜ | ⬜ | ⬜ |
+| Batch payroll (CSV) | ✅ | ⬜ | ⬜ | ⬜ |
+| Escrow | ✅ | ✅ | ⬜ | ⬜ |
+| Tips / Subscriptions | ⬜ | ✅ | ⬜ | ⬜ |
+| Prediction market | ⬜ | ⬜ | ✅ | ✅ |
+| Browser games | ⬜ | ⬜ | ✅ | ✅ |
+| USDC challenge wagers | ⬜ | ⬜ | ⬜ | ✅ |
+| AI assistant | ✅ | ✅ | ✅ | ✅ |
+| X OAuth | ⬜ | ⬜ | ⬜ | ✅ |
+| EN/TR i18n | ⬜ | ⬜ | ⬜ | ✅ |
 
 **Total: 25+ shipped features across the ecosystem.**
 
