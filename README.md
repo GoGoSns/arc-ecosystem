@@ -12,7 +12,7 @@ A complete Web3 ecosystem for **stablecoin payments, creator monetization, and o
 
 **[Live Demo](https://arcecosystemmain.vercel.app)** - **[Gogo AI Chat](https://arcecosystemmain.vercel.app/chat)** - **[Prediction Market](https://arcecosystemmain.vercel.app/predict)**
 
-**[Arc Pay](https://arc-ecosystem-pay.vercel.app)** - **[Arc Creator](https://arc-creator.vercel.app)** - **[Arc Play](https://arc-play-6j19a7q4q-gogosns-projects.vercel.app)**
+**[Arc Pay](https://arcpaymain.vercel.app)** - **[Arc Creator](https://arccreatormain.vercel.app)** - **[Arc Play](https://arcplaymain.vercel.app)**
 
 </div>
 
@@ -144,7 +144,7 @@ This project targets **multiple tracks** of the Stablecoin Commerce Stack Challe
 | **Tip Jar** | Public `/tip/[handle]` page -- fans tip creators in USDC | [x] |
 | **Subscription** | Recurring creator plans with expiry tracking | [x] |
 | **Bounty Board** | Upwork-style: post task → hunters bid → pick winner → pay on approval | [x] |
-| **Marketplace** | Fiverr-style service listings with escrow checkout | [x] |
+| **Freelance Marketplace** | Fiverr-style service listings with 3 pricing modes (single / tiered / hourly) and escrow checkout | [x] |
 
 ---
 
@@ -153,11 +153,11 @@ This project targets **multiple tracks** of the Stablecoin Commerce Stack Challe
 
 | Feature | Description | Status |
 |---------|-------------|:------:|
-| **Prediction Market** | YES/NO markets with autonomous agent settlement | [x] |
-| **NFT Raffle** | Provably-fair USDC + NFT raffles | [x] |
-| **Portfolio Tracker** | Track USDC balance & on-chain activity | [x] |
-| **Token Launchpad** | Launch tokens on Arc | [~] |
-| **Play to Earn** | Earn USDC through gameplay | [~] |
+| **Prediction Market** | Polymarket-style YES/NO markets with autonomous agent settlement | [x] |
+| **NFT Raffle** | Provably-random raffles with USDC pots and NFT prizes | [x] |
+| **Portfolio Tracker** | Track USDC balance, transactions, and monthly on-chain stats | [x] |
+| **Play to Earn** | 3 mini-games (Click Rush, Memory Match, Reaction Test) with USDC leaderboards | [x] |
+| **Token Launchpad** | Launch tokens on Arc, 3 modes (Basic / Allocation / IDO) | [~] |
 
 ---
 
@@ -179,6 +179,27 @@ The central discovery experience that ties the ecosystem together.
 | **EN / TR i18n** | Full English & Turkish localization | [x] |
 | **SDK Showcase** | `arc-kit` integration teaser ("embed Arc Pay in 3 lines") | [x] |
 | **FAQ + Roadmap + Glossary** | Full educational content surfaces | [x] |
+
+---
+
+### 🌍 Arc Global Payouts -- The Companion SaaS
+> *"Batch USDC payouts for global teams."*
+
+**Live:** [arc-payouts.vercel.app](https://arc-payouts.vercel.app) · **Repo:** [GoGoSns/arc-payouts](https://github.com/GoGoSns/arc-payouts)
+
+Arc Payouts is the production-grade payout platform that the entire ecosystem grew out of. It is a standalone SaaS dashboard for companies and agencies to pay freelancers, remote employees, and global vendors in USDC — the cross-border remittance use case Arc was designed for. It pioneered the wallet, payment, and design patterns now shared across Arc Pay, Creator, and Play.
+
+| Feature | Description | Status |
+|---------|-------------|:------:|
+| **X OAuth Profiles** | Login with X (PKCE), profiles saved to Redis | [x] |
+| **Pay Links** | Anonymous `/pay/[username]` USDC payment pages — no account needed | [x] |
+| **Batch CSV Payouts** | Upload a CSV, pay an entire payroll of recipients in one flow | [x] |
+| **Live Transaction Ticker** | Real-time on-chain payment feed via Redis | [x] |
+| **NFT Receipts** | On-chain payment receipts minted as NFTs via Pinata / IPFS | [x] |
+| **Groq AI Chat** | In-app AI assistant routed server-side | [x] |
+| **USDC Tetris** | Mini-game with a friend-challenge / wager system | [x] |
+
+**Why it matters:** Arc Payouts is where the **first real on-chain USDC transfer** was executed and verified on ArcScan, proving the Circle AppKit + Arc Testnet stack end-to-end. It directly addresses Track 1 (cross-border payments & remittances): a UAE-style agency can pay global sellers, creators, and contractors in USDC with transparent fees and real-time settlement.
 
 ---
 
@@ -408,9 +429,11 @@ All four apps deploy independently from the same monorepo on Vercel (root direct
 | App | Root Directory | Live URL |
 |-----|---------------|----------|
 | Arc Landing | `apps/arc-landing` | [arcecosystemmain.vercel.app](https://arcecosystemmain.vercel.app) |
-| Arc Pay | `apps/arc-pay` | [arc-ecosystem-pay.vercel.app](https://arc-ecosystem-pay.vercel.app) |
-| Arc Creator | `apps/arc-creator` | [arc-creator.vercel.app](https://arc-creator.vercel.app) |
-| Arc Play | `apps/arc-play` | [arc-play-6j19a7q4q-gogosns-projects.vercel.app](https://arc-play-6j19a7q4q-gogosns-projects.vercel.app) |
+| Arc Pay | `apps/arc-pay` | [arcpaymain.vercel.app](https://arcpaymain.vercel.app) |
+| Arc Creator | `apps/arc-creator` | [arccreatormain.vercel.app](https://arccreatormain.vercel.app) |
+| Arc Play | `apps/arc-play` | [arcplaymain.vercel.app](https://arcplaymain.vercel.app) |
+
+**Related live project:** [Arc Global Payouts](https://arc-payouts.vercel.app) (`arc-payouts.vercel.app`) — the predecessor USDC payout SaaS with batch CSV, NFT receipts via IPFS, and the first verified on-chain USDC transfer that proved the stack.
 
 ---
 
@@ -489,17 +512,17 @@ We chose **Circle AppKit + USDC** because Arc Network is purpose-built for stabl
 
 ## The Story
 
-Arc Ecosystem was built by **one self-taught builder with zero prior coding experience**, across multiple intense sessions, in a strict mentor-apprentice workflow: every line of code generated and pasted, every command run by hand in PowerShell, every deploy a `git push`.
+Arc Ecosystem grew from a single idea: if USDC is the native gas token, an entire consumer economy can live on one rail with no friction.
 
-It began as a single USDC invoice dapp (`arc-invoice-dapp`). That became **Arc Global Payouts** (`arc-payouts.vercel.app`) -- a payout SaaS with batch CSV, NFT receipts via IPFS, and the first real on-chain USDC transfer. That foundation grew into this monorepo: **four apps, 25+ features, an autonomous settlement agent, and a complete design system** -- all on native USDC.
+It began as a single USDC invoice dapp (`arc-invoice-dapp`). That became **Arc Global Payouts** (`arc-payouts.vercel.app`) -- a payout SaaS with batch CSV payments, NFT receipts via IPFS, and the first real on-chain USDC transfer that proved the stack worked. That foundation grew into this monorepo: **four apps, 25+ features, an autonomous settlement agent, and a complete design system** -- all on native USDC.
 
-The lesson that runs through all of it: **the hard part wasn't the code, it was the discoveries** -- that Arc's USDC is native and 18 decimals, that Circle AppKit only works deployed, that the agent wallet must be sovereign from the admin. Each one cost hours. Each one is now documented above so the next builder doesn't have to bleed for it.
+The lesson that runs through all of it: **the hard part wasn't the code, it was the discoveries** -- that Arc's USDC is native and 18 decimals, that Circle AppKit only works deployed, that the agent wallet must be sovereign from the admin. Each one is now documented above so the next builder doesn't have to rediscover it.
 
 ---
 
 ## Built By
 
-**GoGo** -- self-taught Web3 builder
+**GoGo** -- Web3 builder
 
 - X -- [@0xGoGochain](https://x.com/0xGoGochain)
 - GitHub -- [GoGoSns](https://github.com/GoGoSns)
