@@ -12,7 +12,7 @@ A complete Web3 ecosystem for **stablecoin payments, creator monetization, and o
 
 **[Live Demo](https://arcecosystemmain.vercel.app)** - **[Gogo AI Chat](https://arcecosystemmain.vercel.app/chat)** - **[Prediction Market](https://arcecosystemmain.vercel.app/predict)**
 
-**[Arc Pay](https://arcpaymain.vercel.app)** - **[Arc Creator](https://arccreatormain.vercel.app)** - **[Arc Play](https://arcplaymain.vercel.app)**
+**[Arc Pay](https://arcpaymain.vercel.app)** - **[Arc Creator](https://arccreatormain.vercel.app)** - **[Arc Play](https://arcplaymain.vercel.app)** - **[Arc Payouts](https://arc-payouts.vercel.app)**
 
 </div>
 
