@@ -728,6 +728,9 @@ export default function EventsPage() {
               </p>
 
               <div className="flex flex-wrap gap-3">
+                <Link href="/" className="secondary-button">
+                  Back to Home
+                </Link>
                 <a href="#browse" className="primary-button">
                   Browse events
                   <ArrowRight size={15} />

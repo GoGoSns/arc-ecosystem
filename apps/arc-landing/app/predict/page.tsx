@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Wallet, Info, Trophy, TrendingUp, User, Clock, CheckCircle2, AlertTriangle, ExternalLink, ShieldCheck } from 'lucide-react';
+import { Wallet, Info, Trophy, TrendingUp, User, Clock, CheckCircle2, AlertTriangle, ExternalLink, ShieldCheck, ArrowLeft } from 'lucide-react';
 import { sendToAddress, explorerUrl } from '@/lib/usdcTransfer';
 
 const AGENT_WALLET = '0xB87B6D1a56bB7942bd07b6B0e9540a63b3dA4365';
@@ -198,6 +199,13 @@ export default function PredictionPage() {
         {/* Header */}
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
           <div>
+            <Link 
+              href="/" 
+              className="inline-flex items-center gap-2 text-[#8a8a9a] hover:text-[#d4af37] transition-colors mb-6 text-sm font-bold uppercase tracking-widest group"
+            >
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              Back to Home
+            </Link>
             <div className="flex items-center gap-2 mb-2 text-[#d4af37]">
               <TrendingUp className="w-5 h-5" />
               <span className="text-sm font-bold tracking-widest uppercase">Arc Ecosystem</span>

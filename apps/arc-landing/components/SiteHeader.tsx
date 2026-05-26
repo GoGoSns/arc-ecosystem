@@ -200,7 +200,7 @@ export default function SiteHeader({
               <div
                 id="site-header-more-menu"
                 role="menu"
-                className="absolute left-1/2 top-full z-50 mt-3 w-[min(28rem,calc(100vw-2rem))] -translate-x-1/2 rounded-3xl border border-[#1a1a2e]/95 bg-[#050508]/98 p-4 shadow-[0_24px_60px_rgba(0,0,0,0.5)]"
+                className="absolute left-1/2 top-full z-50 mt-3 w-[min(28rem,calc(100vw-2rem))] -translate-x-1/2 rounded-3xl border border-[#1a1a2e] bg-[#0d0d12] p-4 shadow-2xl"
               >
                 <div className="grid gap-2 sm:grid-cols-2">
                   {MORE_SITE_NAV.map((link) => (
