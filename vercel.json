@@ -1,4 +1,5 @@
 {
-  "buildCommand": "pnpm build",
-  "installCommand": "pnpm install"
+  "buildCommand": "npx turbo build --filter=@arc-ecosystem/arc-landing...",
+  "installCommand": "pnpm install",
+  "outputDirectory": "apps/arc-landing/.next"
 }
