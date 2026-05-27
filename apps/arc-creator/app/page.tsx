@@ -8,28 +8,24 @@ const features = [
     description: "Receive one-tap USDC tips from supporters.",
     icon: Coffee,
     href: "/tip",
-    comingSoon: false,
   },
   {
     title: "Subscription",
     description: "Recurring USDC subscriptions for content.",
     icon: Repeat,
     href: "/subscription",
-    comingSoon: false,
   },
   {
     title: "Bounty Board",
     description: "Post tasks, pay on completion.",
     icon: Trophy,
     href: "/bounty",
-    comingSoon: false,
   },
   {
     title: "Freelance Marketplace",
     description: "Full-service marketplace with escrow.",
     icon: Briefcase,
     href: "/marketplace",
-    comingSoon: false,
   },
 ];
 
@@ -43,20 +39,21 @@ export default function Home() {
             Arc Creator
           </h1>
           <p className="text-base sm:text-xl" style={{ color: "var(--fg)", opacity: 0.65 }}>
-            Monetize your creativity
+            Monetize your creativity on Arc Testnet
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {features.map((feature) => {
             const Icon = feature.icon;
-            const card = (
-              <div
-                className="sweep rounded-xl p-4 sm:p-6 flex flex-col gap-4 transition-colors h-auto"
+            return (
+              <Link
+                key={feature.href}
+                href={feature.href}
+                className="sweep rounded-xl p-4 sm:p-6 flex flex-col gap-4 transition-colors"
                 style={{
                   border: "1px solid var(--border)",
                   background: "var(--card)",
-                  opacity: feature.comingSoon ? 0.6 : 1,
                 }}
               >
                 <div
@@ -67,34 +64,15 @@ export default function Home() {
                 </div>
                 <div>
                   <h2
-                    className="font-semibold mb-1 flex items-center gap-2 flex-wrap"
+                    className="font-semibold mb-1"
                     style={{ color: "var(--fg)" }}
                   >
                     {feature.title}
-                    {feature.comingSoon && (
-                      <span
-                        className="text-xs font-medium px-2 py-0.5 rounded-full"
-                        style={{
-                          background: "rgba(201,168,76,0.12)",
-                          color: "var(--accent)",
-                        }}
-                      >
-                        Soon
-                      </span>
-                    )}
                   </h2>
                   <p className="text-sm leading-relaxed" style={{ color: "var(--fg)", opacity: 0.55 }}>
                     {feature.description}
                   </p>
                 </div>
-              </div>
-            );
-
-            return feature.comingSoon ? (
-              <div key={feature.href}>{card}</div>
-            ) : (
-              <Link key={feature.href} href={feature.href} className="flex">
-                {card}
               </Link>
             );
           })}
