@@ -1,5 +1,5 @@
 {
   "buildCommand": "npx turbo build --filter=@arc-ecosystem/arc-landing...",
-  "installCommand": "pnpm install",
+  "installCommand": "npm i -g pnpm@9.15.4 && pnpm install --no-frozen-lockfile",
   "outputDirectory": "apps/arc-landing/.next"
 }
