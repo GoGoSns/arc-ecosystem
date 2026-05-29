@@ -1,5 +1,0 @@
-{
-  "buildCommand": "npx turbo build --filter=@arc-ecosystem/arc-landing...",
-  "installCommand": "corepack enable && corepack prepare pnpm@9.15.4 --activate && pnpm install --no-frozen-lockfile --config.confirmModulesPurge=false",
-  "outputDirectory": "apps/arc-landing/.next"
-}
