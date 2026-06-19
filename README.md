@@ -12,7 +12,7 @@ A complete Web3 ecosystem for **stablecoin payments, creator monetization, and o
 
 **[Live Demo](https://arcecosystemmain.vercel.app)** - **[Gogo AI Chat](https://arcecosystemmain.vercel.app/chat)** - **[Prediction Market](https://arcecosystemmain.vercel.app/predict)**
 
-**[Arc Pay](https://arcpaymain.vercel.app)** - **[Arc Creator](https://arccreatormain.vercel.app)** - **[Arc Play](https://arcplaymain.vercel.app)** - **[Arc Payouts](https://arc-payouts.vercel.app)**
+**[Arc Pay](https://arcpaymain.vercel.app)** - **[Arc Creator](https://arccreatormain.vercel.app)** - **[Arc Play](https://arcarcade.vercel.app)** - **[Arc Payouts](https://arc-payouts.vercel.app)**
 
 </div>
 
@@ -431,7 +431,7 @@ All four apps deploy independently from the same monorepo on Vercel (root direct
 | Arc Landing | `apps/arc-landing` | [arcecosystemmain.vercel.app](https://arcecosystemmain.vercel.app) |
 | Arc Pay | `apps/arc-pay` | [arcpaymain.vercel.app](https://arcpaymain.vercel.app) |
 | Arc Creator | `apps/arc-creator` | [arccreatormain.vercel.app](https://arccreatormain.vercel.app) |
-| Arc Play | `apps/arc-play` | [arcplaymain.vercel.app](https://arcplaymain.vercel.app) |
+| Arc Play | `apps/arc-play` | [arcarcade.vercel.app](https://arcarcade.vercel.app) |
 
 **Related live project:** [Arc Global Payouts](https://arc-payouts.vercel.app) (`arc-payouts.vercel.app`) — the predecessor USDC payout SaaS with batch CSV, NFT receipts via IPFS, and the first verified on-chain USDC transfer that proved the stack.
 

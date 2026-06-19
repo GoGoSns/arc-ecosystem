@@ -27,7 +27,7 @@ THE ECOSYSTEM HAS 4 APPS:
 - /bounty → Bounty Board: Post tasks, hunters bid, pay on completion (Upwork-style)
 - /marketplace → Freelance Marketplace: Sell services, 3 pricing modes (single/tiered/hourly), Fiverr-style
 
-🟢 ARC PLAY (https://arcplaymain.vercel.app) — Gaming & Web3
+🟢 ARC PLAY (https://arcarcade.vercel.app) — Gaming & Web3
 - /portfolio → Portfolio Tracker: Track your USDC balance, transactions, monthly stats
 - /prediction → Prediction Market: Bet on yes/no outcomes (Polymarket-style)
 - /raffle → NFT Raffle: Provably-random raffles with USDC pots and NFT prizes

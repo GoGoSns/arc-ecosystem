@@ -5,7 +5,7 @@ const SYSTEM_PROMPT = `You are Arc Assistant, the AI helper for Arc Ecosystem �
 The ecosystem has 4 apps:
 - Arc Pay (arcpaymain.vercel.app): /qr, /split, /invoice, /payroll, /escrow — USDC payments
 - Arc Creator (arccreatormain.vercel.app): /tip, /subscription, /bounty, /marketplace — creator monetization
-- Arc Play (arcplaymain.vercel.app): /games, /prediction, /raffle, /launchpad — gaming & DeFi
+- Arc Play (arcarcade.vercel.app): /games, /prediction, /raffle, /launchpad — gaming & DeFi
 - Arc Landing (arcecosystemmain.vercel.app): Central hub with these routes:
   /stats — Network statistics dashboard
   /value — Wallet value lookup (score, portfolio, pricer, domain)
