@@ -3,8 +3,8 @@ export type ArcAppKey = 'pay' | 'creator' | 'play' | 'market' | 'hub';
 const PRODUCTION_DOMAINS: Record<ArcAppKey, string> = {
   pay: 'https://arcpaymain.vercel.app',
   creator: 'https://arccreatorhub.vercel.app',
-  play: 'https://arcarcade.vercel.app',
-  market: 'https://arcarcade.vercel.app/market',
+  play: 'https://arcplaymain.vercel.app',
+  market: 'https://arcplaymain.vercel.app/market',
   hub: 'https://arcecosystemmain.vercel.app',
 };
 
