@@ -5,7 +5,7 @@ import { Wallet, Sparkles, Gamepad2, Home } from 'lucide-react';
 
 const APPS = [
   { name: 'Pay', icon: Wallet, url: 'https://arcpaymain.vercel.app', port: 3000, color: '#60a5fa' },
-  { name: 'Creator', icon: Sparkles, url: 'https://arccreatormain.vercel.app', port: 3001, color: '#f472b6' },
+  { name: 'Creator', icon: Sparkles, url: 'https://arccreatorhub.vercel.app', port: 3001, color: '#f472b6' },
   { name: 'Play', icon: Gamepad2, url: 'https://arcarcade.vercel.app', port: 3002, color: '#34d399' },
   { name: 'Hub', icon: Home, url: 'https://arcecosystemmain.vercel.app', port: 3003, color: '#c9a84c' },
 ];

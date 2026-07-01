@@ -21,7 +21,7 @@ THE ECOSYSTEM HAS 4 APPS:
 - /payroll → Payroll: Bulk USDC payments via CSV upload (mass payroll)
 - /escrow → Escrow: Secure 2-party deals with milestone releases
 
-🟡 ARC CREATOR (https://arccreatormain.vercel.app) — Creator monetization
+🟡 ARC CREATOR (https://arccreatorhub.vercel.app) — Creator monetization
 - /tip → Tip Jar: Receive tips from fans (one-time USDC)
 - /subscription → Subscription: Recurring USDC payments from fans (monthly/yearly)
 - /bounty → Bounty Board: Post tasks, hunters bid, pay on completion (Upwork-style)
