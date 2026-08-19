@@ -9,6 +9,35 @@ function isLocalhost(): boolean {
 
 const ARC_CHAIN_ID = 5042002;
 const ARC_RPC_URL = 'https://rpc.drpc.testnet.arc.network';
+const ARC_CHAIN_ID_HEX = '0x4cef52';
+
+type EthereumProvider = {
+  request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
+};
+
+async function ensureArcTestnet(eth: EthereumProvider): Promise<void> {
+  const chainId = await eth.request({ method: 'eth_chainId' });
+  if (Number.parseInt(String(chainId), 16) === ARC_CHAIN_ID) return;
+
+  try {
+    await eth.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: ARC_CHAIN_ID_HEX }] });
+  } catch (error: unknown) {
+    const code = typeof error === 'object' && error !== null && 'code' in error
+      ? (error as { code?: unknown }).code
+      : undefined;
+    if (code !== 4902) throw new Error('Switch MetaMask to Arc Testnet before sending.');
+    await eth.request({
+      method: 'wallet_addEthereumChain',
+      params: [{
+        chainId: ARC_CHAIN_ID_HEX,
+        chainName: 'Arc Testnet',
+        nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 },
+        rpcUrls: ['https://rpc.testnet.arc.network'],
+        blockExplorerUrls: ['https://testnet.arcscan.app'],
+      }],
+    });
+  }
+}
 
 async function sendUSDC(toAddress: string, amount: string): Promise<{ txHash: string; explorerUrl: string }> {
   // Reference implementation from arc-payouts
@@ -18,6 +47,7 @@ async function sendUSDC(toAddress: string, amount: string): Promise<{ txHash: st
   const kit = new AppKit();
   const eth = (window as any).ethereum;
   if (!eth) throw new Error("MetaMask provider not found.");
+  await ensureArcTestnet(eth as EthereumProvider);
 
   const adapter = await createViemAdapterFromProvider({
     provider: eth
