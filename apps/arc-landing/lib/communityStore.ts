@@ -124,23 +124,34 @@ export const LFG_POSTS: LfgPost[] = [
   { id: "lfg-2", communityId: "arc-builders-tr", title: "Arc sosyal ürün ekibi", description: "Realtime chat ve wallet UX üzerinde çalışacak geliştirici ve tasarımcı arıyoruz.", roles: ["Frontend", "Product"], language: "TR", spots: 3, author: "arcdeniz" },
 ];
 
-const MESSAGE_KEY = "arc-community:messages:v1";
-
-export function communityTimestamp(): number {
-  return Date.now();
+export function communitySigningMessage(message: Pick<CommunityMessage, "communityId" | "channelId" | "body" | "replyTo">): string {
+  return [
+    "Arc Community message",
+    `Community: ${message.communityId}`,
+    `Channel: ${message.channelId}`,
+    `Body: ${message.body}`,
+    `Reply: ${message.replyTo || "none"}`,
+  ].join("\n");
 }
 
-export function loadCommunityMessages(): CommunityMessage[] {
-  if (typeof window === "undefined") return SEED_MESSAGES;
-  try {
-    const stored = JSON.parse(localStorage.getItem(MESSAGE_KEY) || "[]") as CommunityMessage[];
-    return [...SEED_MESSAGES, ...stored];
-  } catch {
-    return SEED_MESSAGES;
-  }
+export async function loadCommunityMessages(): Promise<CommunityMessage[]> {
+  const response = await fetch("/api/community/messages", { cache: "no-store" });
+  if (!response.ok) throw new Error("Community messages are temporarily unavailable.");
+  const payload = await response.json() as { messages?: CommunityMessage[] };
+  return [...SEED_MESSAGES, ...(payload.messages || [])];
 }
 
-export function persistCommunityMessage(message: CommunityMessage): void {
-  const existing = loadCommunityMessages().filter((item) => !item.id.startsWith("seed-"));
-  localStorage.setItem(MESSAGE_KEY, JSON.stringify([...existing, message].slice(-200)));
+export async function persistCommunityMessage(
+  message: Pick<CommunityMessage, "communityId" | "channelId" | "body" | "replyTo">,
+  address: string,
+  signature: string,
+): Promise<CommunityMessage> {
+  const response = await fetch("/api/community/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message, address, signature }),
+  });
+  const payload = await response.json() as { message?: CommunityMessage; error?: string };
+  if (!response.ok || !payload.message) throw new Error(payload.error || "Message could not be published.");
+  return payload.message;
 }

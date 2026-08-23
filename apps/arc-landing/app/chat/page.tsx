@@ -8,7 +8,7 @@ import {
 import { useWallet } from "@/contexts/WalletContext";
 import { getUSDCBalance, sendToAddress } from "@/lib/usdcTransfer";
 import {
-  COMMUNITIES, LFG_POSTS, communityTimestamp, loadCommunityMessages, persistCommunityMessage,
+  COMMUNITIES, LFG_POSTS, communitySigningMessage, loadCommunityMessages, persistCommunityMessage,
   type CommunityMessage,
 } from "@/lib/communityStore";
 
@@ -28,6 +28,8 @@ export default function CommunityHubPage() {
   const [channelId, setChannelId] = useState(community.channels[0].id);
   const [mode, setMode] = useState<ViewMode>("chat");
   const [messages, setMessages] = useState<CommunityMessage[]>([]);
+  const [messageState, setMessageState] = useState<"idle" | "loading" | "signing" | "sending">("loading");
+  const [messageError, setMessageError] = useState("");
   const [draft, setDraft] = useState("");
   const [search, setSearch] = useState("");
   const [replyTo, setReplyTo] = useState<CommunityMessage | null>(null);
@@ -40,8 +42,20 @@ export default function CommunityHubPage() {
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const frame = window.requestAnimationFrame(() => setMessages(loadCommunityMessages()));
-    return () => window.cancelAnimationFrame(frame);
+    let active = true;
+    const refresh = async () => {
+      try {
+        const next = await loadCommunityMessages();
+        if (active) { setMessages(next); setMessageError(""); }
+      } catch (error) {
+        if (active) setMessageError(error instanceof Error ? error.message : "Messages could not be loaded.");
+      } finally {
+        if (active) setMessageState("idle");
+      }
+    };
+    void refresh();
+    const interval = window.setInterval(() => void refresh(), 5_000);
+    return () => { active = false; window.clearInterval(interval); };
   }, []);
   useEffect(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), [messages, communityId, channelId]);
   useEffect(() => {
@@ -62,22 +76,37 @@ export default function CommunityHubPage() {
     setMode("chat");
   }
 
-  function sendMessage() {
+  async function publishMessage(body: string, reply?: string): Promise<CommunityMessage> {
+    if (!address || !window.ethereum) throw new Error("MetaMask is required to publish wallet-verified messages.");
+    const unsigned = { communityId, channelId: channel.id, body, replyTo: reply };
+    setMessageState("signing");
+    const signature = await window.ethereum.request({
+      method: "personal_sign",
+      params: [communitySigningMessage(unsigned), address],
+    }) as string;
+    setMessageState("sending");
+    return persistCommunityMessage(unsigned, address, signature);
+  }
+
+  async function sendMessage() {
     const body = draft.trim();
-    if (!body) return;
+    if (!body || messageState === "signing" || messageState === "sending") return;
     if (!isConnected || !address) {
-      void connect();
+      await connect();
       return;
     }
-    const message: CommunityMessage = {
-      id: crypto.randomUUID(), communityId, channelId: channel.id,
-      author: `arc-${address.slice(2, 6).toLowerCase()}`, address, role: "member", body,
-      createdAt: communityTimestamp(), reactions: 0, replyTo: replyTo?.id,
-    };
-    persistCommunityMessage(message);
-    setMessages((current) => [...current, message]);
-    setDraft("");
-    setReplyTo(null);
+    try {
+      setMessageError("");
+      const message = await publishMessage(body, replyTo?.id);
+      setMessages((current) => [...current, message]);
+      setDraft("");
+      setReplyTo(null);
+    } catch (error) {
+      const code = typeof error === "object" && error !== null && "code" in error ? (error as { code?: unknown }).code : undefined;
+      setMessageError(code === 4001 ? "Signature request was rejected. The message was not posted." : error instanceof Error ? error.message : "Message could not be posted.");
+    } finally {
+      setMessageState("idle");
+    }
   }
 
   async function submitTip() {
@@ -105,14 +134,12 @@ export default function CommunityHubPage() {
       setTipState("error");
       return;
     }
-    const receiptMessage: CommunityMessage = {
-      id: crypto.randomUUID(), communityId, channelId: channel.id,
-      author: `arc-${address.slice(2, 6).toLowerCase()}`, address, role: "member",
-      body: `Tipped ${tipTarget.author} for a helpful contribution.`, createdAt: communityTimestamp(), reactions: 0,
-      tx: { amount: tipAmount, hash: result.txHash, url: result.explorerUrl || `https://testnet.arcscan.app/tx/${result.txHash}` },
-    };
-    persistCommunityMessage(receiptMessage);
-    setMessages((current) => [...current, receiptMessage]);
+    try {
+      const receiptMessage = await publishMessage(`Tipped ${tipTarget.author} ${tipAmount} USDC on Arc Testnet. Transaction: ${result.explorerUrl || `https://testnet.arcscan.app/tx/${result.txHash}`}`);
+      setMessages((current) => [...current, receiptMessage]);
+    } catch {
+      // The transfer is already final; a rejected receipt signature must not relabel it as failed.
+    }
     setBalance(await getUSDCBalance(address));
     setTipState("success");
   }
@@ -168,7 +195,7 @@ export default function CommunityHubPage() {
               })}
               <div ref={endRef} />
             </div>
-            <div className="border-t border-white/10 p-4 md:px-7">{replyTo && <div className="mb-2 flex items-center justify-between rounded-t-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs text-white/45"><span>Replying to <strong className="text-white/70">{replyTo.author}</strong></span><button onClick={() => setReplyTo(null)}><X size={14} /></button></div>}<div className="flex items-end gap-2 rounded-2xl border border-white/10 bg-white/[0.035] p-2 focus-within:border-[#80e1ff]/35"><textarea value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); sendMessage(); } }} rows={1} placeholder={isConnected ? `Message #${channel.label}` : "Connect wallet to join the conversation"} className="max-h-28 min-h-10 flex-1 resize-none bg-transparent px-2 py-2 text-sm outline-none placeholder:text-white/25" /><button onClick={sendMessage} className="grid h-10 w-10 place-items-center rounded-xl bg-[#80e1ff] text-black transition hover:brightness-110"><Send size={17} /></button></div></div>
+            <div className="border-t border-white/10 p-4 md:px-7">{messageError && <p className="mb-2 rounded-xl border border-red-400/20 bg-red-400/5 px-3 py-2 text-xs text-red-300">{messageError}</p>}{replyTo && <div className="mb-2 flex items-center justify-between rounded-t-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs text-white/45"><span>Replying to <strong className="text-white/70">{replyTo.author}</strong></span><button onClick={() => setReplyTo(null)}><X size={14} /></button></div>}<div className="flex items-end gap-2 rounded-2xl border border-white/10 bg-white/[0.035] p-2 focus-within:border-[#80e1ff]/35"><textarea value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); void sendMessage(); } }} rows={1} maxLength={1000} disabled={messageState === "signing" || messageState === "sending"} placeholder={isConnected ? `Message #${channel.label}` : "Connect wallet to join the conversation"} className="max-h-28 min-h-10 flex-1 resize-none bg-transparent px-2 py-2 text-sm outline-none placeholder:text-white/25 disabled:opacity-50" /><button onClick={() => void sendMessage()} disabled={messageState === "signing" || messageState === "sending"} className="grid h-10 w-10 place-items-center rounded-xl bg-[#80e1ff] text-black transition hover:brightness-110 disabled:opacity-40" aria-label={messageState === "signing" ? "Waiting for wallet signature" : "Send message"}><Send size={17} /></button></div></div>
           </> : <div className="flex-1 overflow-y-auto p-5 md:p-7"><div className="mb-7 flex items-end justify-between gap-4"><div><p className="text-xs uppercase tracking-[0.22em] text-[#b8ff80]">Looking for group</p><h3 className="mt-2 text-2xl font-semibold">Build with people you can verify</h3><p className="mt-2 text-sm text-white/45">Find analysts, builders, creators and moderators for your next Arc project.</p></div><button className="hidden rounded-xl bg-[#b8ff80] px-4 py-2 text-sm font-semibold text-black sm:block">Post an opening</button></div><div className="grid gap-4 xl:grid-cols-2">{LFG_POSTS.filter((post) => post.communityId === communityId || communityId === "arc-builders-tr").map((post) => <article key={post.id} className="rounded-2xl border border-white/10 bg-white/[0.025] p-5"><div className="flex items-center justify-between text-xs text-white/35"><span>{post.language} · {post.spots} spots</span><span>by {post.author}</span></div><h4 className="mt-4 text-lg font-semibold">{post.title}</h4><p className="mt-2 min-h-12 text-sm leading-6 text-white/50">{post.description}</p><div className="mt-4 flex flex-wrap gap-2">{post.roles.map((role) => <span key={role} className="rounded-full border border-[#b8ff80]/20 bg-[#b8ff80]/5 px-3 py-1 text-xs text-[#b8ff80]">{role}</span>)}</div><button className="mt-5 w-full rounded-xl border border-white/10 py-2.5 text-sm hover:bg-white/5">Request to join</button></article>)}</div></div>}
         </section>
 
